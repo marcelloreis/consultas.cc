@@ -108,7 +108,7 @@ class ImportController extends AppController {
 			* Calcula o total de registros que sera importado
 			*/
 			$this->Import->timing_ini(1, 'Calcula o total de registros que sera importado');
-			$this->qt_reg = $this->NattFixoPessoa->find('count');
+			$this->qt_reg = $this->NattFixoPessoa->find('count', array('conditions' => array('NattFixoPessoa.transf' => null)));
 			$this->Import->timing_end();
 
 			/**
@@ -383,6 +383,11 @@ class ImportController extends AppController {
 	*/
 	private function importEntity($entity){
 		/**
+		* Inicializa o ID da entidade como null
+		*/
+		$this->Entity->id = null;
+
+		/**
 		* Verifica se a entidade que sera importada já existe na base de dados
 		*/
 		$hasEntity = $this->Entity->find('first', array(
@@ -411,6 +416,11 @@ class ImportController extends AppController {
 	* @return void
 	*/
 	private function importLandline($landline){
+		/**
+		* Inicializa o ID do telefone como null
+		*/
+		$this->Landline->id = null;
+
 		/**
 		* Aborta a insercao caso o telefone seja null (inconsistente)
 		*/		
@@ -451,6 +461,11 @@ class ImportController extends AppController {
 	*/
 	private function importZipcode($zipcode){
 		/**
+		* Inicializa o ID do CEP como null
+		*/
+		$this->Zipcode->id = null;
+
+		/**
 		* Aborta a insercao caso o CEP seja null (inconsistente)
 		*/		
 		if(!$zipcode['Zipcode']['code']){
@@ -490,6 +505,11 @@ class ImportController extends AppController {
 	*/
 	private function importAddress($address){
 		/**
+		* Inicializa o ID do endereco como null
+		*/
+		$this->Address->id = null;
+
+		/**
 		* Verifica se o telefone que sera importado já existe na base de dados
 		*/
 		$hasAddress = $this->Address->find('first', array(
@@ -524,6 +544,11 @@ class ImportController extends AppController {
 	* @return bool $hasCreated
 	*/
 	private function importEntityLandlineAddress($entityLandlineAddress){
+		/**
+		* Inicializa o ID das juncoes como null
+		*/
+		$this->EntityLandlineAddress->id = null;
+
 		/**
 		* Inicializa a variavel $asCreated com false
 		*/

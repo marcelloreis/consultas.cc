@@ -1,5 +1,5 @@
 <?php
-App::uses('AppModel', 'Model');
+App::uses('AppModelClean', 'Model');
 /**
  * Settings Model
  *
@@ -17,7 +17,7 @@ App::uses('AppModel', 'Model');
  * @property Country $Country
  * @property City $City
  */
-class Settings extends AppModel {
+class Settings extends AppModelClean {
 	public $useTable = '_settings';
 
 

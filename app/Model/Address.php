@@ -1,5 +1,5 @@
 <?php
-App::uses('AppModel', 'Model');
+App::uses('AppModelClean', 'Model');
 /**
  * Address Model
  *
@@ -17,6 +17,6 @@ App::uses('AppModel', 'Model');
  * @property Country $Country
  * @property City $City
  */
-class Address extends AppModel {
+class Address extends AppModelClean {
 	public $useTable = 'addresses';
 }

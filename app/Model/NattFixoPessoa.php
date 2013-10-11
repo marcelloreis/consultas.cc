@@ -1,5 +1,5 @@
 <?php
-App::uses('AppModel', 'Model');
+App::uses('AppModelClean', 'Model');
 /**
  * NattFixoPessoa Model
  *
@@ -17,7 +17,7 @@ App::uses('AppModel', 'Model');
  * @property Country $Country
  * @property City $City
  */
-class NattFixoPessoa extends AppModel {
+class NattFixoPessoa extends AppModelClean {
 	public $useTable = false;
 	public $useDbConfig = 'natt';
 	public $primaryKey = 'CPF_CNPJ';
@@ -36,16 +36,16 @@ class NattFixoPessoa extends AppModel {
     	$pessoa = $this->find('first', array(
     		'recursive' => '-1',
     		'conditions' => array(
-    			'CPF_CNPJ !=' => '00000000000000000000',
-    			'transf' => null
+                'CPF_CNPJ !=' => '00000000000000000000',
     			)
     		));
     	$map['pessoa'] = $pessoa['NattFixoPessoa'];
-
-    	$telefone = $this->NattFixoTelefone->find('default_all', array(
-    		'recursive' => '-1',
-    		'conditions' => array('CPF_CNPJ' => $pessoa['NattFixoPessoa']['CPF_CNPJ'])
-    		));
+        $telefone = $this->NattFixoTelefone->find('all', array(
+            'recursive' => '-1',
+            'conditions' => array('CPF_CNPJ' => $pessoa['NattFixoPessoa']['CPF_CNPJ']),
+            'order' => array('DATA_ATUALIZACAO' => 'DESC'),
+            'limit' => 10
+            ));
 
     	if(count($telefone)){
 	    	foreach ($telefone as $k => $v) {
@@ -64,9 +64,7 @@ class NattFixoPessoa extends AppModel {
     }
 
     public function offset($doc){
-    	$this->updateAll(
-    		array('NattFixoPessoa.transf' => true),
-    		array('NattFixoPessoa.CPF_CNPJ' => $doc)
-    	);
+        $this->deleteAll(array('NattFixoPessoa.CPF_CNPJ' => $doc), false);
+    	$this->NattFixoTelefone->deleteAll(array('NattFixoTelefone.CPF_CNPJ' => $doc), false);
     }
 }
