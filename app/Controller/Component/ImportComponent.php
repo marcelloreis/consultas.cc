@@ -203,7 +203,10 @@ class ImportComponent extends Component {
 	/**
 	* Retorna o tipo do documento passado por parametro
 	*/
-	public function getTypeDoc($doc, $name=null, $mother_name=null){
+	/**
+	* Retorna o tipo do documento passado por parametro
+	*/
+	public function getTypeDoc($doc, $name=null, $mother_name=null, $birthday=null){
 		/**
 		* Inicializa a variavel $type como tipo invalido
 		*/
@@ -228,7 +231,7 @@ class ImportComponent extends Component {
 				/**
 				* Tenta descobrir se o documento é CPF verificando se existe o nome da mae
 				*/
-				if($mother_name && $mother_name != ''){
+				if(($mother_name && $mother_name != '') || ($birthday && $birthday != '')){
 					$type = TP_CPF;
 				}
 
@@ -239,12 +242,12 @@ class ImportComponent extends Component {
 		/**
 		* Tenta descobrir se o documento é CNPJ atraves do nome
 		*/
-		if($name){
+		if($type == TP_INVALID && $name){
 			if(preg_match('/[ _-]ltda$|[ _-]me$|[ _-]sa$|[ _-]exp$|[ _-]s\/a$|^ed |^ass /si', strtolower($this->clearName($name)))){
 				$type = TP_CNPJ;
 			}
 
-			if($type == TP_INVALID && preg_match('/advogados|agropecuaria|artigos|artigos|associacao|associados|centro|clinica|comercial|comercio|comunicacao|condominio|construtora|copiadora|distribuidora|drogaria|edificacoes|fabrica|farmacia|igreja|industria|irmaos|laboratorio|mecanica|oficina|otica|padaria|vidracaria|/si', strtolower($this->clearname($name)))){
+			if($type == TP_INVALID && preg_match('/advogados|agropecuaria|artigos|artigos|associacao|associados|centro|clinica|comercial|comercio|comunicacao|condominio|construtora|copiadora|distribuidora|drogaria|edificacoes|fabrica|farmacia|igreja|industria|irmaos|laboratorio|mecanica|oficina|otica|padaria|vidracaria/si', strtolower($this->clearname($name)))){
 				$type = TP_CNPJ;
 			}
 		}		

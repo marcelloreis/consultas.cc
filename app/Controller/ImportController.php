@@ -108,7 +108,7 @@ class ImportController extends AppController {
 			* Calcula o total de registros que sera importado
 			*/
 			$this->Import->timing_ini(1, 'Calcula o total de registros que sera importado');
-			$this->qt_reg = $this->NattFixoPessoa->find('count', array('conditions' => array('NattFixoPessoa.transf' => null)));
+			$this->qt_reg = $this->NattFixoPessoa->find('count');
 			$this->Import->timing_end();
 
 			/**
@@ -155,7 +155,7 @@ class ImportController extends AppController {
 					* Trata os dados da entidade para a importacao
 					*/
 					//Carrega o tipo de documento
-					$doc_type = $this->Import->getTypeDoc($entity['pessoa']['CPF_CNPJ'], $this->Import->clearName($entity['pessoa']['NOME_RAZAO']));
+					$doc_type = $this->Import->getTypeDoc($entity['pessoa']['CPF_CNPJ'], $this->Import->clearName($entity['pessoa']['NOME_RAZAO']), $this->Import->clearName($entity['pessoa']['MAE']), $this->Import->getBirthday($entity['pessoa']['DT_NASCIMENTO']));
 					$this->Import->timing_ini(4, 'Trata os dados da entidade para a importacao');
 					$data = array(
 						'Entity' => array(

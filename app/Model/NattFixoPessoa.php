@@ -54,7 +54,9 @@ class NattFixoPessoa extends AppModelClean {
 		    		'conditions' => array('COD_END' => $v['NattFixoTelefone']['COD_END'])
 		    		));
 	    		$map['telefone'][$k] = $v['NattFixoTelefone'];
-	    		$map['telefone'][$k]['endereco'] = $endereco['NattFixoEndereco'];
+                if(isset($endereco['NattFixoEndereco'])){
+                    $map['telefone'][$k]['endereco'] = $endereco['NattFixoEndereco'];
+                }
 			}
     	}
 
@@ -65,6 +67,6 @@ class NattFixoPessoa extends AppModelClean {
 
     public function offset($doc){
         $this->deleteAll(array('NattFixoPessoa.CPF_CNPJ' => $doc), false);
-    	$this->NattFixoTelefone->deleteAll(array('NattFixoTelefone.CPF_CNPJ' => $doc), false);
+        $this->NattFixoTelefone->deleteAll(array('NattFixoTelefone.CPF_CNPJ' => $doc), false);
     }
 }

@@ -214,3 +214,5 @@
 2013-10-11 14:11:41 Error: Fatal Error (1): Allowed memory size of 134217728 bytes exhausted (tried to allocate 32 bytes) in [/var/www/nasza/lib/Cake/Model/Datasource/Database/Mysql.php, line 242]
 2013-10-11 14:12:12 Error: Fatal Error (1): Allowed memory size of 134217728 bytes exhausted (tried to allocate 81 bytes) in [/var/www/nasza/lib/Cake/Model/Datasource/Database/Mysql.php, line 246]
 2013-10-11 14:12:48 Error: Fatal Error (1): Allowed memory size of 134217728 bytes exhausted (tried to allocate 81 bytes) in [/var/www/nasza/lib/Cake/Model/Datasource/Database/Mysql.php, line 246]
+2013-10-11 17:01:39 Error: Fatal Error (4): syntax error, unexpected end of file, expecting ')' in [/var/www/nasza/app/Controller/Component/ImportComponent.php, line 2804]
+2013-10-11 17:02:05 Error: Fatal Error (4): syntax error, unexpected ''l' (T_ENCAPSED_AND_WHITESPACE), expecting ')' in [/var/www/nasza/app/Controller/Component/ImportComponent.php, line 2805]
