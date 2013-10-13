@@ -139,7 +139,6 @@ class ImportController extends AppController {
 				$this->Import->timing_ini(3, 'Carrega o proximo registro das tabelas de pessoa, telefone e endereco q ainda nao foram importado');
 				$entity = $this->NattFixoPessoa->next();
 				$this->Import->timing_end();
-
 				if(count($entity)){
 					/**
 					* Inicialiaza a transacao

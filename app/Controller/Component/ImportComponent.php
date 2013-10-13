@@ -242,7 +242,7 @@ class ImportComponent extends Component {
 		/**
 		* Tenta descobrir se o documento é CNPJ atraves do nome
 		*/
-		if($type == TP_INVALID && $name){
+		if(($type == TP_INVALID || $type == TP_AMBIGUO) && $name){
 			if(preg_match('/[ _-]ltda$|[ _-]me$|[ _-]sa$|[ _-]exp$|[ _-]s\/a$|^ed |^ass /si', strtolower($this->clearName($name)))){
 				$type = TP_CNPJ;
 			}
