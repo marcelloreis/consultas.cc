@@ -18,5 +18,18 @@ App::uses('AppModelClean', 'Model');
  * @property City $City
  */
 class Entity extends AppModelClean {
-	public $useTable = 'entities';
+	public $useTable = 'i_entities';
+
+
+	public function findImport($type, $params){
+		$hasEntity = $this->find($type, $params);				
+
+		if(!count($hasEntity)){
+			$this->setSource('entities');
+			$hasEntity = $this->find($type, $params);
+			$this->setSource('i_entities');
+		}	
+
+		return $hasEntity;		
+	}
 }

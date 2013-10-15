@@ -18,5 +18,17 @@ App::uses('AppModelClean', 'Model');
  * @property City $City
  */
 class Zipcode extends AppModelClean {
-	public $useTable = 'zipcodes';
+	public $useTable = 'i_zipcodes';
+
+	public function findImport($type, $params){
+		$hasZipcode = $this->find($type, $params);				
+
+		if(!count($hasZipcode)){
+			$this->setSource('zipcodes');
+			$hasZipcode = $this->find($type, $params);
+			$this->setSource('i_zipcodes');
+		}	
+
+		return $hasZipcode;		
+	}		
 }

@@ -1,3 +1,3 @@
-<?php echo $this->element('header')?>
+<?php echo $this->element('Layouts/Login/header')?>
 <?php echo $content_for_layout?>
-<?php echo $this->element('footer')?>
+<?php echo $this->element('Layouts/Login/footer')?>

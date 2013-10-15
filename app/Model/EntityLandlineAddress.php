@@ -18,5 +18,17 @@ App::uses('AppModelClean', 'Model');
  * @property City $City
  */
 class EntityLandlineAddress extends AppModelClean {
-	public $useTable = 'entities_landlines_addresses';
+	public $useTable = 'i_entities_landlines_addresses';
+
+	public function findImport($type, $params){
+		$hasCreated = $this->find($type, $params);				
+
+		if(!count($hasCreated)){
+			$this->setSource('entities_landlines_addresses');
+			$hasCreated = $this->find($type, $params);
+			$this->setSource('i_entities_landlines_addresses');
+		}	
+
+		return $hasCreated;		
+	}	
 }

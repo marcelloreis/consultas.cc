@@ -80,7 +80,7 @@ class AppGoogleComponent extends Component {
 		$this->service->setClientSecret(GOOGLE_CLIENT_SECRET);
 		$this->service->setRedirectUri(GOOGLE_REDIRECT_URI);
 		$this->service->setDeveloperKey(GOOGLE_DEVELOPER_KEY);
-		$this->service->setScopes(GOOGLE_SCOPE_CALENDAR . ' ' . GOOGLE_SCOPE_PROFILE . ' ' . GOOGLE_SCOPE_EMAIL);
+		$this->service->setScopes(GOOGLE_SCOPE_PROFILE . ' ' . GOOGLE_SCOPE_EMAIL);
 	}
 
 	/**

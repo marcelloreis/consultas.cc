@@ -23,7 +23,7 @@
                 $v[$modelClass]['picture_width'] = '70px';
                 
                 $v[$modelClass]['action'] = $this->element('table-actions', array('id' => $v[$modelClass]['id']));
-                $v[$modelClass]['id'] = $this->AppForm->input("{$modelClass}.id.{$k}", array('type' => 'checkbox', 'template' => 'input-clean', 'value' => $v[$modelClass]['id'], 'placeholder' => $v[$modelClass][$fieldText]));
+                $v[$modelClass]['id'] = $this->AppForm->input("{$modelClass}.id.{$k}", array('type' => 'checkbox', 'template' => 'form-input-clean', 'value' => $v[$modelClass]['id'], 'placeholder' => $v[$modelClass][$fieldText]));
                 $v[$modelClass]['group_id'] = $v['Group']['name'];
                 $v[$modelClass]['status'] = $this->AppUtils->boolTxt($v[$modelClass]['status'], 'Ativo', 'Inativo');
                 $avatar = isset($v[$modelClass]['picture']) && !empty($v[$modelClass]['picture'])?$v[$modelClass]['picture']:'avatar.jpg';

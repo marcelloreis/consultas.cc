@@ -108,7 +108,7 @@ class ImportController extends AppController {
 			* Calcula o total de registros que sera importado
 			*/
 			$this->Import->timing_ini(1, 'Calcula o total de registros que sera importado');
-			$this->qt_reg = $this->NattFixoPessoa->find('count');
+			$this->qt_reg = $this->NattFixoPessoa->find('count', array('conditions' => array('CPF_CNPJ !=' => '00000000000000000000',)));
 			$this->Import->timing_end();
 
 			/**
@@ -139,7 +139,8 @@ class ImportController extends AppController {
 				$this->Import->timing_ini(3, 'Carrega o proximo registro das tabelas de pessoa, telefone e endereco q ainda nao foram importado');
 				$entity = $this->NattFixoPessoa->next();
 				$this->Import->timing_end();
-				if(count($entity)){
+
+				if(isset($entity['pessoa'])){
 					/**
 					* Inicialiaza a transacao
 					*/
@@ -198,170 +199,178 @@ class ImportController extends AppController {
 					/**
 					* Inicializa a importacao dos telefones da entidade encontrada
 					*/
-					foreach ($entity['telefone'] as $k => $v) {
-						/**
-						* Inicializa a transacao
-						*/
-						$this->db['entity']->begin();
-						$this->db['landline']->begin();
-						$this->db['address']->begin();
-						$this->db['zipcode']->begin();
-						$this->db['entityLandlineAddress']->begin();
-
-						/**
-						* Desmembra o DDD do Telefone
-						*/
-						$this->Import->timing_ini(6, 'Trata os dados o telefone para a importacao');
-						$ddd_telefone = $v['TELEFONE'];
-						$ddd = $this->Import->getDDD($v['TELEFONE']);
-						$telefone = $this->Import->getTelefone($v['TELEFONE']);
-					
-						/**
-						* Extrai o ano de atualizacao do telefone
-						*/
-						$year = $this->Import->getUpdated($v['DATA_ATUALIZACAO']);
-
-						/**
-						* Trata os dados o telefone para a importacao
-						*/
-						$data = array(
-							'Landline' => array(
-								'year' => $year,
-								'ddd' => $ddd,
-								'tel' => $telefone,
-								'tel_full' => "{$ddd}{$telefone}",
-								'tel_original' => $v['TELEFONE'],
-								)
-							);
-						$this->Import->timing_end();
-						
-						/**
-						* Executa a importacao do telefone
-						* e carrega o id do telefone importado
-						*/
-						$this->Import->timing_ini(7, 'Executa a importacao do telefone');
-						$this->importLandline($data, $v['TELEFONE']);
-						$this->Import->timing_end();
-
-						/**
-						* Inicializa a importacao do CEP do telefone encontrado
-						* Trata os dados do CEP para a importacao
-						*/				
-						$this->Import->timing_ini(8, 'Trata os dados do CEP para a importacao');		
-						$data = array(
-							'Zipcode' => array(
-								'code' => $this->Import->getZipcode($v['endereco']['CEP']),
-								'code_original' => $v['endereco']['CEP']
-								)
-							);
-						$this->Import->timing_end();
-
-						/**
-						* Executa a importacao do CEP
-						* e carrega o id do CEP importado
-						*/
-						$this->Import->timing_ini(9, 'Executa a importacao do CEP');
-						$this->importZipcode($data);
-						$this->Import->timing_end();
-
-						/**
-						* Inicializa a importacao do endereco do telefone encontrado
-						* Trata os dados do endereço para a importacao
-						*/	
-						$this->Import->timing_ini(10, 'Trata os dados do endereço para a importacao');
-						$state_id = $this->Import->getState($v['endereco']['UF'], $this->uf);
-
-						/**
-						* Trata o nome da rua
-						*/
-						$street = $this->Import->getStreet($v['endereco']['NOME_RUA']);
-
-						/**
-						* Gera o hash do nome da rua
-						*/
-						$hash = $this->Import->getHash($street);
-
-						$data = array(
-							'Address' => array(
-								'state_id' => $state_id,
-								'zipcode_id' => $this->Zipcode->id,
-								'city_id' => $this->Import->getCityId($v['endereco']['CIDADE'], $state_id, $this->Zipcode->id),
-								'city' => $this->Import->getCity($v['endereco']['CIDADE']),
-								'type_address' => $this->Import->getTypeAddress($v['endereco']['RUA'], $v['endereco']['NOME_RUA']),
-								'street' => $street,
-								'number' => $this->Import->getStreetNumber($v['NUMERO'], $v['endereco']['NOME_RUA']),
-								'neighborhood' => $this->Import->getNeighborhood($v['endereco']['BAIRRO']),
-								'complement' => $this->Import->getComplement($v['COMPLEMENTO']),
-								'h1' => $hash['h1'],
-								'h2' => $hash['h2'],
-								'h3' => $hash['h3'],
-								'h4' => $hash['h4'],
-								'h5' => $hash['h5'],
-								'h_all' => $hash['h_all'],
-								'h_first_last' => $hash['h_first_last'],
-								'h_last' => $hash['h_last'],
-								'h_first1_first2' => $hash['h_first1_first2'],
-								'h_last1_last2' => $hash['h_last1_last2'],
-								)
-							);
-						$this->Import->timing_end();
-
-						/**
-						* Executa a importacao do Endereço
-						* e carrega o id do Endereço importado
-						*/
-						$this->Import->timing_end(11, 'Executa a importacao do Endereço');
-						$this->importAddress($data);
-						$this->Import->timing_end();
-
-						/**
-						* Amarra os registros Entidade, Telefone, CEP e Endereço na tabela entities_landlines_addresses
-						*/
-
-						/**
-						* Carrega todos os id coletados ate o momento
-						*/
-						$this->Import->timing_ini(12, 'Carrega todos os id coletados ate o momento');
-						$data = array(
-							'EntityLandlineAddress' => array(
-								'entity_id' => $this->Entity->id,
-								'landline_id' => $this->Landline->id,
-								'address_id' => $this->Address->id,
-								'year' => $year,
-								)
-							);
-						$this->Import->timing_end();
-						
-						$this->Import->timing_ini(13, 'Executa a importacao dos dados coletados ate o momento');
-						if($this->importEntityLandlineAddress($data)){
+					if(isset($entity['telefone'])){
+						foreach ($entity['telefone'] as $k => $v) {
 							/**
-							* Registra todas as transacoes
+							* Inicializa a transacao
 							*/
-							$this->db['entity']->commit();
-							$this->db['landline']->commit();
-							$this->db['address']->commit();
-							$this->db['zipcode']->commit();
-							$this->db['entityLandlineAddress']->commit();
-						}else{
+							$this->db['entity']->begin();
+							$this->db['landline']->begin();
+							$this->db['address']->begin();
+							$this->db['zipcode']->begin();
+							$this->db['entityLandlineAddress']->begin();
+
 							/**
-							* Aborta todas as transacoes relacionadas a entidade
+							* Desmembra o DDD do Telefone
 							*/
-							$this->db['entity']->rollback();
-							$this->db['landline']->rollback();
-							$this->db['address']->rollback();
-							$this->db['zipcode']->rollback();
-							$this->db['entityLandlineAddress']->rollback();							
+							$this->Import->timing_ini(6, 'Trata os dados o telefone para a importacao');
+							$ddd_telefone = $v['TELEFONE'];
+							$ddd = $this->Import->getDDD($v['TELEFONE']);
+							$telefone = $this->Import->getTelefone($v['TELEFONE']);
+						
+							/**
+							* Extrai o ano de atualizacao do telefone
+							*/
+							$year = $this->Import->getUpdated($v['DATA_ATUALIZACAO']);
+
+							/**
+							* Trata os dados o telefone para a importacao
+							*/
+							$data = array(
+								'Landline' => array(
+									'year' => $year,
+									'ddd' => $ddd,
+									'tel' => $telefone,
+									'tel_full' => "{$ddd}{$telefone}",
+									'tel_original' => $v['TELEFONE'],
+									)
+								);
+							$this->Import->timing_end();
+							
+							/**
+							* Executa a importacao do telefone
+							* e carrega o id do telefone importado
+							*/
+							$this->Import->timing_ini(7, 'Executa a importacao do telefone');
+							$this->importLandline($data, $v['TELEFONE']);
+							$this->Import->timing_end();
+
+							/**
+							* Inicializa a importacao do CEP do telefone encontrado
+							* Trata os dados do CEP para a importacao
+							*/				
+							$this->Import->timing_ini(8, 'Trata os dados do CEP para a importacao');		
+							$data = array(
+								'Zipcode' => array(
+									'code' => $this->Import->getZipcode($v['endereco']['CEP']),
+									'code_original' => $v['endereco']['CEP']
+									)
+								);
+							$this->Import->timing_end();
+
+							/**
+							* Executa a importacao do CEP
+							* e carrega o id do CEP importado
+							*/
+							$this->Import->timing_ini(9, 'Executa a importacao do CEP');
+							$this->importZipcode($data);
+							$this->Import->timing_end();
+
+							/**
+							* Inicializa a importacao do endereco do telefone encontrado
+							* Trata os dados do endereço para a importacao
+							*/	
+							$this->Import->timing_ini(10, 'Trata os dados do endereço para a importacao');
+							$state_id = $this->Import->getState($v['endereco']['UF'], $this->uf);
+
+							/**
+							* Trata o nome da rua
+							*/
+							$street = $this->Import->getStreet($v['endereco']['NOME_RUA']);
+
+							/**
+							* Gera o hash do nome da rua
+							*/
+							$hash = $this->Import->getHash($street);
+
+							/**
+							* Gera o hash do complemento da rua
+							*/
+							$hash_complement = $this->Import->getHash($this->Import->getComplement($v['COMPLEMENTO']), null, false);
+
+							$data = array(
+								'Address' => array(
+									'state_id' => $state_id,
+									'zipcode_id' => $this->Zipcode->id,
+									'city_id' => $this->Import->getCityId($v['endereco']['CIDADE'], $state_id, $this->Zipcode->id),
+									'city' => $this->Import->getCity($v['endereco']['CIDADE']),
+									'type_address' => $this->Import->getTypeAddress($v['endereco']['RUA'], $v['endereco']['NOME_RUA']),
+									'street' => $street,
+									'number' => $this->Import->getStreetNumber($v['NUMERO'], $v['endereco']['NOME_RUA']),
+									'neighborhood' => $this->Import->getNeighborhood($v['endereco']['BAIRRO']),
+									'complement' => $this->Import->getComplement($v['COMPLEMENTO']),
+									'h1' => $hash['h1'],
+									'h2' => $hash['h2'],
+									'h3' => $hash['h3'],
+									'h4' => $hash['h4'],
+									'h5' => $hash['h5'],
+									'h_all' => $hash['h_all'],
+									'h_first_last' => $hash['h_first_last'],
+									'h_last' => $hash['h_last'],
+									'h_first1_first2' => $hash['h_first1_first2'],
+									'h_last1_last2' => $hash['h_last1_last2'],
+									'h_complement' => $hash_complement['h_all'],
+									)
+								);
+							$this->Import->timing_end();
+
+							/**
+							* Executa a importacao do Endereço
+							* e carrega o id do Endereço importado
+							*/
+							$this->Import->timing_end(11, 'Executa a importacao do Endereço');
+							$this->importAddress($data);
+							$this->Import->timing_end();
+
+							/**
+							* Amarra os registros Entidade, Telefone, CEP e Endereço na tabela entities_landlines_addresses
+							*/
+
+							/**
+							* Carrega todos os id coletados ate o momento
+							*/
+							$this->Import->timing_ini(12, 'Carrega todos os id coletados ate o momento');
+							$data = array(
+								'EntityLandlineAddress' => array(
+									'entity_id' => $this->Entity->id,
+									'landline_id' => $this->Landline->id,
+									'address_id' => $this->Address->id,
+									'year' => $year,
+									)
+								);
+							$this->Import->timing_end();
+							
+							$this->Import->timing_ini(13, 'Executa a importacao dos dados coletados ate o momento');
+							if($this->importEntityLandlineAddress($data)){
+								/**
+								* Registra todas as transacoes
+								*/
+								$this->db['entity']->commit();
+								$this->db['landline']->commit();
+								$this->db['address']->commit();
+								$this->db['zipcode']->commit();
+								$this->db['entityLandlineAddress']->commit();
+							}else{
+								/**
+								* Aborta todas as transacoes relacionadas a entidade
+								*/
+								$this->db['entity']->rollback();
+								$this->db['landline']->rollback();
+								$this->db['address']->rollback();
+								$this->db['zipcode']->rollback();
+								$this->db['entityLandlineAddress']->rollback();							
+							}
+							$this->Import->timing_end();
+
+							/**
+							* Salva as contabilizacoes na base de dados
+							*/					
+							$this->Import->__counter('entities');
+							$this->Import->__counter('landlines');
+							$this->Import->__counter('addresses');
+							$this->Import->__counter('zipcodes');
+							$this->Import->__counter('entities_landlines_addresses');	
 						}
-						$this->Import->timing_end();
-
-						/**
-						* Salva as contabilizacoes na base de dados
-						*/					
-						$this->Import->__counter('entities');
-						$this->Import->__counter('landlines');
-						$this->Import->__counter('addresses');
-						$this->Import->__counter('zipcodes');
-						$this->Import->__counter('entities_landlines_addresses');	
 					}
 
 					/**
@@ -369,8 +378,12 @@ class ImportController extends AppController {
 					*/
 					$this->db['entity']->commit();					
 				}
-
 			}while($entity && count($entity));
+
+			/**
+			* Finaliza o processo de importacao
+			*/
+			exit();
 		}
 	}	
 
@@ -389,7 +402,7 @@ class ImportController extends AppController {
 		/**
 		* Verifica se a entidade que sera importada já existe na base de dados
 		*/
-		$hasEntity = $this->Entity->find('first', array(
+		$hasEntity = $this->Entity->findImport('first', array(
 			'recursive' => '-1',
 			'conditions' => array('doc' => $entity['Entity']['doc'])
 			));				
@@ -430,7 +443,7 @@ class ImportController extends AppController {
 			/**
 			* Verifica se o telefone que sera importado já existe na base de dados
 			*/
-			$hasLandline = $this->Landline->find('first', array(
+			$hasLandline = $this->Landline->findImport('first', array(
 				'recursive' => '-1',
 				'conditions' => array(
 					'tel_full' => $landline['Landline']['tel_full'],
@@ -474,7 +487,7 @@ class ImportController extends AppController {
 			/**
 			* Verifica se o telefone que sera importado já existe na base de dados
 			*/
-			$hasZipcode = $this->Zipcode->find('first', array(
+			$hasZipcode = $this->Zipcode->findImport('first', array(
 				'recursive' => '-1',
 				'conditions' => array(
 					'code' => $zipcode['Zipcode']['code'],
@@ -511,16 +524,14 @@ class ImportController extends AppController {
 		/**
 		* Verifica se o telefone que sera importado já existe na base de dados
 		*/
-		$hasAddress = $this->Address->find('first', array(
+		$hasAddress = $this->Address->findImport('first', array(
 			'recursive' => '-1',
 			'conditions' => array(
 				'zipcode_id' => $address['Address']['zipcode_id'],
 				'number' => $address['Address']['number'],
-				'complement' => $address['Address']['complement'],
-				// 'number NOT' => null,
+				'h_complement' => $address['Address']['h_complement'],
 				)
 			));		
-
 
 		if(count($hasAddress)){
 			$this->Address->id = $hasAddress['Address']['id'];
@@ -565,7 +576,7 @@ class ImportController extends AppController {
 			/**
 			* Verifica se a junção já existe
 			*/
-			$hasEntityLandlineAddress = $this->EntityLandlineAddress->find('first', array(
+			$hasEntityLandlineAddress = $this->EntityLandlineAddress->findImport('first', array(
 				'recursive' => '-1',
 				'conditions' => array(
 					'entity_id' => $entityLandlineAddress['EntityLandlineAddress']['entity_id'],

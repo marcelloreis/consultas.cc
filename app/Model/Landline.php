@@ -18,5 +18,17 @@ App::uses('AppModelClean', 'Model');
  * @property City $City
  */
 class Landline extends AppModelClean {
-	public $useTable = 'landlines';
+	public $useTable = 'i_landlines';
+
+	public function findImport($type, $params){
+		$hasLandline = $this->find($type, $params);				
+
+		if(!count($hasLandline)){
+			$this->setSource('landlines');
+			$hasLandline = $this->find($type, $params);
+			$this->setSource('i_landlines');
+		}	
+
+		return $hasLandline;		
+	}	
 }

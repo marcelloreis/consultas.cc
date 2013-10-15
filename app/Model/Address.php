@@ -18,5 +18,17 @@ App::uses('AppModelClean', 'Model');
  * @property City $City
  */
 class Address extends AppModelClean {
-	public $useTable = 'addresses';
+	public $useTable = 'i_addresses';
+
+	public function findImport($type, $params){
+		$hasAddress = $this->find($type, $params);				
+
+		if(!count($hasAddress)){
+			$this->setSource('addresses');
+			$hasAddress = $this->find($type, $params);
+			$this->setSource('i_addresses');
+		}	
+
+		return $hasAddress;		
+	}	
 }

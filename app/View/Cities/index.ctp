@@ -19,7 +19,7 @@
             foreach($$map as $k => $v){
 
                 $v[$modelClass]['action'] = $this->element('table-actions', array('id' => $v[$modelClass]['id']));
-                $v[$modelClass]['id'] = $this->AppForm->input("{$modelClass}.id.{$k}", array('type' => 'checkbox', 'template' => 'input-clean', 'value' => $v[$modelClass]['id'], 'placeholder' => $v[$modelClass][$fieldText]));
+                $v[$modelClass]['id'] = $this->AppForm->input("{$modelClass}.id.{$k}", array('type' => 'checkbox', 'template' => 'form-input-clean', 'value' => $v[$modelClass]['id'], 'placeholder' => $v[$modelClass][$fieldText]));
                 $v[$modelClass]['state_id'] = $v['State']['name'];
                 $v[$modelClass]['name'] = ucfirst(strtolower($v[$modelClass]['name']));
 

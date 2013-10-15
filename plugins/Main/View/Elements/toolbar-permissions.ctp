@@ -5,10 +5,10 @@
        <?php foreach ($aroModels as $aroModel): 
                 switch ($aroModel) {
                   case 'Group':
-                    $icon = '<span class="entypo-rain"></span>';
+                    $icon = ' [Group] ';
                     break;
                   case 'User':
-                    $icon = '<span class="entypo-users"></span>';
+                    $icon = ' [User] ';
                     break;
                 }
 
@@ -19,17 +19,17 @@
 
 <span class="separator"><!-- seperator --></span>     
 <?php 
-echo $this->Html->link('<span class="entypo-cross-round"></span>', array('action' => 'drop'), array('escape' => false, 'class' => 'entypo-button entypo-16 tip-s', 'title' => sprintf(__('Delete %s and %s'), __d('fields', 'Users'), __d('fields', 'Groups')), 'onclick' => "return confirm('" . sprintf(__('Are you sure you want to delete all %s and %s?'), __d('fields', 'Users'), __('Controllers')) . "');"));
-echo $this->Html->link('<span class="entypo-forbidden"></span>', array('action' => 'drop_perms'), array('escape' => false, 'class' => 'entypo-button entypo-16 tip-s', 'title' => sprintf(__('Delete %s'), __('Permissions')), 'onclick' => "return confirm('" . sprintf(__('Are you sure you want to delete all %s?'), __('Permissions')) . "');"));
+echo $this->Html->link(' [Deletar Usuario e Controladores] ', array('action' => 'drop'), array('escape' => false, 'class' => 'entypo-button entypo-16 tip-s', 'title' => sprintf(__('Delete %s and %s'), __d('fields', 'Users'), __d('fields', 'Groups')), 'onclick' => "return confirm('" . sprintf(__('Are you sure you want to delete all %s and %s?'), __d('fields', 'Users'), __('Controllers')) . "');"));
+echo $this->Html->link(' [Deletar Permissoes] ', array('action' => 'drop_perms'), array('escape' => false, 'class' => 'entypo-button entypo-16 tip-s', 'title' => sprintf(__('Delete %s'), __('Permissions')), 'onclick' => "return confirm('" . sprintf(__('Are you sure you want to delete all %s?'), __('Permissions')) . "');"));
 ?>
 <span class="separator"><!-- seperator --></span>     
 <?php 
-echo $this->Html->link('<span class="entypo-add-user"></span>', array('action' => 'update_aros'), array('escape' => false, 'class' => 'entypo-button entypo-16 tip-s', 'title' => sprintf(__('Refresh %s and %s'), __d('fields', 'Users'), __d('fields', 'Groups'))));
-echo $this->Html->link('<span class="entypo-list-add"></span>', array('action' => 'update_acos'), array('escape' => false, 'class' => 'entypo-button entypo-16 tip-s', 'title' => sprintf(__('Refresh %s'), __('Controllers'))));
+echo $this->Html->link(' [Atualizar Usuarios e Grupos] ', array('action' => 'update_aros'), array('escape' => false, 'class' => 'entypo-button entypo-16 tip-s', 'title' => sprintf(__('Refresh %s and %s'), __d('fields', 'Users'), __d('fields', 'Groups'))));
+echo $this->Html->link(' [Atualizar Actions] ', array('action' => 'update_acos'), array('escape' => false, 'class' => 'entypo-button entypo-16 tip-s', 'title' => sprintf(__('Refresh %s'), __('Controllers'))));
 ?>
 
 
-<?php echo $this->element('toolbar-index-paginator')?>
+<?php //echo $this->element('toolbar-index-paginator')?>
 </div><!-- End .left -->
 <div class="right">
    <select name="bulkActionPermission" class="bulk-actions">

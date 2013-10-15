@@ -23,7 +23,7 @@ class AuthController extends AppController {
 		'Session',
 		'Google.AppGoogle',
 		'Google.AppProfile',
-		'Google.AppCalendar',
+		// 'Google.AppCalendar',
 		);
 
 	/**
@@ -83,7 +83,7 @@ class AuthController extends AppController {
 
 				//Carrega o ID do usuario com o ID encontrado na base de dados do sistema
 				$userGoogle['id'] = $userAlrealyAdd['Social']['id'];
-				$userGoogle['calendar'] = $userAlrealyAdd['Social']['calendar'];
+				// $userGoogle['calendar'] = $userAlrealyAdd['Social']['calendar'];
 			}
 
 			/**
@@ -162,10 +162,10 @@ class AuthController extends AppController {
 			/**
 			* Verifica se existe um calendario pre-definido como padrao pelo usuario
 			*/
-			$userGoogle['calendar'] = isset($userGoogle['calendar']) && !empty($userGoogle['calendar'])?$userGoogle['calendar']:$userGoogle['email'];
+			// $userGoogle['calendar'] = isset($userGoogle['calendar']) && !empty($userGoogle['calendar'])?$userGoogle['calendar']:$userGoogle['email'];
 
         	//Carrega todas os calendarios disponiveis do usuario
-        	$this->AppCalendar->loadCalendars($userGoogle['calendar']);
+        	// $this->AppCalendar->loadCalendars($userGoogle['calendar']);
         	//Carrega todas as permissoes do usuario/grupo em sessao
             parent::__loadPermissionsOnSessions();
         	//Carrega o token de permissao fornecido pelo google em sessao
