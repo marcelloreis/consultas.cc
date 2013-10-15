@@ -82,18 +82,14 @@ class ImportComponent extends Component {
 		/**
 		* Verifica se o nome passado passado por parametro é valido, caso contrario retorna 0
 		*/
-		if(is_null($name)){
-			return 0;
-		}
-
-		if(empty($name)){
+		if(is_null($name) || empty($name)){
 			return 0;
 		}
 
 		/**
 		* Remove todos os acentos do nome
 		*/
-		$name = $this->removeAcentos($name);
+		$name = trim($this->removeAcentos($name));
 
 		/**
 		* Padroniza o hash por letras minusculas
