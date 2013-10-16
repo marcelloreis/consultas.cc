@@ -1,4 +1,33 @@
-
+<div class="row-fluid">
+	<div class="span12">
+		<div class="box box-bordered">
+			<div class="box-content nopadding">
+				<form action="#" method="POST" class='form-horizontal form-bordered'>
+					<div class="span8">
+						<div class="control-group">
+							<label for="textfield" class="control-label"><?php echo __('Search')?></label>
+							<div class="controls">
+								<div class="input-append input-prepend">
+									<span class="add-on"><i class="icon-search"></i></span>
+									<input type="text" placeholder="Search here..." class='input-xxlarge'>
+									<button class="btn" type="button">Search!</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="span4">
+						<div class="control-group">
+							<label for="textfield" class="control-label"></label>
+							<div class="controls">
+								<button class="btn"><i class="icon-plus"></i> <?php echo sprintf(__("Add a %s"), __d('fields', $this->params['action']))?></button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
 
 <table class="table table-hover table-nomargin">
 	<thead>
