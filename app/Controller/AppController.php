@@ -137,7 +137,7 @@ class AppController extends Controller {
     	 * Configurações do componente Auth
     	 */
 		$this->Auth->authorize = array(
-			// 'Controller',
+			'Controller',
 			'Actions' => array('actionPath' => 'controllers')
 		);
     	$this->Auth->userModel = 'User';

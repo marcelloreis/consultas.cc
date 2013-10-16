@@ -1,5 +1,5 @@
-<ul class="dropdown-menu">
+<ul class='main-nav'>
     %repeat%
     <li>%link%</li>
     %/repeat%
-</ul>
+</ul>	

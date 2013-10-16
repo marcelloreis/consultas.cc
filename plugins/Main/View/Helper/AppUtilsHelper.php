@@ -174,6 +174,7 @@ class AppUtilsHelper extends AppHelper {
         	$action = isset($attr['url']['action'])?$attr['url']['action']:$attr['action'];
 
 			if(isset($v['children']) || $this->AppPermissions->check(ucfirst(strtolower($controller)) . '.' . $action)){
+				
 				//Monta a URL do menu
 				$url = ($attr['url'])?$attr['url']:array('controller' => Inflector::variable($controller), 'action' => $action, 'plugin' => $attr['plugin']);
 

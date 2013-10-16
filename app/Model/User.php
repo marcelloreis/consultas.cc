@@ -70,12 +70,12 @@ class User extends AppModel {
 				'message' => 'O campo Email deve ser preenchido corretamente.',
 			),
 		),
-		'status' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				'message' => 'O campo Status deve ser preenchido corretamente.',
-			),
-		),
+		// 'status' => array(
+		// 	'numeric' => array(
+		// 		'rule' => array('numeric'),
+		// 		'message' => 'O campo Status deve ser preenchido corretamente.',
+		// 	),
+		// ),
 	);
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed

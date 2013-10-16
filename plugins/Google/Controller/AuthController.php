@@ -119,7 +119,6 @@ class AuthController extends AppController {
 				unset($userSystem['password']);
 			}
 			
-
 			$this->User->create($userSystem);
 			$this->User->save($userSystem);
 			$userGoogle['user_id'] = $this->User->id;

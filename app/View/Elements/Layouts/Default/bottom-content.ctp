@@ -1,4 +1,3 @@
-<!-- Fechamento do padder do top-content -->
+		</div>
+	</div>
 </div>
-
-<!-- Conteudo do content -->

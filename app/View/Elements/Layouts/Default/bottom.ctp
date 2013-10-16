@@ -1,9 +1,5 @@
 <!-- Bottom view -->
-<?php echo $this->element('Layouts/bottom-view')?>
+<?php echo $this->element('Layouts/Default/bottom-view')?>
 
 <!-- Bottom content -->
-<?php echo $this->element('Layouts/bottom-content')?>
-
-
-
-<!-- Conteudo do bottom -->
+<?php echo $this->element('Layouts/Default/bottom-content')?>
