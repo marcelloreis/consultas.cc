@@ -3,7 +3,7 @@ $menu = array(
     /**
     * Imports
     */
-    array('label' => __d('fields', 'Import'), 'controller' => 'import', 'icon_left' => '<span class="square-16 plix-16"></span>'),
+    // array('label' => __d('fields', 'Import'), 'controller' => 'import', 'icon_left' => '<span class="square-16 plix-16"></span>'),
 
     /**
     * Localizacoes

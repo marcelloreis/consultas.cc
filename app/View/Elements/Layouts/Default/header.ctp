@@ -32,6 +32,7 @@
             'bootstrap-responsive.min.css',
             'plugins/jquery-ui/smoothness/jquery-ui',
             'plugins/jquery-ui/smoothness/jquery.ui.theme',
+            'plugins/datatable/TableTools',
             'plugins/pageguide/pageguide',
             'plugins/fullcalendar/fullcalendar',
             'plugins/fullcalendar/fullcalendar.print',
@@ -66,6 +67,13 @@
             'plugins/vmap/jquery.vmap.sampledata',
 
             'plugins/bootbox/jquery.bootbox',
+
+            // 'plugins/datatable/jquery.dataTables.min',
+            // 'plugins/datatable/TableTools.min',
+            // 'plugins/datatable/ColReorderWithResize',
+            // 'plugins/datatable/ColVis.min',
+            // 'plugins/datatable/jquery.dataTables.columnFilter',
+            // 'plugins/datatable/jquery.dataTables.grouping',
 
             'plugins/flot/jquery.flot.min',
             'plugins/flot/jquery.flot.bar.order.min',

@@ -3,7 +3,7 @@
 		<div class="container-fluid">
 			<div class="page-header">
 				<div class="pull-left">
-					<h1>Fixed topbar and sidebar</h1>
+					<h1><?php echo $this->fetch('title-content', __d('fields', ucfirst($this->params['controller'])))?></h1>
 				</div>
 
 				<?php echo $this->element('Layouts/Default/shortcuts')?>
