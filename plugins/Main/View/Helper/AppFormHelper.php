@@ -50,9 +50,6 @@ class AppFormHelper extends AppHelper {
             unset($options['classForm']);
         }
 
-        //Inicializa a variavel e insere a classe que habilita os e-checkbox
-        // $options['class'] = isset($options['class'])?$options['class'] . ' e-checkbox-section':'e-checkbox-section ';
-
         //Cria o formulario
         $form = $this->Form->create($this->model, $options); 
 
@@ -96,7 +93,7 @@ class AppFormHelper extends AppHelper {
 
 
         //Verifica se foi requisitado um template fora do padrao
-        $templateName = (isset($options['template']))?$options['template']:'input';
+        $templateName = (isset($options['template']))?$options['template']:'form-input';
 
         //Carrega o template do elemento
         $inputTemplate = $this->AppUtils->loadTemplate($templateName);
@@ -111,7 +108,7 @@ class AppFormHelper extends AppHelper {
             $options['title'] = $message;
         }
         //Inicializa a variavel $options['class']
-        if(!isset($options['class']) || $options['class'] == 'e-checkbox-trigger'){
+        if(!isset($options['class'])){
             if(!isset($options['class'])){
                 $options['class'] = '';
             }
@@ -169,7 +166,7 @@ class AppFormHelper extends AppHelper {
     }
 
     public function btn($value=false, $options=array()) {
-        $value = !$value?__('Save'):$value;
+        $value = !$value?__('Save'):__($value);
         /**
          * Libera o acesso ao botao somente se o usuario tiver acesso a ação/função
          */

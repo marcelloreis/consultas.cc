@@ -1,44 +1,54 @@
-<?php $this->assign('title', __(ucfirst($this->params['controller'])));?>
-<?php $this->assign('toolbar-index', $this->element('toolbar-index'));?>
-
-<div id="content-grid">
-    <!-- New widget -->
-    <?php echo $this->AppGrid->create($modelClass, array('tableClass' => 'basic-table', 'id' => 'basic-table'))?>
-    <thead>
-        <?php $columns['id'] = '<input type="checkbox" name="" class="e-checkbox-trigger"/>'?>
-        <?php $columns['action'] = __('Actions')?>
-        <?php unset($columns['password'])?>
-		<?php unset($columns['google_token'])?>
-        <?php unset($columns['google_calendar_key'])?>
-		<?php unset($columns['given_name'])?>
-        <?php echo $this->AppGrid->tr($columns)?>
-    </thead>
-
-    <tbody>
-        <?php 
-        $map = strtolower($modelClass);
-        if(count($$map)){
-            foreach($$map as $k => $v){
-                //Seta as larguras das colunas
-                $v[$modelClass]['picture_width'] = '70px';
-                
-                $v[$modelClass]['action'] = $this->element('table-actions', array('id' => $v[$modelClass]['id']));
-                $v[$modelClass]['id'] = $this->AppForm->input("{$modelClass}.id.{$k}", array('type' => 'checkbox', 'template' => 'form-input-clean', 'value' => $v[$modelClass]['id'], 'placeholder' => $v[$modelClass][$fieldText]));
-                $v[$modelClass]['group_id'] = $v['Group']['name'];
-                $v[$modelClass]['status'] = $this->AppUtils->boolTxt($v[$modelClass]['status'], 'Ativo', 'Inativo');
-                $avatar = isset($v[$modelClass]['picture']) && !empty($v[$modelClass]['picture'])?$v[$modelClass]['picture']:'avatar.jpg';
-                $v[$modelClass]['picture'] = $this->Html->image($avatar, array('id' => 'main-avatar'));
-                echo $this->AppGrid->tr($v[$modelClass]);
-            };
-        }
-        ?>
-    </tbody>
-    <?php echo $this->AppGrid->end(array('labelRight' => $this->Paginator->counter('Página {:page} de {:pages}, exibindo {:current} registros do total de {:count}, começando pelo registro {:start} até o {:end}')))?>
-</div>
-
 <?php 
+/**
+* Adiciona o painel de funcoes da grid
+*/
+echo $this->element('Index/panel');
 
-//Responsável pela impressão do javascript
-echo $this->Js->writeBuffer();
+/**
+* Inicia a montagem da grid
+*/
+echo $this->AppGrid->create($modelClass, array('id' => 'index-table', 'tableClass' => 'table table-hover table-nomargin'));
 
-?>
+/**
+* Monta o cabeçalho
+*/
+$columns['id'] = $this->AppForm->input("", array('id' => 'check-all', 'type' => 'checkbox', 'template' => 'form-input-clean'));
+$columns['action'] = __('Actions');
+unset($columns['password']);
+unset($columns['google_token']);
+unset($columns['google_calendar_key']);
+unset($columns['given_name']);
+echo $this->Html->tag('thead', $this->AppGrid->tr($columns));
+
+/**
+* Monta o body
+*/
+$map = strtolower($modelClass);
+if(count($$map)){
+    $body = '';
+    foreach($$map as $k => $v){
+
+        //Seta as larguras das colunas
+        $v[$modelClass]['picture_width'] = '70px';
+        
+        $v[$modelClass]['action'] = $this->element('Index/action', array('id' => $v[$modelClass]['id']));
+        $v[$modelClass]['id'] = $this->AppForm->input("{$modelClass}.id.{$k}", array('type' => 'checkbox', 'template' => 'form-input-clean', 'value' => $v[$modelClass]['id'], 'placeholder' => $v[$modelClass][$fieldText]));
+        $v[$modelClass]['group_id'] = $v['Group']['name'];
+        $v[$modelClass]['status'] = $this->AppUtils->boolTxt($v[$modelClass]['status'], 'Ativo', 'Inativo');
+        $avatar = isset($v[$modelClass]['picture']) && !empty($v[$modelClass]['picture'])?$v[$modelClass]['picture']:'avatar.jpg';
+        $v[$modelClass]['picture'] = $this->Html->image($avatar, array('id' => "avatar-{$v[$modelClass]['id']}", 'width' => 50, 'height' => 50));
+
+        $body .= $this->AppGrid->tr($v[$modelClass]);
+    }
+    echo $this->Html->tag('tbody', $body);
+}
+
+/**
+* Fecha a montagem da grid
+*/                
+echo $this->AppGrid->end();
+
+/**
+* Adiciona o rodapé da grid
+*/
+echo $this->element('Index/footer');

@@ -36,12 +36,20 @@
             'plugins/pageguide/pageguide',
             'plugins/fullcalendar/fullcalendar',
             'plugins/fullcalendar/fullcalendar.print',
+            'plugins/tagsinput/jquery.tagsinput',
             'plugins/chosen/chosen',
+            'plugins/multiselect/multi-select',
+            'plugins/timepicker/bootstrap-timepicker.min',
+            'plugins/colorpicker/colorpicker',
+            'plugins/datepicker/datepicker',
+            'plugins/daterangepicker/daterangepicker',
+            'plugins/plupload/jquery.plupload.queue',
             'plugins/select2/select2',
             'plugins/icheck/all.css',
             'style.css',
             'themes.css',
         ));
+
 
         /**
         * Scrips da aplicacao
@@ -56,6 +64,8 @@
             'plugins/jquery-ui/jquery.ui.draggable.min',
             'plugins/jquery-ui/jquery.ui.resizable.min',
             'plugins/jquery-ui/jquery.ui.sortable.min',
+            'plugins/jquery-ui/jquery.ui.spinner.js',
+            'plugins/jquery-ui/jquery.ui.slider.js',
 
             'plugins/touch-punch/jquery.touch-punch.min',
             'plugins/slimscroll/jquery.slimscroll.min',
@@ -68,12 +78,18 @@
 
             'plugins/bootbox/jquery.bootbox',
 
-            // 'plugins/datatable/jquery.dataTables.min',
-            // 'plugins/datatable/TableTools.min',
-            // 'plugins/datatable/ColReorderWithResize',
-            // 'plugins/datatable/ColVis.min',
-            // 'plugins/datatable/jquery.dataTables.columnFilter',
-            // 'plugins/datatable/jquery.dataTables.grouping',
+            'plugins/maskedinput/jquery.maskedinput.min',
+
+            'plugins/tagsinput/jquery.tagsinput.min',
+            
+            'plugins/datepicker/bootstrap-datepicker',
+
+            'plugins/daterangepicker/daterangepicker',
+            'plugins/daterangepicker/moment.min',
+
+            'plugins/timepicker/bootstrap-timepicker.min',
+
+            'plugins/colorpicker/bootstrap-colorpicker',
 
             'plugins/flot/jquery.flot.min',
             'plugins/flot/jquery.flot.bar.order.min',
@@ -88,9 +104,23 @@
 
             'plugins/chosen/chosen.jquery.min',
 
+            'plugins/multiselect/jquery.multi-select',
+            
+            'plugins/ckeditor/ckeditor',
+
+            'plugins/plupload/plupload.full',
+            'plugins/plupload/jquery.plupload.queue',
+
+            'plugins/fileupload/bootstrap-fileupload.min',
+            
+            'plugins/mockjax/jquery.mockjax',
+
             'plugins/select2/select2.min',
 
             'plugins/icheck/jquery.icheck.min',
+            
+            'plugins/complexify/jquery.complexify-banlist.min',
+            'plugins/complexify/jquery.complexify.min',
 
             'eakroko.min',
 
@@ -100,6 +130,10 @@
 
             'plugins/validation/jquery.validate.min',
             'plugins/validation/additional-methods.min',
+            
+            'check-all',
+            
+            '_main',
         ));
 
         //Scripts dos plugins
@@ -112,4 +146,4 @@
         ?>
 
     </head>
-    <body data-layout-sidebar="fixed" data-layout-topbar="fixed" class="theme-satblue">
+    <body data-layout-sidebar="fixed" class="<?php echo THEME?>">

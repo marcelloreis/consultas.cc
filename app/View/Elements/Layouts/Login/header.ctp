@@ -54,4 +54,4 @@
         ?>
 
     </head>
-    <body class='login'>
+    <body class='login <?php echo THEME?>'>

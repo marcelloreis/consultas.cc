@@ -1,2 +1,1 @@
-        </table>
-    </div>
+</table>

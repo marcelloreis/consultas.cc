@@ -6,8 +6,8 @@
 					<h1><?php echo $this->fetch('title-content', __d('fields', ucfirst($this->params['controller'])))?></h1>
 				</div>
 
-				<?php echo $this->element('Layouts/Default/shortcuts')?>
+				<?php echo $this->element('Components/shortcuts')?>
 				
 			</div>
 
-			<?php echo $this->element('Layouts/Default/breadcrumbs')?>
+			<?php echo $this->element('Components/breadcrumbs')?>

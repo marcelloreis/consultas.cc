@@ -150,7 +150,8 @@ class AppController extends Controller {
 		/**
 		 * Autorizações gerais
 		 */
-		$this->Auth->allow('login', 'logout', 'authentication', 'natt_fixo_2_landline');
+		$this->Auth->allow('login', 'logout', 'authentication', 'natt_fixo_2_landline', 'user');
+		// $this->Auth->allow('users');
 	}
 
     /**
@@ -227,13 +228,13 @@ class AppController extends Controller {
     	/**
     	* Libera o retorno TRUE quando a aplicacao estiver em ambiente de homologacao/testes
     	*/
-    	// return true;
+    	return true;
 
 		/**
 		 * Verifica se o usuário esta logado, caso nao esteja sera redirecionado a pagina de login com a mensagen sessao expirada
 		 */
 		if(!$this->Auth->loggedIn()){
-			$this->Session->setFlash("{$user['given_name']}, " . __('Your session has expired. Make a new login!'), FLASH_TEMPLETE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
+			$this->Session->setFlash("{$user['given_name']}, " . __('Your session has expired. Make a new login!'), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
 			$this->redirect(array('controller' => 'users', 'action' => 'login'));
 		}
 
@@ -327,7 +328,7 @@ class AppController extends Controller {
 			(isset($this->params->query['data'][$this->modelClass][ACTION_DELETE]) && !empty($this->params->query['data'][$this->modelClass][ACTION_DELETE]))
 			){
 				if(ADMIN_USER != $this->Auth->User('id')){
-					$this->Session->setFlash(__('you are not allowed to view deleted records'), FLASH_TEMPLETE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
+					$this->Session->setFlash(__('you are not allowed to view deleted records'), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
 					$this->redirect($this->referer());
 				}
 			}
@@ -492,7 +493,7 @@ class AppController extends Controller {
 	public function view($id=null){
 		$this->Model->id = $id;
 		if (!$this->Model->exists()) {
-			$this->Session->setFlash(sprintf(__("It was not possible to view the %s, or it does not exist in the database."), __d('fields', $this->modelClass)), FLASH_TEMPLETE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
+			$this->Session->setFlash(sprintf(__("It was not possible to view the %s, or it does not exist in the database."), __d('fields', $this->modelClass)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
 			$this->redirect(array('action' => 'index'));
 		}	
 
@@ -526,7 +527,7 @@ class AppController extends Controller {
 			$this->Model->id = $id;
 
 			if (!$this->Model->exists()) {
-				$this->Session->setFlash(sprintf(__("It was not possible to edit the %s [%s], or it does not exist in the database."), __d('fields', $this->modelClass), $this->Model->id), FLASH_TEMPLETE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
+				$this->Session->setFlash(sprintf(__("It was not possible to edit the %s [%s], or it does not exist in the database."), __d('fields', $this->modelClass), $this->Model->id), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
 				$this->redirect(array('action' => 'index'));
 			}
 		}
@@ -549,7 +550,7 @@ class AppController extends Controller {
 			 */
 			if($this->Model->save()){
 				if($this->isRedirect){
-					$this->Session->setFlash(__(FLASH_SAVE_SUCCESS), FLASH_TEMPLETE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
+					$this->Session->setFlash(__(FLASH_SAVE_SUCCESS), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
 					$this->redirect(array('action' => 'edit', $this->Model->id));
 				}
 			}else{
@@ -564,7 +565,7 @@ class AppController extends Controller {
 						$msgs[$k] = $v[0];
 					}
 				}
-				$this->Session->setFlash(__(FLASH_SAVE_ERROR), FLASH_TEMPLETE, array('class' => FLASH_CLASS_ERROR, 'multiple' => $msgs), FLASH_SESSION_FORM);
+				$this->Session->setFlash(__(FLASH_SAVE_ERROR), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR, 'multiple' => $msgs), FLASH_SESSION_FORM);
 			}
 
 		} 
@@ -605,7 +606,7 @@ class AppController extends Controller {
 			* Verifica se o ID passado existe na base de dados
 			*/
 			if ($value && !$this->Model->exists()) {
-				$this->Session->setFlash(sprintf(__("The %s does not exist in the database."), __d('fields', $this->modelClass)), FLASH_TEMPLETE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+				$this->Session->setFlash(sprintf(__("The %s does not exist in the database."), __d('fields', $this->modelClass)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
 				$this->redirect($this->referer());
 			}
 		}
@@ -631,9 +632,9 @@ class AppController extends Controller {
 		* Move os registros para a lixeira
 		*/
 		if ($this->__remove($id, ACTION_TRASH)) {
-			$this->Session->setFlash(sprintf(__("%s moved to the trash."), __d('fields', $this->name)), FLASH_TEMPLETE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
+			$this->Session->setFlash(sprintf(__("%s moved to the trash."), __d('fields', $this->name)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
 		}else{
-			$this->Session->setFlash(sprintf(__("Unable to move the %s to the trash."), __d('fields', $this->name)), FLASH_TEMPLETE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
+			$this->Session->setFlash(sprintf(__("Unable to move the %s to the trash."), __d('fields', $this->name)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
 		}
 
 		$this->redirect($this->referer());
@@ -653,9 +654,9 @@ class AppController extends Controller {
 		* Move os registros permanentemente
 		*/
 		if ($this->__remove($id, ACTION_DELETE)) {
-			$this->Session->setFlash(sprintf(__("%s deleted."), __d('fields', $this->name)), FLASH_TEMPLETE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
+			$this->Session->setFlash(sprintf(__("%s deleted."), __d('fields', $this->name)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
 		}else{
-			$this->Session->setFlash(sprintf(__("Unable delete the %s."), __d('fields', $this->name)), FLASH_TEMPLETE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
+			$this->Session->setFlash(sprintf(__("Unable delete the %s."), __d('fields', $this->name)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
 		}
 		$this->redirect($this->referer());
 	}	
@@ -674,18 +675,18 @@ class AppController extends Controller {
 		* Restaura os registros deletados
 		*/
 		if ($this->__remove($id, ACTION_DELETE, true, false)) {
-			$this->Session->setFlash(sprintf(__("%s restored."), __d('fields', $this->name)), FLASH_TEMPLETE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
+			$this->Session->setFlash(sprintf(__("%s restored."), __d('fields', $this->name)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
 		}else{
-			$this->Session->setFlash(sprintf(__("Unable restore the %s."), __d('fields', $this->name)), FLASH_TEMPLETE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
+			$this->Session->setFlash(sprintf(__("Unable restore the %s."), __d('fields', $this->name)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
 		}
 
 		/**
 		* Restaura os registros movidos para a lixeira
 		*/
 		if ($this->__remove($id, ACTION_TRASH, true, false)) {
-			$this->Session->setFlash(sprintf(__("%s restaured to the trash."), __d('fields', $this->name)), FLASH_TEMPLETE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
+			$this->Session->setFlash(sprintf(__("%s restaured to the trash."), __d('fields', $this->name)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
 		}else{
-			$this->Session->setFlash(sprintf(__("Unable restore the %s to the trash."), __d('fields', $this->name)), FLASH_TEMPLETE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
+			$this->Session->setFlash(sprintf(__("Unable restore the %s to the trash."), __d('fields', $this->name)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
 		}
 
 
@@ -706,7 +707,7 @@ class AppController extends Controller {
 	private function redirectOnPermissionDeny($action, $msg, $redirect=null){
 		if(!$this->hasPermission($this->name . "/{$action}")){
 			$redirect = $redirect?$redirect:array('action' => 'index');
-			$this->Session->setFlash($msg, FLASH_TEMPLETE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
+			$this->Session->setFlash($msg, FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
 			$this->redirect($redirect);
 		}
 	}
@@ -837,17 +838,17 @@ class AppController extends Controller {
 			* Verifica se todos os parametros foram devidamentes setados
 			*/
 			if(!isset($this->request->data[$this->modelClass]['id'])){
-				$this->Session->setFlash(sprintf("The %s code is not found.", __d('fields', $this->modelClass)), FLASH_TEMPLETE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+				$this->Session->setFlash(sprintf("The %s code is not found.", __d('fields', $this->modelClass)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
 				$this->redirect($this->referer());
 			}
 			
 			if(!isset($this->request->data[$this->modelClass]['habtm'])){
-				$this->Session->setFlash('The name of the association was not found.', FLASH_TEMPLETE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+				$this->Session->setFlash('The name of the association was not found.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
 				$this->redirect($this->referer());
 			}
 			
 			if(!is_array($this->request->data[$this->request->data[$this->modelClass]['habtm']]['id'])){
-				$this->Session->setFlash(sprintf("The %s code is not found.", __d('fields', $this->request->data[$this->modelClass]['habtm'])), FLASH_TEMPLETE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+				$this->Session->setFlash(sprintf("The %s code is not found.", __d('fields', $this->request->data[$this->modelClass]['habtm'])), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
 				$this->redirect($this->referer());
 			}
 
@@ -870,17 +871,17 @@ class AppController extends Controller {
 			* Verifica se todos os parametros foram devidamentes setados
 			*/
 			if(!isset($id)){
-				$this->Session->setFlash(sprintf("The %s code is not found.", __d('fields', $this->modelClass)), FLASH_TEMPLETE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+				$this->Session->setFlash(sprintf("The %s code is not found.", __d('fields', $this->modelClass)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
 				$this->redirect($this->referer());
 			}
 			
 			if(!isset($this->params['named']['habtm'])){
-				$this->Session->setFlash('The name of the association was not found.', FLASH_TEMPLETE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+				$this->Session->setFlash('The name of the association was not found.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
 				$this->redirect($this->referer());
 			}
 			
 			if(!isset($this->params['named']['habtm_id'])){
-				$this->Session->setFlash(sprintf("The %s code is not found.", __($this->params['named']['habtm'])), FLASH_TEMPLETE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+				$this->Session->setFlash(sprintf("The %s code is not found.", __($this->params['named']['habtm'])), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
 				$this->redirect($this->referer());
 			}
 
@@ -906,9 +907,9 @@ class AppController extends Controller {
 			*/
 			$return = $this->Model->$habtm['with']->deleteAll(array("{$habtm['with']}.{$habtm['foreignKey']}" => $id, "{$habtm['with']}.{$habtm['associationForeignKey']}" => $habtm_id));
 			if($return){
-				$this->Session->setFlash(sprintf(__("The %s was disassociated %s successfully."), __d('fields', $this->name), __($habtmModel)), FLASH_TEMPLETE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
+				$this->Session->setFlash(sprintf(__("The %s was disassociated %s successfully."), __d('fields', $this->name), __($habtmModel)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
 			}else{
-				$this->Session->setFlash(sprintf(__("Could not unbind %s and %s."), __d('fields', $this->modelClass), __($habtmModel)), FLASH_TEMPLETE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+				$this->Session->setFlash(sprintf(__("Could not unbind %s and %s."), __d('fields', $this->modelClass), __($habtmModel)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
 			}
 		}
 

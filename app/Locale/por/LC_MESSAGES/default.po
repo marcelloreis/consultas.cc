@@ -24,6 +24,12 @@ msgstr "Não"
 msgid "Save"
 msgstr "Salvar"
 
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgid "Save changes"
+msgstr "Salvar alterações"
+
 msgid "Controllers"
 msgstr "Controladores"
 
@@ -145,20 +151,6 @@ msgstr "A %s foi desassociada do %s com sucesso."
 msgid "Could not unbind %s and %s."
 msgstr "Não foi possível desvincular %s e %s."
 
-#: View/Cities/edit.ctp:7
-#: View/Countries/edit.ctp:7
-#: View/Events/edit.ctp:7
-#: View/Grids/edit.ctp:7
-#: View/Groups/edit.ctp:7
-#: View/Inscriptions/edit.ctp:7
-#: View/Marketings/edit.ctp:7
-#: View/Responsibles/edit.ctp:7
-#: View/Speakers/edit.ctp:7
-#: View/Sponsors/edit.ctp:7
-#: View/States/edit.ctp:7
-#: View/Students/edit.ctp:7
-#: View/Users/edit.ctp:7
-#: View/Workshops/edit.ctp:7
 msgid "Edit %s"
 msgstr "Alterar %s"
 
@@ -393,23 +385,47 @@ msgstr "registro(s) encontrados"
 msgid "index"
 msgstr "índice"
 
+msgid "Index"
+msgstr "Índice"
+
 msgid "edit"
 msgstr "alterar"
+
+msgid "Edit"
+msgstr "Alterar"
 
 msgid "add"
 msgstr "adicionar"
 
+msgid "Add"
+msgstr "Adicionar"
+
 msgid "view"
 msgstr "visualizar"
+
+msgid "View"
+msgstr "Visualizar"
 
 msgid "delete"
 msgstr "excluir"
 
+msgid "Delete"
+msgstr "Excluir"
+
 msgid "trash"
 msgstr "lixeira"
+
+msgid "Trash"
+msgstr "Lixeira"
 
 msgid "restore"
 msgstr "restaurar"
 
+msgid "Restore"
+msgstr "Restaurar"
+
 msgid "options"
 msgstr "opções"
+
+msgid "Options"
+msgstr "Opções"

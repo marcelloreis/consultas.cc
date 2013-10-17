@@ -19,5 +19,7 @@ define('TP_INVALID', 4);
 
 define('LIMIT_HASH', 5);
 
+define('THEME', 'theme-satblue');
+
 define('FEMALE', 1);
 define('MALE', 2);

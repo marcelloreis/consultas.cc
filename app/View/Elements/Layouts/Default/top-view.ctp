@@ -4,7 +4,8 @@
 			<div class="box-title">
 				<h3>
 					<i class="icon-table"></i>
-					<?php echo __d('fields', ucfirst($this->params['action']))?>
+					<?php echo __(ucfirst($this->params['action']))?>
 				</h3>
 			</div>
 			<div class="box-content nopadding">
+				<?php echo $this->Session->flash(FLASH_SESSION_FORM)?>

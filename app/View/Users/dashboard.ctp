@@ -1,33 +1,4 @@
-<div class="row-fluid">
-	<div class="span12">
-		<div class="box box-bordered">
-			<div class="box-content nopadding">
-				<form action="#" method="POST" class='form-horizontal form-bordered'>
-					<div class="span8">
-						<div class="control-group">
-							<label for="textfield" class="control-label"><?php echo __('Search')?></label>
-							<div class="controls">
-								<div class="input-append input-prepend">
-									<span class="add-on"><i class="icon-search"></i></span>
-									<input type="text" placeholder="Search here..." class='input-xxlarge'>
-									<button class="btn" type="button">Search!</button>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="span4">
-						<div class="control-group">
-							<label for="textfield" class="control-label"></label>
-							<div class="controls">
-								<button class="btn"><i class="icon-plus"></i> <?php echo sprintf(__("Add a %s"), __d('fields', $this->params['action']))?></button>
-							</div>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-</div>
+<?php echo $this->element('Index/panel')?>
 
 <table class="table table-hover table-nomargin">
 	<thead>
@@ -48,35 +19,35 @@
 			</td>
 			<td class='hidden-350'>Win 95+</td>
 			<td class='hidden-1024'>4</td>
-			<td class='hidden-480'>X</td>
+			<td class='hidden-480'><?php echo $this->element('Index/action')?></td>
 		</tr>
 		<tr>
 			<td>Presto</td>
 			<td>Nokia N800</td>
 			<td class='hidden-350'>N800</td>
 			<td class='hidden-1024'>-</td>
-			<td class='hidden-480'>A</td>
+			<td class='hidden-480'><?php echo $this->element('Index/action')?></td>
 		</tr>
 		<tr>
 			<td>Misc</td>
 			<td>NetFront 3.4</td>
 			<td class='hidden-350'>Embedded devices</td>
 			<td class='hidden-1024'>-</td>
-			<td class='hidden-480'>A</td>
+			<td class='hidden-480'><?php echo $this->element('Index/action')?></td>
 		</tr>
 		<tr>
 			<td>Misc</td>
 			<td>Dillo 0.8</td>
 			<td class='hidden-350'>Embedded devices</td>
 			<td class='hidden-1024'>-</td>
-			<td class='hidden-480'>X</td>
+			<td class='hidden-480'><?php echo $this->element('Index/action')?></td>
 		</tr>
 		<tr>
 			<td>Misc</td>
 			<td>Links</td>
 			<td class='hidden-350'>Text only</td>
 			<td class='hidden-1024'>-</td>
-			<td class='hidden-480'>X</td>
+			<td class='hidden-480'><?php echo $this->element('Index/action')?></td>
 		</tr>
 		<tr>
 			<td>Misc</td>
@@ -89,14 +60,14 @@
 </table>
 
 <div class="table-pagination">
-	<a href="#" class='disabled'>First</a>
-	<a href="#" class='disabled'>Previous</a>
-	<span>
-		<a href="#" class='active'>1</a>
-		<a href="#">2</a>
-		<a href="#">3</a>
-	</span>
-	<a href="#">Next</a>
-	<a href="#">Last</a>
-</div>								
+    <a href="#" class='disabled'>First</a>
+    <a href="#" class='disabled'>Previous</a>
+    <span>
+        <a href="#" class='active'>1</a>
+        <a href="#">2</a>
+        <a href="#">3</a>
+    </span>
+    <a href="#">Next</a>
+    <a href="#">Last</a>
+</div>
 							
