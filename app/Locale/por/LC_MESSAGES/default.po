@@ -424,6 +424,12 @@ msgstr "restaurar"
 msgid "Restore"
 msgstr "Restaurar"
 
+msgid "back"
+msgstr "voltar"
+
+msgid "Back"
+msgstr "Voltar"
+
 msgid "options"
 msgstr "opções"
 

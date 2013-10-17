@@ -56,7 +56,7 @@ class AclController extends AclManagerAppController {
     public function drop() {
         $this->Acl->Aco->deleteAll(array("1 = 1"));
         $this->Acl->Aro->deleteAll(array("1 = 1"));
-        $this->Session->setFlash(__("Todas os AROs e ACOs foram removidos."), FLASH_TEMPLETE, array('class' => FLASH_CLASS_SUCCESS, 'title' => __('Permissões')), FLASH_SESSION_FORM);
+        $this->Session->setFlash(__("Todas os AROs e ACOs foram removidos."), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS, 'title' => __('Permissões')), FLASH_SESSION_FORM);
         $this->redirect($this->request->referer());
     }
 
@@ -65,9 +65,9 @@ class AclController extends AclManagerAppController {
      */
     public function drop_perms() {
         if ($this->Acl->Aro->Permission->deleteAll(array("1 = 1"))) {
-            $this->Session->setFlash(__("Todas as permissões foram removidas."), FLASH_TEMPLETE, array('class' => FLASH_CLASS_SUCCESS, 'title' => __('Permissões')), FLASH_SESSION_FORM);
+            $this->Session->setFlash(__("Todas as permissões foram removidas."), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS, 'title' => __('Permissões')), FLASH_SESSION_FORM);
         } else {
-            $this->Session->setFlash(__("Não foi possivel remover as permisssões."), FLASH_TEMPLETE, array('class' => FLASH_CLASS_ERROR, 'title' => __('Permissões')), FLASH_SESSION_FORM);
+            $this->Session->setFlash(__("Não foi possivel remover as permisssões."), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR, 'title' => __('Permissões')), FLASH_SESSION_FORM);
         }
         $this->redirect($this->request->referer());
     }
@@ -75,8 +75,8 @@ class AclController extends AclManagerAppController {
     /**
      * Index action
      */
-    public function index() {
-    }
+    // public function index() {
+    // }
 
     /**
      * Manage Permissions
@@ -122,7 +122,7 @@ class AclController extends AclManagerAppController {
         * Verifica se o ARO solicitado existe
         */
         if(!isset($this->params['named']['aro_id']) || !isset($aro_list[$this->params['named']['aro_id']])){
-            $this->Session->setFlash(__('O Aro informado nao existe'), FLASH_TEMPLETE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
+            $this->Session->setFlash(__('O Aro informado nao existe'), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
             $this->redirect(array('controller' => 'users', 'action' => 'dashboard', 'plugin' => false));
         }
 
@@ -207,7 +207,7 @@ class AclController extends AclManagerAppController {
     public function update_acos() {
         $hasAro = $this->Acl->Aro->find('count');
         if(!$hasAro){
-            $this->Session->setFlash(__('Nenhum ARO foi criado ainda, crie os AROs primeiro.'), FLASH_TEMPLETE, array('class' => FLASH_CLASS_ERROR, 'title' => __('Atualização de ACO\'s')), FLASH_SESSION_FORM);
+            $this->Session->setFlash(__('Nenhum ARO foi criado ainda, crie os AROs primeiro.'), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR, 'title' => __('Atualização de ACO\'s')), FLASH_SESSION_FORM);
         }else{
 
             $count = 0;
@@ -272,7 +272,7 @@ class AclController extends AclManagerAppController {
             $this->Acl->Aco->deleteAll(array('Aco.id' => $acoIds));
         }
 
-        $this->Session->setFlash(sprintf(__("%d ACOs(CONTROLADORES/FUNÇÕES) foram criados/atualizados."), $count), FLASH_TEMPLETE, array('class' => FLASH_CLASS_SUCCESS, 'title' => __('Atualização de ACO\'s')), FLASH_SESSION_FORM);
+        $this->Session->setFlash(sprintf(__("%d ACOs(CONTROLADORES/FUNÇÕES) foram criados/atualizados."), $count), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS, 'title' => __('Atualização de ACO\'s')), FLASH_SESSION_FORM);
     }
     $this->redirect($this->request->referer());
 }
@@ -344,7 +344,7 @@ class AclController extends AclManagerAppController {
             }
         }
 
-        $this->Session->setFlash(sprintf(__("%d AROs(GRUPOS E USUÁRIOS) foram criados."), $count), FLASH_TEMPLETE, array('class' => FLASH_CLASS_SUCCESS, 'title' => __('Atualização de ARO\'s')), FLASH_SESSION_FORM);
+        $this->Session->setFlash(sprintf(__("%d AROs(GRUPOS E USUÁRIOS) foram criados."), $count), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS, 'title' => __('Atualização de ARO\'s')), FLASH_SESSION_FORM);
         $this->redirect($this->request->referer());
     }
 

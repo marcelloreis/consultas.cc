@@ -101,8 +101,8 @@ define('ACTION_DELETE', 'deleted');
 */
 define('FLASH_SESSION_FORM', 'session_form');
 define('FLASH_SESSION_LOGIN', 'session_login');
-define('FLASH_TEMPLATE', 'Complements/flash-message');
-define('FLASH_TEMPLATE_DASHBOARD', 'Complements/flash-message-dashboard');
+define('FLASH_TEMPLATE', 'Components/flash-message');
+define('FLASH_TEMPLATE_DASHBOARD', 'Components/flash-message-dashboard');
 
 /**
 * Classe de status das mensagens

@@ -23,7 +23,12 @@ $map = strtolower($modelClass);
 if(count($$map)){
     $body = '';
     foreach($$map as $k => $v){
-        $v[$modelClass]['action'] = $this->element('Index/action', array('id' => $v[$modelClass]['id']));
+    	/**
+    	* Altera a largura da coluna Acoes
+    	*/
+    	$v[$modelClass]['action_width'] = '150';
+    	
+        $v[$modelClass]['action'] = $this->element('Index/Groups/action', array('id' => $v[$modelClass]['id']));
         $v[$modelClass]['id'] = $this->AppForm->input("{$modelClass}.id.{$k}", array('type' => 'checkbox', 'template' => 'form-input-clean', 'value' => $v[$modelClass]['id'], 'placeholder' => $v[$modelClass][$fieldText]));
         $body .= $this->AppGrid->tr($v[$modelClass]);
     }
