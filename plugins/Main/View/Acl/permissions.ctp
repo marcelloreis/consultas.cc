@@ -5,25 +5,19 @@
 $aro_id = (isset($this->params['named']['aro_id']) && !empty($this->params['named']['aro_id']))?$this->params['named']['aro_id']:'';
 
 /**
+* Carrega o icone da view
+*/
+$this->assign('icon-view', '<i class="icon-unlock"></i>');
+
+/**
+* Carrega o titulo da view
+*/
+$this->assign('title-view', __('%s Permissions', __($aro_list[$aro_id])));
+
+/**
 * Adiciona o topo com o titulo da grid
 */
-echo $this->element('Index/header', array('title' => __('%s Permissions', __($aro_list[$aro_id]))));
-
-/**
-* Adiciona o painel de funcoes da grid
-*/
-echo $this->element('Acl/index-panel');
-
-/**
-* Inicia a montagem da grid
-*/
-echo $this->AppGrid->create($modelClass, array('tableClass' => "table table-striped b-t m-b-none"));
-
-/**
-* Monta o cabeçalho
-*/
-$columns['controllers'] = __('Controllers');
-echo $this->Html->tag('thead', $this->AppGrid->tr($columns, array('sort' => false)));
+echo $this->element('Acl/panel');
 
 /**
 * Monta o body
@@ -78,20 +72,7 @@ if(count($acos)){
     */
     $body = '';
     foreach ($actions as $k => $v) {
-        $tr['controllers'] = $this->element('Acl/permissions-actions', array('controller' => __($v['Controller']), 'key' => "collapse-{$k}", 'common' => $v['common'], 'others' => $v['others']));
-        $body .= $this->AppGrid->tr($tr);                                
+        echo $this->element('Acl/permissions-actions', array('controller' => __($v['Controller']), 'key' => "collapse-{$k}", 'common' => $v['common'], 'others' => $v['others']));
     }
-
-    echo $this->Html->tag('tbody', $body);
 }
-
-/**
-* Fecha a montagem da grid
-*/                
-echo $this->AppGrid->end();
-
-/**
-* Adiciona o rodapé da grid
-*/
-echo $this->element('Index/footer', array('paginate' => false));
 ?>        

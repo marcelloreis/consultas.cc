@@ -146,4 +146,4 @@
         ?>
 
     </head>
-    <body data-layout-sidebar="fixed" class="<?php echo THEME?>">
+    <body class="<?php echo THEME?>">

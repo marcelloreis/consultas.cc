@@ -28,7 +28,6 @@
                                 <label for="textfield" class="control-label"></label>
                                 <div class="controls">
                                     <?php echo $this->Html->link('<i class="icon-plus"></i> ' . sprintf(__("Add a %s"), __d('fields', ucfirst($this->params['controller']))), array('action' => 'add'), array('class' => 'btn', 'escape' => false))?>
-                                    <!-- <button class="btn"><i class="icon-plus"></i> <?php echo sprintf(__("Add a %s"), __d('fields', $this->params['controller']))?></button> -->
                                 </div>
                             </div>
                         </div>

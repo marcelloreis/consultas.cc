@@ -14,6 +14,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
+
 #Traducoes Gerais
 msgid "Yes"
 msgstr "Sim"
@@ -32,6 +33,9 @@ msgstr "Salvar alterações"
 
 msgid "Controllers"
 msgstr "Controladores"
+
+msgid "%s Permissions"
+msgstr "Permissões de(a) %s"
 
 msgid "Switch Main Menu"
 msgstr "Minimizar/Maximizar Menu Principal"
@@ -378,6 +382,12 @@ msgstr "Clique na lupa para buscar"
 #: View/Elements/Templates/table-header.ctp:3
 msgid "record(s) found"
 msgstr "registro(s) encontrados"
+
+msgid "Common Actions"
+msgstr "Ações Comuns"
+
+msgid "Specifict Actions"
+msgstr "Ações Específicas"
 
 ######################
 #### Actions 	######

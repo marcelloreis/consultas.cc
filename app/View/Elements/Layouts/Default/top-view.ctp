@@ -3,9 +3,9 @@
 		<div class="box">
 			<div class="box-title">
 				<h3>
-					<i class="icon-table"></i>
-					<?php echo __(ucfirst($this->params['action']))?>
+					<?php echo $this->fetch('icon-view', '<i class="icon-table"></i>')?>
+					<?php echo $this->fetch('title-view', __(ucfirst($this->params['action'])))?>
 				</h3>
 			</div>
-			<div class="box-content nopadding">
+			<div class="nopadding">
 				<?php echo $this->Session->flash(FLASH_SESSION_FORM)?>

@@ -7,5 +7,5 @@ if(isset($this->params['named']['trashed']) && $this->AppPermissions->check("{$t
 }else{
 	echo $this->Html->link('<i class="icon-trash"></i>', array("controller" => $this->params['controller'], "action" => "trash", $id), array('title' => __('Trash'), 'class' => 'btn', 'rel' => 'tooltip', 'data-original-title' => __('Trash'), 'escape' => false), __('Are you sure you want to move this record to the trash?')) . ' ';
 }
-echo $this->Html->link('<i class="icon-lock"></i>', array("controller" => 'acl', "action" => "permissions", 'aro_id' => $id, 'plugin' => 'main'), array('title' => __('Permissions'), 'class' => 'btn', 'rel' => 'tooltip', 'data-original-title' => __('Permissions'), 'escape' => false)) . ' ';
+echo $this->Html->link('<i class="glyphicon-unlock"></i>', array("controller" => 'acl', "action" => "permissions", 'aro_id' => $id, 'plugin' => 'main'), array('title' => __('Permissions'), 'class' => 'btn', 'rel' => 'tooltip', 'data-original-title' => __('Permissions'), 'escape' => false)) . ' ';
 ?>
