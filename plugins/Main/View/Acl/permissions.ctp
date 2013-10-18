@@ -72,7 +72,7 @@ if(count($acos)){
     */
     $body = '';
     foreach ($actions as $k => $v) {
-        echo $this->element('Acl/permissions-actions', array('controller' => __($v['Controller']), 'key' => "collapse-{$k}", 'common' => $v['common'], 'others' => $v['others']));
+        echo $this->element('Acl/permissions-actions', array('controller' => $v['Controller'], 'key' => "collapse-{$k}", 'common' => $v['common'], 'others' => $v['others']));
     }
 }
 ?>        

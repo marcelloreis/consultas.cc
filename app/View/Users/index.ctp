@@ -27,11 +27,13 @@ $map = strtolower($modelClass);
 if(count($$map)){
     $body = '';
     foreach($$map as $k => $v){
-
-        //Seta as larguras das colunas
+        /**
+        * Seta as larguras das colunas
+        */
         $v[$modelClass]['picture_width'] = '70px';
+        $v[$modelClass]['action_width'] = '150';
         
-        $v[$modelClass]['action'] = $this->element('Index/action', array('id' => $v[$modelClass]['id']));
+        $v[$modelClass]['action'] = $this->element('Index/Users/action', array('id' => $v[$modelClass]['id']));
         $v[$modelClass]['id'] = $this->AppForm->input("{$modelClass}.id.{$k}", array('type' => 'checkbox', 'template' => 'form-input-clean', 'value' => $v[$modelClass]['id'], 'placeholder' => $v[$modelClass][$fieldText]));
         $v[$modelClass]['group_id'] = $v['Group']['name'];
         $v[$modelClass]['status'] = $this->AppUtils->boolTxt($v[$modelClass]['status'], 'Ativo', 'Inativo');

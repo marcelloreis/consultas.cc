@@ -2,31 +2,153 @@ $(document).ready(function(){
     /**
      * Configurações do plugin ACL
      */
-     $('.bulkActionPermission').click(function(){
-        if($('select[name=bulkActionPermission]').val()){
-            Acl.bulkAction($('a[class*=permsBtn]'), $('select[name=bulkActionPermission]').val());
-            return false;
-        }
-    });
-    $('.bulkActionColumnPermission').click(function(){
-        Acl.bulkAction($('a.permsBtn-' + $(this).attr('id')), $(this).attr('rel'));
+     $('.perms-toggle').click(function(){
+        Acl.toggleAction($(this).parents('.box-perms:eq(0)'));
         return false;
     });
-    $('a[class*=permsBtn]').click(function(){
-        Acl.bulkAction(this);
+     $('.perms-toggle-all').click(function(){
+        var link = this;
+        $('.box-perms').each(function(){
+            Acl.toggleActionAll(this, $(link));
+        });
         return false;
     });
-
-    /**
-     * Configurações da GRID
-     */
-     $('.bulkActionRows').click(function(a){
-        $(this).parent().eq(0).find(':checkbox').check();
-     });
-
 })
 
 var Acl = {
+    toggleActionAll:function(box, link){
+        /**
+        * Carrega o elemento BOX
+        */
+        var $el = $(box);
+
+        var link_slide = $('a.perms-toggle:eq(0)', $el);
+
+        /**
+        * Carrega a permissao
+        */
+        var perm;
+        if(link.hasClass('allow')){
+            perm = 'allow';
+        }else if(link.hasClass('deny')){
+            perm = 'deny';
+        }
+
+        /**
+        * Carrega o status conforme a permissao
+        */
+        var status;
+        switch(perm){
+            case 'allow':
+                status = 'btn-success';
+            break;       
+            case 'deny':
+                status = 'btn-red';
+            break;       
+        }
+
+        /**
+        * Alterna a permissao do link
+        */
+        link
+            .removeClass('allow')
+            .removeClass('deny');
+        link.addClass(perm);          
+
+        /**
+        * Carrega a permissao de todos os actions do box
+        */
+        $(':hidden[name*=Perms]', $el).val(perm);
+
+        /**
+        * Carrega as permissoes setadas
+        */
+        var data_perms = $(':hidden[name*=Perms]', $el).serialize();
+
+        $.ajax({
+            type: 'POST',
+            beforeSend:function(){
+                link_slide.find("i").addClass("icon-spin");
+                $el.css({'pointer-events':'none', 'opacity':'0.2'});
+            },
+            url: "/main/acl/ajax_permissions",
+            data: data_perms
+            })
+        .done(function(data, request_status) {
+            if(request_status == 'success'){
+                /**
+                * Altera a cor do controle conforme a sua permissao
+                */
+                $('a[href^=#aco-]', $el)
+                    .removeClass('btn-success')
+                    .removeClass('btn-red');
+                $('a[href^=#aco-]', $el).addClass(status);            
+
+                link_slide.find("i").removeClass("icon-spin");
+                $el.removeAttr('style');
+            }
+        });
+
+        // console.log($(':hidden[name*=Perms]', $el).serialize());
+    },
+    toggleAction:function(box){
+        /**
+        * Carrega o elemento BOX
+        */
+        var $el = $(box);
+
+        /**
+        * Carrega o link clicado
+        */
+        var link = $('a.perms-toggle:eq(0)', $el);
+
+        /**
+        * Carrega a permissao
+        */
+        var perms = link.hasClass('allow')?'allow':'deny';
+
+        /**
+        * Carrega o status conforme a permissao
+        */
+        var status = link.hasClass('allow')?'btn-success':'btn-red';
+
+        /**
+        * Alterna a permissao do link
+        */
+        link.toggleClass('allow');
+
+        /**
+        * Altera a cor do controle conforme a sua permissao
+        */
+        $('a[href^=#aco-]', $el).removeClass('btn-success').removeClass('btn-red');
+        $('a[href^=#aco-]', $el).addClass(status);
+
+        /**
+        * Carrega a permissao de todos os actions do box
+        */
+        $(':hidden[name*=Perms]', $el).val(perms);
+
+        /**
+        * Carrega as permissoes setadas
+        */
+        var data_perms = $(':hidden[name*=Perms]', $el).serialize();
+
+        $.ajax({
+            type: 'POST',
+            beforeSend:function(){
+                link.find("i").addClass("icon-spin");
+                $el.css({'pointer-events':'none', 'opacity':'0.2'});
+            },
+            url: "/main/acl/ajax_permissions",
+            data: data_perms
+            })
+        .done(function(data, status) {
+            link.find("i").removeClass("icon-spin");
+            $el.removeAttr('style');
+        });
+
+        // console.log($(':hidden[name*=Perms]', $el).serialize());
+    },
     bulkAction:function(a, bulkAction){
         var label;
         var color;
@@ -65,8 +187,3 @@ var Acl = {
         });
     }
 }
-
-/**
- * Plugin para textos padroes em inputs
- */
- jQuery.fn.labelify=function(a){a=jQuery.extend({text:"title",labelledClass:""},a);var b={title:function(a){return $(a).attr("title")},label:function(a){return $("label[for="+a.id+"]").text()}};var c;var d=$(this);return $(this).each(function(){if(typeof a.text==="string"){c=b[a.text]}else{c=a.text}if(typeof c!=="function"){return}var e=c(this);if(!e){return}$(this).data("label",c(this).replace(/\n/g,""));$(this).focus(function(){if(this.value===$(this).data("label")){this.value=this.defaultValue;$(this).removeClass(a.labelledClass)}}).blur(function(){if(this.value===this.defaultValue){this.value=$(this).data("label");$(this).addClass(a.labelledClass)}});var f=function(){d.each(function(){if(this.value===$(this).data("label")){this.value=this.defaultValue;$(this).removeClass(a.labelledClass)}})};$(this).parents("form").submit(f);$(window).unload(f);if(this.value!==this.defaultValue){return}this.value=$(this).data("label");$(this).addClass(a.labelledClass)})}

@@ -28,8 +28,7 @@ class AclManagerAppController extends AppController {
 		$routePrefix = isset($this->request->params['prefix']) ? $this->request->params['prefix'] : false;
 		if ($prefix && $prefix != $routePrefix) {
 			$this->redirect($this->request->referer());
-		} 
-		elseif ($prefix) {
+		} elseif ($prefix) {
 			$this->request->params['action'] = str_replace($prefix . "_", "", $this->request->params['action']);
 			$this->view = str_replace($prefix . "_", "", $this->view);
 		}

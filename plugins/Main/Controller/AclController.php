@@ -20,8 +20,6 @@ class AclController extends AclManagerAppController {
     public $paginate = array();
     protected $_authorizer = null;
 
-    public function permissoes(){}
-
     /**
      * beforeFitler
      */
@@ -51,63 +49,76 @@ class AclController extends AclManagerAppController {
     }
 
     /**
+    * Restart All
+    */
+    public function reset_all(){
+        $this->drop(false);
+        $this->drop_perms(false);
+        $this->update_aros(false);
+        $this->update_acos(false);
+        $this->Session->setFlash(__("As configurações foram resetadas com sucesso."), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS, 'title' => __('Permissões')), FLASH_SESSION_FORM);
+        $this->redirect($this->request->referer());
+    }
+
+    /**
      * Delete everything
      */
-    public function drop() {
+    public function drop($redirect=true) {
         $this->Acl->Aco->deleteAll(array("1 = 1"));
         $this->Acl->Aro->deleteAll(array("1 = 1"));
-        $this->Session->setFlash(__("Todas os AROs e ACOs foram removidos."), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS, 'title' => __('Permissões')), FLASH_SESSION_FORM);
-        $this->redirect($this->request->referer());
+        if($redirect){
+            $this->Session->setFlash(__("Todas os AROs e ACOs foram removidos."), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS, 'title' => __('Permissões')), FLASH_SESSION_FORM);
+            $this->redirect($this->request->referer());
+        }
     }
 
     /**
      * Delete all permissions
      */
-    public function drop_perms() {
+    public function drop_perms($redirect=true) {
         if ($this->Acl->Aro->Permission->deleteAll(array("1 = 1"))) {
             $this->Session->setFlash(__("Todas as permissões foram removidas."), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS, 'title' => __('Permissões')), FLASH_SESSION_FORM);
         } else {
             $this->Session->setFlash(__("Não foi possivel remover as permisssões."), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR, 'title' => __('Permissões')), FLASH_SESSION_FORM);
         }
-        $this->redirect($this->request->referer());
+        if($redirect){
+            $this->redirect($this->request->referer());
+        }
     }
 
     /**
-     * Index action
+     * Manage Permissions Ajax
      */
-    // public function index() {
-    // }
+    public function ajax_permissions(){
+        $perms =  isset($this->request->data['Perms']) ? $this->request->data['Perms'] : array();
+
+        foreach ($perms as $aco => $aros) {
+            $action = str_replace(":", "/", $aco);
+            foreach ($aros as $node => $perm) {
+                list($model, $id) = explode(':', $node);
+                $node = array('model' => $model, 'foreign_key' => $id);
+                if ($perm == 'allow') {
+                    $this->Acl->allow($node, $action);
+                }
+                elseif ($perm == 'inherit') {
+                    $this->Acl->inherit($node, $action);
+                }
+                elseif ($perm == 'deny') {
+                    $this->Acl->deny($node, $action);
+                }
+            }
+        }
+
+        //Reseta todas as permissoes gravadas na session
+        parent::__loadPermissionsOnSessions();
+    }
+
 
     /**
      * Manage Permissions
      */
     public function permissions() {
-        /**
-        * Verifica se o ARO solicitado existe
-        */
-
-        // Saving permissions
-        if ($this->request->is('post') || $this->request->is('put')) {
-            $perms =  isset($this->request->data['Perms']) ? $this->request->data['Perms'] : array();
-            foreach ($perms as $aco => $aros) {
-                $action = str_replace(":", "/", $aco);
-                foreach ($aros as $node => $perm) {
-                    list($model, $id) = explode(':', $node);
-                    $node = array('model' => $model, 'foreign_key' => $id);
-                    if ($perm == 'allow') {
-                        $this->Acl->allow($node, $action);
-                    }
-                    elseif ($perm == 'inherit') {
-                        $this->Acl->inherit($node, $action);
-                    }
-                    elseif ($perm == 'deny') {
-                        $this->Acl->deny($node, $action);
-                    }
-                }
-            }
-        }
-
-        $model = isset($this->request->params['named']['aro']) ? $this->request->params['named']['aro'] : null;
+        $model = isset($this->request->params['named']['aro']) ? ucfirst(strtolower($this->request->params['named']['aro'])) : null;
         if (!$model || !in_array($model, Configure::read('AclManager.aros'))) {
             $model = Configure::read('AclManager.aros');
             $model = $model[0];
@@ -126,10 +137,25 @@ class AclController extends AclManagerAppController {
             $this->redirect(array('controller' => 'users', 'action' => 'dashboard', 'plugin' => false));
         }
 
+
+        /**
+         * Se o campo "q" for igual a 1, simula o envio do form por get
+         * redirecionando para http://[domain]/[controller]/[action]/seach:value1/namedN:valueN
+         */
+        $this->__post2get();
+
+        /**
+        * Verifica se foi passado algum valor na variavel padrao de busca
+        */
+        $cond_acos = array('order' => 'Aco.lft ASC', 'recursive' => 1);
+        if(isset($this->params['named']['search']) && !empty($this->params['named']['search'])){
+            // $cond_acos['conditions'] = array('Aco.alias like' => "%{$this->params['named']['search']}%");
+        }
+
         /**
          * Build permissions info
          */
-        $acos = $this->Acl->Aco->find('all', array('order' => 'Aco.lft ASC', 'recursive' => 1));
+        $acos = $this->Acl->Aco->find('all', $cond_acos);        
         $perms = array();
         $parents = array();
         foreach ($acos as $key => $data) {
@@ -204,7 +230,7 @@ class AclController extends AclManagerAppController {
      * Update ACOs
      * Sets the missing actions in the database
      */
-    public function update_acos() {
+    public function update_acos($redirect=true) {
         $hasAro = $this->Acl->Aro->find('count');
         if(!$hasAro){
             $this->Session->setFlash(__('Nenhum ARO foi criado ainda, crie os AROs primeiro.'), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR, 'title' => __('Atualização de ACO\'s')), FLASH_SESSION_FORM);
@@ -213,7 +239,7 @@ class AclController extends AclManagerAppController {
             $count = 0;
             $knownAcos = $this->_getAcos();
 
-        // Root node
+            // Root node
             $aco = $this->_action(array(), '');
             if (!$rootNode = $this->Acl->Aco->node($aco)) {
                 $rootNode = $this->_buildAcoNode($aco, null);
@@ -221,7 +247,7 @@ class AclController extends AclManagerAppController {
             }
             $knownAcos = $this->_removeActionFromAcos($knownAcos, $aco);
 
-        // Loop around each controller and its actions
+            // Loop around each controller and its actions
             $allActions = $this->_getActions();
             foreach ($allActions as $controller => $actions) {
                 if (empty($actions)) {
@@ -231,57 +257,60 @@ class AclController extends AclManagerAppController {
                 $parentNode = $rootNode;
                 list($plugin, $controller) = pluginSplit($controller);
 
-            // Plugin
-                $aco = $this->_action(array('plugin' => $plugin), '/:plugin/');
-            $aco = rtrim($aco, '/');        // Remove trailing slash
-            $newNode = $parentNode;
-            if ($plugin && !$newNode = $this->Acl->Aco->node($aco)) {
-                $newNode = $this->_buildAcoNode($plugin, $parentNode);
-                $count++;
-            }
-            $parentNode = $newNode;
-            $knownAcos = $this->_removeActionFromAcos($knownAcos, $aco);
-
-            // Controller
-            $aco = $this->_action(array('controller' => $controller, 'plugin' => $plugin), '/:plugin/:controller');
-            if (!$newNode = $this->Acl->Aco->node($aco)) {
-                $newNode = $this->_buildAcoNode($controller, $parentNode);
-                $count++;
-            }
-            $parentNode = $newNode;
-            $knownAcos = $this->_removeActionFromAcos($knownAcos, $aco);
-
-            // Actions
-            foreach ($actions as $action) {
-                $aco = $this->_action(array(
-                    'controller' => $controller,
-                    'action' => $action,
-                    'plugin' => $plugin
-                    ));
-                if (!$node = $this->Acl->Aco->node($aco)) {
-                    $this->_buildAcoNode($action, $parentNode);
+                // Plugin
+                    $aco = $this->_action(array('plugin' => $plugin), '/:plugin/');
+                $aco = rtrim($aco, '/');        // Remove trailing slash
+                $newNode = $parentNode;
+                if ($plugin && !$newNode = $this->Acl->Aco->node($aco)) {
+                    $newNode = $this->_buildAcoNode($plugin, $parentNode);
                     $count++;
                 }
+                $parentNode = $newNode;
                 $knownAcos = $this->_removeActionFromAcos($knownAcos, $aco);
+
+                // Controller
+                $aco = $this->_action(array('controller' => $controller, 'plugin' => $plugin), '/:plugin/:controller');
+                if (!$newNode = $this->Acl->Aco->node($aco)) {
+                    $newNode = $this->_buildAcoNode($controller, $parentNode);
+                    $count++;
+                }
+                $parentNode = $newNode;
+                $knownAcos = $this->_removeActionFromAcos($knownAcos, $aco);
+
+                // Actions
+                foreach ($actions as $action) {
+                    $aco = $this->_action(array(
+                        'controller' => $controller,
+                        'action' => $action,
+                        'plugin' => $plugin
+                        ));
+                    if (!$node = $this->Acl->Aco->node($aco)) {
+                        $this->_buildAcoNode($action, $parentNode);
+                        $count++;
+                    }
+                    $knownAcos = $this->_removeActionFromAcos($knownAcos, $aco);
+                }
             }
+
+            // Some ACOs are in the database but not in the controllers
+            if (count($knownAcos) > 0) {
+                $acoIds = Set::extract('/Aco/id', $knownAcos);
+                $this->Acl->Aco->deleteAll(array('Aco.id' => $acoIds));
+            }
+
+            $this->Session->setFlash(sprintf(__("%d ACOs(CONTROLADORES/FUNÇÕES) foram criados/atualizados."), $count), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS, 'title' => __('Atualização de ACO\'s')), FLASH_SESSION_FORM);
         }
 
-        // Some ACOs are in the database but not in the controllers
-        if (count($knownAcos) > 0) {
-            $acoIds = Set::extract('/Aco/id', $knownAcos);
-            $this->Acl->Aco->deleteAll(array('Aco.id' => $acoIds));
+        if($redirect){
+            $this->redirect($this->request->referer());
         }
-
-        $this->Session->setFlash(sprintf(__("%d ACOs(CONTROLADORES/FUNÇÕES) foram criados/atualizados."), $count), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS, 'title' => __('Atualização de ACO\'s')), FLASH_SESSION_FORM);
     }
-    $this->redirect($this->request->referer());
-}
 
     /**
      * Update AROs
      * Sets the missing AROs in the database
      */
-    public function update_aros() {
+    public function update_aros($redirect=true) {
 
         // Debug off to enable redirect
         Configure::write('debug', 0);
@@ -328,6 +357,13 @@ class AclController extends AclManagerAppController {
                     // Extracted from AclBehavior::afterSave (and adapted)
                     $parent = $Model->parentNode();
                     if (!empty($parent)) {
+// echo '###<pre>';
+// print_r($parent[key($parent)]['id']);
+// echo '</pre>';
+                        if(!$this->_hasAro(key($parent), $parent[key($parent)]['id'])){
+                            $this->Session->setFlash(__("O " . __d('fields', ucfirst(strtolower(key($parent)))) . " [{$parent[key($parent)]['id']}] relacionado ao " . __d('fields', $Model->alias) . " {$item['name']} [{$item['id']}] nao existe no banco de dados."), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+                            $this->redirect($this->request->referer());
+                        }
                         $parent = $Model->node($parent, $type);
                     }
                     $data = array(
@@ -344,8 +380,21 @@ class AclController extends AclManagerAppController {
             }
         }
 
-        $this->Session->setFlash(sprintf(__("%d AROs(GRUPOS E USUÁRIOS) foram criados."), $count), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS, 'title' => __('Atualização de ARO\'s')), FLASH_SESSION_FORM);
-        $this->redirect($this->request->referer());
+        if($redirect){
+            $this->Session->setFlash(sprintf(__("%d AROs(GRUPOS E USUÁRIOS) foram criados."), $count), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS, 'title' => __('Atualização de ARO\'s')), FLASH_SESSION_FORM);
+            $this->redirect($this->request->referer());
+        }
+    }
+
+    /**
+    * Verifica se o ARO passado pelo parametro existe
+    */
+    private function _hasAro($model, $id){
+        $hasAro = $this->{$model}->find('count', array('recursive' => '-1', 'conditions' => array('id' => $id)));
+echo '<pre>';
+print_r($hasAro);
+echo '</pre>';
+        return $hasAro;
     }
 
     /**

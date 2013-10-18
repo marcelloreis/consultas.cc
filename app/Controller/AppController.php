@@ -114,6 +114,17 @@ class AppController extends Controller {
 			 * Carrega o layout ajax sem cabecalhos e rodape
 			 */
 			$this->layout = 'ajax';
+
+			/**
+			* Desabilita o carregamento automatico do layout
+			*/
+	        $this->autoLayout = false;
+
+			/**
+			* Desabilita o carregamento automatico da view
+			*/
+	        $this->autoRender = false;			
+
 	 		/**
 	 		 * Carrega a variavel de ambiente '$requestHandler' com a string 'ajax' indicando que a requisicao é via ajax
 	 		 */
@@ -125,7 +136,7 @@ class AppController extends Controller {
 	 		/**
 	 		 * Desabilita o cache do browser
 	 		 */
-	 		$this->disableCache();
+	 		$this->disableCache(); 	
 	 	}
 
 		/**
@@ -150,8 +161,8 @@ class AppController extends Controller {
 		/**
 		 * Autorizações gerais
 		 */
-		// $this->Auth->allow('login', 'logout', 'authentication', 'natt_fixo_2_landline', 'user');
-		$this->Auth->allow('*');
+		$this->Auth->allow('login', 'logout', 'authentication', 'natt_fixo_2_landline', 'user');
+		// $this->Auth->allow('*');
 	}
 
     /**

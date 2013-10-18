@@ -23,9 +23,9 @@ $map = strtolower($modelClass);
 if(count($$map)){
     $body = '';
     foreach($$map as $k => $v){
-    	/**
-    	* Altera a largura da coluna Acoes
-    	*/
+        /**
+        * Seta as larguras das colunas
+        */
     	$v[$modelClass]['action_width'] = '150';
     	
         $v[$modelClass]['action'] = $this->element('Index/Groups/action', array('id' => $v[$modelClass]['id']));

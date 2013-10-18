@@ -37,6 +37,18 @@ msgstr "Controladores"
 msgid "%s Permissions"
 msgstr "Permissões de(a) %s"
 
+msgid "Close %s"
+msgstr "Fechar o %s"
+
+msgid "Allow/Deny all"
+msgstr "Permitir/Negar todos"
+
+msgid "Allow All"
+msgstr "Permitir Todos"
+
+msgid "Deny All"
+msgstr "Negar Todos"
+
 msgid "Switch Main Menu"
 msgstr "Minimizar/Maximizar Menu Principal"
 
@@ -60,6 +72,12 @@ msgstr "Excluír %s e %s"
 
 msgid "Delete %s"
 msgstr "Excluír %s"
+
+msgid "Reset all settings"
+msgstr "Reiniciar todas as configurações"
+
+msgid "Are you sure you want to reset all settings?"
+msgstr "Tem certeza que deseja reiniciar toda a configuração?"
 
 msgid "Are you sure you want to delete all %s and %s?"
 msgstr "Tem certeza que deseja excluir todos(as) os(as) %s e %s?"
@@ -386,7 +404,7 @@ msgstr "registro(s) encontrados"
 msgid "Common Actions"
 msgstr "Ações Comuns"
 
-msgid "Specifict Actions"
+msgid "Specific Actions"
 msgstr "Ações Específicas"
 
 ######################
