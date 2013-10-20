@@ -14,26 +14,26 @@
                     <form style="border: 1px solid #DDDDDD;" class="form-horizontal form-column form-bordered" method="POST" action="#">
                         <div class="span6">
                             <div class="control-group">
-                                <label class="control-label"><?php echo __d('app', 'Telephone')?></label>
+                                <label class="control-label"><?php echo __d('fields', 'Landline')?></label>
                                 <div class="controls">
                                     (27) 3019-9792
                                 </div>
                             </div>
 
                             <div class="control-group">
-                                <label class="control-label"><?php echo __d('app', 'Number')?></label>
+                                <label class="control-label"><?php echo __d('fields', 'Number')?></label>
                                 <div class="controls">
                                     14
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label"><?php echo __d('app', 'Complement')?></label>
+                                <label class="control-label"><?php echo __d('fields', 'Complement')?></label>
                                 <div class="controls">
                                     Rua da Cesan
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label"><?php echo __d('app', 'Neighborhood')?></label>
+                                <label class="control-label"><?php echo __d('fields', 'Neighborhood')?></label>
                                 <div class="controls">
                                     Bonfim
                                 </div>
@@ -41,26 +41,26 @@
                         </div>
                         <div class="span6">
                             <div class="control-group">
-                                <label class="control-label"><?php echo __d('app', 'Address')?></label>
+                                <label class="control-label"><?php echo __d('fields', 'Address')?></label>
                                 <div class="controls">
                                     Rua Mario Loureiro Nunes
                                 </div>
                             </div>
 
                             <div class="control-group">
-                                <label class="control-label"><?php echo __d('app', 'Zipcode')?></label>
+                                <label class="control-label"><?php echo __d('fields', 'Zipcode')?></label>
                                 <div class="controls">
                                     29047066
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label"><?php echo __d('app', 'State')?></label>
+                                <label class="control-label"><?php echo __d('fields', 'State')?></label>
                                 <div class="controls">
                                     ES
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label"><?php echo __d('app', 'Name in List')?></label>
+                                <label class="control-label"><?php echo __d('fields', 'Name in List')?></label>
                                 <div class="controls">
                                     Marcelo Martins dos Reis
                                 </div>

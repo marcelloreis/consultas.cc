@@ -19,19 +19,37 @@ App::uses('AppModel', 'Model');
  */
 class Landline extends AppModel {
 
-/**
- * Display field
- *
- * @var string
- */
+	/**
+	* Display field
+	*
+	* @var string
+	*/
 	public $displayField = 'tel_full';
 
+	/**
+	* Recursive
+	*
+	* @var integer
+	*/
+	public $recursive = -1;	
 
-/**
- * hasAndBelongsToMany associations
- *
- * @var array
- */
+	/**
+	* hasMany associations
+	*
+	* @var array
+	*/
+	public $hasMany = array(
+        'EntityLandlineAddress' => array(
+            'className' => 'EntityLandlineAddress',
+            'foreignKey' => 'landline_id'
+        )
+	);	
+
+	/**
+	* hasAndBelongsToMany associations
+	*
+	* @var array
+	*/
 	public $hasAndBelongsToMany = array(
 		'Entity' => array(
 			'className' => 'Entity',
@@ -49,5 +67,4 @@ class Landline extends AppModel {
 			'insertQuery' => ''
 		)
 	);
-
 }

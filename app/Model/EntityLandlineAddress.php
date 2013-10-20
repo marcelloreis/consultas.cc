@@ -1,5 +1,5 @@
 <?php
-App::uses('AppModelClean', 'Model');
+App::uses('AppModel', 'Model');
 /**
  * EntityLandlineAddress Model
  *
@@ -17,23 +17,29 @@ App::uses('AppModelClean', 'Model');
  * @property Country $Country
  * @property City $City
  */
-class EntityLandlineAddress extends AppModelClean {
+class EntityLandlineAddress extends AppModel {
 	public $useTable = 'entities_landlines_addresses';
 
+	/**
+	* Recursive
+	*
+	* @var integer
+	*/
+	public $recursive = -1;	
 
-		public $hasMany = array(
-	        'Address' => array(
-	            'className' => 'Address',
-	            'foreignKey' => 'address_id'
-	        ),
-	        'Landline' => array(
-	            'className' => 'Landline',
-	            'foreignKey' => 'landline_id'
-	        ),
-	        'Entity' => array(
-	            'className' => 'Entity',
-	            'foreignKey' => 'entity_id'
-	        )
-    	);
 
+	public $belongsTo = array(
+        'Address' => array(
+            'className' => 'Address',
+            'foreignKey' => 'address_id'
+        ),
+        'Landline' => array(
+            'className' => 'Landline',
+            'foreignKey' => 'landline_id'
+        ),
+        'Entity' => array(
+            'className' => 'Entity',
+            'foreignKey' => 'entity_id'
+        )
+	);
 }

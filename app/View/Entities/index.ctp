@@ -8,7 +8,7 @@ if($entity){
 	/**
 	* Atalhos
 	*/
-	// echo $this->element('Index/Entities/shortcuts');
+	echo $this->element('Index/Entities/goto');
 	/**
 	* Obito
 	*/
@@ -24,7 +24,15 @@ if($entity){
 	/**
 	* Dados dos telefones
 	*/
-	echo $this->element('Index/Entities/landline');
+	if(isset($landline) && is_array($landline)){
+		echo $this->element('Index/Entities/landline');
+	}
+	/**
+	* Endereços que nao estao ligados a nenhum telefone fixo
+	*/
+	if(isset($address) && is_array($address)){
+		echo $this->element('Index/Entities/address');
+	}
 	/**
 	* Participacao Societaria
 	*/

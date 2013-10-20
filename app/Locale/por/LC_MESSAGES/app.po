@@ -60,8 +60,59 @@ msgstr "Tipo"
 msgid "type document"
 msgstr "digite o documento"
 
-msgid ""
-msgstr ""
+msgid "type name"
+msgstr "digite o nome"
+
+msgid "type address"
+msgstr "digite o endereço"
+
+msgid "type landline"
+msgstr "digite o telefone fixo"
+
+msgid "Landline Data"
+msgstr "Dados do Telefone Fixo"
+
+msgid "Warning"
+msgstr "Atenção"
+
+msgid "%s updated in %s"
+msgstr "%s atualizado em %s"
+
+msgid "No address for this landline"
+msgstr "Nenhum endereço para este telefone fixo"
+
+msgid "Address Data"
+msgstr "Endereço do localizador"
+
+msgid "Go To"
+msgstr "Ir Para"
+
+msgid "Sister"
+msgstr "Irmã"
+
+msgid "Brother"
+msgstr "Irmão"
+
+msgid "Same Floor"
+msgstr "Mesmo Andar"
+
+msgid "Same Street"
+msgstr "Mesma Rua"
+
+msgid "Same Neighborhood"
+msgstr "Mesmo Bairro"
+
+msgid "Same City"
+msgstr "Mesma Cidade"
+
+msgid "Same State"
+msgstr "Mesmo Estado"
+
+msgid "Family"
+msgstr "Família"
+
+msgid "Shareholding"
+msgstr "Participação Societária"
 
 
 

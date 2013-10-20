@@ -318,7 +318,10 @@ class AppController extends Controller {
 		* Checa se o parametro trashed esta setados, caso esteja
 		* verifica se o usuario tem permissao para a visualizacao de registros da lixeira
 		*/
-		if($this->AppUtils->hasVal($this->params['named'][ACTION_TRASH]) || $this->AppUtils->hasVal($this->params->query['data'][$this->modelClass][ACTION_TRASH])){
+		if(
+			(isset($this->params['named'][ACTION_TRASH]) && !empty($this->params['named'][ACTION_TRASH])) ||
+			(isset($this->params->query['data'][$this->modelClass][ACTION_TRASH]) && !empty($this->params->query['data'][$this->modelClass][ACTION_TRASH]))
+			){
 				$this->redirectOnPermissionDeny('trash', "{$user['given_name']}, " . __('you are not allowed to view trashed records') . ' ' . __(Inflector::pluralize($this->modelClass)) . ".");
 			}
 
@@ -326,7 +329,10 @@ class AppController extends Controller {
 		* Checa se o parametro deleted esta setados, caso esteja
 		* verifica se o usuario logado é o usuario MASTER, pois ele é o unico q tem permissao para visualizar registros DELETADOS
 		*/
-		if($this->AppUtils->hasVal($this->params['named'][ACTION_DELETE]) || $this->AppUtils->hasVal($this->params->query['data'][$this->modelClass][ACTION_DELETE])){
+		if(
+			(isset($this->params['named'][ACTION_DELETE]) && !empty($this->params['named'][ACTION_DELETE])) ||
+			(isset($this->params->query['data'][$this->modelClass][ACTION_DELETE]) && !empty($this->params->query['data'][$this->modelClass][ACTION_DELETE]))
+			){
 				if(ADMIN_USER != $this->Auth->User('id')){
 					$this->Session->setFlash(__('you are not allowed to view deleted records'), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
 					$this->redirect($this->referer());
@@ -382,9 +388,9 @@ class AppController extends Controller {
 	    	/**
 	    	* Verifica se foi passado algum valor na variavel padrao de busca
 	    	*/
-			if($this->AppUtils->hasVal($this->params['named']['search'])){
+			if(isset($this->params['named']['search']) && !empty($this->params['named']['search'])){
 				$search = $this->params['named']['search'];
-			}else if($this->AppUtils->hasVal($this->params->query['data'][$this->modelClass]['search'])){
+			}else if(isset($this->params->query['data'][$this->modelClass]['search']) && !empty($this->params->query['data'][$this->modelClass]['search'])){
 				$search = $this->params->query['data'][$this->modelClass]['search'];
 			}
 
@@ -421,18 +427,18 @@ class AppController extends Controller {
 	    	/**
 	    	* Verifica se foi passado algum valor na variavel trashed
 	    	*/
-			if($this->AppUtils->hasVal($this->params['named'][ACTION_TRASH])){
+			if(isset($this->params['named'][ACTION_TRASH]) && !empty($this->params['named'][ACTION_TRASH])){
 				$params['conditions']["{$this->modelClass}." . ACTION_TRASH] = $this->params['named'][ACTION_TRASH];
-			}else if($this->AppUtils->hasVal($this->params->query['data'][$this->modelClass][ACTION_TRASH])){
+			}else if(isset($this->params->query['data'][$this->modelClass][ACTION_TRASH]) && !empty($this->params->query['data'][$this->modelClass][ACTION_TRASH])){
 				$params['conditions']["{$this->modelClass}." . ACTION_TRASH] = $this->params->query['data'][$this->modelClass][ACTION_TRASH];
 			}			
 
 	    	/**
 	    	* Verifica se foi passado algum valor na variavel deleted
 	    	*/
-			if($this->AppUtils->hasVal($this->params['named'][ACTION_DELETE])){
+			if(isset($this->params['named'][ACTION_DELETE]) && !empty($this->params['named'][ACTION_DELETE])){
 				$params['conditions']["{$this->modelClass}." . ACTION_DELETE] = $this->params['named'][ACTION_DELETE];
-			}else if($this->AppUtils->hasVal($this->params->query['data'][$this->modelClass][ACTION_DELETE])){
+			}else if(isset($this->params->query['data'][$this->modelClass][ACTION_DELETE]) && !empty($this->params->query['data'][$this->modelClass][ACTION_DELETE])){
 				$params['conditions']["{$this->modelClass}." . ACTION_DELETE] = $this->params->query['data'][$this->modelClass][ACTION_DELETE];
 			}			
 
@@ -724,7 +730,7 @@ class AppController extends Controller {
 		/**
     	* Verifica se foi passado alguma valor na variavel padrao de busca
     	*/
-		if($this->AppUtils->hasVal($this->params['named']['search'])){
+		if(isset($this->params['named']['search']) && !empty($this->params['named']['search'])){
 			$search = $this->params['named']['search'];
 		}
 

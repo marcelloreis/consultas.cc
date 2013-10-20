@@ -63,11 +63,23 @@ class Entity extends AppModel {
 		),
 	);
 
-/**
- * hasAndBelongsToMany associations
- *
- * @var array
- */
+	/**
+	* hasMany associations
+	*
+	* @var array
+	*/
+	public $hasMany = array(
+        'EntityLandlineAddress' => array(
+            'className' => 'EntityLandlineAddress',
+            'foreignKey' => 'entity_id'
+        )
+	);	
+
+	/**
+	* hasAndBelongsToMany associations
+	*
+	* @var array
+	*/
 	public $hasAndBelongsToMany = array(
 		'Address' => array(
 			'className' => 'Address',
@@ -100,5 +112,4 @@ class Entity extends AppModel {
 			'insertQuery' => ''
 		)
 	);
-
 }

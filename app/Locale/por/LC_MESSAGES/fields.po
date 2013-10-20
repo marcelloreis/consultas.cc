@@ -24,6 +24,24 @@ msgstr ""
 ######################
 #### Modelos 	######
 ######################
+msgid "Entities"
+msgstr "Pessoas"
+
+msgid "People"
+msgstr "Pessoas"
+
+msgid "Mobile"
+msgstr "Telefone Móvel"
+
+msgid "Death"
+msgstr "Obito"
+
+msgid "Address"
+msgstr "Endereço"
+
+msgid "Landline"
+msgstr "Telefone Fixo"
+
 msgid "Event"
 msgstr "Evento"
 
@@ -125,6 +143,9 @@ msgstr "Palestrantes"
 ######################
 #### Campos 	######
 ######################
+
+msgid "Street"
+msgstr "Rua"
 
 msgid "Event_id"
 msgstr "Evento"
