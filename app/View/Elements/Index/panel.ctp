@@ -5,7 +5,6 @@
             <div class="box-content nopadding">
                 <?php echo $this->AppForm->create($modelClass, array('class' => $requestHandler, 'classForm' => 'form-horizontal form-bordered'));?>
                     <?php echo $this->form->hidden('q', array('value' => $requestHandler));?>
-                <!-- <form action="#" method="POST" class='form-horizontal form-bordered'> -->
 
                     <!-- Carrega o campo de busca -->
                     <div class="span12" style="margin-left: 0px;">
@@ -32,7 +31,6 @@
                             </div>
                         </div>
                     </div>
-                <!-- </form> -->
                 <?php echo $this->AppForm->end(); ?>
             </div>
         </div>

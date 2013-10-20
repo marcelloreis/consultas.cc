@@ -8,4 +8,3 @@
 				</h3>
 			</div>
 			<div class="nopadding">
-				<?php echo $this->Session->flash(FLASH_SESSION_FORM)?>

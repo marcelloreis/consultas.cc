@@ -26,7 +26,7 @@ class ImportComponent extends Component {
 
 	private $Log;
 	private $City;
-	private $Address;
+	private $Iaddress;
 	private $ModelCounter;
 	private $Timing;
 	private $counter;
@@ -41,7 +41,7 @@ class ImportComponent extends Component {
 	public function __construct() {
 	    $this->Log = ClassRegistry::init('Log');
 	    $this->City = ClassRegistry::init('City');
-	    $this->Address = ClassRegistry::init('Address');
+	    $this->Iaddress = ClassRegistry::init('Iaddress');
 	    $this->ModelCounter = ClassRegistry::init('Counter');
 	    $this->Timing = ClassRegistry::init('Timing');
 		$map = $this->Log->query('select @@foreign_key_checks, @@unique_checks, @@autocommit, @@query_cache_type, @@query_cache_size');
@@ -477,7 +477,7 @@ class ImportComponent extends Component {
 			* Verifica se algum endereço ja foi cadastrado com o mesmo CEP e clona a cidade do endereço
 			*/
 			if($zipcode_id){
-				$hasCity = $this->Address->find('first', array(
+				$hasCity = $this->Iaddress->find('first', array(
 					'recursive' => '-1',
 					'conditions' => array(
 						'zipcode_id' => $zipcode_id,
@@ -485,7 +485,7 @@ class ImportComponent extends Component {
 						)
 					));
 				if(count($hasCity)){
-					$city_id = $hasCity['Address']['city_id'];
+					$city_id = $hasCity['Iaddress']['city_id'];
 				}
 			}
 

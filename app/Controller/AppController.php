@@ -48,7 +48,7 @@ class AppController extends Controller {
 		'Main.AppUtils',
 		'RequestHandler',
 		'Google.AppGoogle',
-		'DebugKit.Toolbar' => array('autoRun' => false),
+		'DebugKit.Toolbar' => array('autoRun' => true),
 		'Facebook.AppFacebook',
 		);
 	/**
@@ -80,11 +80,6 @@ class AppController extends Controller {
 		parent::beforeFilter();
 
 		/**
-		* AREA DESTINADA A FUNCOES ESPECIFICAS DO PROJETO, ESTAS FUNCOES NAO PERTENCEM A FRAMEWORK
-		*/
-		$this->projectVoid();
-
-		/**
 		 * Inicializa o atributo userLogged com os dados do usuario logado
 		 */
 		$this->userLogged = $this->Session->read('Auth.User');
@@ -102,7 +97,7 @@ class AppController extends Controller {
 		/**
 		* Carrega o Helper AppForm com todos os campos do model e e suas regras de validacao configuradas
 		*/
-		if($this->Model->useTable){
+		if(isset($this->Model->useTable) && $this->Model->useTable !== false){
 			$this->helpers['Main.AppForm'] = array('fields' => $this->Model->getColumnTypes(), 'validate' => $this->Model->validate, 'modelClass' => $this->modelClass);
 		}
 
@@ -161,7 +156,7 @@ class AppController extends Controller {
 		/**
 		 * Autorizações gerais
 		 */
-		$this->Auth->allow('login', 'logout', 'authentication', 'natt_fixo_2_landline', 'user');
+		$this->Auth->allow('login', 'logout', 'authentication', 'natt_fixo_2_landline');
 		// $this->Auth->allow('*');
 	}
 
@@ -323,10 +318,7 @@ class AppController extends Controller {
 		* Checa se o parametro trashed esta setados, caso esteja
 		* verifica se o usuario tem permissao para a visualizacao de registros da lixeira
 		*/
-		if(
-			(isset($this->params['named'][ACTION_TRASH]) && !empty($this->params['named'][ACTION_TRASH])) ||
-			(isset($this->params->query['data'][$this->modelClass][ACTION_TRASH]) && !empty($this->params->query['data'][$this->modelClass][ACTION_TRASH]))
-			){
+		if($this->AppUtils->hasVal($this->params['named'][ACTION_TRASH]) || $this->AppUtils->hasVal($this->params->query['data'][$this->modelClass][ACTION_TRASH])){
 				$this->redirectOnPermissionDeny('trash', "{$user['given_name']}, " . __('you are not allowed to view trashed records') . ' ' . __(Inflector::pluralize($this->modelClass)) . ".");
 			}
 
@@ -334,10 +326,7 @@ class AppController extends Controller {
 		* Checa se o parametro deleted esta setados, caso esteja
 		* verifica se o usuario logado é o usuario MASTER, pois ele é o unico q tem permissao para visualizar registros DELETADOS
 		*/
-		if(
-			(isset($this->params['named'][ACTION_DELETE]) && !empty($this->params['named'][ACTION_DELETE])) ||
-			(isset($this->params->query['data'][$this->modelClass][ACTION_DELETE]) && !empty($this->params->query['data'][$this->modelClass][ACTION_DELETE]))
-			){
+		if($this->AppUtils->hasVal($this->params['named'][ACTION_DELETE]) || $this->AppUtils->hasVal($this->params->query['data'][$this->modelClass][ACTION_DELETE])){
 				if(ADMIN_USER != $this->Auth->User('id')){
 					$this->Session->setFlash(__('you are not allowed to view deleted records'), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
 					$this->redirect($this->referer());
@@ -393,9 +382,9 @@ class AppController extends Controller {
 	    	/**
 	    	* Verifica se foi passado algum valor na variavel padrao de busca
 	    	*/
-			if(isset($this->params['named']['search']) && !empty($this->params['named']['search'])){
+			if($this->AppUtils->hasVal($this->params['named']['search'])){
 				$search = $this->params['named']['search'];
-			}else if(isset($this->params->query['data'][$this->modelClass]['search']) && !empty($this->params->query['data'][$this->modelClass]['search'])){
+			}else if($this->AppUtils->hasVal($this->params->query['data'][$this->modelClass]['search'])){
 				$search = $this->params->query['data'][$this->modelClass]['search'];
 			}
 
@@ -432,18 +421,18 @@ class AppController extends Controller {
 	    	/**
 	    	* Verifica se foi passado algum valor na variavel trashed
 	    	*/
-			if(isset($this->params['named'][ACTION_TRASH]) && !empty($this->params['named'][ACTION_TRASH])){
+			if($this->AppUtils->hasVal($this->params['named'][ACTION_TRASH])){
 				$params['conditions']["{$this->modelClass}." . ACTION_TRASH] = $this->params['named'][ACTION_TRASH];
-			}else if(isset($this->params->query['data'][$this->modelClass][ACTION_TRASH]) && !empty($this->params->query['data'][$this->modelClass][ACTION_TRASH])){
+			}else if($this->AppUtils->hasVal($this->params->query['data'][$this->modelClass][ACTION_TRASH])){
 				$params['conditions']["{$this->modelClass}." . ACTION_TRASH] = $this->params->query['data'][$this->modelClass][ACTION_TRASH];
 			}			
 
 	    	/**
 	    	* Verifica se foi passado algum valor na variavel deleted
 	    	*/
-			if(isset($this->params['named'][ACTION_DELETE]) && !empty($this->params['named'][ACTION_DELETE])){
+			if($this->AppUtils->hasVal($this->params['named'][ACTION_DELETE])){
 				$params['conditions']["{$this->modelClass}." . ACTION_DELETE] = $this->params['named'][ACTION_DELETE];
-			}else if(isset($this->params->query['data'][$this->modelClass][ACTION_DELETE]) && !empty($this->params->query['data'][$this->modelClass][ACTION_DELETE])){
+			}else if($this->AppUtils->hasVal($this->params->query['data'][$this->modelClass][ACTION_DELETE])){
 				$params['conditions']["{$this->modelClass}." . ACTION_DELETE] = $this->params->query['data'][$this->modelClass][ACTION_DELETE];
 			}			
 
@@ -735,7 +724,7 @@ class AppController extends Controller {
 		/**
     	* Verifica se foi passado alguma valor na variavel padrao de busca
     	*/
-		if(isset($this->params['named']['search']) && !empty($this->params['named']['search'])){
+		if($this->AppUtils->hasVal($this->params['named']['search'])){
 			$search = $this->params['named']['search'];
 		}
 
@@ -815,12 +804,13 @@ class AppController extends Controller {
 				'controller' => $this->params['controller'],
 				'action' => $this->params['action']
 				);
+
 			foreach ($this->data[$this->modelClass] as $k => $v) {
 				$redirect[$k] = $v;
 			}
 
 	        foreach ($this->params['named'] as $k => $v) {
-	        	if(!preg_match('/(page|search)/si', $k)){
+	        	if(!array_key_exists($k, $redirect) && !preg_match('/(page|search)/si', $k)){
 	            	$redirect[$k] = $v;
 	        	}
 	        }
@@ -975,11 +965,4 @@ class AppController extends Controller {
     		}
     	}
     }	
-
-    /**
-    * AREA DESTINADA A FUNCOES ESPECIFICAS DO PROJETO, ESTAS FUNCOES NAO PERTENCEM A FRAMEWORK
-    */
-    private function projectVoid(){
-    }
-
 }

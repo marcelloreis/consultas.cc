@@ -113,6 +113,20 @@ class AppUtilsComponent extends Component {
 	}
 
 	/**
+	* Método hasVal
+	* Este metodo verifica se o parametro $var esta setado e se contem algum valor
+	*
+	* @param string $var
+	* @return bool
+	*/
+	public function hasVal($var){
+    	/**
+    	* Verifica se o parametro passado foi setado
+    	*/
+    	return isset($var) && !empty($var);
+	}
+
+	/**
 	* Método removeAcentos
 	* Remove todos os caracteres com acentos do texto passado pelo parametro
 	* Ex.: $desc = $this->AppUtils->removeAcentos('Méto que remóvê acêntòs');

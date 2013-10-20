@@ -6,10 +6,18 @@ $menu = array(
     // array('label' => __d('fields', 'Import'), 'controller' => 'import', 'icon_left' => '<span class="square-16 plix-16"></span>'),
 
     /**
+    * Produtos
+    */
+    array(
+        'label' => '<span>' . __('People Location') . '</span>', 'controller' => 'entities'
+        ),
+    /**
     * Localizacoes
     */
     array(
-        'label' => __('Locales'),
+        'label' => '<span>' . __('Locales') . '</span>',
+        'params' => array('class' => 'dropdown-toggle', 'data-toggle' => 'dropdown'),
+        'icon_right' => '<span class="caret"></span>',
         'children' => array(
             /**
             * Países
@@ -29,7 +37,9 @@ $menu = array(
     * Seguranca
     */
     array(
-        'label' => __('Security'),
+        'label' => '<span>' . __('Security') . '</span>',
+        'params' => array('class' => 'dropdown-toggle', 'data-toggle' => 'dropdown'),
+        'icon_right' => '<span class="caret"></span>',
         'children' => array(
             /**
             * Seguranca/Usuarios
@@ -39,10 +49,6 @@ $menu = array(
             * Seguranca/Grupos
             */
             array('label' => __('Groups'), 'controller' => 'groups'),
-            /**
-            * Seguranca/Permissoes
-            */
-            array('label' => __('Permissions'), 'controller' => 'acl', 'action' => 'permissions', 'plugin' => 'main')
             )
         ),
     );

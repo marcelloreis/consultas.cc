@@ -85,6 +85,18 @@ msgstr "Tem certeza que deseja excluir todos(as) os(as) %s e %s?"
 msgid "Are you sure you want to delete all %s"
 msgstr "Tem certeza que deseja excluir todos(as) os(as) %s"
 
+msgid "Select"
+msgstr "Selecione"
+
+msgid "Settings"
+msgstr "Configurações"
+
+msgid "Male"
+msgstr "Masculino"
+
+msgid "Female"
+msgstr "Feminino"
+
 #: Controller/AppController.php:227
 msgid "Your session has expired. Make a new login!"
 msgstr "Sua sessão expirou. Faça um novo login!"

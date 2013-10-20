@@ -1,9 +1,9 @@
 <?php
-App::uses('AppModelClean', 'Model');
+App::uses('AppModel', 'Model');
 /**
- * EntityLandlineAddress Model
+ * Entity Model
  *
- * Esta classe é responsável ​​pela gestão de quase tudo o que acontece a respeito do(a) Estado, 
+ * Esta classe é responsável ​​pela gestão de quase tudo o que acontece a respeito do(a) Entity, 
  * é responsável também pela validação dos seus dados.
  *
  * PHP 5
@@ -12,24 +12,93 @@ App::uses('AppModelClean', 'Model');
  * @link          http://www.nasza.com.br/ Nasza(tm) Project
  * @package       app.Model
  *
- * EntityLandlineAddress Model
+ * Entity Model
  *
- * @property Country $Country
- * @property City $City
+ * @property Address $Address
+ * @property Landline $Landline
  */
-class Entity extends AppModelClean {
-	public $useTable = 'i_entities';
+class Entity extends AppModel {
 
+	/**
+	* Display field
+	*
+	* @var string
+	*/
+	public $displayField = 'name';
 
-	public function findImport($type, $params){
-		$hasEntity = $this->find($type, $params);				
+	/**
+	* Virtual fields
+	*
+	* @var string
+	*/
+	public $virtualFields = array(
+    	'age' => "DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(Entity.birthday)), '%Y')+0",
+    	'gender_str' => "CASE Entity.gender WHEN 1 THEN 'Female' WHEN 2 THEN 'Male' ELSE 'Unknown' END"
+	);
 
-		if(!count($hasEntity)){
-			$this->setSource('entities');
-			$hasEntity = $this->find($type, $params);
-			$this->setSource('i_entities');
-		}	
+	/**
+	* Recursive
+	*
+	* @var integer
+	*/
+	public $recursive = -1;
 
-		return $hasEntity;		
-	}
+	/**
+	* Validation rules
+	*
+	* @var array
+	*/
+	public $validate = array(
+		'doc' => array(
+			'notempty' => array(
+				'rule' => array('notempty'),
+				'message' => 'O campo Doc deve ser preenchido corretamente.',
+			),
+		),
+		'type' => array(
+			'numeric' => array(
+				'rule' => array('numeric'),
+				'message' => 'O campo Type deve ser preenchido corretamente.',
+			),
+		),
+	);
+
+/**
+ * hasAndBelongsToMany associations
+ *
+ * @var array
+ */
+	public $hasAndBelongsToMany = array(
+		'Address' => array(
+			'className' => 'Address',
+			'joinTable' => 'entities_landlines_addresses',
+			'foreignKey' => 'address_id',
+			'associationForeignKey' => 'entity_id',
+			'unique' => 'keepExisting',
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'finderQuery' => '',
+			'deleteQuery' => '',
+			'insertQuery' => ''
+		),
+		'Landline' => array(
+			'className' => 'Landline',
+			'joinTable' => 'entities_landlines_addresses',
+			'foreignKey' => 'landline_id',
+			'associationForeignKey' => 'entity_id',
+			'unique' => 'keepExisting',
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'finderQuery' => '',
+			'deleteQuery' => '',
+			'insertQuery' => ''
+		)
+	);
+
 }

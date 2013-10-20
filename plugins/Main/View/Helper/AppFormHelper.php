@@ -40,8 +40,8 @@ class AppFormHelper extends AppHelper {
         $options['inputDefaults'] = array('label' => false, 'div' => false, 'hiddenField' => false, 'error' => false);
         // $options['error'] = false;
         //Seta as classes de tamanhos dos inputs
-        if(!isset($options['defaultSize'])){
-            $this->defaultSize = 'small';
+        if(isset($options['defaultSize'])){
+            $this->defaultSize = $options['defaultSize'];
         }
 
         //O formulario pode ser montado apartir da AppGrid, entao é verificado se a classe vem setada de lá
@@ -144,13 +144,13 @@ class AppFormHelper extends AppHelper {
             'label' => __d('fields', $this->inputLabel),
             'input' => $this->Form->input($fieldName, $options),
             );
-
         $attr = array_merge($defaults, $options);
         //Altera as chaves do array para o padrao de variaveis do template
         $values = $this->AppUtils->key2var($attr);
 
         //Carrega as variaveis do template do input com os valores passados por parametro
         $this->input = str_replace(array_keys($values), $values, $inputTemplate);
+
         //Carrega o ID do input
         preg_match('/id=[\"\'](.*?)[\"\']/si', $this->input, $map);
         $id = $map[1];

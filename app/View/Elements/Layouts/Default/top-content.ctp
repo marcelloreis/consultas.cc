@@ -1,4 +1,5 @@
-<div class="container-fluid nav-hidden" id="content">
+<div class="container-fluid" id="content">
+	<?php //echo $this->element('Components/sidebar')?>
 	<div id="main">
 		<div class="container-fluid">
 			<div class="page-header">
@@ -9,5 +10,5 @@
 				<?php echo $this->element('Components/shortcuts')?>
 				
 			</div>
-
+			<?php echo $this->Session->flash(FLASH_SESSION_FORM)?>
 			<?php echo $this->element('Components/breadcrumbs')?>

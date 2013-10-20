@@ -56,6 +56,7 @@ class AclController extends AclManagerAppController {
         $this->drop_perms(false);
         $this->update_aros(false);
         $this->update_acos(false);
+        parent::__loadPermissionsOnSessions();
         $this->Session->setFlash(__("As configurações foram resetadas com sucesso."), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS, 'title' => __('Permissões')), FLASH_SESSION_FORM);
         $this->redirect($this->request->referer());
     }
@@ -357,12 +358,9 @@ class AclController extends AclManagerAppController {
                     // Extracted from AclBehavior::afterSave (and adapted)
                     $parent = $Model->parentNode();
                     if (!empty($parent)) {
-// echo '###<pre>';
-// print_r($parent[key($parent)]['id']);
-// echo '</pre>';
                         if(!$this->_hasAro(key($parent), $parent[key($parent)]['id'])){
-                            $this->Session->setFlash(__("O " . __d('fields', ucfirst(strtolower(key($parent)))) . " [{$parent[key($parent)]['id']}] relacionado ao " . __d('fields', $Model->alias) . " {$item['name']} [{$item['id']}] nao existe no banco de dados."), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
-                            $this->redirect($this->request->referer());
+                            $this->Session->setFlash(__("Não existe " . __d('fields', ucfirst(strtolower(key($parent)))) . " para o " . __d('fields', $Model->alias) . " {$item['name']} [{$item['id']}], ou o id [{$parent[key($parent)]['id']}] do " . __d('fields', ucfirst(strtolower(key($parent)))) . " nao existe no banco de dados."), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+                            $this->redirect(array('controller' => Inflector::pluralize(strtolower($Model->alias)), 'action' => 'edit', $item['id'], 'plugin' => false));
                         }
                         $parent = $Model->node($parent, $type);
                     }
@@ -391,9 +389,6 @@ class AclController extends AclManagerAppController {
     */
     private function _hasAro($model, $id){
         $hasAro = $this->{$model}->find('count', array('recursive' => '-1', 'conditions' => array('id' => $id)));
-echo '<pre>';
-print_r($hasAro);
-echo '</pre>';
         return $hasAro;
     }
 

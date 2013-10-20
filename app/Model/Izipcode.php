@@ -1,7 +1,7 @@
 <?php
 App::uses('AppModelClean', 'Model');
 /**
- * Zipcode Model
+ * Izipcode Model
  *
  * Esta classe é responsável ​​pela gestão de quase tudo o que acontece a respeito do(a) Estado, 
  * é responsável também pela validação dos seus dados.
@@ -12,12 +12,12 @@ App::uses('AppModelClean', 'Model');
  * @link          http://www.nasza.com.br/ Nasza(tm) Project
  * @package       app.Model
  *
- * Zipcode Model
+ * Izipcode Model
  *
  * @property Country $Country
  * @property City $City
  */
-class Zipcode extends AppModelClean {
+class Izipcode extends AppModelClean {
 	public $useTable = 'i_zipcodes';
 
 	public function findImport($type, $params){
