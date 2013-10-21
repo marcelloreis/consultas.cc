@@ -1,5 +1,5 @@
 <div class="control-group">
-    <label class="control-label"><?php echo __d('app', 'Company')?></label>
+    <label class="control-label"><?php echo __('Company')?></label>
     <div class="controls">
         <?php echo $this->Html->link($people['Entity']['name'], array('controller' => '', 'action' => ''))?>
     </div>
@@ -7,7 +7,7 @@
 
 <div class="span4">
     <div class="control-group">
-        <label class="control-label"><?php echo __d('app', 'CNPJ')?></label>
+        <label class="control-label"><?php echo __('CNPJ')?></label>
         <div class="controls">
             <?php echo $people['Entity']['doc']?>
         </div>
@@ -16,7 +16,7 @@
 
 <div class="span4">
     <div class="control-group">
-        <label class="control-label"><?php echo __d('app', 'Person')?></label>
+        <label class="control-label"><?php echo __('Person')?></label>
         <div class="controls">
             Jurídica
         </div>
@@ -25,7 +25,7 @@
 
 <div class="span4">
     <div class="control-group">
-        <label class="control-label"><?php echo __d('app', 'Updated')?></label>
+        <label class="control-label"><?php echo __('Updated')?></label>
         <div class="controls">
             <?php echo $people['Entity']['modified']?>
         </div>

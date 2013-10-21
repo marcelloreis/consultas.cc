@@ -4,20 +4,20 @@
             <div class="box-title">
                 <h3>
                     <i class="glyphicon-search"></i>
-                    <?php echo __d('app', 'Searches')?>
+                    <?php echo __('Searches')?>
                 </h3>
                 <ul class="tabs">
                     <li class="active">
-                        <a href="#t1" data-toggle="tab"><?php echo __d('app', 'By Document')?></a>
+                        <a href="#t1" data-toggle="tab"><?php echo __('By Document')?></a>
                     </li>
                     <li>
-                        <a href="#t2" data-toggle="tab"><?php echo __d('app', 'By Name')?></a>
+                        <a href="#t2" data-toggle="tab"><?php echo __('By Name')?></a>
                     </li>
                     <li>
-                        <a href="#t3" data-toggle="tab"><?php echo __d('app', 'By Address')?></a>
+                        <a href="#t3" data-toggle="tab"><?php echo __('By Address')?></a>
                     </li>
                     <li>
-                        <a href="#t4" data-toggle="tab"><?php echo __d('app', 'By Telephone')?></a>
+                        <a href="#t4" data-toggle="tab"><?php echo __('By Telephone')?></a>
                     </li>
                 </ul>
             </div>
@@ -27,13 +27,13 @@
                         <?php echo $this->AppForm->create($modelClass, array('defaultSize' => 'input-xlarge', 'classForm' => 'form-horizontal form-bordered'))?>
                             <?php echo $this->form->hidden('q', array('value' => $requestHandler));?>
                             <div class="control-group">
-                                <label class="control-label" for="textfield"><?php echo __d('app', 'Type Document')?></label>
+                                <label class="control-label" for="textfield"><?php echo __('Type Document')?></label>
                                 <div class="controls">
                                     <div class="input-append input-prepend">
                                         <span class="add-on"><i class="icon-search"></i></span>
                                         <?php $doc = isset($this->params['named']['doc']) && !empty($this->params['named']['doc'])?$this->params['named']['doc']:''?>
-                                        <?php echo $this->AppForm->input('doc', array('template' => 'form-input-clean', 'value' => $doc, 'placeholder' => __d('app', 'type document')))?>
-                                        <button type="submit" class="btn"><?php echo __d('app', 'Search')?></button>
+                                        <?php echo $this->AppForm->input('doc', array('template' => 'form-input-clean', 'value' => $doc, 'placeholder' => __('type document')))?>
+                                        <button type="submit" class="btn"><?php echo __('Search')?></button>
                                     </div>
                                 </div>
                             </div>
@@ -43,13 +43,13 @@
                         <?php echo $this->AppForm->create($modelClass, array('defaultSize' => 'input-xlarge', 'classForm' => 'form-horizontal form-bordered'))?>
                             <?php echo $this->form->hidden('q', array('value' => $requestHandler));?>
                             <div class="control-group">
-                                <label class="control-label" for="textfield"><?php echo __d('app', 'By Name')?></label>
+                                <label class="control-label" for="textfield"><?php echo __('By Name')?></label>
                                 <div class="controls">
                                     <div class="input-append input-prepend">
                                         <span class="add-on"><i class="icon-search"></i></span>
                                         <?php $name = isset($this->params['named']['name']) && !empty($this->params['named']['name'])?$this->params['named']['name']:''?>
-                                        <?php echo $this->AppForm->input('name', array('template' => 'form-input-clean', 'value' => $name, 'classInput' => 'tagsinput', 'placeholder' => __d('app', 'type name')))?>
-                                        <button type="submit" class="btn"><?php echo __d('app', 'Search')?></button>
+                                        <?php echo $this->AppForm->input('name', array('template' => 'form-input-clean', 'value' => $name, 'classInput' => 'tagsinput', 'placeholder' => __('type name')))?>
+                                        <button type="submit" class="btn"><?php echo __('Search')?></button>
                                     </div>
                                 </div>
                             </div>

@@ -4,7 +4,7 @@
             <div class="box-title">
                 <h3>
                     <i class="glyphicon-vcard"></i>
-                    <?php echo __d('app', 'Document Data')?>
+                    <?php echo __('Document Data')?>
                 </h3>
             </div>
             <div class="box-content nopadding">

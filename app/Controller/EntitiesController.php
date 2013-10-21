@@ -36,29 +36,33 @@ class EntitiesController extends ProjectController {
     	*/
     	$doc = isset($this->params['named']['doc']) && !empty($this->params['named']['doc'])?$this->params['named']['doc']:false;
     	$name = isset($this->params['named']['name']) && !empty($this->params['named']['name'])?$this->params['named']['name']:false;
-    	/**
-    	* Verifica se o parametro 'doc' foi setado
-    	*/
-    	if($doc){
-    		$people = $this->peopleByDoc($doc);
-    	}else if($name){
-    		$people = $this->peopleByName($name);
+    	if($doc || $name){
+	    	/**
+	    	* Verifica se o parametro 'doc' foi setado
+	    	*/
+	    	if($doc){
+	    		$people = $this->peopleByDoc($doc);
+	    	}else if($name){
+	    		$people = $this->peopleByName($name);
+	    	}
+
+			/**
+			* Carrega todas as chaves associativas da entidade
+			*/
+	 		$associations = $this->loadAssociations($people);
+
+	    	/**
+	    	* Carrega os dados pertinentes ao produto 'Telefone Fixo'
+	    	*/
+	    	$landline = $this->landline($associations);
+
+	    	/**
+	    	* Carrega os dados pertinentes ao produto 'Endereços'
+	    	*/
+	    	$address = $this->address($associations);
+	
+	    	$this->set(compact('people', 'landline', 'address'));
     	}
-
-		/**
-		* Carrega todas as chaves associativas da entidade
-		*/
- 		$associations = $this->loadAssociations($people);
-
-    	/**
-    	* Carrega os dados pertinentes ao produto 'Telefone Fixo'
-    	*/
-    	$landline = $this->landline($associations);
-
-    	/**
-    	* Carrega os dados pertinentes ao produto 'Endereços'
-    	*/
-    	$address = $this->address($associations);
 
 // debug($people);
 // debug($landline);
@@ -66,7 +70,6 @@ class EntitiesController extends ProjectController {
 // debug($associations);
 // die;
 
-    	$this->set(compact('people', 'landline', 'address'));
 	}	
 
 	/**

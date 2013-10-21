@@ -2,7 +2,7 @@
     <div class="span12">
         <div class="box box-bordered box-color">
             <div class="box-title">
-                <h3><i class="glyphicon-iphone"></i> <?php echo __d('app', 'Mobile Data')?></h3>
+                <h3><i class="glyphicon-iphone"></i> <?php echo __('Mobile Data')?></h3>
             </div>
             <div class="box-content">
                 <!-- Telefone 1 -->
@@ -24,32 +24,32 @@
                                 $yearClass = 'btn-red';
                                 break;
                         }
-                        echo sprintf(__d('app', '%s updated in %s'), __d('app', 'Mobile'), $this->Html->link($year, '#', array('class' => 'btn ' . $yearClass)));
+                        echo sprintf(__('%s updated in %s'), __('Mobile'), $this->Html->link($year, '#', array('class' => 'btn ' . $yearClass)));
                         ?>
                     </h4>
                     <form style="border: 1px solid #DDDDDD;" class="form-horizontal form-column form-bordered" method="POST" action="#">
                         <div class="span6">
                             <div class="control-group">
-                                <label class="control-label"><?php echo __d('app', 'Mobile')?></label>
+                                <label class="control-label"><?php echo __('Mobile')?></label>
                                 <div class="controls">
                                     (27) 3019-9792
                                 </div>
                             </div>
 
                             <div class="control-group">
-                                <label class="control-label"><?php echo __d('app', 'Number')?></label>
+                                <label class="control-label"><?php echo __('Number')?></label>
                                 <div class="controls">
                                     14
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label"><?php echo __d('app', 'Complement')?></label>
+                                <label class="control-label"><?php echo __('Complement')?></label>
                                 <div class="controls">
                                     Rua da Cesan
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label"><?php echo __d('app', 'Neighborhood')?></label>
+                                <label class="control-label"><?php echo __('Neighborhood')?></label>
                                 <div class="controls">
                                     Bonfim
                                 </div>
@@ -57,26 +57,26 @@
                         </div>
                         <div class="span6">
                             <div class="control-group">
-                                <label class="control-label"><?php echo __d('app', 'Address')?></label>
+                                <label class="control-label"><?php echo __('Address')?></label>
                                 <div class="controls">
                                     Rua Mario Loureiro Nunes
                                 </div>
                             </div>
 
                             <div class="control-group">
-                                <label class="control-label"><?php echo __d('app', 'Zipcode')?></label>
+                                <label class="control-label"><?php echo __('Zipcode')?></label>
                                 <div class="controls">
                                     29047066
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label"><?php echo __d('app', 'State')?></label>
+                                <label class="control-label"><?php echo __('State')?></label>
                                 <div class="controls">
                                     ES
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label"><?php echo __d('app', 'Name in List')?></label>
+                                <label class="control-label"><?php echo __('Name in List')?></label>
                                 <div class="controls">
                                     Marcelo Martins dos Reis
                                 </div>
@@ -104,32 +104,32 @@
                                 $yearClass = 'btn-red';
                                 break;
                         }
-                        echo sprintf(__d('app', '%s updated in %s'), __d('app', 'Mobile'), $this->Html->link($year, '#', array('class' => 'btn ' . $yearClass)));
+                        echo sprintf(__('%s updated in %s'), __('Mobile'), $this->Html->link($year, '#', array('class' => 'btn ' . $yearClass)));
                         ?>
                     </h4>
                     <form style="border: 1px solid #DDDDDD;" class="form-horizontal form-column form-bordered" method="POST" action="#">
                         <div class="span6">
                             <div class="control-group">
-                                <label class="control-label"><?php echo __d('app', 'Mobile')?></label>
+                                <label class="control-label"><?php echo __('Mobile')?></label>
                                 <div class="controls">
                                     (27) 3019-9792
                                 </div>
                             </div>
 
                             <div class="control-group">
-                                <label class="control-label"><?php echo __d('app', 'Number')?></label>
+                                <label class="control-label"><?php echo __('Number')?></label>
                                 <div class="controls">
                                     14
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label"><?php echo __d('app', 'Complement')?></label>
+                                <label class="control-label"><?php echo __('Complement')?></label>
                                 <div class="controls">
                                     Rua da Cesan
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label"><?php echo __d('app', 'Neighborhood')?></label>
+                                <label class="control-label"><?php echo __('Neighborhood')?></label>
                                 <div class="controls">
                                     Bonfim
                                 </div>
@@ -137,26 +137,26 @@
                         </div>
                         <div class="span6">
                             <div class="control-group">
-                                <label class="control-label"><?php echo __d('app', 'Address')?></label>
+                                <label class="control-label"><?php echo __('Address')?></label>
                                 <div class="controls">
                                     Rua Mario Loureiro Nunes
                                 </div>
                             </div>
 
                             <div class="control-group">
-                                <label class="control-label"><?php echo __d('app', 'Zipcode')?></label>
+                                <label class="control-label"><?php echo __('Zipcode')?></label>
                                 <div class="controls">
                                     29047066
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label"><?php echo __d('app', 'State')?></label>
+                                <label class="control-label"><?php echo __('State')?></label>
                                 <div class="controls">
                                     ES
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label"><?php echo __d('app', 'Name in List')?></label>
+                                <label class="control-label"><?php echo __('Name in List')?></label>
                                 <div class="controls">
                                     Marcelo Martins dos Reis
                                 </div>
@@ -184,32 +184,32 @@
                                 $yearClass = 'btn-red';
                                 break;
                         }
-                        echo sprintf(__d('app', '%s updated in %s'), __d('app', 'Mobile'), $this->Html->link($year, '#', array('class' => 'btn ' . $yearClass)));
+                        echo sprintf(__('%s updated in %s'), __('Mobile'), $this->Html->link($year, '#', array('class' => 'btn ' . $yearClass)));
                         ?>
                     </h4>
                     <form style="border: 1px solid #DDDDDD;" class="form-horizontal form-column form-bordered" method="POST" action="#">
                         <div class="span6">
                             <div class="control-group">
-                                <label class="control-label"><?php echo __d('app', 'Mobile')?></label>
+                                <label class="control-label"><?php echo __('Mobile')?></label>
                                 <div class="controls">
                                     (27) 3019-9792
                                 </div>
                             </div>
 
                             <div class="control-group">
-                                <label class="control-label"><?php echo __d('app', 'Number')?></label>
+                                <label class="control-label"><?php echo __('Number')?></label>
                                 <div class="controls">
                                     14
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label"><?php echo __d('app', 'Complement')?></label>
+                                <label class="control-label"><?php echo __('Complement')?></label>
                                 <div class="controls">
                                     Rua da Cesan
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label"><?php echo __d('app', 'Neighborhood')?></label>
+                                <label class="control-label"><?php echo __('Neighborhood')?></label>
                                 <div class="controls">
                                     Bonfim
                                 </div>
@@ -217,26 +217,26 @@
                         </div>
                         <div class="span6">
                             <div class="control-group">
-                                <label class="control-label"><?php echo __d('app', 'Address')?></label>
+                                <label class="control-label"><?php echo __('Address')?></label>
                                 <div class="controls">
                                     Rua Mario Loureiro Nunes
                                 </div>
                             </div>
 
                             <div class="control-group">
-                                <label class="control-label"><?php echo __d('app', 'Zipcode')?></label>
+                                <label class="control-label"><?php echo __('Zipcode')?></label>
                                 <div class="controls">
                                     29047066
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label"><?php echo __d('app', 'State')?></label>
+                                <label class="control-label"><?php echo __('State')?></label>
                                 <div class="controls">
                                     ES
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label"><?php echo __d('app', 'Name in List')?></label>
+                                <label class="control-label"><?php echo __('Name in List')?></label>
                                 <div class="controls">
                                     Marcelo Martins dos Reis
                                 </div>

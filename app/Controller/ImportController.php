@@ -288,11 +288,18 @@ class ImportController extends AppController {
 							*/
 							$hash_complement = $this->Import->getHash($this->Import->getComplement($v['COMPLEMENTO']), null, false);
 
+							/**
+							* Carrega um array com todos os estados
+							*/
+							$map_states = $this->Import->loadStates(true);
+
 							$data = array(
 								'Iaddress' => array(
 									'state_id' => $state_id,
 									'zipcode_id' => $this->Izipcode->id,
 									'city_id' => $this->Import->getCityId($v['endereco']['CIDADE'], $state_id, $this->Izipcode->id),
+									'state' => $map_states[$state_id],
+									'zipcode' => $this->Import->getZipcode($v['endereco']['CEP']),
 									'city' => $this->Import->getCity($v['endereco']['CIDADE']),
 									'type_address' => $this->Import->getTypeAddress($v['endereco']['RUA'], $v['endereco']['NOME_RUA']),
 									'street' => $street,

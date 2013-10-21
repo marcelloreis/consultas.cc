@@ -4,20 +4,20 @@
 			<div class="box-title">
 				<h3>
 					<i class="glyphicon-check"></i>
-					<?php echo __d('app', 'Products')?>
+					<?php echo __('Products')?>
 				</h3>
 			</div>
 			<div class="box-content">
 				<div class="basic-margin">
 					<?php 
-					echo $this->Html->link('<i class="glyphicon-vcard"></i> ' . __d('app', 'Document Data'), '#', array('class' => 'btn', 'escape' => false));
-					echo $this->Html->link('<i class="icon-plus-sign-alt"></i> ' . __d('fields', 'Death'), '#', array('class' => 'btn', 'escape' => false));
-					echo $this->Html->link('<i class="glyphicon-iphone"></i> ' . __d('fields', 'Mobile'), '#', array('class' => 'btn', 'escape' => false));
-					echo $this->Html->link('<i class="icon-phone"></i> ' . __d('fields', 'Landline'), '#', array('class' => 'btn', 'escape' => false));
-					echo $this->Html->link('<i class="glyphicon-road"></i> ' . __d('app', 'Address Data'), '#', array('class' => 'btn', 'escape' => false));
-					echo $this->Html->link('<i class="glyphicon-building"></i> ' . __d('app', 'Shareholding'), '#', array('class' => 'btn', 'escape' => false));
-					echo $this->Html->link('<i class="glyphicon-parents"></i> ' . __d('app', 'Family'), '#', array('class' => 'btn', 'escape' => false));
-					echo $this->Html->link('<i class="glyphicon-home"></i> ' . __d('app', 'Vizinhos'), '#', array('class' => 'btn', 'escape' => false));
+					echo $this->Html->link('<i class="glyphicon-vcard"></i> ' . __('Document Data'), '#', array('class' => 'btn', 'escape' => false));
+					echo $this->Html->link('<i class="icon-plus-sign-alt"></i> ' . __('Death'), '#', array('class' => 'btn', 'escape' => false));
+					echo $this->Html->link('<i class="glyphicon-iphone"></i> ' . __('Mobile'), '#', array('class' => 'btn', 'escape' => false));
+					echo $this->Html->link('<i class="icon-phone"></i> ' . __('Landline'), '#', array('class' => 'btn', 'escape' => false));
+					echo $this->Html->link('<i class="glyphicon-road"></i> ' . __('Address Data'), '#', array('class' => 'btn', 'escape' => false));
+					echo $this->Html->link('<i class="glyphicon-building"></i> ' . __('Shareholding'), '#', array('class' => 'btn', 'escape' => false));
+					echo $this->Html->link('<i class="glyphicon-parents"></i> ' . __('Family'), '#', array('class' => 'btn', 'escape' => false));
+					echo $this->Html->link('<i class="glyphicon-home"></i> ' . __('Vizinhos'), '#', array('class' => 'btn', 'escape' => false));
 					?>
 				</div>
 			</div>

@@ -2,7 +2,7 @@
     <div class="span12">
         <div class="box box-bordered box-color">
             <div class="box-title">
-                <h3><i class="glyphicon-road"></i> <?php echo __d('app', 'Address Data')?></h3>
+                <h3><i class="glyphicon-road"></i> <?php echo __('Address Data')?></h3>
             </div>
             <div class="box-content">
                 <!-- Telefone 1 -->
@@ -29,55 +29,55 @@
                                     $yearClass = 'btn-red';
                                     break;
                             }
-                            echo sprintf(__d('app', '%s updated in %s'), __d('fields', 'Address'), $this->Html->link($v['Address']['year'], '#', array('class' => 'btn ' . $yearClass)));
+                            echo sprintf(__('%s updated in %s'), __('Address'), $this->Html->link($v['Address']['year'], '#', array('class' => 'btn ' . $yearClass)));
                             ?>
                         </h4>
                         <form style="border: 1px solid #DDDDDD;" class="form-horizontal form-column form-bordered" method="POST" action="#">
                             <div class="control-group">
-                                <label class="control-label"><?php echo __d('fields', 'Street')?></label>
+                                <label class="control-label"><?php echo isset($v['Address']['type_address'])?$v['Address']['type_address']:'<small>' . __('Not Foud') . '</small>';?></label>
                                 <div class="controls">
-                                    <?php echo $v['Address']['street']?>
+                                    <?php echo !empty($v['Address']['street'])?$v['Address']['street']:'<small>' . __('Not Found') . '</small>';?>
                                 </div>
                             </div>
 
                             <div class="span6">
                                 <div class="control-group">
-                                    <label class="control-label"><?php echo __d('fields', 'Number')?></label>
+                                    <label class="control-label"><?php echo __('Number')?></label>
                                     <div class="controls">
-                                        <?php echo $v['Address']['number']?>
+                                        <?php echo !empty($v['Address']['number'])?$v['Address']['number']:'<small>' . __('Not Found') . '</small>';?>
                                     </div>
                                 </div>
                                 <div class="control-group">
-                                    <label class="control-label"><?php echo __d('fields', 'Complement')?></label>
+                                    <label class="control-label"><?php echo __('Complement')?></label>
                                     <div class="controls">
-                                        <?php echo $v['Address']['complement']?>
+                                        <?php echo !empty($v['Address']['complement'])?$v['Address']['complement']:'<small>' . __('Not Found') . '</small>';?>
                                     </div>
                                 </div>
                                 <div class="control-group">
-                                    <label class="control-label"><?php echo __d('fields', 'Neighborhood')?></label>
+                                    <label class="control-label"><?php echo __('Neighborhood')?></label>
                                     <div class="controls">
-                                        <?php echo $v['Address']['neighborhood']?>
+                                        <?php echo !empty($v['Address']['neighborhood'])?$v['Address']['neighborhood']:'<small>' . __('Not Found') . '</small>';?>
                                     </div>
                                 </div>
                             </div>
                             <div class="span6">
 
                                 <div class="control-group">
-                                    <label class="control-label"><?php echo __d('fields', 'Zipcode')?></label>
+                                    <label class="control-label"><?php echo __('Zipcode')?></label>
                                     <div class="controls">
-                                        <?php echo $v['Address']['zipcode_id']?>
+                                        <?php echo !empty($v['Address']['zipcode'])?$v['Address']['zipcode']:'<small>' . __('Not Found') . '</small>';?>
                                     </div>
                                 </div>
                                 <div class="control-group">
-                                    <label class="control-label"><?php echo __d('fields', 'State')?></label>
+                                    <label class="control-label"><?php echo __('State')?></label>
                                     <div class="controls">
-                                        <?php echo $v['Address']['state_id']?>
+                                        <?php echo !empty($v['Address']['state'])?$v['Address']['state']:'<small>' . __('Not Found') . '</small>';?>
                                     </div>
                                 </div>
                                 <div class="control-group">
-                                    <label class="control-label"><?php echo __d('fields', 'City')?></label>
+                                    <label class="control-label"><?php echo __('City')?></label>
                                     <div class="controls">
-                                        <?php echo $v['Address']['city']?>
+                                        <?php echo !empty($v['Address']['city'])?$v['Address']['city']:'<small>' . __('Not Found') . '</small>';?>
                                     </div>
                                 </div>
                             </div>

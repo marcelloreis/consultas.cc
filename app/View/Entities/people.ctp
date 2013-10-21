@@ -4,7 +4,7 @@
 */
 echo $this->element('Index/Entities/panel');
 
-if($people){
+if(isset($people)){
 	/**
 	* Atalhos
 	*/

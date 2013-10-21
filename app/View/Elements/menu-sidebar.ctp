@@ -3,13 +3,13 @@ $menu = array(
     /**
     * Imports
     */
-    array('label' => __d('fields', 'Import'), 'controller' => 'import', 'icon_left' => '<span class="square-16 plix-16"></span>'),
+    array('label' => __('Import'), 'controller' => 'import', 'icon_left' => '<span class="square-16 plix-16"></span>'),
 
     /**
     * Checkinlist
     */
     array(
-        'label' => __d('app', 'Checkinlist'),
+        'label' => __('Checkinlist'),
         'icon_left' => '<span class="map-16 plix-16"></span>', 
         'icon_right' => '<span class="button-icon"><span class="plix-10 plus-10"></span></span>',
         'children' => array(

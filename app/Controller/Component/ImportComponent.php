@@ -1063,7 +1063,7 @@ class ImportComponent extends Component {
 	/**
 	* Carrega um array com os codigos e siglas de todos os estados
 	*/	
-	private function loadStates(){
+	private function loadStates($flip=false){
 		$states = array(
 					'AC' => '1',
 					'AL' => '2',
@@ -1093,6 +1093,10 @@ class ImportComponent extends Component {
 					'SP' => '26',
 					'TO' => '27'
 				);
+
+		if($flip){
+			$states = array_flip($states);
+		}
 
 		return $states;	
 	}
