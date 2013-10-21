@@ -182,6 +182,7 @@ class EntitiesController extends ProjectController {
 	* @return array
 	*/
 	private function loadAssociations($entity){
+		$map = array();
 		if(isset($entity['Entity']['id']) && !empty($entity['Entity']['id'])){
 			$map = $this->Entity->EntityLandlineAddress->find('default_all', array(
 				'conditions' => array('EntityLandlineAddress.entity_id' => $entity['Entity']['id']),
