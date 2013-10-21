@@ -21,6 +21,9 @@ msgstr "Dados do Documento"
 msgid "Searches"
 msgstr "Buscas"
 
+msgid "Search"
+msgstr "Buscar"
+
 msgid "By Document"
 msgstr "Por Documento"
 
@@ -35,6 +38,9 @@ msgstr "Por Telefone Fixo"
 
 msgid "Name"
 msgstr "Nome"
+
+msgid "Company"
+msgstr "Empresa"
 
 msgid "Mother"
 msgstr "Mãe"
@@ -54,6 +60,9 @@ msgstr "Idade"
 msgid "Gender"
 msgstr "Sexo"
 
+msgid "Person"
+msgstr "Pessoa"
+
 msgid "Type"
 msgstr "Tipo"
 
@@ -67,10 +76,22 @@ msgid "type address"
 msgstr "digite o endereço"
 
 msgid "type landline"
-msgstr "digite o telefone fixo"
+msgstr "digite o telefone"
+
+msgid "Type Document"
+msgstr "Digite o Documento"
+
+msgid "Type Name"
+msgstr "Digite o Nome"
+
+msgid "Type Address"
+msgstr "Digite o Endereço"
+
+msgid "Type Landline"
+msgstr "Digite o Telefone"
 
 msgid "Landline Data"
-msgstr "Dados do Telefone Fixo"
+msgstr "Dados do Telefone"
 
 msgid "Warning"
 msgstr "Atenção"
@@ -79,13 +100,13 @@ msgid "%s updated in %s"
 msgstr "%s atualizado em %s"
 
 msgid "No address for this landline"
-msgstr "Nenhum endereço para este telefone fixo"
+msgstr "Nenhum endereço para este telefone"
 
 msgid "Address Data"
 msgstr "Endereço do localizador"
 
-msgid "Go To"
-msgstr "Ir Para"
+msgid "Products"
+msgstr "Produtos"
 
 msgid "Sister"
 msgstr "Irmã"

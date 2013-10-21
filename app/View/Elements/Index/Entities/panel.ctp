@@ -27,7 +27,7 @@
                         <?php echo $this->AppForm->create($modelClass, array('defaultSize' => 'input-xlarge', 'classForm' => 'form-horizontal form-bordered'))?>
                             <?php echo $this->form->hidden('q', array('value' => $requestHandler));?>
                             <div class="control-group">
-                                <label class="control-label" for="textfield"><?php echo __d('app', 'By Document')?></label>
+                                <label class="control-label" for="textfield"><?php echo __d('app', 'Type Document')?></label>
                                 <div class="controls">
                                     <div class="input-append input-prepend">
                                         <span class="add-on"><i class="icon-search"></i></span>

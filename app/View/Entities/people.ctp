@@ -4,11 +4,11 @@
 */
 echo $this->element('Index/Entities/panel');
 
-if($entity){
+if($people){
 	/**
 	* Atalhos
 	*/
-	echo $this->element('Index/Entities/goto');
+	echo $this->element('Index/Entities/products');
 	/**
 	* Obito
 	*/
@@ -16,7 +16,7 @@ if($entity){
 	/**
 	* Dados do documento
 	*/
-	echo $this->element('Index/Entities/entity');
+	echo $this->element('Index/Entities/people');
 	/**
 	* Dados dos telefones
 	*/

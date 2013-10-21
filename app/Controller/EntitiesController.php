@@ -17,14 +17,14 @@ App::uses('ProjectController', 'Controller');
 class EntitiesController extends ProjectController {
 
 	/**
-	* Método index
+	* Método people
 	* Este método contem regras de negocios que permitem buscar na base de dados por quais quer parametro
 	*
-	* @override Metodo AppController.index
+	* @override Metodo AppController.people
 	* @param string $period (Periodo das movimentacoes q serao listadas)
 	* @return void
 	*/
-	public function index($params=array()){
+	public function people($params=array()){
     	/**
 		 * Se o campo "q" for igual a 1, simula o envio do form por get
 		 * redirecionando para http://[domain]/[controller]/[action]/seach:value1/namedN:valueN
@@ -36,12 +36,19 @@ class EntitiesController extends ProjectController {
     	*/
     	$doc = isset($this->params['named']['doc']) && !empty($this->params['named']['doc'])?$this->params['named']['doc']:false;
     	$name = isset($this->params['named']['name']) && !empty($this->params['named']['name'])?$this->params['named']['name']:false;
-    	$entity = $this->people($doc, $name);
+    	/**
+    	* Verifica se o parametro 'doc' foi setado
+    	*/
+    	if($doc){
+    		$people = $this->peopleByDoc($doc);
+    	}else if($name){
+    		$people = $this->peopleByName($name);
+    	}
 
 		/**
 		* Carrega todas as chaves associativas da entidade
 		*/
- 		$associations = $this->loadAssociations($entity);
+ 		$associations = $this->loadAssociations($people);
 
     	/**
     	* Carrega os dados pertinentes ao produto 'Telefone Fixo'
@@ -53,31 +60,14 @@ class EntitiesController extends ProjectController {
     	*/
     	$address = $this->address($associations);
 
-// debug($entity);
+// debug($people);
 // debug($landline);
 // debug($address);
 // debug($associations);
 // die;
 
-    	$this->set(compact('entity', 'landline', 'address'));
+    	$this->set(compact('people', 'landline', 'address'));
 	}	
-
-	/**
-	* Método people
-	* Este método corresponde ao produto 'Pessoas' e retorna todos os dados da entidade a partir dos parametros passados por parametro
-	*
-	* @return array
-	*/
-	public function people($doc=false, $name=false){
-    	/**
-    	* Verifica se o parametro 'doc' foi setado
-    	*/
-    	if($doc){
-    		$map = $this->peopleByDoc($doc);
-    	}
-
-    	return $map;
-	}
 
 	/**
 	* Método landline
@@ -149,7 +139,7 @@ class EntitiesController extends ProjectController {
 	}
 
 	/**
-	* Método findByDoc
+	* Método peopleByDoc
 	* Este método retorna todos os dados da entidade a partir do documento passados por parametro
 	*
 	* @return array
@@ -170,6 +160,16 @@ class EntitiesController extends ProjectController {
 		$map = count($map)?$map:false;
 
 		return $map;
+	}		
+
+	/**
+	* Método peopleByName
+	* Este método retorna todos os dados da entidade a partir do nome passados por parametro
+	*
+	* @return array
+	*/
+	private function peopleByName($name){
+		//Regra de negocio aqui
 	}		
 
 	/**
