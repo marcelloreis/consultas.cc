@@ -1,33 +1,46 @@
-<?php $this->assign('title', __(ucfirst($this->params['controller'])));?>
-<?php $this->assign('toolbar-index', $this->element('toolbar-index'));?>
-
-<div id="content-grid">
-    <?php echo $this->AppGrid->create($modelClass, array('tableClass' => 'basic-table', 'id' => 'basic-table'))?>
-    <thead>
-        <?php $columns['id'] = '<input type="checkbox" name="" class="e-checkbox-trigger"/>'?>
-        <?php $columns['action'] = __('Actions')?>
-        <?php echo $this->AppGrid->tr($columns)?>
-    </thead>
-
-    <tbody>
-        <?php 
-        $map = strtolower($modelClass);
-        if(count($$map)){
-            foreach($$map as $k => $v){
-                $v[$modelClass]['action'] = $this->element('table-actions', array('id' => $v[$modelClass]['id']));
-                $v[$modelClass]['id'] = $this->AppForm->input("{$modelClass}.id.{$k}", array('type' => 'checkbox', 'template' => 'input-clean', 'value' => $v[$modelClass]['id'], 'placeholder' => $v[$modelClass][$fieldText]));
-                echo $this->AppGrid->tr($v[$modelClass]);
-            }
-        }
-        ?>
-    </tbody>
-    <?php echo $this->AppGrid->end(array('labelRight' => $this->Paginator->counter('Página {:page} de {:pages}, exibindo {:current} registros do total de {:count}, começando pelo registro {:start} até o {:end}')))?>
-</div>
-
 <?php 
+/**
+* Adiciona o painel de funcoes da grid
+*/
+echo $this->element('Index/panel');
 
 /**
-* Carrega todos os scripts de javascripts criados ate o momento
+* Inicia a montagem da grid
 */
-echo $this->Js->writeBuffer();
-?>
+echo $this->AppGrid->create($modelClass, array('id' => 'index-table', 'tableClass' => 'table table-hover table-nomargin'));
+
+/**
+* Monta o cabeçalho
+*/
+$columns['id'] = $this->AppForm->input("", array('id' => 'check-all', 'type' => 'checkbox', 'template' => 'form-input-clean'));
+$columns['action'] = __('Actions');
+echo $this->Html->tag('thead', $this->AppGrid->tr($columns));
+
+/**
+* Monta o body
+*/
+$map = strtolower($modelClass);
+if(count($$map)){
+    $body = '';
+    foreach($$map as $k => $v){
+        /**
+        * Seta as larguras das colunas
+        */
+    	$v[$modelClass]['action_width'] = '150';
+    	
+        $v[$modelClass]['action'] = $this->element('Index/Groups/action', array('id' => $v[$modelClass]['id']));
+        $v[$modelClass]['id'] = $this->AppForm->input("{$modelClass}.id.{$k}", array('type' => 'checkbox', 'template' => 'form-input-clean', 'value' => $v[$modelClass]['id'], 'placeholder' => $v[$modelClass][$fieldText]));
+        $body .= $this->AppGrid->tr($v[$modelClass]);
+    }
+    echo $this->Html->tag('tbody', $body);
+}
+
+/**
+* Fecha a montagem da grid
+*/                
+echo $this->AppGrid->end();
+
+/**
+* Adiciona o rodapé da grid
+*/
+echo $this->element('Index/footer');

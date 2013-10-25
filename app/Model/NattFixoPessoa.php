@@ -33,34 +33,37 @@ class NattFixoPessoa extends AppModelClean {
     );
 
     public function next(){
+        $map = array();
     	$pessoa = $this->find('first', array(
     		'recursive' => '-1',
     		'conditions' => array(
                 'CPF_CNPJ !=' => '00000000000000000000',
     			)
     		));
-    	$map['pessoa'] = $pessoa['NattFixoPessoa'];
-        $telefone = $this->NattFixoTelefone->find('all', array(
-            'recursive' => '-1',
-            'conditions' => array('CPF_CNPJ' => $pessoa['NattFixoPessoa']['CPF_CNPJ']),
-            'order' => array('DATA_ATUALIZACAO' => 'DESC'),
-            'limit' => 10
-            ));
+        if(isset($pessoa['NattFixoPessoa'])){
+        	$map['pessoa'] = $pessoa['NattFixoPessoa'];
+            $telefone = $this->NattFixoTelefone->find('all', array(
+                'recursive' => '-1',
+                'conditions' => array('CPF_CNPJ' => $pessoa['NattFixoPessoa']['CPF_CNPJ']),
+                'order' => array('DATA_ATUALIZACAO' => 'DESC'),
+                'limit' => 10
+                ));
 
-    	if(count($telefone)){
-	    	foreach ($telefone as $k => $v) {
-		    	$endereco = $this->NattFixoTelefone->NattFixoEndereco->find('first', array(
-		    		'recursive' => '-1',
-		    		'conditions' => array('COD_END' => $v['NattFixoTelefone']['COD_END'])
-		    		));
-	    		$map['telefone'][$k] = $v['NattFixoTelefone'];
-                if(isset($endereco['NattFixoEndereco'])){
-                    $map['telefone'][$k]['endereco'] = $endereco['NattFixoEndereco'];
-                }
-			}
-    	}
+        	if(count($telefone)){
+    	    	foreach ($telefone as $k => $v) {
+    		    	$endereco = $this->NattFixoTelefone->NattFixoEndereco->find('first', array(
+    		    		'recursive' => '-1',
+    		    		'conditions' => array('COD_END' => $v['NattFixoTelefone']['COD_END'])
+    		    		));
+    	    		$map['telefone'][$k] = $v['NattFixoTelefone'];
+                    if(isset($endereco['NattFixoEndereco'])){
+                        $map['telefone'][$k]['endereco'] = $endereco['NattFixoEndereco'];
+                    }
+    			}
+        	}
 
-    	$this->offset($map['pessoa']['CPF_CNPJ']);
+        	$this->offset($map['pessoa']['CPF_CNPJ']);
+        }
 
 		return $map;    	
     }

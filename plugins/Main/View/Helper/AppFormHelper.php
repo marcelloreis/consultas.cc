@@ -40,8 +40,8 @@ class AppFormHelper extends AppHelper {
         $options['inputDefaults'] = array('label' => false, 'div' => false, 'hiddenField' => false, 'error' => false);
         // $options['error'] = false;
         //Seta as classes de tamanhos dos inputs
-        if(!isset($options['defaultSize'])){
-            $this->defaultSize = 'small';
+        if(isset($options['defaultSize'])){
+            $this->defaultSize = $options['defaultSize'];
         }
 
         //O formulario pode ser montado apartir da AppGrid, entao é verificado se a classe vem setada de lá
@@ -49,9 +49,6 @@ class AppFormHelper extends AppHelper {
             $options['class'] = $options['classForm'];
             unset($options['classForm']);
         }
-
-        //Inicializa a variavel e insere a classe que habilita os e-checkbox
-        $options['class'] = isset($options['class'])?$options['class'] . ' e-checkbox-section':'e-checkbox-section ';
 
         //Cria o formulario
         $form = $this->Form->create($this->model, $options); 
@@ -78,7 +75,7 @@ class AppFormHelper extends AppHelper {
             $options['field_name'] = $fieldName;
             $options['data_source'] = "/{$fk_controller}/index/fkbox:belongsto";
             $options['title_modal'] = __d('fields', $fk_controller);
-            $options['template'] = 'input-fk';
+            $options['template'] = 'form-input-fk';
             $options['type'] = 'hidden';
             $options['placeholder'] = __("Click the magnifying glass to search the {$fk_model}");
             $options['value_text'] = isset($options['value_text'])?$options['value_text']:'';
@@ -96,7 +93,7 @@ class AppFormHelper extends AppHelper {
 
 
         //Verifica se foi requisitado um template fora do padrao
-        $templateName = (isset($options['template']))?$options['template']:'input';
+        $templateName = (isset($options['template']))?$options['template']:'form-input';
 
         //Carrega o template do elemento
         $inputTemplate = $this->AppUtils->loadTemplate($templateName);
@@ -111,7 +108,7 @@ class AppFormHelper extends AppHelper {
             $options['title'] = $message;
         }
         //Inicializa a variavel $options['class']
-        if(!isset($options['class']) || $options['class'] == 'e-checkbox-trigger'){
+        if(!isset($options['class'])){
             if(!isset($options['class'])){
                 $options['class'] = '';
             }
@@ -147,13 +144,13 @@ class AppFormHelper extends AppHelper {
             'label' => __d('fields', $this->inputLabel),
             'input' => $this->Form->input($fieldName, $options),
             );
-
         $attr = array_merge($defaults, $options);
         //Altera as chaves do array para o padrao de variaveis do template
         $values = $this->AppUtils->key2var($attr);
 
         //Carrega as variaveis do template do input com os valores passados por parametro
         $this->input = str_replace(array_keys($values), $values, $inputTemplate);
+
         //Carrega o ID do input
         preg_match('/id=[\"\'](.*?)[\"\']/si', $this->input, $map);
         $id = $map[1];
@@ -169,18 +166,19 @@ class AppFormHelper extends AppHelper {
     }
 
     public function btn($value=false, $options=array()) {
-        $value = !$value?__('Save'):$value;
+        $value = !$value?__('Save'):__($value);
         /**
          * Libera o acesso ao botao somente se o usuario tiver acesso a ação/função
          */
         // debug($this->params['action']);die;
         if($this->params['action'] != 'view'){
             //Verifica se foi requisitado um template fora do padrao
-            $templateName = (isset($options['template']))?$options['template']:'input-btn';
+            $templateName = (isset($options['template']))?$options['template']:'form-input-btn';
             //Carrega o template do elemento
             $inputTemplate = $this->AppUtils->loadTemplate($templateName);
             //Carrega os valores padroes do input
             $defaults = array(
+                'class' => 'btn',
                 'side' => 'right',
                 'value' => __d('fields', $value)
                 );
@@ -198,7 +196,7 @@ class AppFormHelper extends AppHelper {
 
     public function separator($options=array()) {
         //Verifica se foi requisitado um template fora do padrao
-        $templateName = (isset($options['template']))?$options['template']:'input-separator';
+        $templateName = (isset($options['template']))?$options['template']:'form-input-separator';
         //Carrega o template do elemento
         $inputTemplate = $this->AppUtils->loadTemplate($templateName);
 

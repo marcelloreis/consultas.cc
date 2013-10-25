@@ -1,9 +1,9 @@
 <?php
-App::uses('AppModelClean', 'Model');
+App::uses('AppModel', 'Model');
 /**
  * Landline Model
  *
- * Esta classe é responsável ​​pela gestão de quase tudo o que acontece a respeito do(a) Estado, 
+ * Esta classe é responsável ​​pela gestão de quase tudo o que acontece a respeito do(a) Landline, 
  * é responsável também pela validação dos seus dados.
  *
  * PHP 5
@@ -14,9 +14,57 @@ App::uses('AppModelClean', 'Model');
  *
  * Landline Model
  *
- * @property Country $Country
- * @property City $City
+ * @property Address $Address
+ * @property Landline $Landline
  */
-class Landline extends AppModelClean {
-	public $useTable = 'landlines';
+class Landline extends AppModel {
+
+	/**
+	* Display field
+	*
+	* @var string
+	*/
+	public $displayField = 'tel_full';
+
+	/**
+	* Recursive
+	*
+	* @var integer
+	*/
+	public $recursive = -1;	
+
+	/**
+	* hasMany associations
+	*
+	* @var array
+	*/
+	public $hasMany = array(
+        'EntityLandlineAddress' => array(
+            'className' => 'EntityLandlineAddress',
+            'foreignKey' => 'landline_id'
+        )
+	);	
+
+	/**
+	* hasAndBelongsToMany associations
+	*
+	* @var array
+	*/
+	public $hasAndBelongsToMany = array(
+		'Entity' => array(
+			'className' => 'Entity',
+			'joinTable' => 'entities_landlines_addresses',
+			'foreignKey' => 'entity_id',
+			'associationForeignKey' => 'landline_id',
+			'unique' => 'keepExisting',
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'finderQuery' => '',
+			'deleteQuery' => '',
+			'insertQuery' => ''
+		)
+	);
 }

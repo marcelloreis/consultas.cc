@@ -34,7 +34,7 @@ class AppProfileComponent extends Component {
 	*
 	* Aqui serao carregados os servicos do webservice do google ja instnciado no component AppGoogle
 	*/
-	public function startup($controller){
+	public function startup(Controller $controller){
 		/**
 		* Instância dos objetos
 		*/

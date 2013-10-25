@@ -33,7 +33,7 @@ class AppGridHelper extends AppHelper {
     	* Monta o top do template da tabela
     	*/
         //Verifica se foi requisitado um template fora do padrao
-        $templateName = (isset($options['template']))?$options['template']:'table-header';
+        $templateName = (isset($options['template']))?$options['template']:'index-table-header';
 
         //Carrega o template do elemento
         $this->tableIniTemplate = $this->AppUtils->loadTemplate($templateName);
@@ -42,7 +42,7 @@ class AppGridHelper extends AppHelper {
         $defaults = array(
             'init_form' => $this->AppForm->create($this->model, $options),
             'classForm' => '',
-            'tableClass' => 'grid',
+            'tableClass' => 'table table-striped b-t',
             'tableWidth' => '100%',
             'tableCellspacing' => '0',
             'tableCellpadding' => '0',
@@ -80,7 +80,7 @@ class AppGridHelper extends AppHelper {
      */
     public function tr($columns, $options=array()){
         //Verifica se foi requisitado um template fora do padrao
-        $templateName = (isset($options['template']))?$options['template']:'table-tr';
+        $templateName = (isset($options['template']))?$options['template']:'index-table-tr';
 
         //Carrega o template do elemento
         $this->trTemplate = $this->AppUtils->loadTemplate($templateName);
@@ -190,7 +190,7 @@ class AppGridHelper extends AppHelper {
 
     public function btn($value='Salvar', $options=array()){
         //Verifica se foi requisitado um template fora do padrao
-        $templateName = (isset($options['template']))?$options['template']:'table-tr';
+        $templateName = (isset($options['template']))?$options['template']:'index-table-tr';
 
         //Carrega o template do elemento
         $this->trTemplate = $this->AppUtils->loadTemplate($templateName);
@@ -247,7 +247,7 @@ class AppGridHelper extends AppHelper {
         * Finaliza o top do template da tabela
         */
         //Verifica se foi requisitado um template fora do padrao
-        $templateName = (isset($options['template']))?$options['template']:'table-footer';
+        $templateName = (isset($options['template']))?$options['template']:'index-table-footer';
 
         //Carrega o template do elemento
         $this->bottomTemplate = $this->AppUtils->loadTemplate($templateName);

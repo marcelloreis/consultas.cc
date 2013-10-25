@@ -1,5 +1,5 @@
-<ul>
-	%repeat%
-	<li class="%classActive%">%link%</li>
-	%/repeat%
+<ul class="dropdown-menu">
+    %repeat%
+    <li>%link%</li>
+    %/repeat%
 </ul>

@@ -5,7 +5,7 @@
 <div id="content-grid">
     <?php echo $this->AppGrid->create($modelClass, array('tableClass' => 'basic-table', 'id' => 'basic-table'))?>
     <thead>
-        <?php $columns['id'] = $this->AppForm->input("{$modelClass}.id.trigger", array('class' => 'e-checkbox-trigger', 'type' => 'checkbox', 'template' => 'input-clean', 'value' => null))?>
+        <?php $columns['id'] = $this->AppForm->input("{$modelClass}.id.trigger", array('class' => 'e-checkbox-trigger', 'type' => 'checkbox', 'template' => 'form-input-clean', 'value' => null))?>
         <?php $columns['action'] = __('Actions')?>
         <?php $columns['printable_name'] = __('Name')?>
         <?php unset($columns['name'])?>
@@ -18,7 +18,7 @@
         if(count($$map)){
             foreach($$map as $k => $v){
                 $v[$modelClass]['action'] = $this->element('table-actions', array('id' => $v[$modelClass]['id']));
-                $v[$modelClass]['id'] = $this->AppForm->input("{$modelClass}.id.{$k}", array('type' => 'checkbox', 'template' => 'input-clean', 'value' => $v[$modelClass]['id'], 'placeholder' => $v[$modelClass][$fieldText]));
+                $v[$modelClass]['id'] = $this->AppForm->input("{$modelClass}.id.{$k}", array('type' => 'checkbox', 'template' => 'form-input-clean', 'value' => $v[$modelClass]['id'], 'placeholder' => $v[$modelClass][$fieldText]));
 
                 echo $this->AppGrid->tr($v[$modelClass]);
             };

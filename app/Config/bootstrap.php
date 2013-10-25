@@ -101,16 +101,16 @@ define('ACTION_DELETE', 'deleted');
 */
 define('FLASH_SESSION_FORM', 'session_form');
 define('FLASH_SESSION_LOGIN', 'session_login');
-define('FLASH_TEMPLETE', 'flash-message');
-define('FLASH_TEMPLETE_DASHBOARD', 'flash-message-dashboard');
+define('FLASH_TEMPLATE', 'Components/flash-message');
+define('FLASH_TEMPLATE_DASHBOARD', 'Components/flash-message-dashboard');
 
 /**
 * Classe de status das mensagens
 */
-define('FLASH_CLASS_INFO', 'info');
-define('FLASH_CLASS_SUCCESS', 'success');
-define('FLASH_CLASS_ERROR', 'error');
-define('FLASH_CLASS_ALERT', 'warning');
+define('FLASH_CLASS_INFO', 'alert-info');
+define('FLASH_CLASS_SUCCESS', 'alert-success');
+define('FLASH_CLASS_ERROR', 'alert-error');
+define('FLASH_CLASS_ALERT', 'alert');
 
 /**
 * Mensagens padroes

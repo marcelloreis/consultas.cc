@@ -47,7 +47,7 @@ class AppCalendarComponent extends Component {
 	* @param Controller $controller
 	* @return void
 	*/
-	public function startup($controller){
+	public function startup(Controller $controller){
 		/**
 		* A sessao 'User.Social.api' é setada no users controller no momento em que o 
 		* usuario seleciona a rede social que sera utilizada como login

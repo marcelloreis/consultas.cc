@@ -9,7 +9,7 @@
     <?php if (!empty($associations['hasAndBelongsToMany'])):?>
         <?php echo "<?php if(isset(\$this->data['{$modelClass}']['id']) && !empty(\$this->data['{$modelClass}']['id'])):?>\n"?>
         <?php foreach ($associations['hasAndBelongsToMany'] as $k => $v):?>
-            <li class="<?php echo "<?php echo (isset(\$this->params['named']['habtm']) && \$this->params['named']['habtm'] == '{$k}')?'etabs-active':'';?>"?>"><?php echo "<?php echo \$this->Html->link(sprintf(__('List %s'), __d('fields', '{$k}')), array(\$this->data[\$modelClass]['id'], 'habtm' => '{$k}'))?>"?></li>
+            <li class="<?php echo "<?php echo (isset(\$this->params['named']['habtm']) && \$this->params['named']['habtm'] == '{$k}')?'etabs-active':'';?>"?>"><?php echo "<?php echo \$this->Html->link(sprintf(__('List %s'), __('{$k}')), array(\$this->data[\$modelClass]['id'], 'habtm' => '{$k}'))?>"?></li>
         <?php endforeach?>
         <?php echo "<?php endif?>\n"?>
     <?php endif?>

@@ -23,7 +23,7 @@
 	* Este método contem regras de negocios que permitem visualizar todos os registros contidos na entidade do controlador
 	*
 	* @override Metodo AppController.index
-	* @param string $period (Periodo das movimentacoes q serao listadas)
+	* @param string $params (Parametros que montará a pagina de índice)
 	* @return void
 	*/
 	public function index($params=array()){
