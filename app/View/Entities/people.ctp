@@ -30,8 +30,8 @@ if(isset($people)){
 	/**
 	* Endereços que nao estao ligados a nenhum telefone fixo
 	*/
-	if(isset($address) && is_array($address)){
-		echo $this->element('Index/Entities/address');
+	if(isset($locator) && is_array($locator)){
+		echo $this->element('Index/Entities/locator');
 	}
 	/**
 	* Participacao Societaria
@@ -44,7 +44,7 @@ if(isset($people)){
 	/**
 	* vizinhos
 	*/
-	echo $this->element('Index/Entities/neighborhood');
+	// echo $this->element('Index/Entities/neighborhood');
 	
 }
 

@@ -29,7 +29,7 @@
         <label class="control-label"><?php echo __('Gender')?></label>
         <div class="controls">
             <i class="glyphicon-<?php echo strtolower($people['Entity']['gender_str'])?>"></i>
-            <?php echo !empty(__($people['Entity']['gender_str']))?__($people['Entity']['gender_str']):'<small>' . __('Not Found') . '</small>';?>
+            <?php echo !empty($people['Entity']['gender_str'])?__($people['Entity']['gender_str']):'<small>' . __('Not Found') . '</small>';?>
         </div>
     </div>
 </div>

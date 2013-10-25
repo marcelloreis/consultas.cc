@@ -935,7 +935,7 @@ class AppController extends Controller {
 
         //Verifica se o usuario se logou corretamente
     	if (isset($user)) {
-            //Carrega o ID do ARO a qual o usuario pertence
+            //Carrega o ID do ARO/Grupo a qual o usuario pertence
     		$aro = $this->Acl->Aro->find('first', array(
     			'conditions' => array(
     				'Aro.model' => 'Group',
@@ -946,12 +946,14 @@ class AppController extends Controller {
             //Percorre por todos os ACOs(funcoes) existentes
     		$acos = $this->Acl->Aco->children();
     		foreach($acos as $aco){
-    			$permission = $this->Acl->Aro->Permission->find('first', array(
-    				'conditions' => array(
-    					'Permission.aro_id' => $aro['Aro']['id'],
-    					'Permission.aco_id' => $aco['Aco']['id'],
-    					),
-    				));
+    			if(isset($aro['Aro']['id']) && isset($aco['Aco']['id'])){
+	    			$permission = $this->Acl->Aro->Permission->find('first', array(
+	    				'conditions' => array(
+	    					'Permission.aro_id' => $aro['Aro']['id'],
+	    					'Permission.aco_id' => $aco['Aco']['id'],
+	    					),
+	    				));
+    			}
 
                 //Verifica se o usuario tem permissao para o ACO(funcao) atual do foreach
     			if(isset($permission['Permission']['id'])){

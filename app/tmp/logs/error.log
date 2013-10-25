@@ -1,0 +1,3 @@
+2013-10-24 22:31:29 Error: Fatal Error (64): Can't use function return value in write context in [/var/www/nasza/app/View/Elements/Index/Entities/people-cpf.ctp, line 32]
+2013-10-24 22:31:33 Error: Fatal Error (64): Can't use function return value in write context in [/var/www/nasza/app/View/Elements/Index/Entities/people-cpf.ctp, line 32]
+2013-10-24 22:32:51 Error: Fatal Error (64): Can't use function return value in write context in [/var/www/nasza/app/View/Elements/Index/Entities/people-cpf.ctp, line 32]
