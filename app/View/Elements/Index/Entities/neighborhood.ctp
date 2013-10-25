@@ -12,7 +12,7 @@
                         <blockquote>
                             <h4>
                                 <?php echo $this->Html->link(__($k), '#', array('class' => 'btn btn-success'))?>
-                                <?php echo $this->Html->link($v2['Entity']['name'], array('controller' => '', 'action' => ''))?>
+                                <?php echo $this->Html->link($v2['Entity']['name'], array('controller' => 'entities', 'action' => 'people', 'plugin' => false, $v2['Entity']['id']))?>
                             </h4>
                             <form style="border: 1px solid #DDDDDD;" class="form-horizontal form-column form-bordered" method="POST" action="#">
                                 <div class="span4">

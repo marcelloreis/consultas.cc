@@ -26,13 +26,14 @@
                     <div class="tab-pane active" id="t1">
                         <?php echo $this->AppForm->create($modelClass, array('defaultSize' => 'input-xlarge', 'classForm' => 'form-horizontal form-bordered'))?>
                             <?php echo $this->form->hidden('q', array('value' => $requestHandler));?>
+                            <?php echo $this->form->hidden('Entity.search_type', array('value' => 'doc'));?>
                             <div class="control-group">
                                 <label class="control-label" for="textfield"><?php echo __('Type Document')?></label>
                                 <div class="controls">
                                     <div class="input-append input-prepend">
                                         <span class="add-on"><i class="icon-search"></i></span>
-                                        <?php $doc = isset($this->params['named']['doc']) && !empty($this->params['named']['doc'])?$this->params['named']['doc']:''?>
-                                        <?php echo $this->AppForm->input('doc', array('template' => 'form-input-clean', 'value' => $doc, 'placeholder' => __('type document')))?>
+                                        <?php $search = isset($this->params['named']['search']) && !empty($this->params['named']['search'])?$this->params['named']['search']:''?>
+                                        <?php echo $this->AppForm->input('search', array('template' => 'form-input-clean', 'value' => $search, 'placeholder' => __('type document')))?>
                                         <button type="submit" class="btn"><?php echo __('Search')?></button>
                                     </div>
                                 </div>
@@ -42,13 +43,14 @@
                     <div class="tab-pane" id="t2">
                         <?php echo $this->AppForm->create($modelClass, array('defaultSize' => 'input-xlarge', 'classForm' => 'form-horizontal form-bordered'))?>
                             <?php echo $this->form->hidden('q', array('value' => $requestHandler));?>
+                            <?php echo $this->form->hidden('search_type', array('value' => 'name'));?>
                             <div class="control-group">
                                 <label class="control-label" for="textfield"><?php echo __('Type Name')?></label>
                                 <div class="controls">
                                     <div class="input-append input-prepend">
                                         <span class="add-on"><i class="icon-search"></i></span>
-                                        <?php $name = isset($this->params['named']['name']) && !empty($this->params['named']['name'])?$this->params['named']['name']:''?>
-                                        <?php echo $this->AppForm->input('name', array('template' => 'form-input-clean', 'value' => $name, 'classInput' => 'tagsinput', 'placeholder' => __('type name')))?>
+                                        <?php $search = isset($this->params['named']['search']) && !empty($this->params['named']['search'])?$this->params['named']['search']:''?>
+                                        <?php echo $this->AppForm->input('search', array('template' => 'form-input-clean', 'value' => $search, 'classInput' => 'tagsinput', 'placeholder' => __('type name')))?>
                                         <button type="submit" class="btn"><?php echo __('Search')?></button>
                                     </div>
                                 </div>

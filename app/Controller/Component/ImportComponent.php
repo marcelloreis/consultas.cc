@@ -248,7 +248,7 @@ class ImportComponent extends Component {
 				$type = TP_CNPJ;
 			}
 
-			if($type == TP_INVALID && preg_match('/advogados|agropecuaria|artigos|artigos|associacao|associados|centro|clinica|comercial|comercio|comunicacao|condominio|construtora|copiadora|distribuidora|drogaria|edificacoes|fabrica|farmacia|igreja|industria|irmaos|laboratorio|mecanica|oficina|otica|padaria|vidracaria/si', strtolower($this->clearname($name)))){
+			if($type == TP_INVALID && preg_match('/advogados|agropecuaria|artigos|artigos|associacao|associados|bcodo|centro|clinica|comercial|comercio|comunicacao|condominio|construtora|copiadora|distribuidora|drogaria|edificacoes|fabrica|farmacia|igreja|industria|irmaos|laboratorio|mecanica|oficina|otica|padaria|vidracaria/si', strtolower($this->clearname($name)))){
 				$type = TP_CNPJ;
 			}
 		}		

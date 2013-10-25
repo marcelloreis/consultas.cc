@@ -18,7 +18,8 @@ define('TP_AMBIGUO', 3);
 define('TP_INVALID', 4);
 
 define('LIMIT_HASH', 5);
-define('LIMIT_BROTHERS', 6);
+define('LIMIT_FAMILY', 6);
+define('LIMIT_NEIGHBORS', 6);
 
 define('THEME', 'theme-satblue');
 

@@ -816,13 +816,13 @@ class AppController extends Controller {
 			}
 
 	        foreach ($this->params['named'] as $k => $v) {
-	        	if(!array_key_exists($k, $redirect) && !preg_match('/(page|search)/si', $k)){
+	        	if(!preg_match('/(page|search)/si', $k)){
 	            	$redirect[$k] = $v;
 	        	}
 	        }
-
-	        if(isset($this->params['pass'][0])){
-	            array_push($redirect, $this->params['pass'][0]);
+	        
+	        foreach($this->params['pass'] as $k => $v){
+	            array_push($redirect, $v);
 	        }
 
 			$this->redirect($redirect);    		
