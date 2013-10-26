@@ -91,7 +91,53 @@ class EntitiesController extends ProjectController {
 					$people = isset($people[0])?$people[0]:false;
     				break;
     			case 'landline':
-    				$people = $this->peopleByLandline($this->params['named']['search']);
+
+    				/**
+    				* 
+    				*/
+	    			if(isset($this->params['named']['ddd']) && !empty($this->params['named']['ddd']) && isset($this->params['named']['landline']) && !empty($this->params['named']['landline'])){
+	    				$tel = "{$this->params['named']['ddd']}{$this->params['named']['landline']}";
+	    			}else if(isset($this->params['named']['landline']) && !empty($this->params['named']['landline'])){
+	    				$tel = $this->params['named']['landline'];
+	    			}
+
+	    			$people = $this->Entity->find('list', array(
+	    				'fields' => array('Entity.id', 'Entity.id'),
+	    				'joins' => array(
+							array('table' => 'associations',
+						        'alias' => 'Association',
+						        'type' => 'INNER',
+						        'conditions' => array(
+						            'Association.entity_id = Entity.id',
+						        )
+						    ),
+							array('table' => 'landlines',
+						        'alias' => 'Landline',
+						        'type' => 'INNER',
+						        'conditions' => array(
+						            'Landline.id = Association.landline_id',
+						        )
+						    ),
+							),
+	    				'conditions' => array(
+	    					'OR' => array(
+	    						'Landline.tel' => $tel,
+	    						'Landline.tel_full' => $tel,
+	    						)
+	    					)
+	    				));
+
+					if(count($people) == 1){
+						$people = $this->Entity->findById($people[key($people)]);
+					}else if(count($people) > 1){
+						$people = $this->find('first', array(
+							'conditions' => array(
+								'Entity.id' => $people,
+								),
+							));						
+						$this->index($params);
+					}
+
     				break;
     		}
 

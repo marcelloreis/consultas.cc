@@ -16,10 +16,10 @@
                             case 'name':
                                 $t2 = 'active';
                                 break;
-                            case 'address':
+                            case 'landline':
                                 $t3 = 'active';
                                 break;
-                            case 'landline':
+                            case 'address':
                                 $t4 = 'active';
                                 break;
                             default:
