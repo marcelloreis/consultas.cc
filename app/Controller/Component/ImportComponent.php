@@ -269,7 +269,7 @@ class ImportComponent extends Component {
 			/**
 			* Remove qualquer caracter do nome que nao seja letras
 			*/
-			$name = ucwords(strtolower(trim($name)));
+			$name = ucwords(strtolower(trim($this->removeAcentos($name))));
 			if($clearNumber){
 				$name = trim(preg_replace('/[^a-zA-Z ]/si', '', $name));
 			}

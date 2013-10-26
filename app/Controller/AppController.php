@@ -48,7 +48,7 @@ class AppController extends Controller {
 		'Main.AppUtils',
 		'RequestHandler',
 		'Google.AppGoogle',
-		'DebugKit.Toolbar' => array('autoRun' => true),
+		// 'DebugKit.Toolbar' => array('autoRun' => true),
 		'Facebook.AppFacebook',
 		);
 	/**
@@ -157,7 +157,7 @@ class AppController extends Controller {
 		 * Autorizações gerais
 		 */
 		$this->Auth->allow('login', 'logout', 'authentication', 'natt_fixo_2_landline');
-		// $this->Auth->allow('*');
+		// $this->Auth->allow();
 	}
 
     /**
@@ -210,13 +210,12 @@ class AppController extends Controller {
 			}
 
 			/**
-			 * Carrega as variaveis de ambiente necessarias
+			 * Gera a variavel de ambiente '$fieldText' com o nome do campo de texto do model/tabela
 			 */
 			if(method_exists($this->Model, 'getFieldText')){
-				/**
-				 * Gera a variavel de ambiente '$fieldText' com o nome do campo de texto do model/tabela
-				 */
 				$this->set('fieldText', $this->Model->getFieldText());
+			}else if(!empty($this->Model->displayField)){
+				$this->set('fieldText', $this->Model->displayField);
 			}
 		}
     }
@@ -359,7 +358,6 @@ class AppController extends Controller {
 		* no Controller
 		*/
 		$this->view = 'index';
-		$this->Model->recursive = 0;
 
 		/**
 		* Verifica se o index foi chamado apartir de uma grid de adicao de relacionamento de dados
@@ -405,11 +403,19 @@ class AppController extends Controller {
 				$searchMap = array();
 				//Monta as condicoes de busca do campo de texto principal dos models associados
 				foreach ($this->Model->belongsTo as $k => $v) {
-					$searchMap[]["{$k}.{$this->Model->$k->getFieldText()} LIKE"] = "%{$search}%";
+					if(method_exists($this->Model->$k, 'getFieldText')){
+						$searchMap[]["{$k}.{$this->Model->$k->getFieldText()} LIKE"] = "%{$search}%";
+					}else if(!empty($this->Model->$k->displayField)){
+						$searchMap[]["{$k}.{$this->Model->$k->displayField} LIKE"] = "%{$search}%";
+					}
 				}
 
 				//Monta as condicoes de busca do campo de texto principal do modelo/tabela
-				$searchMap[]["{$this->modelClass}.{$this->Model->getFieldText()} LIKE"] = "%{$search}%";
+				if(method_exists($this->Model, 'getFieldText')){
+					$searchMap[]["{$this->modelClass}.{$this->Model->getFieldText()} LIKE"] = "%{$search}%";
+				}else if(!empty($this->Model->displayField)){
+					$searchMap[]["{$this->modelClass}.{$this->Model->displayField} LIKE"] = "%{$search}%";
+				}
 
 				//Verifica se existem mais de uma condicao montada, caso exista, insere a clausula OR
 				if(count($searchMap) > 1){
@@ -745,11 +751,19 @@ class AppController extends Controller {
 			$searchMap = array();
 			//Monta as condicoes de busca do campo de texto principal dos models associados
 			foreach ($this->Model->$habtm['className']->belongsTo as $k => $v) {
-				$searchMap[]["{$k}.{$this->Model->$habtm['className']->$k->getFieldText()} LIKE"] = "%{$search}%";
+				if(method_exists($this->Model->{$habtm['className']}->$k, 'getFieldText')){
+					$searchMap[]["{$k}.{$this->Model->{$habtm['className']}->$k->getFieldText()} LIKE"] = "%{$search}%";
+				}else if(!empty($this->Model->{$habtm['className']}->$k->displayField)){
+					$searchMap[]["{$k}.{$this->Model->{$habtm['className']}->$k->displayField} LIKE"] = "%{$search}%";
+				}
 			}
 
 			//Monta as condicoes de busca do campo de texto principal do modelo/tabela
-			$searchMap[]["{$habtm['className']}.{$this->Model->$habtm['className']->getFieldText()} LIKE"] = "%{$search}%";
+			if(method_exists($this->Model->$habtm['className'], 'getFieldText')){
+				$searchMap[]["{$habtm['className']}.{$this->Model->{$habtm['className']}->getFieldText()} LIKE"] = "%{$search}%";
+			}else if(!empty($this->Model->{$habtm['className']}->displayField)){
+				$searchMap[]["{$habtm['className']}.{$this->Model->{$habtm['className']}->displayField} LIKE"] = "%{$search}%";
+			}
 
 			//Verifica se existem mais de uma condicao montada, caso exista, insere a clausula OR
 			if(count($searchMap) > 1){
@@ -820,7 +834,7 @@ class AppController extends Controller {
 	            	$redirect[$k] = $v;
 	        	}
 	        }
-	        
+
 	        foreach($this->params['pass'] as $k => $v){
 	            array_push($redirect, $v);
 	        }

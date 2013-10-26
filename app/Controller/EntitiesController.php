@@ -15,6 +15,25 @@ App::uses('ProjectController', 'Controller');
  * @property Entity $Entity
  */
 class EntitiesController extends ProjectController {
+	/**
+	* Declaracao dos componentes
+	*/
+	public $components = array('Import');
+
+	/**
+	* Método index
+	* Este método contem regras de negocios visualizar todos os registros contidos na entidade do controlador
+	*
+	* @override Metodo AppController.index
+	* @param string $period (Periodo das movimentacoes q serao listadas)
+	* @return void
+	*/
+	public function index($params=array()){
+		$this->Entity->recursive = 1;
+
+		//@override
+		parent::index($params);
+	}		
 
 	/**
 	* Método people
@@ -34,11 +53,10 @@ class EntitiesController extends ProjectController {
     	* Inicializa a variavel $people com false
     	*/
     	$people = false;
-
+    	/**
+    	* Carrega os dados da entidade a partir do id informado
+    	*/
     	if($id){
-	    	/**
-	    	* Carrega os dados da entidade a partir do id informado
-	    	*/
 	    	$people = $this->Entity->findById($id);
 	    	
     	/**
@@ -50,7 +68,30 @@ class EntitiesController extends ProjectController {
     				$people = $this->Entity->findByDoc($this->params['named']['search']);
     				break;
     			case 'name':
-    				// $map = $this->Entity->findByDoc($this->params['named']['search']);
+					/**
+					* Gera o hash do nome da entidade e
+					* procura por outras entidades com o nome identico ao passado por parametro
+					*/
+					$hash = $this->Import->getHash($this->Import->clearName($this->params['named']['name']));
+					$people = $this->Entity->findAllByHAll($hash['h_all']);
+					if(count($people) != 1){
+						$params = array(
+							'conditions' => array(
+								'OR' => array(
+									'Entity.h_all' => $hash['h_all'],
+									'Entity.h_first_last' => $hash['h_first_last'],
+									'Entity.h_last1_last2' => $hash['h_last1_last2'],
+									'Entity.h_first1_first2' => $hash['h_first1_first2'],
+									)
+								),
+							'order' => array('h_all')
+							);						
+						$this->index($params);
+					}
+					$people = isset($people[0])?$people[0]:false;
+    				break;
+    			case 'landline':
+    				$people = $this->peopleByLandline($this->params['named']['search']);
     				break;
     		}
 
@@ -92,16 +133,30 @@ class EntitiesController extends ProjectController {
 	
 	    	$this->set(compact('people', 'landline', 'address', 'locator', 'family', 'neighborhood'));
     	}
-
-// debug($people);
-// debug($family);
-// debug($landline);
-// debug($neighborhood);
-// debug($address);
-// debug($associations);
-// die;
-
 	}	
+
+	/**
+	* Método redirectOnFound
+	* Este método redireciona para a funcao 'people' caso a entidade passada por parametro contenha somente 1 registro
+	* ou redireciona para a index caso contenha mais de uma entidade no parametro
+	*
+	* @return void
+	*/
+	private function redirectOnFound($entity, $hash, $type_hash){
+		/**
+		* Redireciona para o action INDEX passando o hash como parametro caso exista mais de uma entidade com o mesmo nome pesquisado
+		*/
+		if(count($entity) > 1){
+			$this->redirect(array('action' => 'index', 't_hash' => $type_hash, 'hash' => $hash[$type_hash]));
+		}		
+
+		/**
+		* Carrega a entidade econtrada caso exista somente uma com o mesmo nome pesquisado
+		*/
+		if(count($entity) == 1){
+			$this->redirect(array('action' => 'people', $entity[key($entity)]['Entity']['id']));
+		}
+	}
 
 	/**
 	* Método landline
@@ -126,7 +181,7 @@ class EntitiesController extends ProjectController {
 			* Carrega todos os dados dos telefones contidos na associacao
 			*/
     		foreach ($assoc_landlines as $k => $v) {
-				$landline = $this->Entity->Landline->find('default_first', array(
+				$landline = $this->Entity->Landline->find('first', array(
 					'conditions' => array('Landline.id' => $v['landline_id'])
 					));
 				$landline['Landline']['year'] = $v['year'];
@@ -160,7 +215,7 @@ class EntitiesController extends ProjectController {
 			* Carrega todos os dados dos enderecos contidos na associacao
 			*/
     		foreach ($assoc_address as $k => $v) {
-				$address = $this->Entity->Address->find('default_first', array(
+				$address = $this->Entity->Address->find('first', array(
 					'conditions' => array('Address.id' => $v['address_id'])
 					));
 
@@ -195,12 +250,14 @@ class EntitiesController extends ProjectController {
 					'fields' => '*',
 					'conditions' => array(
 						'Entity.id NOT' => $people['Entity']['id'],
-						'Entity.id NOT' => $members_found,
 						'Entity.type !=' => TP_CNPJ,
 						'Entity.h_all' => $people['Entity']['h_mother'],
 						),
 					'limit' => 1
 				));
+				if($map['Family']['mother']['Entity']['age'] < $people['Entity']['age']){
+					$map['Family']['mother'] = array();
+				}
 			}
 
 			/**
@@ -296,7 +353,7 @@ class EntitiesController extends ProjectController {
 					/**
 					* Caso o nome da entidade encontrada seja igual ao nome da mae da entidade pesquisada, é um forte indicio de que seja a sua mae
 					*/
-					if(!count($map['Family']['mother']) && $v['Entity']['h_all'] == $people['Entity']['h_mother']){
+					if(!count($map['Family']['mother']) && $v['Entity']['h_all'] == $people['Entity']['h_mother'] && $map['Family']['mother']['Entity']['age'] < $people['Entity']['age']){
 						$map['Family']['mother'] = $v;
 						/**
 						* Caso o nome da mae da entidade encontrada seja igual ao nome da entidade pesquisada, é um forte indicio de que seja seu irmao
@@ -472,6 +529,7 @@ class EntitiesController extends ProjectController {
 						'group' => 'Association.entity_id',
 						'limit' => $limit_neighbors
 						));
+
 					foreach ($neighbor as $v2) {
 						$neighbors_found['same_street'][$v2['Association']['entity_id']] = $v2['Association']['entity_id'];
 					}
@@ -493,40 +551,6 @@ class EntitiesController extends ProjectController {
 	}
 
 	/**
-	* Método peopleByDoc
-	* Este método retorna todos os dados da entidade a partir do documento passados por parametro
-	*
-	* @return array
-	*/
-	private function peopleByDoc($doc){
-		/**
-		* Remove tudo que nao for numeros do documento
-		*/
-		$doc = preg_replace('/[^0-9]/', '', $doc);
-
-		/**
-		* Busca a entidade a partir do documento passado pelo parametro sem a verificacao dos trasheds e deleteds 'default_first'
-		*/
-		$map = $this->Entity->find('default_first', array('conditions' => array('Entity.doc' => $doc)));
-		/**
-		* Retorna FALSE caso nao encontre nenhum registro na base de dados
-		*/
-		$map = count($map)?$map:false;
-
-		return $map;
-	}		
-
-	/**
-	* Método peopleByName
-	* Este método retorna todos os dados da entidade a partir do nome passados por parametro
-	*
-	* @return array
-	*/
-	private function peopleByName($name){
-		//Regra de negocio aqui
-	}		
-
-	/**
 	* Método loadAssociations
 	* Este método carrega todas as chaves associativas da entidade, telefones fixos e seus respectivos endereços a partir do id da entidade
 	*
@@ -535,7 +559,7 @@ class EntitiesController extends ProjectController {
 	private function loadAssociations($entity){
 		$map = array();
 		if(isset($entity['Entity']['id']) && !empty($entity['Entity']['id'])){
-			$map = $this->Entity->Association->find('default_all', array(
+			$map = $this->Entity->Association->find('all', array(
 				'conditions' => array('Association.entity_id' => $entity['Entity']['id']),
 				'order' => array('Association.year' => 'desc')
 				)

@@ -1,5 +1,5 @@
 <?php
-App::uses('AppModel', 'Model');
+App::uses('AppModelClean', 'Model');
 /**
  * Entity Model
  *
@@ -14,10 +14,9 @@ App::uses('AppModel', 'Model');
  *
  * Entity Model
  *
- * @property Address $Address
- * @property Landline $Landline
+ * @property Entity $Entity
  */
-class Entity extends AppModel {
+class Entity extends AppModelClean {
 
 	/**
 	* Display field
@@ -33,7 +32,7 @@ class Entity extends AppModel {
 	*/
 	public $virtualFields = array(
     	'age' => "DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(Entity.birthday)), '%Y')+0",
-    	'gender_str' => "CASE Entity.gender WHEN 1 THEN 'Female' WHEN 2 THEN 'Male' ELSE 'Unknown' END"
+    	'gender_str' => "CASE Entity.gender WHEN 1 THEN 'Female' WHEN 2 THEN 'Male' ELSE null END"
 	);
 
 	/**

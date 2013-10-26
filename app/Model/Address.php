@@ -1,5 +1,5 @@
 <?php
-App::uses('AppModel', 'Model');
+App::uses('AppModelClean', 'Model');
 /**
  * Address Model
  *
@@ -17,7 +17,7 @@ App::uses('AppModel', 'Model');
  * @property Address $Address
  * @property Address $Address
  */
-class Address extends AppModel {
+class Address extends AppModelClean {
 
 	/**
 	* Display field
@@ -32,6 +32,13 @@ class Address extends AppModel {
 	* @var integer
 	*/
 	public $recursive = -1;		
+
+	/**
+	* belongsTo associations
+	*
+	* @var array
+	*/
+	public $belongsTo = 'State';	
 
 	/**
 	* hasMany associations

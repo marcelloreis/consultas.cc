@@ -1,5 +1,5 @@
 <?php
-App::uses('AppModel', 'Model');
+App::uses('AppModelClean', 'Model');
 /**
  * Landline Model
  *
@@ -17,7 +17,7 @@ App::uses('AppModel', 'Model');
  * @property Address $Address
  * @property Landline $Landline
  */
-class Landline extends AppModel {
+class Landline extends AppModelClean {
 
 	/**
 	* Display field

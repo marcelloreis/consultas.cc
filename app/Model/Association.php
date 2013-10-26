@@ -1,5 +1,5 @@
 <?php
-App::uses('AppModel', 'Model');
+App::uses('AppModelClean', 'Model');
 /**
  * Association Model
  *
@@ -17,7 +17,7 @@ App::uses('AppModel', 'Model');
  * @property Country $Country
  * @property City $City
  */
-class Association extends AppModel {
+class Association extends AppModelClean {
 	public $useTable = 'associations';
 
 	/**
