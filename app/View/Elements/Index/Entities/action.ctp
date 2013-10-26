@@ -1,0 +1,2 @@
+<?php 
+echo $this->Html->link('<i class="icon-search"></i>', array("controller" => $this->params['controller'], "action" => "people", $id), array('title' => __('View Record'), 'class' => 'btn', 'rel' => 'tooltip', 'data-original-title' => __('View Record'), 'escape' => false)) . '&nbsp;';
