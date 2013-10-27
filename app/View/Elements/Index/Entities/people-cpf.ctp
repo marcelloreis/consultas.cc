@@ -8,7 +8,7 @@
 <div class="control-group">
     <label class="control-label"><?php echo __('Mother')?></label>
     <div class="controls">
-        <?php echo !empty($people['Entity']['mother'])?$this->Html->link($people['Entity']['mother'], array('controller' => '', 'action' => ''), array('escape' => false)):'<small>' . __('Not Found') . '</small>';?>
+        <?php echo !empty($people['Entity']['mother'])?$this->Html->link($people['Entity']['mother'], array('controller' => '', 'action' => ''), array('escape' => false)):'<small style="color: #999999;display: block;line-height: 20px;">— ' . __('Not Found') . '</small>';?>
     </div>
 </div>
 
@@ -29,7 +29,7 @@
         <label class="control-label"><?php echo __('Gender')?></label>
         <div class="controls">
             <i class="glyphicon-<?php echo strtolower($people['Entity']['gender_str'])?>"></i>
-            <?php echo !empty(__($people['Entity']['gender_str']))?__($people['Entity']['gender_str']):'<small>' . __('Not Found') . '</small>';?>
+            <?php echo !empty($people['Entity']['gender_str'])?__($people['Entity']['gender_str']):'<small style="color: #999999;display: block;line-height: 20px;">— ' . __('Not Found') . '</small>';?>
         </div>
     </div>
 </div>
@@ -56,13 +56,13 @@
     <div class="control-group">
         <label class="control-label"><?php echo __('Birthday')?></label>
         <div class="controls">
-            <?php echo !empty($people['Entity']['birthday'])?$people['Entity']['birthday']:'<small>' . __('Not Found') . '</small>';?>
+            <?php echo !empty($people['Entity']['birthday'])?$people['Entity']['birthday']:'<small style="color: #999999;display: block;line-height: 20px;">— ' . __('Not Found') . '</small>';?>
         </div>
     </div>
     <div class="control-group">
         <label class="control-label"><?php echo __('Age')?></label>
         <div class="controls">
-            <?php echo !empty($people['Entity']['age'])?$people['Entity']['age']:'<small>' . __('Not Found') . '</small>';?>
+            <?php echo !empty($people['Entity']['age'])?$people['Entity']['age']:'<small style="color: #999999;display: block;line-height: 20px;">— ' . __('Not Found') . '</small>';?>
         </div>
     </div>
 </div>

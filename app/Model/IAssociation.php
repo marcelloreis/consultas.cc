@@ -1,7 +1,7 @@
 <?php
 App::uses('AppModelClean', 'Model');
 /**
- * IentityLandlineAddress Model
+ * Iassociation Model
  *
  * Esta classe é responsável ​​pela gestão de quase tudo o que acontece a respeito do(a) Estado, 
  * é responsável também pela validação dos seus dados.
@@ -12,21 +12,21 @@ App::uses('AppModelClean', 'Model');
  * @link          http://www.nasza.com.br/ Nasza(tm) Project
  * @package       app.Model
  *
- * IentityLandlineAddress Model
+ * Iassociation Model
  *
  * @property Country $Country
  * @property City $City
  */
-class IentityLandlineAddress extends AppModelClean {
-	public $useTable = 'i_entities_landlines_addresses';
+class Iassociation extends AppModelClean {
+	public $useTable = 'i_associations';
 
 	public function findImport($type, $params){
 		$hasCreated = $this->find($type, $params);				
 
 		if(!count($hasCreated)){
-			$this->setSource('entities_landlines_addresses');
+			$this->setSource('associations');
 			$hasCreated = $this->find($type, $params);
-			$this->setSource('i_entities_landlines_addresses');
+			$this->setSource('i_associations');
 		}	
 
 		return $hasCreated;		

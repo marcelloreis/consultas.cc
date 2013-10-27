@@ -1,17 +1,15 @@
+<?php 
+// debug($locator);
+?>
 <div class="row-fluid">
     <div class="span12">
         <div class="box box-bordered box-color">
             <div class="box-title">
-                <h3><i class="glyphicon-road"></i> <?php echo __('Address Data')?></h3>
+                <h3><i class="glyphicon-road"></i> <?php echo __('Locator')?></h3>
             </div>
             <div class="box-content">
                 <!-- Telefone 1 -->
-                <?php foreach($address as $k => $v):?>
-                    <?php 
-                        if(isset($landline[$k]['Landline'])){
-                            continue;
-                        }
-                    ?>
+                <?php foreach($locator as $k => $v):?>
                     <blockquote>
                         <h4>
                             <i class="glyphicon-clock"></i>
@@ -34,7 +32,7 @@
                         </h4>
                         <form style="border: 1px solid #DDDDDD;" class="form-horizontal form-column form-bordered" method="POST" action="#">
                             <div class="control-group">
-                                <label class="control-label"><?php echo isset($v['Address']['type_address'])?$v['Address']['type_address']:'<small>' . __('Not Foud') . '</small>';?></label>
+                                <label class="control-label"><?php echo !empty($v['Address']['type_address'])?$v['Address']['type_address']:'<small>' . __('Not Foud') . '</small>';?></label>
                                 <div class="controls">
                                     <?php echo !empty($v['Address']['street'])?$v['Address']['street']:'<small>' . __('Not Found') . '</small>';?>
                                 </div>

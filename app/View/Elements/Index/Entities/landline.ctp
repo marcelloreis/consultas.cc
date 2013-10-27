@@ -11,6 +11,7 @@
                         <h4>
                             <i class="glyphicon-clock"></i>
                             <?php 
+
                             $yearDiff = date('Y') - $v['Landline']['year'];
                             switch ($yearDiff) {
                                 case 0:
@@ -39,46 +40,46 @@
                                 <div class="control-group">
                                     <label class="control-label"><?php echo __('Number')?></label>
                                     <div class="controls">
-                                        <?php echo isset($address[$k]['Address']['number'])?$address[$k]['Address']['number']:'<small>' . __('Not Foud') . '</small>';?>
+                                        <?php echo !empty($address[$k]['Address']['number'])?$address[$k]['Address']['number']:'<small>' . __('Not Foud') . '</small>';?>
                                     </div>
                                 </div>
                                 <div class="control-group">
                                     <label class="control-label"><?php echo __('Complement')?></label>
                                     <div class="controls">
-                                        <?php echo isset($address[$k]['Address']['complement'])?$address[$k]['Address']['complement']:'<small>' . __('Not Foud') . '</small>';?>
+                                        <?php echo !empty($address[$k]['Address']['complement'])?$address[$k]['Address']['complement']:'<small>' . __('Not Foud') . '</small>';?>
                                     </div>
                                 </div>
                                 <div class="control-group">
                                     <label class="control-label"><?php echo __('Neighborhood')?></label>
                                     <div class="controls">
-                                        <?php echo isset($address[$k]['Address']['neighborhood'])?$address[$k]['Address']['neighborhood']:'<small>' . __('Not Foud') . '</small>';?>
+                                        <?php echo !empty($address[$k]['Address']['neighborhood'])?$address[$k]['Address']['neighborhood']:'<small>' . __('Not Foud') . '</small>';?>
                                     </div>
                                 </div>
                             </div>
                             <div class="span6">
                                 <div class="control-group">
-                                    <label class="control-label"><?php echo isset($address[$k]['Address']['street'])?$address[$k]['Address']['type_address']:'<small>' . __('Not Foud') . '</small>';?></label>
+                                    <label class="control-label"><?php echo !empty($address[$k]['Address']['type_address'])?$address[$k]['Address']['type_address']:'<small>' . __('Not Foud') . '</small>';?></label>
                                     <div class="controls">
-                                        <?php echo isset($address[$k]['Address']['street'])?$address[$k]['Address']['street']:'<small>' . __('Not Foud') . '</small>';?>
+                                        <?php echo !empty($address[$k]['Address']['street'])?$address[$k]['Address']['street']:'<small>' . __('Not Foud') . '</small>';?>
                                     </div>
                                 </div>
 
                                 <div class="control-group">
                                     <label class="control-label"><?php echo __('Zipcode')?></label>
                                     <div class="controls">
-                                        <?php echo isset($address[$k]['Address']['zipcode'])?$address[$k]['Address']['zipcode']:'<small>' . __('Not Foud') . '</small>';?>
+                                        <?php echo !empty($address[$k]['Address']['zipcode'])?$address[$k]['Address']['zipcode']:'<small>' . __('Not Foud') . '</small>';?>
                                     </div>
                                 </div>
                                 <div class="control-group">
                                     <label class="control-label"><?php echo __('State')?></label>
                                     <div class="controls">
-                                        <?php echo isset($address[$k]['Address']['state'])?$address[$k]['Address']['state']:'<small>' . __('Not Foud') . '</small>';?>
+                                        <?php echo !empty($address[$k]['Address']['state'])?$address[$k]['Address']['state']:'<small>' . __('Not Foud') . '</small>';?>
                                     </div>
                                 </div>
                                 <div class="control-group">
                                     <label class="control-label"><?php echo __('City')?></label>
                                     <div class="controls">
-                                        <?php echo isset($address[$k]['Address']['city'])?$address[$k]['Address']['city']:'<small>' . __('Not Foud') . '</small>';?>
+                                        <?php echo !empty($address[$k]['Address']['city'])?$address[$k]['Address']['city']:'<small>' . __('Not Foud') . '</small>';?>
                                     </div>
                                 </div>
                             </div>

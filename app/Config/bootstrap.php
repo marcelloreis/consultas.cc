@@ -85,9 +85,8 @@ define('PATH_MIDIAS', dirname(dirname(__FILE__)) . DS . 'webroot' . DS . 'upload
  */
 //Grupos
 define('ADMIN_GROUP', 1);
-define('COOPERATOR_GROUP', 2);
-define('GOOGLE_GROUP', 3);
-define('FACEBOOK_GROUP', 4);
+define('GOOGLE_GROUP', 2);
+define('FACEBOOK_GROUP', 3);
 //Status
 define('STATUS_ACTIVE', 1);
 //Usuarios

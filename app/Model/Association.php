@@ -1,7 +1,7 @@
 <?php
 App::uses('AppModel', 'Model');
 /**
- * EntityLandlineAddress Model
+ * Association Model
  *
  * Esta classe é responsável ​​pela gestão de quase tudo o que acontece a respeito do(a) Estado, 
  * é responsável também pela validação dos seus dados.
@@ -12,13 +12,13 @@ App::uses('AppModel', 'Model');
  * @link          http://www.nasza.com.br/ Nasza(tm) Project
  * @package       app.Model
  *
- * EntityLandlineAddress Model
+ * Association Model
  *
  * @property Country $Country
  * @property City $City
  */
-class EntityLandlineAddress extends AppModel {
-	public $useTable = 'entities_landlines_addresses';
+class Association extends AppModel {
+	public $useTable = 'associations';
 
 	/**
 	* Recursive

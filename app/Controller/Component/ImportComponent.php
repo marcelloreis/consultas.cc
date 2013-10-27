@@ -705,6 +705,11 @@ class ImportComponent extends Component {
 		*/
 		if(!$type && $street){
 			$type = $this->getTypeAddress($street);
+		}else if (!$type && !$street){
+			/**
+			* Insere Rua como padrao de logradouro
+			*/
+			$type = 'Rua';
 		}		
 
 		return $this->clearName($type);

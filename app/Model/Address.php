@@ -39,8 +39,8 @@ class Address extends AppModel {
 	* @var array
 	*/
 	public $hasMany = array(
-        'EntityLandlineAddress' => array(
-            'className' => 'EntityLandlineAddress',
+        'Association' => array(
+            'className' => 'Association',
             'foreignKey' => 'address_id'
         )
 	);	
@@ -53,7 +53,7 @@ class Address extends AppModel {
 	public $hasAndBelongsToMany = array(
 		'Entity' => array(
 			'className' => 'Entity',
-			'joinTable' => 'entities_landlines_addresses',
+			'joinTable' => 'associations',
 			'foreignKey' => 'entity_id',
 			'associationForeignKey' => 'address_id',
 			'unique' => 'keepExisting',
