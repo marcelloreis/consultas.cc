@@ -1,3 +1,11 @@
+tmp/*
+[Cc]onfig/core.php
+[Cc]onfig/database.php
+app/tmp/*
+app/[Cc]onfig/core.php
+app/[Cc]onfig/database.php
+!empty
+
 # Test URI
 # Ignore netbeans folder
 nbproject/
@@ -20,96 +28,9 @@ nbproject/
 # Windows
 Thumbs.db
 
-# Eclipse project files
+# Eclipse/Netbeans project files
 /.cache
 .project
 /.settings
 .buildpath
 /nbproject
-
-# Cake TMP Dirs
-/app/tmp/
-!/app/tmp/
-
-/app/webroot/img/produtos/
-/app/tmp/cache/
-/app/tmp/cache/
-/app/tmp/cache/empty
-
-/app/tmp/cache/models/
-/app/tmp/cache/models/
-/app/tmp/cache/models/empty
-
-/app/tmp/cache/persistent/
-/app/tmp/cache/persistent/
-/app/tmp/cache/persistent/empty
-
-/app/tmp/cache/views/
-/app/tmp/cache/views/
-/app/tmp/cache/views/empty
-
-/app/tmp/logs/
-/app/tmp/logs/
-/app/tmp/logs/empty
-
-/app/tmp/sessions/
-/app/tmp/sessions/
-/app/tmp/sessions/empty
-
-/app/tmp/tests/
-/app/tmp/tests/
-/app/tmp/tests/empty
-/app/tmp/cache/models/myapp_cake_model_default_minha_list
-
-app/tmp/cache/persistent/myapp_cake_core_file_map
-
-app/tmp/cache/persistent/myapp_cake_core_method_cache
-
-app/tmp/logs/debug.log
-
-app/tmp/logs/error.log
-app/tmp/cache/models/myapp_cake_model_default_minha_aviso
-app/tmp/cache/models/myapp_cake_model_default_minha_dashboard
-app/tmp/cache/models/myapp_cake_model_default_minha_dashboard_widget
-app/tmp/cache/models/myapp_cake_model_default_minha_fonte
-app/tmp/cache/models/myapp_cake_model_default_minha_pagina
-app/tmp/cache/models/myapp_cake_model_default_minha_parametrovalor
-app/tmp/cache/models/myapp_cake_model_default_minha_setor
-app/tmp/cache/models/myapp_cake_model_default_minha_template
-app/tmp/cache/models/myapp_cake_model_default_minha_user
-app/tmp/cache/persistent/myapp_cake_core_cake_dev_en-us
-app/tmp/cache/persistent/myapp_cake_core_cake_dev_pt-br
-app/tmp/cache/persistent/myapp_cake_core_cake_en-us
-app/tmp/cache/persistent/myapp_cake_core_cake_pt-br
-app/tmp/cache/models/myapp_cake_model_default_minha_canal
-app/tmp/cache/models/myapp_cake_model_default_minha_doc
-app/tmp/cache/models/myapp_cake_model_default_minha_link
-app/tmp/cache/models/myapp_cake_model_default_minha_natureza
-app/tmp/cache/models/myapp_cake_model_default_minha_permissao
-app/tmp/cache/models/myapp_cake_model_default_minha_relatorio
-app/tmp/cache/models/myapp_cake_model_winews_winews_list
-app/tmp/cache/models/myapp_cake_model_winews_winews_newsletter
-app/tmp/cache/models/myapp_cake_model_winews_winews_segmentation
-app/tmp/*
-app/webroot/assinaturas/comercial_fulano_2.jpg
-app/webroot/assinaturas/comercial_fulano_22.jpg
-app/webroot/assinaturas/comercial_fulano_222.jpg
-app/webroot/assinaturas/criacao_huxley_dias.jpg
-<<<<<<< HEAD
-app/webroot/files/campanhas/1-3748527044-1375731166.17.jpg
-app/webroot/files/campanhas/1-Banner_hotsite_toro_loco_21_05-1375731166.16.jpg
-app/webroot/files/campanhas/1-fotos_mari-1375731166.17.zip
-app/webroot/files/campanhas/1-gps-1375730860.56.jpg
-app/webroot/files/campanhas/2-bubbling_over_the_buzz_on_sparkling_wine_50d3722a0de44-1375730970.28.jpg
-app/webroot/files/campanhas/3-tumblr_l6ygxuTDYA1qc3ie2-1375731003.42.jpg
-app/webroot/files/campanhas/cached/1-3748527044-1375731166.17-580x580.jpg
-app/webroot/files/campanhas/cached/1-Banner_hotsite_toro_loco_21_05-1375731166.16-580x580.jpg
-app/webroot/files/campanhas/cached/1-gps-1375730860.56-280x280.jpg
-app/webroot/files/campanhas/cached/1-gps-1375730860.56-580x580.jpg
-app/webroot/files/campanhas/cached/2-bubbling_over_the_buzz_on_sparkling_wine_50d3722a0de44-1375730970.28-280x280.jpg
-app/webroot/files/campanhas/cached/2-bubbling_over_the_buzz_on_sparkling_wine_50d3722a0de44-1375730970.28-580x580.jpg
-app/webroot/files/campanhas/cached/3-tumblr_l6ygxuTDYA1qc3ie2-1375731003.42-280x280.jpg
-app/webroot/files/campanhas/cached/3-tumblr_l6ygxuTDYA1qc3ie2-1375731003.42-580x580.jpg
-app/webroot/img/produtos/news-toto-loco-crianza-2010.jpg
-=======
->>>>>>> c00c7d300e8dacca5479de5614f6db6bed94ef95
