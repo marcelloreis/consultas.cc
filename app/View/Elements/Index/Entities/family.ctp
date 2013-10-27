@@ -57,14 +57,14 @@
                             <div class="control-group">
                                 <label class="control-label"><?php echo __('Mother')?></label>
                                 <div class="controls">
-                                    <?php echo $v['Entity']['mother']?>
+                                    <?php echo !empty($v['Entity']['mother'])?$v['Entity']['mother']:'<small>' . __('Not Found') . '</small>';?>
                                 </div>
                             </div>
                             <div class="span4">
                                 <div class="control-group">
                                     <label class="control-label"><?php echo __('CPF')?></label>
                                     <div class="controls">
-                                        <?php echo $v['Entity']['doc']?>
+                                        <?php echo !empty($v['Entity']['doc'])?$v['Entity']['doc']:'<small>' . __('Not Found') . '</small>';?>
                                     </div>
                                 </div>
                             </div>
@@ -72,7 +72,7 @@
                                 <div class="control-group">
                                     <label class="control-label"><?php echo __('Age')?></label>
                                     <div class="controls">
-                                        <?php echo $v['Entity']['age']?>
+                                        <?php echo !empty($v['Entity']['age'])?$v['Entity']['age']:'<small>' . __('Not Found') . '</small>';?>
                                     </div>
                                 </div>
                             </div>
@@ -80,7 +80,7 @@
                                 <div class="control-group">
                                     <label class="control-label"><?php echo __('Updated')?></label>
                                     <div class="controls">
-                                        <?php echo $v['Entity']['modified']?>
+                                        <?php echo !empty($v['Entity']['modified'])?$v['Entity']['modified']:'<small>' . __('Not Found') . '</small>';?>
                                     </div>
                                 </div>
                             </div>
@@ -103,14 +103,14 @@
                             <div class="control-group">
                                 <label class="control-label"><?php echo __('Mother')?></label>
                                 <div class="controls">
-                                    <?php echo $v['Entity']['mother']?>
+                                    <?php echo !empty($v['Entity']['mother'])?$v['Entity']['mother']:'<small>' . __('Not Found') . '</small>';?>
                                 </div>
                             </div>
                             <div class="span4">
                                 <div class="control-group">
                                     <label class="control-label"><?php echo __('CPF')?></label>
                                     <div class="controls">
-                                        <?php echo $v['Entity']['doc']?>
+                                        <?php echo !empty($v['Entity']['doc'])?$v['Entity']['doc']:'<small>' . __('Not Found') . '</small>';?>
                                     </div>
                                 </div>
                             </div>
@@ -118,7 +118,7 @@
                                 <div class="control-group">
                                     <label class="control-label"><?php echo __('Age')?></label>
                                     <div class="controls">
-                                        <?php echo $v['Entity']['age']?>
+                                        <?php echo !empty($v['Entity']['age'])?$v['Entity']['age']:'<small>' . __('Not Found') . '</small>';?>
                                     </div>
                                 </div>
                             </div>
@@ -126,7 +126,7 @@
                                 <div class="control-group">
                                     <label class="control-label"><?php echo __('Updated')?></label>
                                     <div class="controls">
-                                        <?php echo $v['Entity']['modified']?>
+                                        <?php echo !empty($v['Entity']['modified'])?$v['Entity']['modified']:'<small>' . __('Not Found') . '</small>';?>
                                     </div>
                                 </div>
                             </div>

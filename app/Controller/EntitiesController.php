@@ -170,6 +170,7 @@ class EntitiesController extends ProjectController {
 			* Busca os irmaos da entidade comparando outras entidades 
 			* com o mesmo nome da mae
 			*/
+			$brothers = array();
 			if($people['Entity']['h_mother'] > 0){
 				$brothers = $this->Entity->find('all', array(
 					'fields' => '*',
@@ -183,41 +184,45 @@ class EntitiesController extends ProjectController {
 				foreach ($brothers as $k => $v) {
 					$map['Family']['brothers'][] = $v;
 				}
+ 			}
 
-				/**
-				* Caso nao encontre a quantidade suficiente de supostos irmaos, termina a busca com entidades com o mesmo sobrenome
-				*/
-				if(count($brothers) < LIMIT_BROTHERS){
-					$limit_brothers = LIMIT_BROTHERS - count($brothers);
-					$brothers_found = array();
 
-					foreach ($brothers as $k => $v) {
-						$brothers_found[] = $v['Entity']['id'];
-					}
+/**
+* INSERIR BUSCA PRIMEIRO NA REGIAO DA ENTIDADE
+*/				
+			/**
+			* Caso nao encontre a quantidade suficiente de supostos irmaos, termina a busca com entidades com o mesmo sobrenome
+			*/
+			if(count($brothers) < LIMIT_BROTHERS){
+				$limit_brothers = LIMIT_BROTHERS - count($brothers);
+				$brothers_found = array();
 
-					$brothers = $this->Entity->find('all', array(
-						'fields' => '*',
-						'conditions' => array(
-							'Entity.h_all NOT' => $people['Entity']['h_all'],
-							'Entity.id NOT' => $people['Entity']['id'],
-							'Entity.id NOT' => $brothers_found,
-							'Entity.h_last1_last2' => $people['Entity']['h_last1_last2'],
-							),
-						'limit' => $limit_brothers
-						));
-
-					foreach ($brothers as $k => $v) {
-						if($v['Entity']['name'] == $people['Entity']['mother']){
-							$map['Family']['mother'] = $v;
-						}else if($v['Entity']['mother'] == $people['Entity']['name']){
-							$map['Family']['children'][] = $v;
-						}else{
-							$map['Family']['brothers'][] = $v;
-						}
-
-					}
+				foreach ($brothers as $k => $v) {
+					$brothers_found[] = $v['Entity']['id'];
 				}
-			}			
+
+				$brothers = $this->Entity->find('all', array(
+					'fields' => '*',
+					'conditions' => array(
+						'Entity.h_all NOT' => $people['Entity']['h_all'],
+						'Entity.id NOT' => $people['Entity']['id'],
+						'Entity.id NOT' => $brothers_found,
+						'Entity.h_last1_last2' => $people['Entity']['h_last1_last2'],
+						),
+					'limit' => $limit_brothers
+					));
+
+				foreach ($brothers as $k => $v) {
+					if($v['Entity']['name'] == $people['Entity']['mother']){
+						$map['Family']['mother'] = $v;
+					}else if($v['Entity']['mother'] == $people['Entity']['name']){
+						$map['Family']['children'][] = $v;
+					}else{
+						$map['Family']['brothers'][] = $v;
+					}
+
+				}
+			}
 
 			/**
 			* Percorre por todos os endereços encontrados da entidade buscando um possivel conjuje
