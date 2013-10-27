@@ -43,11 +43,25 @@ class EntitiesController extends ProjectController {
 	* @return void
 	*/
 	public function people($id=null){
+		/**
+		* Carrega todos os estados cadastrados
+		*/
+		$states = $this->Entity->Address->State->find('list');
+
+		/**
+		* Carrega todos as cidades cadastrados
+		*/
+		$states = $this->Entity->Address->City->find('list');
+
     	/**
 		 * Se o campo "q" for igual a 1, simula o envio do form por get
 		 * redirecionando para http://[domain]/[controller]/[action]/seach:value1/namedN:valueN
     	 */
     	$this->__post2get();
+    	/**
+    	* Carrega os parametros named na variavel $params
+    	*/
+    	$params = $this->params['named'];
 
     	/**
     	* Inicializa a variavel $people com false
@@ -62,88 +76,128 @@ class EntitiesController extends ProjectController {
     	/**
     	* Carrega os dados da entidade a partir dos parametros passados
     	*/
-    	}else if(!$id && isset($this->params['named']['search_type'])){
-    		switch ($this->params['named']['search_type']) {
-    			case 'doc':
-    				$people = $this->Entity->findByDoc($this->params['named']['search']);
-    				break;
-    			case 'name':
-					/**
-					* Gera o hash do nome da entidade e
-					* procura por outras entidades com o nome identico ao passado por parametro
-					*/
-					$hash = $this->Import->getHash($this->Import->clearName($this->params['named']['name']));
-					$people = $this->Entity->findAllByHAll($hash['h_all']);
-					if(count($people) != 1){
-						$params = array(
-							'conditions' => array(
-								'OR' => array(
-									'Entity.h_all' => $hash['h_all'],
-									'Entity.h_first_last' => $hash['h_first_last'],
-									'Entity.h_last1_last2' => $hash['h_last1_last2'],
-									'Entity.h_first1_first2' => $hash['h_first1_first2'],
-									)
-								),
-							'order' => array('h_all')
-							);						
-						$this->index($params);
-					}
-					$people = isset($people[0])?$people[0]:false;
-    				break;
-    			case 'landline':
-
-    				/**
-    				* 
-    				*/
-	    			if(isset($this->params['named']['ddd']) && !empty($this->params['named']['ddd']) && isset($this->params['named']['landline']) && !empty($this->params['named']['landline'])){
-	    				$tel = "{$this->params['named']['ddd']}{$this->params['named']['landline']}";
-	    			}else if(isset($this->params['named']['landline']) && !empty($this->params['named']['landline'])){
-	    				$tel = $this->params['named']['landline'];
-	    			}
-
-	    			$people = $this->Entity->find('list', array(
-	    				'fields' => array('Entity.id', 'Entity.id'),
-	    				'joins' => array(
-							array('table' => 'associations',
-						        'alias' => 'Association',
-						        'type' => 'INNER',
-						        'conditions' => array(
-						            'Association.entity_id = Entity.id',
-						        )
-						    ),
-							array('table' => 'landlines',
-						        'alias' => 'Landline',
-						        'type' => 'INNER',
-						        'conditions' => array(
-						            'Landline.id = Association.landline_id',
-						        )
-						    ),
+    	}else if(!$id){
+    		if(isset($params['doc'])){
+    			$people = $this->Entity->findByDoc($params['doc']);
+    		
+    		}else if(isset($params['name'])){
+				/**
+				* Gera o hash do nome da entidade e
+				* procura por outras entidades com o nome identico ao passado por parametro
+				*/
+				$hash = $this->Import->getHash($this->Import->clearName($params['name']));
+				$people_found = $this->Entity->findAllByHAll($hash['h_all']);
+				if(count($people_found) != 1){
+					$params = array(
+						'conditions' => array(
+							'OR' => array(
+								'Entity.h_all' => $hash['h_all'],
+								'Entity.h_first_last' => $hash['h_first_last'],
+								'Entity.h_last1_last2' => $hash['h_last1_last2'],
+								'Entity.h_first1_first2' => $hash['h_first1_first2'],
+								)
 							),
-	    				'conditions' => array(
-	    					'OR' => array(
-	    						'Landline.tel' => $tel,
-	    						'Landline.tel_full' => $tel,
-	    						)
-	    					)
-	    				));
+						'order' => array('state_id')
+						);						
+					$this->index($params);
+				}
+				$people = isset($people_found[0])?$people_found[0]:false;
 
-					if(count($people) == 1){
-						$people = $this->Entity->findById($people[key($people)]);
-					}else if(count($people) > 1){
-						$people = $this->find('first', array(
-							'conditions' => array(
-								'Entity.id' => $people,
-								),
-							));						
-						$this->index($params);
-					}
+    		}else if(isset($params['landline'])){
+  			
+				/**
+				* Uni o ddd ao telefone pesquisado
+				*/
+    			if(isset($params['ddd']) && !empty($params['ddd']) && isset($params['landline']) && !empty($params['landline'])){
+    				$tel = "{$params['ddd']}{$params['landline']}";
+    			}else if(isset($params['landline']) && !empty($params['landline'])){
+    				$tel = $params['landline'];
+    			}
 
-    				break;
+    			$people_found = $this->Entity->find('list', array(
+    				'fields' => array('Entity.id', 'Entity.id'),
+    				'joins' => array(
+						array('table' => 'associations',
+					        'alias' => 'Association',
+					        'type' => 'INNER',
+					        'conditions' => array(
+					            'Association.entity_id = Entity.id',
+					        )
+					    ),
+						array('table' => 'landlines',
+					        'alias' => 'Landline',
+					        'type' => 'INNER',
+					        'conditions' => array(
+					            'Landline.id = Association.landline_id',
+					        )
+					    ),
+						),
+    				'conditions' => array(
+    					'OR' => array(
+    						'Landline.tel' => $tel,
+    						'Landline.tel_full' => $tel,
+    						)
+    					)
+    				));
+
+				if(count($people_found) == 1){
+					$people = $this->Entity->findById($people_found[key($people_found)]);
+				}else if(count($people_found) > 1){
+					$params = array(
+						'conditions' => array(
+							'Entity.id' => $people_found,
+							),
+						);						
+					$this->index($params);
+				}    			
+    		}else if(isset($params['address'])){
+
+				/**
+				* Uni o ddd ao telefone pesquisado
+				*/
+    			if(isset($params['ddd']) && !empty($params['ddd']) && isset($params['landline']) && !empty($params['landline'])){
+    				$tel = "{$params['ddd']}{$params['landline']}";
+    			}else if(isset($params['landline']) && !empty($params['landline'])){
+    				$tel = $params['landline'];
+    			}
+
+    			$people_found = $this->Entity->find('list', array(
+    				'fields' => array('Entity.id', 'Entity.id'),
+    				'joins' => array(
+						array('table' => 'associations',
+					        'alias' => 'Association',
+					        'type' => 'INNER',
+					        'conditions' => array(
+					            'Association.entity_id = Entity.id',
+					        )
+					    ),
+						array('table' => 'landlines',
+					        'alias' => 'Landline',
+					        'type' => 'INNER',
+					        'conditions' => array(
+					            'Landline.id = Association.landline_id',
+					        )
+					    ),
+						),
+    				'conditions' => array(
+    					'OR' => array(
+    						'Landline.tel' => $tel,
+    						'Landline.tel_full' => $tel,
+    						)
+    					)
+    				));
+
+				if(count($people_found) == 1){
+					$people = $this->Entity->findById($people_found[key($people_found)]);
+				}else if(count($people_found) > 1){
+					$params = array(
+						'conditions' => array(
+							'Entity.id' => $people_found,
+							),
+						);						
+					$this->index($params);
+				}    			
     		}
-
-			if(isset($map['Entity']['id'])){
-				$id = $map['Entity']['id'];
-			}
     	}
 
     	if($people){
@@ -179,6 +233,11 @@ class EntitiesController extends ProjectController {
 	
 	    	$this->set(compact('people', 'landline', 'address', 'locator', 'family', 'neighborhood'));
     	}
+
+    	/**
+    	* Carrega as variaveis de ambiente
+    	*/
+    	$this->set(compact('states'));
 	}	
 
 	/**
@@ -301,7 +360,7 @@ class EntitiesController extends ProjectController {
 						),
 					'limit' => 1
 				));
-				if($map['Family']['mother']['Entity']['age'] < $people['Entity']['age']){
+				if(isset($map['Family']['mother']['Entity']['age']) && $map['Family']['mother']['Entity']['age'] < $people['Entity']['age']){
 					$map['Family']['mother'] = array();
 				}
 			}
@@ -660,7 +719,7 @@ class EntitiesController extends ProjectController {
 			}
 
 	        foreach ($this->params['named'] as $k => $v) {
-	        	if(!preg_match('/(page|search)/si', $k)){
+	        	if(!preg_match('/(page|search|doc|name|ddd|landline|address)/si', $k)){
 	            	$redirect[$k] = $v;
 	        	}
 	        }
