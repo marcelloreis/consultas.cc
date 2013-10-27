@@ -51,7 +51,7 @@ class EntitiesController extends ProjectController {
 		/**
 		* Carrega todos as cidades cadastrados
 		*/
-		$states = $this->Entity->Address->City->find('list');
+		$cities = array();//$this->Entity->Address->City->find('list');
 
     	/**
 		 * Se o campo "q" for igual a 1, simula o envio do form por get
@@ -237,7 +237,7 @@ class EntitiesController extends ProjectController {
     	/**
     	* Carrega as variaveis de ambiente
     	*/
-    	$this->set(compact('states'));
+    	$this->set(compact('states', 'cities'));
 	}	
 
 	/**
