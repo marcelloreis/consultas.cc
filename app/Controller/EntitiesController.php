@@ -79,7 +79,6 @@ class EntitiesController extends ProjectController {
     	}else if(!$id){
     		if(isset($params['doc'])){
     			$people = $this->Entity->findByDoc($params['doc']);
-    		
     		}else if(isset($params['name'])){
 				/**
 				* Gera o hash do nome da entidade e
@@ -87,7 +86,17 @@ class EntitiesController extends ProjectController {
 				*/
 				$hash = $this->Import->getHash($this->Import->clearName($params['name']));
 				$people_found = $this->Entity->findAllByHAll($hash['h_all']);
-				if(count($people_found) != 1){
+				if(count($people_found) == 1){
+					$people = $people_found[0];
+				}else if(count($people_found) > 1){
+					$params = array(
+						'conditions' => array(
+							'Entity.h_all' => $hash['h_all'],
+							),
+						'order' => array('state_id')
+						);					
+					$this->index($params);
+				}else{
 					$params = array(
 						'conditions' => array(
 							'OR' => array(
@@ -101,10 +110,7 @@ class EntitiesController extends ProjectController {
 						'order' => array('state_id')
 						);					
 					$this->index($params);
-				}else{
-					$people = isset($people_found[0])?$people_found[0]:false;
 				}
-
     		}else if(isset($params['landline'])){
   			
 				/**
@@ -139,7 +145,8 @@ class EntitiesController extends ProjectController {
     						'Landline.tel' => $tel,
     						'Landline.tel_full' => $tel,
     						)
-    					)
+    					),
+    				'order' => array('Association.year' => 'desc', 'Entity.id')
     				));
 
 				if(count($people_found) == 1){
@@ -152,15 +159,63 @@ class EntitiesController extends ProjectController {
 						);						
 					$this->index($params);
 				}    			
-    		}else if(isset($params['address'])){
+    		}else if(isset($params['zipcode']) || isset($params['street'])){
+    			/**
+    			* Inicializa a variavel que guardara as condicoes de busca por endereco
+    			*/
+    			$cond = array();
+    			/**
+    			* Verifica se a numeracao do endereco foi preenchida
+    			*/
+    			if(isset($params['number_ini']) && !empty($params['number_ini'])){
+    				$cond['Address.number >'] = $params['number_ini'];
+    				if(isset($params['number_end']) && !empty($params['number_end'])){
+    					unset($cond['Address.number >']);
+    					$cond['Address.number BETWEEN ? AND ?'] = array($params['number_ini'], $params['number_end']);
+    				}
+    			}
+    			
+    			/**
+    			* Verifica se o cep do endereço foi prennchido
+    			*/
+    			if(isset($params['zipcode']) && !empty($params['zipcode'])){
+    				$zipcode = $this->Entity->Address->Zipcode->find('first', array('conditions' => array('Zipcode.code' => $params['zipcode'])));
+    				if(count($zipcode)){
+    					$cond['Address.zipcode_id'] = $zipcode['Zipcode']['id'];
+    				}
+    			}else{
+    				/**
+    				* Verifica se o nome da rua do endereço foi prenchido
+    				*/
+    				if(isset($params['street']) && !empty($params['street'])){
+						/**
+						* Gera o hash do nome da rua
+						*/
+						$hash = $this->Import->getHash($params['street']);
+						$hasAddress = $this->Entity->Address->find('count', array('conditions' => array('h_all' => $hash['h_all'])));
+						if($hasAddress){
+							$cond['Address.h_all'] = $hash['h_all'];
+						}else{
+							$cond['OR']['h_first_last'] = $hash['h_first_last'];
+							$cond['OR']['h_last'] = $hash['h_last'];
+							$cond['OR']['h_first1_first2'] = $hash['h_first1_first2'];
+							$cond['OR']['h_last1_last2'] = $hash['h_last1_last2'];
+						}
+    				}
 
-				/**
-				* Uni o ddd ao telefone pesquisado
-				*/
-    			if(isset($params['ddd']) && !empty($params['ddd']) && isset($params['landline']) && !empty($params['landline'])){
-    				$tel = "{$params['ddd']}{$params['landline']}";
-    			}else if(isset($params['landline']) && !empty($params['landline'])){
-    				$tel = $params['landline'];
+    				/**
+    				* Verifica se o estado foi setado
+    				*/
+    				if(isset($params['state_id']) && !empty($params['state_id'])){
+    					$cond['Address.state_id'] = $params['state_id'];
+    				}
+
+    				/**
+    				* Verifica se a cidade foi setado
+    				*/
+    				if(isset($params['city_id']) && !empty($params['city_id'])){
+    					$cond['Address.city_id'] = $params['city_id'];
+    				}
     			}
 
     			$people_found = $this->Entity->find('list', array(
@@ -173,20 +228,16 @@ class EntitiesController extends ProjectController {
 					            'Association.entity_id = Entity.id',
 					        )
 					    ),
-						array('table' => 'landlines',
-					        'alias' => 'Landline',
+						array('table' => 'addresses',
+					        'alias' => 'Address',
 					        'type' => 'INNER',
 					        'conditions' => array(
-					            'Landline.id = Association.landline_id',
+					            'Address.id = Association.address_id',
 					        )
 					    ),
 						),
-    				'conditions' => array(
-    					'OR' => array(
-    						'Landline.tel' => $tel,
-    						'Landline.tel_full' => $tel,
-    						)
-    					)
+    				'conditions' => $cond,
+    				'order' => array('Association.year' => 'desc', 'Entity.id')
     				));
 
 				if(count($people_found) == 1){
@@ -721,7 +772,7 @@ class EntitiesController extends ProjectController {
 			}
 
 	        foreach ($this->params['named'] as $k => $v) {
-	        	if(!preg_match('/(page|search|doc|name|ddd|landline|address)/si', $k)){
+	        	if(!preg_match('/(page|search|doc|name|ddd|landline|zipcode|number_ini|number_end|street|state_id|city_id)/si', $k)){
 	            	$redirect[$k] = $v;
 	        	}
 	        }

@@ -9,7 +9,7 @@ $menu = array(
     * Produtos
     */
     array(
-        'label' => '<span>' . __('People Location') . '</span>', 'controller' => 'entities'
+        'label' => '<span>' . __('People Location') . '</span>', 'controller' => 'entities', 'action' => 'people'
         ),
     /**
     * Localizacoes
@@ -51,5 +51,12 @@ $menu = array(
             array('label' => __('Groups'), 'controller' => 'groups'),
             )
         ),
+    /**
+    * Traducoes
+    */
+    array(
+        'label' => '<span>' . __('Translations') . '</span>', 'controller' => 'translations', 'action'
+        ),
+
     );
 echo $this->AppUtils->buildMenu($menu, array('classActive' => 'page-active'));

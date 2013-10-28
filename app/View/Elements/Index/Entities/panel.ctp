@@ -19,7 +19,7 @@ $params = $this->params['named'];
                     <li class="<?php echo isset($params['landline'])?'active':'';?>">
                         <a href="#t3" data-toggle="tab"><?php echo __('By Landline')?></a>
                     </li>
-                    <li class="<?php echo isset($params['address'])?'active':'';?>">
+                    <li class="<?php echo isset($params['zipcode']) || isset($params['street'])?'active':'';?>">
                         <a href="#t4" data-toggle="tab"><?php echo __('By Address')?></a>
                     </li>
                 </ul>
@@ -86,7 +86,7 @@ $params = $this->params['named'];
                                             <span class="add-on"><i class="icon-phone"></i></span>
                                             <?php $landline = isset($this->params['named']['landline']) && !empty($this->params['named']['landline'])?$this->params['named']['landline']:''?>
                                             <?php echo $this->AppForm->input('landline', array('template' => 'form-input-clean', 'value' => $landline, 'placeholder' => __('type landline')))?>
-                                            <button type="submit" class="btn"><?php echo __('Search')?></button>
+                                            <button type="submit" style="margin-left:15px" class="btn"><?php echo __('Search')?></button>
                                         </div>
                                     </div>
                                 </div>
@@ -95,7 +95,7 @@ $params = $this->params['named'];
                     </div>
 
                     <!-- Endereços -->
-                    <div class="tab-pane <?php echo isset($params['address'])?'active':'';?>" id="t4">
+                    <div class="tab-pane <?php echo isset($params['zipcode']) || isset($params['street'])?'active':'';?>" id="t4">
                         <?php echo $this->AppForm->create($modelClass, array('defaultSize' => 'input-xlarge', 'classForm' => 'form-horizontal form-column form-bordered'))?>
                             <?php echo $this->form->hidden('q', array('value' => $requestHandler));?>
                             <?php echo $this->form->hidden('address', array('value' => '1'));?>
@@ -108,33 +108,35 @@ $params = $this->params['named'];
                                     <div class="input-append input-prepend">
                                         <span class="add-on"><?php echo __('Zipcode')?></span>
                                         <?php $zipcode = isset($this->params['named']['zipcode']) && !empty($this->params['named']['zipcode'])?$this->params['named']['zipcode']:''?>
-                                        <?php echo $this->AppForm->input('zipcode', array('template' => 'form-input-clean', 'value' => $zipcode, 'class' => 'input-small', 'placeholder' => __('type zipcode')))?>
+                                        <?php echo $this->AppForm->input('zipcode', array('template' => 'form-input-clean', 'value' => $zipcode, 'class' => 'input-small zipcode-field', 'placeholder' => __('type zipcode')))?>
                                         &nbsp;
-                                        <span style="margin-left:10px;" class="add-on"><?php echo __('Number Start')?></span> 
-                                        <?php $number_start = isset($this->params['named']['number_start']) && !empty($this->params['named']['number_start'])?$this->params['named']['number_start']:''?>
-                                        <?php echo $this->AppForm->input('number_start', array('template' => 'form-input-clean', 'value' => $number_start, 'class' => 'input-small', 'placeholder' => __('type Number')))?>
+                                        <span style="margin-left:10px;" class="add-on"><?php echo __('Number ini')?></span> 
+                                        <?php $number_ini = isset($this->params['named']['number_ini']) && !empty($this->params['named']['number_ini'])?$this->params['named']['number_ini']:''?>
+                                        <?php echo $this->AppForm->input('number_ini', array('template' => 'form-input-clean', 'value' => $number_ini, 'class' => 'input-small', 'placeholder' => __('type number')))?>
                                         &nbsp;
                                         <span style="margin-left:10px;" class="add-on"><?php echo __('Number End')?></span>
                                         <?php $number_end = isset($this->params['named']['number_end']) && !empty($this->params['named']['number_end'])?$this->params['named']['number_end']:''?>
-                                        <?php echo $this->AppForm->input('number_end', array('template' => 'form-input-clean', 'value' => $number_end, 'class' => 'input-small', 'placeholder' => __('type Number')))?>
-                                        <button type="submit" class="btn"><?php echo __('Search')?></button>
+                                        <?php echo $this->AppForm->input('number_end', array('template' => 'form-input-clean', 'value' => $number_end, 'class' => 'input-small', 'placeholder' => __('type number')))?>
+                                        <button type="submit" style="margin-left:15px" class="btn"><?php echo __('Search')?></button>
                                     </div>
                                 </div>
                             </div>
 
 
-                            <div class="control-group">
+                            <div class="control-group address-fields">
                                 <label class="control-label" style="padding:10px 0 10px 30px;"><i class="glyphicon-globe"></i>&nbsp;<?php echo __('Type Address')?></label>
                             </div>
 
-                            <div class="control-group">
+
+                            <div class="control-group address-fields">
                                 <label class="control-label"><?php echo __('Street Name')?></label>
                                 <div class="controls">
-                                    <?php echo $this->AppForm->input('street', array('template' => 'form-input-clean', 'value' => $zipcode, 'class' => 'input-block-level', 'placeholder' => __('type street name')))?>
+                                    <?php $street = isset($this->params['named']['street']) && !empty($this->params['named']['street'])?$this->params['named']['street']:''?>
+                                    <?php echo $this->AppForm->input('street', array('template' => 'form-input-clean', 'value' => $street, 'class' => 'input-block-level', 'placeholder' => __('type street name')))?>
                                 </div>
                             </div>
 
-                            <div class="span6">
+                            <div class="span6 address-fields">
                                 <div class="control-group">
                                     <label class="control-label"><?php echo __('State')?></label>
                                     <div class="controls">
@@ -145,7 +147,7 @@ $params = $this->params['named'];
                                 </div>
                             </div>
                             
-                            <div class="span6">
+                            <div class="span6 address-fields">
                                 <div class="control-group">
                                     <label class="control-label"><?php echo __('City')?></label>
                                     <div class="controls">

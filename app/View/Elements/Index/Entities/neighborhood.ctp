@@ -2,7 +2,7 @@
     <div class="span12">
         <div class="box box-bordered box-color">
             <div class="box-title">
-                <h3><i class="glyphicon-parents"></i> <?php echo __('Neighbor')?></h3>
+                <h3><i class="glyphicon-parents"></i> <?php echo __('Neighbors')?></h3>
             </div>
             <div class="box-content">
 

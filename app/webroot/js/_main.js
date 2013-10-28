@@ -1,7 +1,27 @@
 $(document).ready(function(){
 
+	/**
+	* Sistema de selecao de estados/cidades
+	*/
 	$('.select-state').change(function(){
 		Nz.loadCities(this);
+	});
+
+	/**
+	* Controle de busca por endereco
+	*/
+	$('.zipcode-field').keyup(function(){
+		$zipcode = $(this);
+		if($zipcode.val() != ''){
+			$('.address-fields').css('opacity', '0.4');
+			$('.address-fields').fadeOut('middle');
+			$(':input', '.address-fields').attr('disabled', 'disabled');
+		}else{
+			$('.address-fields').css('opacity', '1');
+			$('.address-fields').fadeIn('middle');
+			$(':input', '.address-fields').removeAttr('disabled');
+		}
+		console.log($zipcode.val());
 	});
 
 	/**
@@ -28,5 +48,8 @@ var Nz = {
 					});		        	
 		        }
 		});		
+	},
+	lockAddress:function(){
+
 	}
 }

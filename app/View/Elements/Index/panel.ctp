@@ -26,7 +26,7 @@
                             <div class="control-group">
                                 <label for="textfield" class="control-label"></label>
                                 <div class="controls">
-                                    <?php echo $this->Html->link('<i class="icon-plus"></i> ' . sprintf(__("Add a %s"), __d('fields', ucfirst($this->params['controller']))), array('action' => 'add'), array('class' => 'btn', 'escape' => false))?>
+                                    <?php echo $this->Html->link('<i class="icon-plus"></i> ' . sprintf(__("Add a %s"), __(ucfirst($this->params['controller']))), array('action' => 'add'), array('class' => 'btn', 'escape' => false))?>
                                 </div>
                             </div>
                         </div>

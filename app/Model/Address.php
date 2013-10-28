@@ -38,7 +38,7 @@ class Address extends AppModelClean {
 	*
 	* @var array
 	*/
-	public $belongsTo = array('State', 'City');	
+	public $belongsTo = array('State', 'City', 'Zipcode');	
 
 	/**
 	* hasMany associations
