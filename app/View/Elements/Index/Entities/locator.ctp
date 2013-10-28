@@ -32,7 +32,7 @@
                         </h4>
                         <form style="border: 1px solid #DDDDDD;" class="form-horizontal form-column form-bordered" method="POST" action="#">
                             <div class="control-group">
-                                <label class="control-label"><?php echo isset($v['Address']['type_address'])?$v['Address']['type_address']:'<small>' . __('Not Foud') . '</small>';?></label>
+                                <label class="control-label"><?php echo !empty($v['Address']['type_address'])?$v['Address']['type_address']:'<small>' . __('Not Foud') . '</small>';?></label>
                                 <div class="controls">
                                     <?php echo !empty($v['Address']['street'])?$v['Address']['street']:'<small>' . __('Not Found') . '</small>';?>
                                 </div>

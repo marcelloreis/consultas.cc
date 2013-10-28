@@ -44,7 +44,7 @@ if(isset($people)){
 	/**
 	* vizinhos
 	*/
-	// echo $this->element('Index/Entities/neighborhood');
+	echo $this->element('Index/Entities/neighborhood');
 	
 }
 

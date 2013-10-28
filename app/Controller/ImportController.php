@@ -38,7 +38,7 @@ class ImportController extends AppController {
 		"Ientity",
 		"Izipcode",
 		"Iaddress",
-		"IentityLandlineAddress",
+		"Iassociation",
 		"Settings"
 		);
 
@@ -123,7 +123,7 @@ class ImportController extends AppController {
 			$this->db['landline'] = $this->Ilandline->getDataSource();
 			$this->db['address'] = $this->Ilandline->getDataSource();
 			$this->db['zipcode'] = $this->Ilandline->getDataSource();
-			$this->db['entityLandlineAddress'] = $this->IentityLandlineAddress->getDataSource();
+			$this->db['entityLandlineAddress'] = $this->Iassociation->getDataSource();
 
 			do{
 				/**
@@ -330,7 +330,7 @@ class ImportController extends AppController {
 							$this->Import->timing_end();
 
 							/**
-							* Amarra os registros Entidade, Telefone, CEP e Endereço na tabela entities_landlines_addresses
+							* Amarra os registros Entidade, Telefone, CEP e Endereço na tabela associations
 							*/
 
 							/**
@@ -338,7 +338,7 @@ class ImportController extends AppController {
 							*/
 							$this->Import->timing_ini(12, 'Carrega todos os id coletados ate o momento');
 							$data = array(
-								'IentityLandlineAddress' => array(
+								'Iassociation' => array(
 									'entity_id' => $this->Ientity->id,
 									'landline_id' => $this->Ilandline->id,
 									'address_id' => $this->Iaddress->id,
@@ -348,7 +348,7 @@ class ImportController extends AppController {
 							$this->Import->timing_end();
 							
 							$this->Import->timing_ini(13, 'Executa a importacao dos dados coletados ate o momento');
-							if($this->importEntityLandlineAddress($data)){
+							if($this->importAssociation($data)){
 								/**
 								* Registra todas as transacoes
 								*/
@@ -376,7 +376,7 @@ class ImportController extends AppController {
 							$this->Import->__counter('landlines');
 							$this->Import->__counter('addresses');
 							$this->Import->__counter('zipcodes');
-							$this->Import->__counter('entities_landlines_addresses');	
+							$this->Import->__counter('associations');	
 						}
 					}
 
@@ -555,16 +555,16 @@ class ImportController extends AppController {
 	}
 
 	/**
-	* Método importEntityLandlineAddress
-	* Amarra os registros Entidade, Telefone, CEP e Endereço na tabela entities_landlines_addresses
+	* Método importAssociation
+	* Amarra os registros Entidade, Telefone, CEP e Endereço na tabela associations
 	*
 	* @return bool $hasCreated
 	*/
-	private function importEntityLandlineAddress($entityLandlineAddress){
+	private function importAssociation($entityLandlineAddress){
 		/**
 		* Inicializa o ID das juncoes como null
 		*/
-		$this->IentityLandlineAddress->id = null;
+		$this->Iassociation->id = null;
 
 		/**
 		* Inicializa a variavel $asCreated com false
@@ -572,40 +572,40 @@ class ImportController extends AppController {
 		$hasCreated = false;
 
 		if(
-			(!empty($entityLandlineAddress['IentityLandlineAddress']['entity_id']) && $entityLandlineAddress['IentityLandlineAddress']['entity_id'] != '0')
+			(!empty($entityLandlineAddress['Iassociation']['entity_id']) && $entityLandlineAddress['Iassociation']['entity_id'] != '0')
 			&& 
 			(
-				(!empty($entityLandlineAddress['IentityLandlineAddress']['landline_id']) && $entityLandlineAddress['IentityLandlineAddress']['landline_id'] != '0') 
+				(!empty($entityLandlineAddress['Iassociation']['landline_id']) && $entityLandlineAddress['Iassociation']['landline_id'] != '0') 
 				|| 
-				(!empty($entityLandlineAddress['IentityLandlineAddress']['address_id']) && $entityLandlineAddress['IentityLandlineAddress']['address_id'] != '0'))
+				(!empty($entityLandlineAddress['Iassociation']['address_id']) && $entityLandlineAddress['Iassociation']['address_id'] != '0'))
 			){
 
 			/**
 			* Verifica se a junção já existe
 			*/
-			$hasEntityLandlineAddress = $this->IentityLandlineAddress->findImport('first', array(
+			$hasAssociation = $this->Iassociation->findImport('first', array(
 				'recursive' => '-1',
 				'conditions' => array(
-					'entity_id' => $entityLandlineAddress['IentityLandlineAddress']['entity_id'],
-					'landline_id' => $entityLandlineAddress['IentityLandlineAddress']['landline_id'],
-					'address_id' => $entityLandlineAddress['IentityLandlineAddress']['address_id'],
-					'year' => $entityLandlineAddress['IentityLandlineAddress']['year'],
+					'entity_id' => $entityLandlineAddress['Iassociation']['entity_id'],
+					'landline_id' => $entityLandlineAddress['Iassociation']['landline_id'],
+					'address_id' => $entityLandlineAddress['Iassociation']['address_id'],
+					'year' => $entityLandlineAddress['Iassociation']['year'],
 					)
 				));	
 
 		}
 
 
-		if(isset($hasEntityLandlineAddress) && count($hasEntityLandlineAddress)){
-			$this->IentityLandlineAddress->id = $hasEntityLandlineAddress['IentityLandlineAddress']['id'];
+		if(isset($hasAssociation) && count($hasAssociation)){
+			$this->Iassociation->id = $hasAssociation['Iassociation']['id'];
 		}else{
-			$this->IentityLandlineAddress->create($entityLandlineAddress);
-			$hasCreated = $this->IentityLandlineAddress->save(); 
+			$this->Iassociation->create($entityLandlineAddress);
+			$hasCreated = $this->Iassociation->save(); 
 			if($hasCreated){
-				$this->Import->success('entities_landlines_addresses');
+				$this->Import->success('associations');
 			}else{
-				$this->Import->fail('entities_landlines_addresses');
-				$this->Import->__log("Falha ao importar os dados da tabela entities_landlines_addresses", $this->uf, false, $this->IentityLandlineAddress->useTable, $this->Ientity->id);
+				$this->Import->fail('associations');
+				$this->Import->__log("Falha ao importar os dados da tabela associations", $this->uf, false, $this->Iassociation->useTable, $this->Ientity->id);
 			}
 		}	
 

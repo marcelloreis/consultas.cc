@@ -18,7 +18,7 @@
                                 <div class="control-group">
                                     <label class="control-label"><?php echo __('CPF')?></label>
                                     <div class="controls">
-                                        <?php echo $family['Family']['mother']['Entity']['doc']?>
+                                        <?php echo !empty($family['Family']['mother']['Entity']['doc'])?$family['Family']['mother']['Entity']['doc']:'<small>' . __('Not Found') . '</small>';?>
                                     </div>
                                 </div>
                             </div>
@@ -26,7 +26,7 @@
                                 <div class="control-group">
                                     <label class="control-label"><?php echo __('Age')?></label>
                                     <div class="controls">
-                                        <?php echo $family['Family']['mother']['Entity']['age']?>
+                                        <?php echo !empty($family['Family']['mother']['Entity']['age'])?$family['Family']['mother']['Entity']['age']:'<small>' . __('Not Found') . '</small>';?>
                                     </div>
                                 </div>
                             </div>
@@ -34,7 +34,7 @@
                                 <div class="control-group">
                                     <label class="control-label"><?php echo __('Updated')?></label>
                                     <div class="controls">
-                                        <?php echo $family['Family']['mother']['Entity']['modified']?>
+                                        <?php echo !empty($family['Family']['mother']['Entity']['modified'])?$family['Family']['mother']['Entity']['modified']:'<small>' . __('Not Found') . '</small>';?>
                                     </div>
                                 </div>
                             </div>
