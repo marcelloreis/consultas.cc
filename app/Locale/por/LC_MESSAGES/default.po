@@ -15,325 +15,53 @@ msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
 
-#Traducoes Gerais
-msgid "Yes"
-msgstr "Sim"
+msgid "%s deleted."
+msgstr "%s excluído"
 
-msgid "No"
-msgstr "Não"
-
-msgid "Save"
-msgstr "Salvar"
-
-msgid "Cancel"
-msgstr "Cancelar"
-
-msgid "Save changes"
-msgstr "Salvar alterações"
-
-msgid "Controllers"
-msgstr "Controladores"
-
-msgid "%s Permissions"
-msgstr "Permissões de(a) %s"
-
-msgid "Close %s"
-msgstr "Fechar o %s"
-
-msgid "Allow/Deny all"
-msgstr "Permitir/Negar todos"
-
-msgid "Allow All"
-msgstr "Permitir Todos"
-
-msgid "Deny All"
-msgstr "Negar Todos"
-
-msgid "Switch Main Menu"
-msgstr "Minimizar/Maximizar Menu Principal"
-
-msgid "This field must be filled in correctly."
-msgstr "Este campo deve ser preenchido corretamente."
-
-msgid "Form saved successfully."
-msgstr "Formulário salvo com sucesso."
-
-msgid "Manage by %s"
-msgstr "Gerenciar por %s"
-
-msgid "Refresh %s"
-msgstr "Atualizar %s"
-
-msgid "Refresh %s and %s"
-msgstr "Atualizar %s e %s"
-
-msgid "Delete %s and %s"
-msgstr "Excluír %s e %s"
-
-msgid "Delete %s"
-msgstr "Excluír %s"
-
-msgid "Reset all settings"
-msgstr "Reiniciar todas as configurações"
-
-msgid "Are you sure you want to reset all settings?"
-msgstr "Tem certeza que deseja reiniciar toda a configuração?"
-
-msgid "Are you sure you want to delete all %s and %s?"
-msgstr "Tem certeza que deseja excluir todos(as) os(as) %s e %s?"
-
-msgid "Are you sure you want to delete all %s"
-msgstr "Tem certeza que deseja excluir todos(as) os(as) %s"
-
-msgid "Select"
-msgstr "Selecione"
-
-msgid "Settings"
-msgstr "Configurações"
-
-msgid "Male"
-msgstr "Masculino"
-
-msgid "Female"
-msgstr "Feminino"
-
-msgid "Your session has expired. Make a new login!"
-msgstr "Sua sessão expirou. Faça um novo login!"
-
-msgid "you do not have permission to view"
-msgstr "você não tem permissão para visualizar"
-
-msgid "you do not have permission to edit"
-msgstr "você não tem permissão para Alterar"
-
-msgid "you are not allowed to view the content of"
-msgstr "você não tem permissão para visualizar o conteúdo de"
-
-msgid "you are not allowed to add"
-msgstr "você não tem permissão para adicionar"
-
-msgid "you are not allowed to trash"
-msgstr "você não tem permissão para excluir"
-
-msgid "you are not allowed to delete"
-msgstr "você não tem permissão para excluir permanentemente"
-
-msgid "you are not allowed to view trashed records"
-msgstr "você não tem permissão para vizualizar registros da lixeira"
-
-msgid "you are not allowed to view deleted records"
-msgstr "você não tem permissão para visualizar registros excluídos"
-
-msgid "It was not possible to view the %s, or it does not exist in the database."
-msgstr "Não foi possível visualizar o %s, ou ele não existe na base de dados."
-
-msgid "It was not possible to edit the %s [%s], or it does not exist in the database."
-msgstr "Não foi possível Alterar o %s [%s], ou ele não existe na base de dados."
-
-msgid "The %s does not exist in the database."
-msgstr "O %s não existe na base de dados."
+msgid "%s Deleted."
+msgstr "%s Excluído"
 
 msgid "%s moved to the trash."
 msgstr "% movido para a lixeira."
 
-msgid "Unable to move the %s to the trash."
-msgstr "Não foi possível mover o %s para a lixeira."
+msgid "%s Moved to The Trash."
+msgstr "% Movido Para a Lixeira."
 
-msgid "%s deleted."
-msgstr "%s excluído"
+msgid "%s Permissions"
+msgstr "Permissões De(a) %s"
 
-msgid "Unable delete the %s."
-msgstr "Não foi possível excluir o %s."
-
-msgid "%s restored."
-msgstr "%s restaurado."
-
-msgid "Unable restore the %s."
-msgstr "Não foi possível restaurar o %s."
+msgid "%s permissions"
+msgstr "Permissões de(a) %s"
 
 msgid "%s restaured to the trash."
 msgstr "% restaurado da lixeira."
 
-msgid "Unable restore the %s to the trash."
-msgstr "Não foi possível restaurar o %s da lixeira."
+msgid "%s Restaured to The Trash."
+msgstr "% Restaurado da Lixeira."
 
-msgid "The %s was disassociated %s successfully."
-msgstr "A %s foi desassociada do %s com sucesso."
+msgid "%s restored."
+msgstr "%s restaurado."
 
-msgid "Could not unbind %s and %s."
-msgstr "Não foi possível desvincular %s e %s."
+msgid "%s Restored."
+msgstr "%s Restaurado."
 
-msgid "Edit %s"
-msgstr "Alterar %s"
+msgid "%s Updated in %s"
+msgstr "%s Atualizado em %s"
+
+msgid "%s updated in %s"
+msgstr "%s atualizado em %s"
+
+msgid "about"
+msgstr "sobre"
+
+msgid "About"
+msgstr "Sobre"
+
+msgid "actions"
+msgstr "ações"
 
 msgid "Actions"
 msgstr "Ações"
-
-
-msgid "Name"
-msgstr "Nome"
-
-msgid "Version"
-msgstr "Versão"
-
-msgid "Unjoin"
-msgstr "Desvincular"
-
-msgid "Add Relationship"
-msgstr "Adicionar Relacionamento"
-
-msgid "ID"
-msgstr "Código"
-
-msgid "Description"
-msgstr "Descrição"
-
-msgid "Settings"
-msgstr "Configurações"
-
-msgid "Locales"
-msgstr "Locais"
-
-msgid "Countries"
-msgstr "Países"
-
-msgid "States"
-msgstr "Estados"
-
-msgid "Cities"
-msgstr "Cidades"
-
-msgid "Security"
-msgstr "Segurança"
-
-msgid "Users"
-msgstr "Usuários"
-
-msgid "Groups"
-msgstr "Grupos"
-
-msgid "Permissions"
-msgstr "Permissões"
-
-msgid "Logout"
-msgstr "Sair"
-
-msgid "View Record"
-msgstr "Vizualizar Registro"
-
-msgid "Are you sure you want to remove this association?"
-msgstr "Tem certeza de que deseja remover esta associação?"
-
-msgid "Add record"
-msgstr "Adicionar Registro"
-
-msgid "Add/Delete record"
-msgstr "Adicionar/Excluir Registro"
-
-msgid "Edit Record"
-msgstr "Alterar Registro"
-
-msgid "Restore"
-msgstr "Restaurar"
-
-msgid "Are you sure you want to restore this record from the trash?"
-msgstr "Tem certeza de que deseja restaurar o registro da lixeira?"
-
-msgid "Trash"
-msgstr "Lixeira"
-
-msgid "Are you sure you want to move this record to the trash?"
-msgstr "Tem certeza de que deseja mover esse registro para a lixeira?"
-
-msgid "Enter the data for the new record."
-msgstr "Insira os dados do novo regristro."
-
-msgid "Last change of this record."
-msgstr "Última alteração deste registro."
-
-msgid "New"
-msgstr "Novo(a)"
-
-msgid "List"
-msgstr "Listar"
-
-msgid "List %s"
-msgstr "Listar %s"
-
-msgid "First"
-msgstr "Início"
-
-msgid "Last"
-msgstr "Último"
-
-msgid "Next"
-msgstr "Próximo"
-
-msgid "Prev"
-msgstr "Anterior"
-
-msgid "What are you looking for"
-msgstr "O que esta procurando"
-
-msgid "Search"
-msgstr "Busca"
-
-msgid "Bulk Actions"
-msgstr "Ações em Massa"
-
-msgid "Move to Trash"
-msgstr "Mover para a lixeira"
-
-msgid "Delete Permanently"
-msgstr "Excluír permanentemente"
-
-msgid "Apply"
-msgstr "Aplicar"
-
-msgid "Apply the action"
-msgstr "Aplicar a ação"
-
-msgid "Show All"
-msgstr "Tudo"
-
-msgid "Show all %s"
-msgstr "Exibir todos(as) %s"
-
-msgid "Show all %s trashed"
-msgstr "Exibir todos(as) %s da lixeira"
-
-msgid "Add a %s"
-msgstr "Adicionar um(a) %s"
-
-msgid "Save associated records"
-msgstr "Salvar registros associados"
-
-msgid "Personal Information"
-msgstr "Informações Pessoais"
-
-msgid "Click the magnifying glass to search"
-msgstr "Clique na lupa para buscar"
-
-msgid "record(s) found"
-msgstr "registro(s) encontrados"
-
-msgid "Common Actions"
-msgstr "Ações Comuns"
-
-msgid "Specific Actions"
-msgstr "Ações Específicas"
-
-msgid "index"
-msgstr "índice"
-
-msgid "Index"
-msgstr "Índice"
-
-msgid "edit"
-msgstr "alterar"
-
-msgid "Edit"
-msgstr "Alterar"
 
 msgid "add"
 msgstr "adicionar"
@@ -341,29 +69,167 @@ msgstr "adicionar"
 msgid "Add"
 msgstr "Adicionar"
 
-msgid "view"
-msgstr "visualizar"
+msgid "add a %s"
+msgstr "adicionar um(a) %s"
 
-msgid "View"
-msgstr "Visualizar"
+msgid "Add a %s"
+msgstr "Adicionar Um(a) %s"
 
-msgid "delete"
-msgstr "excluir"
+msgid "Add Record"
+msgstr "Adicionar Registro"
 
-msgid "Delete"
-msgstr "Excluir"
+msgid "add record"
+msgstr "adicionar registro"
 
-msgid "trash"
-msgstr "lixeira"
+msgid "Add record"
+msgstr "Adicionar registro"
 
-msgid "Trash"
-msgstr "Lixeira"
+msgid "add relationship"
+msgstr "adicionar relacionamento"
 
-msgid "restore"
-msgstr "restaurar"
+msgid "Add relationship"
+msgstr "Adicionar relacionamento"
 
-msgid "Restore"
-msgstr "Restaurar"
+msgid "Add Relationship"
+msgstr "Adicionar Relacionamento"
+
+msgid "Add/delete Record"
+msgstr "Adicionar/excluir Registro"
+
+msgid "Add/delete record"
+msgstr "Adicionar/excluir registro"
+
+msgid "add/delete record"
+msgstr "adicionar/excluir registro"
+
+msgid "address"
+msgstr "endereço"
+
+msgid "Address"
+msgstr "Endereço"
+
+msgid "Address Data"
+msgstr "Endereço do Localizador"
+
+msgid "address data"
+msgstr "endereço do localizador"
+
+msgid "Address data"
+msgstr "Endereço do localizador"
+
+msgid "address installation"
+msgstr "endereço de instalação"
+
+msgid "Address installation"
+msgstr "Endereço de instalação"
+
+msgid "Address Installation"
+msgstr "Endereço de Instalação"
+
+msgid "Age"
+msgstr "Idade"
+
+msgid "age"
+msgstr "idade"
+
+msgid "Allow All"
+msgstr "Permitir Todos"
+
+msgid "allow all"
+msgstr "permitir todos"
+
+msgid "Allow all"
+msgstr "Permitir todos"
+
+msgid "allow/deny all"
+msgstr "permitir/negar todos"
+
+msgid "Allow/deny All"
+msgstr "Permitir/negar Todos"
+
+msgid "Allow/deny all"
+msgstr "Permitir/negar todos"
+
+msgid "Apply"
+msgstr "Aplicar"
+
+msgid "apply"
+msgstr "aplicar"
+
+msgid "Apply the action"
+msgstr "Aplicar a ação"
+
+msgid "Apply the Action"
+msgstr "Aplicar a Ação"
+
+msgid "apply the action"
+msgstr "aplicar a ação"
+
+msgid "Are you sure you want to delete all %s"
+msgstr "Tem certeza que deseja excluir todos(as) os(as) %s"
+
+msgid "are you sure you want to delete all %s"
+msgstr "tem certeza que deseja excluir todos(as) os(as) %s"
+
+msgid "Are you Sure you Want to Delete all %s"
+msgstr "Tem Certeza que Deseja Excluir Todos(as) Os(as) %s"
+
+msgid "are you sure you want to delete all %s and %s?"
+msgstr "tem certeza que deseja excluir todos(as) os(as) %s e %s?"
+
+msgid "Are you sure you want to delete all %s and %s?"
+msgstr "Tem certeza que deseja excluir todos(as) os(as) %s e %s?"
+
+msgid "Are you Sure you Want to Delete all %s and %s?"
+msgstr "Tem Certeza que Deseja Excluir Todos(as) Os(as) %s e %s?"
+
+msgid "are you sure you want to move this record to the trash?"
+msgstr "tem certeza de que deseja mover esse registro para a lixeira?"
+
+msgid "Are you sure you want to move this record to the trash?"
+msgstr "Tem certeza de que deseja mover esse registro para a lixeira?"
+
+msgid "Are you Sure you Want to Move This Record to The Trash?"
+msgstr "Tem Certeza de Que Deseja Mover Esse Registro Para a Lixeira?"
+
+msgid "Are you sure you want to remove this association?"
+msgstr "Tem certeza de que deseja remover esta associação?"
+
+msgid "are you sure you want to remove this association?"
+msgstr "tem certeza de que deseja remover esta associação?"
+
+msgid "Are you Sure you Want to Remove This Association?"
+msgstr "Tem Certeza de Que Deseja Remover Esta Associação?"
+
+msgid "Are you Sure you Want to Reset all Settings?"
+msgstr "Tem Certeza que Deseja Reiniciar Toda a Configuração?"
+
+msgid "are you sure you want to reset all settings?"
+msgstr "tem certeza que deseja reiniciar toda a configuração?"
+
+msgid "Are you sure you want to reset all settings?"
+msgstr "Tem certeza que deseja reiniciar toda a configuração?"
+
+msgid "are you sure you want to restore this record from the trash?"
+msgstr "tem certeza de que deseja restaurar o registro da lixeira?"
+
+msgid "Are you sure you want to restore this record from the trash?"
+msgstr "Tem certeza de que deseja restaurar o registro da lixeira?"
+
+msgid "Are you Sure you Want to Restore This Record From the Trash?"
+msgstr "Tem Certeza de Que Deseja Restaurar o Registro da Lixeira?"
+
+msgid "Attached"
+msgstr "Anexo"
+
+msgid "attached"
+msgstr "anexo"
+
+msgid "available"
+msgstr "disponível"
+
+msgid "Available"
+msgstr "Disponível"
 
 msgid "back"
 msgstr "voltar"
@@ -371,311 +237,1091 @@ msgstr "voltar"
 msgid "Back"
 msgstr "Voltar"
 
-msgid "options"
-msgstr "opções"
-
-msgid "Options"
-msgstr "Opções"
-
-msgid "Document Data"
-msgstr "Dados do Documento"
-
-msgid "Searches"
-msgstr "Buscas"
-
-msgid "Search"
-msgstr "Buscar"
-
-msgid "By Document"
-msgstr "Por Documento"
-
-msgid "By Name"
-msgstr "Por Nome"
-
-msgid "By Address"
-msgstr "Por Endereço"
-
-msgid "By Landline"
-msgstr "Por Telefone Fixo"
-
-msgid "Name"
-msgstr "Nome"
-
-msgid "Company"
-msgstr "Empresa"
-
-msgid "Mother"
-msgstr "Mãe"
-
-msgid "Document"
-msgstr "Documento"
-
 msgid "Birthday"
 msgstr "Aniversário"
 
-msgid "Updated"
-msgstr "Atualizado"
-
-msgid "Age"
-msgstr "Idade"
-
-msgid "Gender"
-msgstr "Sexo"
-
-msgid "Person"
-msgstr "Pessoa"
-
-msgid "Type"
-msgstr "Tipo"
-
-msgid "type document"
-msgstr "digite o documento"
-
-msgid "type name"
-msgstr "digite o nome"
-
-msgid "type address"
-msgstr "digite o endereço"
-
-msgid "type landline"
-msgstr "digite o telefone"
-
-msgid "Type Document"
-msgstr "Digite o Documento"
-
-msgid "Type Name"
-msgstr "Digite o Nome"
-
-msgid "Type Address"
-msgstr "Digite o Endereço"
-
-msgid "Type Landline"
-msgstr "Digite o Telefone"
-
-msgid "Landline Data"
-msgstr "Dados do Telefone"
-
-msgid "Warning"
-msgstr "Atenção"
-
-msgid "%s updated in %s"
-msgstr "%s atualizado em %s"
-
-msgid "No address for this landline"
-msgstr "Nenhum endereço para este telefone"
-
-msgid "Address Data"
-msgstr "Endereço do localizador"
-
-msgid "Products"
-msgstr "Produtos"
-
-msgid "Sister"
-msgstr "Irmã"
+msgid "birthday"
+msgstr "aniversário"
 
 msgid "Brother"
 msgstr "Irmão"
 
-msgid "Same Floor"
-msgstr "Mesmo Andar"
+msgid "brother"
+msgstr "irmão"
 
-msgid "Same Street"
-msgstr "Mesma Rua"
+msgid "Bulk actions"
+msgstr "Ações em massa"
 
-msgid "Same Neighborhood"
-msgstr "Mesmo Bairro"
+msgid "Bulk Actions"
+msgstr "Ações em Massa"
 
-msgid "Same City"
-msgstr "Mesma Cidade"
+msgid "bulk actions"
+msgstr "ações em massa"
 
-msgid "Same State"
-msgstr "Mesmo Estado"
+msgid "by address"
+msgstr "por endereço"
 
-msgid "Family"
-msgstr "Família"
+msgid "By address"
+msgstr "Por endereço"
 
-msgid "Shareholding"
-msgstr "Participação Societária"
+msgid "By Address"
+msgstr "Por Endereço"
 
-msgid "Entities"
-msgstr "Pessoas"
+msgid "By document"
+msgstr "Por documento"
 
-msgid "People"
-msgstr "Pessoas"
+msgid "by document"
+msgstr "por documento"
 
-msgid "Mobile"
-msgstr "Telefone Móvel"
+msgid "By Document"
+msgstr "Por Documento"
 
-msgid "Death"
-msgstr "Obito"
+msgid "By Landline"
+msgstr "Por Telefone Fixo"
 
-msgid "Address"
-msgstr "Endereço"
+msgid "By landline"
+msgstr "Por telefone fixo"
 
-msgid "Landline"
-msgstr "Telefone Fixo"
+msgid "by landline"
+msgstr "por telefone fixo"
 
-msgid "Event"
-msgstr "Evento"
+msgid "By Name"
+msgstr "Por Nome"
 
-msgid "City"
-msgstr "Cidade"
+msgid "by name"
+msgstr "por nome"
 
-msgid "Country"
-msgstr "País"
+msgid "By name"
+msgstr "Por nome"
 
-msgid "Grid"
-msgstr "Grade"
+msgid "cancel"
+msgstr "cancelar"
 
-msgid "Group"
-msgstr "Grupo"
-
-msgid "Inscription"
-msgstr "Inscrição"
-
-msgid "Marketing"
-msgstr "Email Marketing"
-
-msgid "Responsible"
-msgstr "Responsável"
-
-msgid "Social"
-msgstr "Perfil Social"
-
-msgid "Speaker"
-msgstr "Palestrante"
-
-msgid "Sponsor"
-msgstr "Patrocinador"
-
-msgid "State"
-msgstr "Estado"
-
-msgid "Student"
-msgstr "Estudante"
-
-msgid "User"
-msgstr "Usuário"
-
-msgid "Workshop"
-msgstr "Oficina"
-
-msgid "Users"
-msgstr "Usuários"
-
-msgid "Groups"
-msgstr "Grupos"
+msgid "Cancel"
+msgstr "Cancelar"
 
 msgid "Cities"
 msgstr "Cidades"
 
-msgid "Events"
-msgstr "Eventos"
+msgid "cities"
+msgstr "cidades"
 
-msgid "Grids"
-msgstr "Grades"
+msgid "City"
+msgstr "Cidade"
 
-msgid "Students"
-msgstr "Estudantes"
-
-msgid "Inscriptions"
-msgstr "Inscrições"
-
-msgid "Marketings"
-msgstr "Email Marketings"
-
-msgid "Workshops"
-msgstr "Oficinas"
-
-msgid "Sponsors"
-msgstr "Patrocinadores"
-
-msgid "Responsibles"
-msgstr "Responsáveis"
-
-msgid "Speakers"
-msgstr "Palestrantes"
-
-msgid "Street"
-msgstr "Rua"
-
-msgid "Event_id"
-msgstr "Evento"
+msgid "city"
+msgstr "cidade"
 
 msgid "City_id"
 msgstr "Cidade"
 
+msgid "city_id"
+msgstr "cidade"
+
+msgid "Click the magnifying glass to search"
+msgstr "Clique na lupa para buscar"
+
+msgid "Click the Magnifying Glass to Search"
+msgstr "Clique na Lupa Para Buscar"
+
+msgid "click the magnifying glass to search"
+msgstr "clique na lupa para buscar"
+
+msgid "Close %s"
+msgstr "Fechar o %s"
+
+msgid "close %s"
+msgstr "fechar o %s"
+
+msgid "common actions"
+msgstr "ações comuns"
+
+msgid "Common actions"
+msgstr "Ações comuns"
+
+msgid "Common Actions"
+msgstr "Ações Comuns"
+
+msgid "Company"
+msgstr "Empresa"
+
+msgid "company"
+msgstr "empresa"
+
+msgid "Complement"
+msgstr "Complemento"
+
+msgid "complement"
+msgstr "complemento"
+
+msgid "Content"
+msgstr "Conteúdo"
+
+msgid "content"
+msgstr "conteúdo"
+
+msgid "controllers"
+msgstr "controladores"
+
+msgid "Controllers"
+msgstr "Controladores"
+
+msgid "could not unbind %s and %s."
+msgstr "não foi possível desvincular %s e %s."
+
+msgid "Could not Unbind %s and %s."
+msgstr "Não foi Possível Desvincular %s e %s."
+
+msgid "Could not unbind %s and %s."
+msgstr "Não foi possível desvincular %s e %s."
+
+msgid "countries"
+msgstr "países"
+
+msgid "Countries"
+msgstr "Países"
+
+msgid "Country"
+msgstr "País"
+
+msgid "country"
+msgstr "país"
+
+msgid "country_id"
+msgstr "país"
+
 msgid "Country_id"
 msgstr "País"
 
-msgid "Grid_id"
-msgstr "Grade"
+msgid "course"
+msgstr "curso"
 
-msgid "Group_id"
-msgstr "Grupo"
+msgid "Course"
+msgstr "Curso"
 
-msgid "Inscription_id"
-msgstr "Inscrição"
+msgid "Course_end"
+msgstr "Final do curso"
 
-msgid "Marketing_id"
-msgstr "Emailmarketing"
+msgid "course_end"
+msgstr "final do curso"
 
-msgid "Responsible_id"
-msgstr "Responsável"
+msgid "course_ini"
+msgstr "início do curso"
 
-msgid "Social_id"
-msgstr "Perfil Social"
+msgid "Course_ini"
+msgstr "Início do Curso"
 
-msgid "Speaker_id"
-msgstr "Palestrante"
+msgid "Course_period"
+msgstr "Período do curso"
 
-msgid "Sponsor_id"
-msgstr "Patrocinador"
+msgid "course_period"
+msgstr "período do curso"
 
-msgid "State_id"
-msgstr "Estado"
+msgid "Date_end"
+msgstr "Fim"
 
-msgid "Student_id"
-msgstr "Estudante"
+msgid "date_end"
+msgstr "fim"
 
-msgid "User_id"
-msgstr "Usuário"
+msgid "Date_end_time"
+msgstr "Hora fim"
 
-msgid "Workshop_id"
-msgstr "Oficina"
+msgid "date_end_time"
+msgstr "hora fim"
 
-msgid "People"
-msgstr "Pessoas"
+msgid "date_ini"
+msgstr "início"
 
-msgid "Name"
-msgstr "Nome"
+msgid "Date_ini"
+msgstr "Início"
 
-msgid "About"
-msgstr "Sobre"
+msgid "Date_ini_time"
+msgstr "Hora ini"
 
-msgid "Address"
-msgstr "Endereço"
+msgid "date_ini_time"
+msgstr "hora ini"
 
-msgid "Neighborhood"
-msgstr "Bairro"
+msgid "date_sent"
+msgstr "data de envio"
 
-msgid "Facebook_link"
-msgstr "Facebook"
+msgid "Date_sent"
+msgstr "Data de Envio"
 
-msgid "Twitter_link"
-msgstr "Twitter"
+msgid "Ddd"
+msgstr "Ddd"
 
-msgid "Google_link"
-msgstr "Google"
+msgid "ddd"
+msgstr "ddd"
 
-msgid "Password"
-msgstr "Senha"
+msgid "Death"
+msgstr "Obito"
+
+msgid "death"
+msgstr "obito"
+
+msgid "Delete"
+msgstr "Excluir"
+
+msgid "delete"
+msgstr "excluir"
+
+msgid "Delete %s"
+msgstr "Excluír %s"
+
+msgid "delete %s"
+msgstr "excluír %s"
+
+msgid "delete %s and %s"
+msgstr "excluír %s e %s"
+
+msgid "Delete %s and %s"
+msgstr "Excluír %s e %s"
+
+msgid "Delete Permanently"
+msgstr "Excluír Permanentemente"
+
+msgid "Delete permanently"
+msgstr "Excluír permanentemente"
+
+msgid "delete permanently"
+msgstr "excluír permanentemente"
+
+msgid "Deny All"
+msgstr "Negar Todos"
+
+msgid "deny all"
+msgstr "negar todos"
+
+msgid "Deny all"
+msgstr "Negar todos"
+
+msgid "Description"
+msgstr "Descrição"
+
+msgid "description"
+msgstr "descrição"
 
 msgid "Doc"
 msgstr "Documento"
 
-msgid "Birthday"
-msgstr "Aniversário"
+msgid "doc"
+msgstr "documento"
+
+msgid "Document"
+msgstr "Documento"
+
+msgid "document"
+msgstr "documento"
+
+msgid "document data"
+msgstr "dados do documento"
+
+msgid "Document data"
+msgstr "Dados do documento"
+
+msgid "Document Data"
+msgstr "Dados do Documento"
+
+msgid "edit"
+msgstr "alterar"
+
+msgid "Edit"
+msgstr "Alterar"
+
+msgid "edit %s"
+msgstr "alterar %s"
+
+msgid "Edit %s"
+msgstr "Alterar %s"
+
+msgid "Edit record"
+msgstr "Alterar registro"
+
+msgid "edit record"
+msgstr "alterar registro"
+
+msgid "Edit Record"
+msgstr "Alterar Registro"
+
+msgid "Enter the data for the new record."
+msgstr "Insira os dados do novo regristro."
+
+msgid "enter the data for the new record."
+msgstr "insira os dados do novo regristro."
+
+msgid "Enter the Data for The new Record."
+msgstr "Insira os Dados do Novo Regristro."
+
+msgid "entities"
+msgstr "pessoas"
+
+msgid "Entities"
+msgstr "Pessoas"
+
+msgid "Event"
+msgstr "Evento"
+
+msgid "event"
+msgstr "evento"
+
+msgid "Events"
+msgstr "Eventos"
+
+msgid "events"
+msgstr "eventos"
+
+msgid "event_id"
+msgstr "evento"
+
+msgid "Event_id"
+msgstr "Evento"
+
+msgid "Facebook_link"
+msgstr "Facebook"
+
+msgid "facebook_link"
+msgstr "facebook"
+
+msgid "family"
+msgstr "família"
+
+msgid "Family"
+msgstr "Família"
+
+msgid "Female"
+msgstr "Feminino"
+
+msgid "female"
+msgstr "feminino"
+
+msgid "first"
+msgstr "início"
+
+msgid "First"
+msgstr "Início"
+
+msgid "Form saved successfully."
+msgstr "Formulário salvo com sucesso."
+
+msgid "form saved successfully."
+msgstr "formulário salvo com sucesso."
+
+msgid "Form Saved Successfully."
+msgstr "Formulário Salvo com Sucesso."
+
+msgid "Gender"
+msgstr "Sexo"
+
+msgid "gender"
+msgstr "sexo"
+
+msgid "Given_name"
+msgstr "Apelido"
+
+msgid "given_name"
+msgstr "apelido"
+
+msgid "google_link"
+msgstr "google"
+
+msgid "Google_link"
+msgstr "Google"
+
+msgid "grid"
+msgstr "grade"
+
+msgid "Grid"
+msgstr "Grade"
+
+msgid "Grids"
+msgstr "Grades"
+
+msgid "grids"
+msgstr "grades"
+
+msgid "Grid_id"
+msgstr "Grade"
+
+msgid "grid_id"
+msgstr "grade"
+
+msgid "group"
+msgstr "grupo"
+
+msgid "Group"
+msgstr "Grupo"
+
+msgid "groups"
+msgstr "grupos"
+
+msgid "Groups"
+msgstr "Grupos"
+
+msgid "group_id"
+msgstr "grupo"
+
+msgid "Group_id"
+msgstr "Grupo"
+
+msgid "hour end"
+msgstr "hora fim"
+
+msgid "Hour End"
+msgstr "Hora Fim"
+
+msgid "Hour end"
+msgstr "Hora fim"
+
+msgid "hour ini"
+msgstr "hora ini"
+
+msgid "Hour ini"
+msgstr "Hora ini"
+
+msgid "Hour Ini"
+msgstr "Hora Ini"
+
+msgid "id"
+msgstr "código"
+
+msgid "Id"
+msgstr "Código"
+
+msgid "index"
+msgstr "índice"
+
+msgid "Index"
+msgstr "índice"
+
+msgid "inscription"
+msgstr "inscrição"
+
+msgid "Inscription"
+msgstr "Inscrição"
+
+msgid "Inscriptions"
+msgstr "Inscrições"
+
+msgid "inscriptions"
+msgstr "inscrições"
+
+msgid "Inscription_id"
+msgstr "Inscrição"
+
+msgid "inscription_id"
+msgstr "inscrição"
+
+msgid "instituition"
+msgstr "instituição"
+
+msgid "Instituition"
+msgstr "Instituição"
+
+msgid "interval"
+msgstr "intervalo"
+
+msgid "Interval"
+msgstr "Intervalo"
+
+msgid "Is_paid"
+msgstr "Pago"
+
+msgid "is_paid"
+msgstr "pago"
+
+msgid "It was Not Possible to Edit the %s [%s], or It Does not Exist in The Database."
+msgstr "Não foi Possível Alterar o %s [%s], ou Ele Não Existe na Base de Dados."
+
+msgid "it was not possible to edit the %s [%s], or it does not exist in the database."
+msgstr "não foi possível alterar o %s [%s], ou ele não existe na base de dados."
+
+msgid "It was not possible to edit the %s [%s], or it does not exist in the database."
+msgstr "Não foi possível alterar o %s [%s], ou ele não existe na base de dados."
+
+msgid "it was not possible to view the %s, or it does not exist in the database."
+msgstr "não foi possível visualizar o %s, ou ele não existe na base de dados."
+
+msgid "It was not possible to view the %s, or it does not exist in the database."
+msgstr "Não foi possível visualizar o %s, ou ele não existe na base de dados."
+
+msgid "It was Not Possible to View the %s, or It Does not Exist in The Database."
+msgstr "Não foi Possível Visualizar o %s, ou Ele Não Existe na Base de Dados."
+
+msgid "landline"
+msgstr "telefone fixo"
+
+msgid "Landline"
+msgstr "Telefone fixo"
+
+msgid "landline data"
+msgstr "dados do telefone"
+
+msgid "Landline Data"
+msgstr "Dados do Telefone"
+
+msgid "Landline data"
+msgstr "Dados do telefone"
+
+msgid "Last"
+msgstr "último"
+
+msgid "last"
+msgstr "último"
+
+msgid "last change of this record."
+msgstr "última alteração deste registro."
+
+msgid "Last change of this record."
+msgstr "última alteração deste registro."
+
+msgid "Last Change of This Record."
+msgstr "última Alteração Deste Registro."
+
+msgid "List"
+msgstr "Listar"
+
+msgid "list"
+msgstr "listar"
+
+msgid "List %s"
+msgstr "Listar %s"
+
+msgid "list %s"
+msgstr "listar %s"
+
+msgid "locales"
+msgstr "locais"
+
+msgid "Locales"
+msgstr "Locais"
+
+msgid "logout"
+msgstr "sair"
+
+msgid "Logout"
+msgstr "Sair"
+
+msgid "male"
+msgstr "masculino"
+
+msgid "Male"
+msgstr "Masculino"
+
+msgid "Manage by %s"
+msgstr "Gerenciar por %s"
+
+msgid "manage by %s"
+msgstr "gerenciar por %s"
+
+msgid "Marketing"
+msgstr "Email Marketing"
+
+msgid "marketing"
+msgstr "email marketing"
+
+msgid "Marketings"
+msgstr "Email marketings"
+
+msgid "marketings"
+msgstr "email marketings"
+
+msgid "Marketing_id"
+msgstr "Emailmarketing"
+
+msgid "marketing_id"
+msgstr "emailmarketing"
+
+msgid "matriculation"
+msgstr "matrícula"
+
+msgid "Matriculation"
+msgstr "Matrícula"
+
+msgid "Mobile"
+msgstr "Telefone Móvel"
+
+msgid "mobile"
+msgstr "telefone móvel"
+
+msgid "Mother"
+msgstr "Mãe"
+
+msgid "mother"
+msgstr "mãe"
+
+msgid "Move to Trash"
+msgstr "Mover Para a Lixeira"
+
+msgid "Move to trash"
+msgstr "Mover para a lixeira"
+
+msgid "move to trash"
+msgstr "mover para a lixeira"
+
+msgid "Name"
+msgstr "Nome"
+
+msgid "name"
+msgstr "nome"
+
+msgid "neighborhood"
+msgstr "bairro"
+
+msgid "Neighborhood"
+msgstr "Bairro"
+
+msgid "New"
+msgstr "Novo(a)"
+
+msgid "new"
+msgstr "novo(a)"
+
+msgid "Newsletter"
+msgstr "Receber Notícias"
+
+msgid "newsletter"
+msgstr "receber notícias"
+
+msgid "next"
+msgstr "próximo"
+
+msgid "Next"
+msgstr "Próximo"
+
+msgid "No"
+msgstr "Não"
+
+msgid "no"
+msgstr "não"
+
+msgid "no address for this landline"
+msgstr "nenhum endereço para este telefone"
+
+msgid "No address for this landline"
+msgstr "Nenhum endereço para este telefone"
+
+msgid "No Address for This Landline"
+msgstr "Nenhum Endereço Para Este Telefone"
+
+msgid "Number"
+msgstr "Número"
+
+msgid "number"
+msgstr "número"
+
+msgid "Numcode"
+msgstr "Código"
+
+msgid "numcode"
+msgstr "código"
+
+msgid "Options"
+msgstr "Opções"
+
+msgid "options"
+msgstr "opções"
+
+msgid "password"
+msgstr "senha"
+
+msgid "Password"
+msgstr "Senha"
+
+msgid "Payment_type"
+msgstr "Tipo Pagamento"
+
+msgid "payment_type"
+msgstr "tipo pagamento"
+
+msgid "People"
+msgstr "Pessoas"
+
+msgid "people"
+msgstr "pessoas"
+
+msgid "Permissions"
+msgstr "Permissões"
+
+msgid "permissions"
+msgstr "permissões"
+
+msgid "person"
+msgstr "pessoa"
+
+msgid "Person"
+msgstr "Pessoa"
+
+msgid "personal information"
+msgstr "informações pessoais"
+
+msgid "Personal information"
+msgstr "Informações pessoais"
+
+msgid "Personal Information"
+msgstr "Informações Pessoais"
+
+msgid "Picture"
+msgstr "Avatar"
+
+msgid "picture"
+msgstr "avatar"
+
+msgid "Prev"
+msgstr "Anterior"
+
+msgid "prev"
+msgstr "anterior"
+
+msgid "Printable_name"
+msgstr "Nome de exibição"
+
+msgid "printable_name"
+msgstr "nome de exibição"
+
+msgid "Print_invoice"
+msgstr "Dt impressão fatura"
+
+msgid "print_invoice"
+msgstr "dt impressão fatura"
+
+msgid "products"
+msgstr "produtos"
+
+msgid "Products"
+msgstr "Produtos"
+
+msgid "Record(s) Found"
+msgstr "Registro(s) Encontrados"
+
+msgid "record(s) found"
+msgstr "registro(s) encontrados"
+
+msgid "Record(s) found"
+msgstr "Registro(s) encontrados"
+
+msgid "Refresh %s"
+msgstr "Atualizar %s"
+
+msgid "refresh %s"
+msgstr "atualizar %s"
+
+msgid "Refresh %s and %s"
+msgstr "Atualizar %s e %s"
+
+msgid "refresh %s and %s"
+msgstr "atualizar %s e %s"
+
+msgid "reset all settings"
+msgstr "reiniciar todas as configurações"
+
+msgid "Reset all Settings"
+msgstr "Reiniciar Todas as Configurações"
+
+msgid "Reset all settings"
+msgstr "Reiniciar todas as configurações"
+
+msgid "Responsible"
+msgstr "Responsável"
+
+msgid "responsible"
+msgstr "responsável"
+
+msgid "responsibles"
+msgstr "responsáveis"
+
+msgid "Responsibles"
+msgstr "Responsáveis"
+
+msgid "Responsible_id"
+msgstr "Responsável"
+
+msgid "responsible_id"
+msgstr "responsável"
+
+msgid "restore"
+msgstr "restaurar"
+
+msgid "Restore"
+msgstr "Restaurar"
+
+msgid "same city"
+msgstr "mesma cidade"
+
+msgid "Same City"
+msgstr "Mesma Cidade"
+
+msgid "Same city"
+msgstr "Mesma cidade"
+
+msgid "Same floor"
+msgstr "Mesmo andar"
+
+msgid "same floor"
+msgstr "mesmo andar"
+
+msgid "Same Floor"
+msgstr "Mesmo Andar"
+
+msgid "Same neighborhood"
+msgstr "Mesmo bairro"
+
+msgid "same neighborhood"
+msgstr "mesmo bairro"
+
+msgid "Same Neighborhood"
+msgstr "Mesmo Bairro"
+
+msgid "same state"
+msgstr "mesmo estado"
+
+msgid "Same state"
+msgstr "Mesmo estado"
+
+msgid "Same State"
+msgstr "Mesmo Estado"
+
+msgid "Same Street"
+msgstr "Mesma Rua"
+
+msgid "Same street"
+msgstr "Mesma rua"
+
+msgid "same street"
+msgstr "mesma rua"
+
+msgid "save"
+msgstr "salvar"
+
+msgid "Save"
+msgstr "Salvar"
+
+msgid "Save associated records"
+msgstr "Salvar registros associados"
+
+msgid "Save Associated Records"
+msgstr "Salvar Registros Associados"
+
+msgid "save associated records"
+msgstr "salvar registros associados"
+
+msgid "Save Changes"
+msgstr "Salvar Alterações"
+
+msgid "save changes"
+msgstr "salvar alterações"
+
+msgid "Save changes"
+msgstr "Salvar alterações"
+
+msgid "search"
+msgstr "buscar"
+
+msgid "Search"
+msgstr "Buscar"
+
+msgid "Searches"
+msgstr "Buscas"
+
+msgid "searches"
+msgstr "buscas"
+
+msgid "Security"
+msgstr "Segurança"
+
+msgid "security"
+msgstr "segurança"
+
+msgid "select"
+msgstr "selecione"
+
+msgid "Select"
+msgstr "Selecione"
+
+msgid "Send"
+msgstr "Enviar"
+
+msgid "send"
+msgstr "enviar"
+
+msgid "Settings"
+msgstr "Configurações"
+
+msgid "settings"
+msgstr "configurações"
+
+msgid "Sex"
+msgstr "Sexo"
+
+msgid "sex"
+msgstr "sexo"
+
+msgid "Shareholding"
+msgstr "Participação societária"
+
+msgid "shareholding"
+msgstr "participação societária"
+
+msgid "Shirt_size"
+msgstr "Tamanho camisa"
+
+msgid "shirt_size"
+msgstr "tamanho camisa"
+
+msgid "Show all"
+msgstr "Tudo"
+
+msgid "show all"
+msgstr "tudo"
+
+msgid "Show all %s"
+msgstr "Exibir todos(as) %s"
+
+msgid "show all %s"
+msgstr "exibir todos(as) %s"
+
+msgid "Show all %s Trashed"
+msgstr "Exibir Todos(as) %s da Lixeira"
+
+msgid "Show all %s trashed"
+msgstr "Exibir todos(as) %s da lixeira"
+
+msgid "show all %s trashed"
+msgstr "exibir todos(as) %s da lixeira"
+
+msgid "Sister"
+msgstr "Irmã"
+
+msgid "sister"
+msgstr "irmã"
+
+msgid "social"
+msgstr "perfil social"
+
+msgid "Social"
+msgstr "Perfil Social"
+
+msgid "social_id"
+msgstr "perfil social"
+
+msgid "Social_id"
+msgstr "Perfil social"
+
+msgid "Speaker"
+msgstr "Palestrante"
+
+msgid "speaker"
+msgstr "palestrante"
+
+msgid "Speakers"
+msgstr "Palestrantes"
+
+msgid "speakers"
+msgstr "palestrantes"
+
+msgid "Speaker_id"
+msgstr "Palestrante"
+
+msgid "speaker_id"
+msgstr "palestrante"
+
+msgid "specific actions"
+msgstr "ações específicas"
+
+msgid "Specific actions"
+msgstr "Ações específicas"
+
+msgid "Specific Actions"
+msgstr "Ações Específicas"
+
+msgid "sponsor"
+msgstr "patrocinador"
+
+msgid "Sponsor"
+msgstr "Patrocinador"
+
+msgid "Sponsors"
+msgstr "Patrocinadores"
+
+msgid "sponsors"
+msgstr "patrocinadores"
+
+msgid "Sponsor_id"
+msgstr "Patrocinador"
+
+msgid "sponsor_id"
+msgstr "patrocinador"
+
+msgid "state"
+msgstr "estado"
+
+msgid "State"
+msgstr "Estado"
+
+msgid "states"
+msgstr "estados"
+
+msgid "States"
+msgstr "Estados"
+
+msgid "State_id"
+msgstr "Estado"
+
+msgid "state_id"
+msgstr "estado"
+
+msgid "status"
+msgstr "ativo"
+
+msgid "Status"
+msgstr "Ativo"
+
+msgid "Street"
+msgstr "Rua"
+
+msgid "street"
+msgstr "rua"
+
+msgid "student"
+msgstr "estudante"
+
+msgid "Student"
+msgstr "Estudante"
+
+msgid "students"
+msgstr "estudantes"
+
+msgid "Students"
+msgstr "Estudantes"
+
+msgid "student_id"
+msgstr "estudante"
+
+msgid "Student_id"
+msgstr "Estudante"
+
+msgid "Study_level"
+msgstr "Formação"
+
+msgid "study_level"
+msgstr "formação"
+
+msgid "subject"
+msgstr "assunto"
+
+msgid "Subject"
+msgstr "Assunto"
+
+msgid "switch main menu"
+msgstr "minimizar/maximizar menu principal"
+
+msgid "Switch main menu"
+msgstr "Minimizar/maximizar menu principal"
+
+msgid "Switch Main Menu"
+msgstr "Minimizar/maximizar Menu Principal"
+
+msgid "telephone"
+msgstr "telefone"
 
 msgid "Telephone"
 msgstr "Telefone"
@@ -683,122 +1329,327 @@ msgstr "Telefone"
 msgid "Telephone1"
 msgstr "Telefone"
 
+msgid "telephone1"
+msgstr "telefone"
+
+msgid "telephone2"
+msgstr "telefone"
+
 msgid "Telephone2"
 msgstr "Telefone"
 
-msgid "Sex"
-msgstr "Sexo"
+msgid "The %s does not exist in the database."
+msgstr "O %s não existe na base de dados."
 
-msgid "Shirt_size"
-msgstr "Tamanho Camisa"
+msgid "The %s Does not Exist in The Database."
+msgstr "O %s Não Existe na Base de Dados."
 
-msgid "Study_level"
-msgstr "Formação"
+msgid "the %s does not exist in the database."
+msgstr "o %s não existe na base de dados."
 
-msgid "Complement"
-msgstr "Complemento"
+msgid "The %s was disassociated %s successfully."
+msgstr "A %s foi desassociada do %s com sucesso."
 
-msgid "Is_paid"
-msgstr "Pago"
+msgid "The %s was Disassociated %s Successfully."
+msgstr "A %s foi Desassociada do %s com Sucesso."
 
-msgid "Payment_type"
-msgstr "Tipo Pagamento"
+msgid "the %s was disassociated %s successfully."
+msgstr "a %s foi desassociada do %s com sucesso."
 
-msgid "Print_invoice"
-msgstr "Dt Impressão Fatura"
+msgid "This field must be filled in correctly."
+msgstr "Este campo deve ser preenchido corretamente."
 
-msgid "Matriculation"
-msgstr "Matrícula"
+msgid "this field must be filled in correctly."
+msgstr "este campo deve ser preenchido corretamente."
 
-msgid "Status"
-msgstr "Ativo"
+msgid "This Field Must be Filled in Correctly."
+msgstr "Este Campo Deve ser Preenchido Corretamente."
+
+msgid "This Message has Already Been Translated."
+msgstr "Esta Mensagem Já foi Traduzida."
+
+msgid "this message has already been translated."
+msgstr "esta mensagem já foi traduzida."
+
+msgid "This message has already been translated."
+msgstr "Esta mensagem já foi traduzida."
+
+msgid "Trash"
+msgstr "Lixeira"
+
+msgid "trash"
+msgstr "lixeira"
+
+msgid "twitter_link"
+msgstr "twitter"
+
+msgid "Twitter_link"
+msgstr "Twitter"
 
 msgid "Type"
 msgstr "Tipo"
 
-msgid "Printable_name"
-msgstr "Nome de exibição"
+msgid "type"
+msgstr "tipo"
 
-msgid "Numcode"
-msgstr "Código"
+msgid "type address"
+msgstr "digite o endereço"
+
+msgid "Type Address"
+msgstr "Digite o Endereço"
+
+msgid "Type address"
+msgstr "Digite o endereço"
+
+msgid "type document"
+msgstr "digite o documento"
+
+msgid "Type Document"
+msgstr "Digite o Documento"
+
+msgid "Type document"
+msgstr "Digite o documento"
+
+msgid "type landline"
+msgstr "digite o telefone"
+
+msgid "Type Landline"
+msgstr "Digite o Telefone"
+
+msgid "Type landline"
+msgstr "Digite o telefone"
+
+msgid "Type Name"
+msgstr "Digite o Nome"
+
+msgid "Type name"
+msgstr "Digite o nome"
+
+msgid "type name"
+msgstr "digite o nome"
 
 msgid "Uf"
-msgstr "UF"
+msgstr "Uf"
 
-msgid "Ddd"
-msgstr "DDD"
+msgid "uf"
+msgstr "uf"
 
-msgid "Given_name"
-msgstr "Apelido"
+msgid "Unable delete the %s."
+msgstr "Não foi possível excluir o %s."
 
-msgid "Subject"
-msgstr "Assunto"
+msgid "unable delete the %s."
+msgstr "não foi possível excluir o %s."
 
-msgid "Content"
-msgstr "Conteúdo"
+msgid "Unable Delete the %s."
+msgstr "Não foi Possível Excluir o %s."
 
-msgid "Date_sent"
-msgstr "Data de envio"
+msgid "Unable Restore the %s to The Trash."
+msgstr "Não foi Possível Restaurar o %s da Lixeira."
 
-msgid "Date_ini"
-msgstr "Início"
+msgid "unable restore the %s to the trash."
+msgstr "não foi possível restaurar o %s da lixeira."
 
-msgid "Date_end"
-msgstr "Fim"
+msgid "Unable restore the %s to the trash."
+msgstr "Não foi possível restaurar o %s da lixeira."
 
-msgid "Attached"
-msgstr "Anexo"
+msgid "Unable Restore the %s."
+msgstr "Não foi Possível Restaurar o %s."
 
-msgid "Send"
-msgstr "Enviar"
+msgid "Unable restore the %s."
+msgstr "Não foi possível restaurar o %s."
 
-msgid "Zipcode"
-msgstr "CEP"
+msgid "unable restore the %s."
+msgstr "não foi possível restaurar o %s."
 
-msgid "Instituition"
-msgstr "Instituição"
+msgid "Unable to move the %s to the trash."
+msgstr "Não foi possível mover o %s para a lixeira."
 
-msgid "Course"
-msgstr "Curso"
+msgid "unable to move the %s to the trash."
+msgstr "não foi possível mover o %s para a lixeira."
 
-msgid "Course_ini"
-msgstr "Início do Curso"
+msgid "Unable to Move the %s to The Trash."
+msgstr "Não foi Possível Mover o %s Para a Lixeira."
 
-msgid "Course_end"
-msgstr "Final do Curso"
+msgid "Unjoin"
+msgstr "Desvincular"
 
-msgid "Course_period"
-msgstr "Período do Curso"
+msgid "unjoin"
+msgstr "desvincular"
 
-msgid "Number"
-msgstr "Número"
+msgid "Updated"
+msgstr "Atualizado"
+
+msgid "updated"
+msgstr "atualizado"
+
+msgid "User"
+msgstr "Usuário"
+
+msgid "user"
+msgstr "usuário"
+
+msgid "Users"
+msgstr "Usuários"
+
+msgid "users"
+msgstr "usuários"
+
+msgid "user_id"
+msgstr "usuário"
+
+msgid "User_id"
+msgstr "Usuário"
+
+msgid "vacancies"
+msgstr "vagas"
 
 msgid "Vacancies"
 msgstr "Vagas"
 
-msgid "Available"
-msgstr "Disponível"
+msgid "version"
+msgstr "versão"
 
-msgid "Description"
-msgstr "Descrição"
+msgid "Version"
+msgstr "Versão"
 
-msgid "Interval"
-msgstr "Intervalo"
+msgid "view"
+msgstr "visualizar"
 
-msgid "Hour Ini"
-msgstr "Hora Ini"
+msgid "View"
+msgstr "Visualizar"
 
-msgid "Hour End"
-msgstr "Hora Fim"
+msgid "view record"
+msgstr "vizualizar registro"
 
-msgid "Date_ini_time"
-msgstr "Hora Ini"
+msgid "View record"
+msgstr "Vizualizar registro"
 
-msgid "Date_end_time"
-msgstr "Hora Fim"
+msgid "View Record"
+msgstr "Vizualizar Registro"
 
-msgid "Newsletter"
-msgstr "Receber Notícias"
+msgid "Warning"
+msgstr "Atenção"
 
-msgid "Picture"
-msgstr "Avatar"
+msgid "warning"
+msgstr "atenção"
+
+msgid "What are you looking for"
+msgstr "O que esta procurando"
+
+msgid "What are You Looking For"
+msgstr "O que Esta Procurando"
+
+msgid "what are you looking for"
+msgstr "o que esta procurando"
+
+msgid "Workshop"
+msgstr "Oficina"
+
+msgid "workshop"
+msgstr "oficina"
+
+msgid "Workshops"
+msgstr "Oficinas"
+
+msgid "workshops"
+msgstr "oficinas"
+
+msgid "workshop_id"
+msgstr "oficina"
+
+msgid "Workshop_id"
+msgstr "Oficina"
+
+msgid "Yes"
+msgstr "Sim"
+
+msgid "yes"
+msgstr "sim"
+
+msgid "you are not allowed to add"
+msgstr "você não tem permissão para adicionar"
+
+msgid "You are Not Allowed to Add"
+msgstr "Você Não tem Permissão Para Adicionar"
+
+msgid "You are not allowed to add"
+msgstr "Você não tem permissão para adicionar"
+
+msgid "You are Not Allowed to Delete"
+msgstr "Você Não tem Permissão Para Excluir Permanentemente"
+
+msgid "you are not allowed to delete"
+msgstr "você não tem permissão para excluir permanentemente"
+
+msgid "You are not allowed to delete"
+msgstr "Você não tem permissão para excluir permanentemente"
+
+msgid "You are Not Allowed to Trash"
+msgstr "Você Não tem Permissão Para Excluir"
+
+msgid "You are not allowed to trash"
+msgstr "Você não tem permissão para excluir"
+
+msgid "you are not allowed to trash"
+msgstr "você não tem permissão para excluir"
+
+msgid "you are not allowed to view deleted records"
+msgstr "você não tem permissão para visualizar registros excluídos"
+
+msgid "You are not allowed to view deleted records"
+msgstr "Você não tem permissão para visualizar registros excluídos"
+
+msgid "You are Not Allowed to View Deleted Records"
+msgstr "Você Não tem Permissão Para Visualizar Registros Excluídos"
+
+msgid "You are not allowed to view the content of"
+msgstr "Você não tem permissão para visualizar o conteúdo de"
+
+msgid "you are not allowed to view the content of"
+msgstr "você não tem permissão para visualizar o conteúdo de"
+
+msgid "You are Not Allowed to View the Content Of"
+msgstr "Você Não tem Permissão Para Visualizar o Conteúdo De"
+
+msgid "You are Not Allowed to View Trashed Records"
+msgstr "Você Não tem Permissão Para Vizualizar Registros da Lixeira"
+
+msgid "You are not allowed to view trashed records"
+msgstr "Você não tem permissão para vizualizar registros da lixeira"
+
+msgid "you are not allowed to view trashed records"
+msgstr "você não tem permissão para vizualizar registros da lixeira"
+
+msgid "you do not have permission to edit"
+msgstr "você não tem permissão para alterar"
+
+msgid "You do not have permission to edit"
+msgstr "Você não tem permissão para alterar"
+
+msgid "You do Not Have Permission to Edit"
+msgstr "Você Não tem Permissão Para Alterar"
+
+msgid "You do Not Have Permission to View"
+msgstr "Você Não tem Permissão Para Visualizar"
+
+msgid "you do not have permission to view"
+msgstr "você não tem permissão para visualizar"
+
+msgid "You do not have permission to view"
+msgstr "Você não tem permissão para visualizar"
+
+msgid "Your session has expired. make a new login!"
+msgstr "Sua sessão expirou. faça um novo login!"
+
+msgid "your session has expired. make a new login!"
+msgstr "sua sessão expirou. faça um novo login!"
+
+msgid "Your Session has Expired. Make a New Login!"
+msgstr "Sua Sessão Expirou. Faça um Novo Login!"
+
+msgid "zipcode"
+msgstr "cep"
+
+msgid "Zipcode"
+msgstr "Cep"
+

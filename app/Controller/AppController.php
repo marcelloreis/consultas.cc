@@ -36,6 +36,7 @@ class AppController extends Controller {
 	*/
 	private $Model;
 	private $isRedirect = true;
+	public $saveType = 'save';
 	public $userLogged;
 
 	/**
@@ -553,14 +554,14 @@ class AppController extends Controller {
 			 * sem este metodo todas as funções do AppModel deixam de funcionar pois 
 			 * o atributo $this->data só funciona quando este metodo é setado
 			 */
-			$this->Model->create($this->request->data);
+			$this->Model->create();
 
 			/**
 			 * A criação ou atualização é controlada pelo campo id do model. 
 			 * Se o $this->Model->id já estiver definido, o registro com esta chave primária será atualizado. 
 			 * Caso contrário, um novo registro será criado.
 			 */
-			if($this->Model->save()){
+			if($this->Model->{$this->saveType}($this->request->data)){
 				if($this->isRedirect){
 					$this->Session->setFlash(__(FLASH_SAVE_SUCCESS), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
 					$this->redirect(array('action' => 'edit', $this->Model->id));

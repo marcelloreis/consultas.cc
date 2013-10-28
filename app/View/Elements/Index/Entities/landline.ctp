@@ -37,7 +37,7 @@
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label" style="padding:10px 0 10px 30px;"><i class="glyphicon-globe"></i>&nbsp;<?php echo __('Address Installation')?></label>
+                                <label class="control-label" style="padding:10px 0 10px 30px; width:auto;"><i class="glyphicon-globe"></i>&nbsp;<?php echo __('Address Installation')?></label>
                             </div>
 
                             <div class="span6">

@@ -4,7 +4,7 @@
 		<div class="container-fluid">
 			<div class="page-header">
 				<div class="pull-left">
-					<h1><?php echo $this->fetch('title-content', __d('fields', ucfirst($this->params['controller'])))?></h1>
+					<h1><?php echo $this->fetch('title-content', __(ucfirst($this->params['controller'])))?></h1>
 				</div>
 
 				<?php echo $this->element('Components/shortcuts')?>
