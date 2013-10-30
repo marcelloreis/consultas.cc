@@ -301,7 +301,7 @@ class EntitiesController extends ProjectController {
 						),
 					'limit' => 1
 				));
-				if($map['Family']['mother']['Entity']['age'] < $people['Entity']['age']){
+				if(isset($map['Family']['mother']['Entity']['age']) && $map['Family']['mother']['Entity']['age'] < $people['Entity']['age']){
 					$map['Family']['mother'] = array();
 				}
 			}
