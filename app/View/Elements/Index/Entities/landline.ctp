@@ -29,6 +29,17 @@
                             ?>
                         </h4>
                         <form style="border: 1px solid #DDDDDD;" class="form-horizontal form-column form-bordered" method="POST" action="#">
+
+                            <div class="control-group">
+                                <label class="control-label"><?php echo __('Landline')?></label>
+                                <div class="controls">
+                                    <?php echo $v['Landline']['tel_full']?>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" style="padding:10px 0 10px 30px;"><i class="glyphicon-globe"></i>&nbsp;<?php echo __('Address Installation')?></label>
+                            </div>
+
                             <div class="span6">
                                 <div class="control-group">
                                     <label class="control-label"><?php echo __('Landline')?></label>
@@ -56,6 +67,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="span6">
                                 <div class="control-group">
                                     <label class="control-label"><?php echo !empty($address[$k]['Address']['type_address'])?$address[$k]['Address']['type_address']:'<small>' . __('Not Foud') . '</small>';?></label>

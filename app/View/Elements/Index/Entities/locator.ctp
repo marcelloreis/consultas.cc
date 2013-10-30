@@ -5,7 +5,7 @@
     <div class="span12">
         <div class="box box-bordered box-color">
             <div class="box-title">
-                <h3><i class="glyphicon-road"></i> <?php echo __('Locator')?></h3>
+                <h3><i class="glyphicon-globe"></i> <?php echo __('Locator')?></h3>
             </div>
             <div class="box-content">
                 <!-- Telefone 1 -->
@@ -58,8 +58,8 @@
                                     </div>
                                 </div>
                             </div>
+                            
                             <div class="span6">
-
                                 <div class="control-group">
                                     <label class="control-label"><?php echo __('Zipcode')?></label>
                                     <div class="controls">
