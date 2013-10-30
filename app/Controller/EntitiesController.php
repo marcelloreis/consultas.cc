@@ -372,6 +372,7 @@ class EntitiesController extends ProjectController {
 				if($hasAddress){
 					$cond['Address.h_all'] = $hash['h_all'];
 				}else{
+					$cond['OR']['Address.h_all'] = $hash['h_all'];
 					$cond['OR']['Address.h_first_last'] = $hash['h_first_last'];
 					$cond['OR']['Address.h_last'] = $hash['h_last'];
 					$cond['OR']['Address.h_first1_first2'] = $hash['h_first1_first2'];

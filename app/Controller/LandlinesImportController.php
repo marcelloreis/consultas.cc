@@ -2,7 +2,7 @@
 /**
  * Import content controller.
  *
- * Este arquivo ira renderizar as visões contidas em views/States/
+ * Este arquivo ira renderizar as visões contidas em views/LandlinesImport/
  *
  * PHP 5
  *
@@ -19,16 +19,9 @@ App::uses('AppController', 'Controller');
  * Este controlador contem regras de negócio aplicadas ao model State
  *
  * @package       app.Controller
- * @link http://.framework.nasza.com.br/2.0/controller/States.html
+ * @link http://.framework.nasza.com.br/2.0/controller/LandlinesImport.html
  */
-class ImportController extends AppController {
-	/**
-	* Controller name
-	*
-	* @var string
-	*/
-	public $name = 'Import';
-
+class LandlinesImportController extends AppController {
 	public $uses = array(
 		"Import", 
 		"NattFixoTelefone", 
@@ -78,12 +71,12 @@ class ImportController extends AppController {
 	}	
 
 	/**
-	* Método natt_fixo_2_landline
+	* Método run
 	* Este método importa os telefones Fixos no modelo da base de dados do Natt para o Sistema
 	*
 	* @return void
 	*/
-	public function natt_fixo_2_landline($uf=null){
+	public function run($uf=null){
 		/**
 		* Verifica se foi passado algum estado por parametro
 		*/
@@ -130,7 +123,7 @@ class ImportController extends AppController {
 				* Verifica se a chave do modulo de importacao esta ativa
 				*/
 				$this->Import->timing_ini(2, 'Verifica se a chave do modulo de importacao esta ativa');
-				$this->Settings->active($this->action);
+				$this->Settings->active($this->name);
 				$this->Import->timing_end();
 
 				/**
