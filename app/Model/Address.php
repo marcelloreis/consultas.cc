@@ -45,12 +45,12 @@ class Address extends AppModelClean {
 	*
 	* @var array
 	*/
-	public $hasMany = array(
-        'Association' => array(
-            'className' => 'Association',
-            'foreignKey' => 'address_id'
-        )
-	);	
+	// public $hasMany = array(
+ //        'Association' => array(
+ //            'className' => 'Association',
+ //            'foreignKey' => 'address_id'
+ //        )
+	// );	
 
 	/**
 	* hasAndBelongsToMany associations

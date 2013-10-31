@@ -64,6 +64,16 @@ class CitiesController extends AppController {
 	* @return void
 	*/
 	public function options ($state_id){
+		/**
+		* Habilita o carregamento automatico do layout
+		*/
+        $this->autoLayout = true;
+
+		/**
+		* Habilita o carregamento automatico da view
+		*/
+        $this->autoRender = true;			
+
 		if(isset($state_id) && !empty($state_id)){
 			$params['conditions'] = array('City.state_id' => $state_id);
 		}

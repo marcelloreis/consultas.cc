@@ -67,12 +67,12 @@ class Entity extends AppModelClean {
 	*
 	* @var array
 	*/
-	public $hasMany = array(
-        'Association' => array(
-            'className' => 'Association',
-            'foreignKey' => 'entity_id'
-        )
-	);	
+	// public $hasMany = array(
+ //        'Association' => array(
+ //            'className' => 'Association',
+ //            'foreignKey' => 'entity_id'
+ //        )
+	// );	
 
 	/**
 	* hasAndBelongsToMany associations
@@ -83,8 +83,8 @@ class Entity extends AppModelClean {
 		'Address' => array(
 			'className' => 'Address',
 			'joinTable' => 'associations',
-			'foreignKey' => 'address_id',
-			'associationForeignKey' => 'entity_id',
+			'foreignKey' => 'entity_id',
+			'associationForeignKey' => 'address_id',
 			'unique' => 'keepExisting',
 			'conditions' => '',
 			'fields' => '',
@@ -98,8 +98,8 @@ class Entity extends AppModelClean {
 		'Landline' => array(
 			'className' => 'Landline',
 			'joinTable' => 'associations',
-			'foreignKey' => 'landline_id',
-			'associationForeignKey' => 'entity_id',
+			'foreignKey' => 'entity_id',
+			'associationForeignKey' => 'landline_id',
 			'unique' => 'keepExisting',
 			'conditions' => '',
 			'fields' => '',

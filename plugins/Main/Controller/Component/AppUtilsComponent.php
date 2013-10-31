@@ -17,6 +17,8 @@ App::uses('Component', 'Controller');
  */
 class AppUtilsComponent extends Component {
 
+	private $controller;
+
 	/**
 	* Método startup
 	*
@@ -26,6 +28,11 @@ class AppUtilsComponent extends Component {
 	* Aqui serao carregados todos os atributos do componente
 	*/
 	public function startup(Controller $controller){
+		/**
+		* Carrega o controller
+		*/
+		$this->controller = $controller;
+
 		parent::startup($controller);
 	}
 

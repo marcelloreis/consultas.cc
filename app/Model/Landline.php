@@ -38,12 +38,12 @@ class Landline extends AppModelClean {
 	*
 	* @var array
 	*/
-	public $hasMany = array(
-        'Association' => array(
-            'className' => 'Association',
-            'foreignKey' => 'landline_id'
-        )
-	);	
+	// public $hasMany = array(
+ //        'Association' => array(
+ //            'className' => 'Association',
+ //            'foreignKey' => 'landline_id'
+ //        )
+	// );	
 
 	/**
 	* hasAndBelongsToMany associations

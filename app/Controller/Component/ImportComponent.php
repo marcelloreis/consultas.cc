@@ -103,6 +103,11 @@ class ImportComponent extends Component {
 			$name = preg_replace('/ltda|ltdame|meltda|ltda-me|ltda_me|ltda\/me/si', '', $name);
 
 			/**
+			* Remove os nomes irrelevantes como: junior, filho, neto
+			*/
+			$name = preg_replace('/junior|filho|neto|sobrinho/si', '', $name);
+
+			/**
 			* Remove todas as palavras com menos de 4 letrase que estejam no meio do nome do nome
 			* onde todas as preposicoes serao excluidas  de | do | da | dos | das 
 			*/
@@ -186,8 +191,8 @@ class ImportComponent extends Component {
 			$hash['h_last1_last2'] = $this->__hash("{$name_last_pre}{$name_last}");
 		}else if($name_last_pre){
 			$hash['h_last1_last2'] = $this->__hash("{$name_last_pre}");
-		}else{
-			$hash['h_last1_last2'] = 0;
+		}else if(isset($map_name[0])){
+			$hash['h_last1_last2'] = $this->__hash("{$map_name[0]}");
 		}
 
 		/**

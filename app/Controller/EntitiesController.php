@@ -51,7 +51,7 @@ class EntitiesController extends ProjectController {
 		/**
 		* Carrega todos as cidades cadastrados
 		*/
-		$cities = array();//$this->Entity->Address->City->find('list');
+		$cities = array();
 
     	/**
 		 * Se o campo "q" for igual a 1, simula o envio do form por get
@@ -92,16 +92,18 @@ class EntitiesController extends ProjectController {
 						'conditions' => array(
 							'OR' => array(
 								'Entity.h_all' => $hash['h_all'],
+								'Entity.h_last' => $hash['h_last'],
 								'Entity.h_first_last' => $hash['h_first_last'],
 								'Entity.h_last1_last2' => $hash['h_last1_last2'],
 								'Entity.h_first1_first2' => $hash['h_first1_first2'],
 								)
 							),
 						'order' => array('state_id')
-						);						
+						);					
 					$this->index($params);
+				}else{
+					$people = isset($people_found[0])?$people_found[0]:false;
 				}
-				$people = isset($people_found[0])?$people_found[0]:false;
 
     		}else if(isset($params['landline'])){
   			

@@ -98,6 +98,7 @@ $params = $this->params['named'];
                     <div class="tab-pane <?php echo isset($params['address'])?'active':'';?>" id="t4">
                         <?php echo $this->AppForm->create($modelClass, array('defaultSize' => 'input-xlarge', 'classForm' => 'form-horizontal form-column form-bordered'))?>
                             <?php echo $this->form->hidden('q', array('value' => $requestHandler));?>
+                            <?php echo $this->form->hidden('address', array('value' => '1'));?>
 
 
 
@@ -138,7 +139,7 @@ $params = $this->params['named'];
                                     <label class="control-label"><?php echo __('State')?></label>
                                     <div class="controls">
                                         <div class="input-xlarge">
-                                            <?php echo $this->AppForm->input('state', array('template' => 'form-input-clean', 'empty' => __('Select'), 'options' => $states, 'class' => 'chosen-select'))?>
+                                            <?php echo $this->AppForm->input('state_id', array('template' => 'form-input-clean', 'empty' => __('Select'), 'options' => $states, 'class' => 'chosen-select select-state'))?>
                                         </div>
                                     </div>
                                 </div>
@@ -149,11 +150,12 @@ $params = $this->params['named'];
                                     <label class="control-label"><?php echo __('City')?></label>
                                     <div class="controls">
                                         <div class="input-xlarge">
-                                            <?php echo $this->AppForm->input('city', array('template' => 'form-input-clean', 'empty' => __('Select'), 'options' => $cities, 'class' => 'chosen-select'))?>
+                                            <?php echo $this->AppForm->input('city_id', array('template' => 'form-input-clean', 'empty' => __('Select a state'), 'options' => $cities, 'class' => 'chosen-select'))?>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            
 
                         <?php echo $this->AppForm->end()?>
                     </div>
