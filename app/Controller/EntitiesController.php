@@ -29,10 +29,23 @@ class EntitiesController extends ProjectController {
 	* @return void
 	*/
 	public function index($params=array()){
-		$this->Entity->recursive = 1;
-
 		//@override
 		parent::index($params);
+
+		/**
+		* Carrega as entidades econtradas
+		*/
+		$entities = isset($this->viewVars['entity'])?$this->viewVars['entity']:array();
+
+		/**
+		* Redireciona para pagina de exibicao de dados da entidade caso só retorne um entidade
+		*/
+		if(count($params) && count($entities) == 1){
+			$this->redirect(array('action' => 'people', $entities[0]['Entity']['id']));
+		}
+
+
+
 	}		
 
 	/**
@@ -58,15 +71,18 @@ class EntitiesController extends ProjectController {
 		 * redirecionando para http://[domain]/[controller]/[action]/seach:value1/namedN:valueN
     	 */
     	$this->__post2get();
+
     	/**
-    	* Carrega os parametros named na variavel $params
+    	* Carrega todas parametros de busca passado pelo formulario
     	*/
     	$params = $this->params['named'];
 
     	/**
-    	* Inicializa a variavel $people com false
+    	* Inicializa a variavel $people que armazena os dados da entidade 
+    	* encontrada a partir dos parametros passados pelo formulario
     	*/
     	$people = false;
+
     	/**
     	* Carrega os dados da entidade a partir do id informado
     	*/
@@ -74,185 +90,25 @@ class EntitiesController extends ProjectController {
 	    	$people = $this->Entity->findById($id);
 	    	
     	/**
-    	* Carrega os dados da entidade a partir dos parametros passados
+    	* Carrega os dados da entidade de acordo com os parametros passados
     	*/
-    	}else if(!$id){
-    		if(isset($params['doc'])){
-    			$people = $this->Entity->findByDoc($params['doc']);
-    		}else if(isset($params['name'])){
-				/**
-				* Gera o hash do nome da entidade e
-				* procura por outras entidades com o nome identico ao passado por parametro
-				*/
-				$hash = $this->Import->getHash($this->Import->clearName($params['name']));
-				$people_found = $this->Entity->findAllByHAll($hash['h_all']);
-				if(count($people_found) == 1){
-					$people = $people_found[0];
-				}else if(count($people_found) > 1){
-					$params = array(
-						'conditions' => array(
-							'Entity.h_all' => $hash['h_all'],
-							),
-						'order' => array('state_id')
-						);					
-					$this->index($params);
-				}else{
-					$params = array(
-						'conditions' => array(
-							'OR' => array(
-								'Entity.h_all' => $hash['h_all'],
-								'Entity.h_last' => $hash['h_last'],
-								'Entity.h_first_last' => $hash['h_first_last'],
-								'Entity.h_last1_last2' => $hash['h_last1_last2'],
-								'Entity.h_first1_first2' => $hash['h_first1_first2'],
-								)
-							),
-						'order' => array('state_id')
-						);					
-					$this->index($params);
-				}
-    		}else if(isset($params['landline'])){
-  			
-				/**
-				* Uni o ddd ao telefone pesquisado
-				*/
-    			if(isset($params['ddd']) && !empty($params['ddd']) && isset($params['landline']) && !empty($params['landline'])){
-    				$tel = "{$params['ddd']}{$params['landline']}";
-    			}else if(isset($params['landline']) && !empty($params['landline'])){
-    				$tel = $params['landline'];
-    			}
+    	}else if(isset($params['doc'])){
+			$people = $this->Entity->findByDoc($params['doc']);
+			$msg = 'No records found with the typed document';
+		}else if(isset($params['name'])){
+			$people = $this->getByName($params);
+			$msg = 'No records found with the typed name';
+		}else if(isset($params['landline'])){
+			$people = $this->getByLandline($params);
+			$msg = 'No records found with the typed landline';
+		}else if(isset($params['zipcode']) || isset($params['street'])){
+			$people = $this->getByAddress($params);
+			$msg = 'No records found with the typed address';
+		}
 
-    			$people_found = $this->Entity->find('list', array(
-    				'fields' => array('Entity.id', 'Entity.id'),
-    				'joins' => array(
-						array('table' => 'associations',
-					        'alias' => 'Association',
-					        'type' => 'INNER',
-					        'conditions' => array(
-					            'Association.entity_id = Entity.id',
-					        )
-					    ),
-						array('table' => 'landlines',
-					        'alias' => 'Landline',
-					        'type' => 'INNER',
-					        'conditions' => array(
-					            'Landline.id = Association.landline_id',
-					        )
-					    ),
-						),
-    				'conditions' => array(
-    					'OR' => array(
-    						'Landline.tel' => $tel,
-    						'Landline.tel_full' => $tel,
-    						)
-    					),
-    				'order' => array('Association.year' => 'desc', 'Entity.id')
-    				));
-
-				if(count($people_found) == 1){
-					$people = $this->Entity->findById($people_found[key($people_found)]);
-				}else if(count($people_found) > 1){
-					$params = array(
-						'conditions' => array(
-							'Entity.id' => $people_found,
-							),
-						);						
-					$this->index($params);
-				}    			
-    		}else if(isset($params['zipcode']) || isset($params['street'])){
-    			/**
-    			* Inicializa a variavel que guardara as condicoes de busca por endereco
-    			*/
-    			$cond = array();
-    			/**
-    			* Verifica se a numeracao do endereco foi preenchida
-    			*/
-    			if(isset($params['number_ini']) && !empty($params['number_ini'])){
-    				$cond['Address.number >'] = $params['number_ini'];
-    				if(isset($params['number_end']) && !empty($params['number_end'])){
-    					unset($cond['Address.number >']);
-    					$cond['Address.number BETWEEN ? AND ?'] = array($params['number_ini'], $params['number_end']);
-    				}
-    			}
-    			
-    			/**
-    			* Verifica se o cep do endereço foi prennchido
-    			*/
-    			if(isset($params['zipcode']) && !empty($params['zipcode'])){
-    				$zipcode = $this->Entity->Address->Zipcode->find('first', array('conditions' => array('Zipcode.code' => $params['zipcode'])));
-    				if(count($zipcode)){
-    					$cond['Address.zipcode_id'] = $zipcode['Zipcode']['id'];
-    				}
-    			}else{
-    				/**
-    				* Verifica se o nome da rua do endereço foi prenchido
-    				*/
-    				if(isset($params['street']) && !empty($params['street'])){
-						/**
-						* Gera o hash do nome da rua
-						*/
-						$hash = $this->Import->getHash($params['street']);
-						$hasAddress = $this->Entity->Address->find('count', array('conditions' => array('h_all' => $hash['h_all'])));
-						if($hasAddress){
-							$cond['Address.h_all'] = $hash['h_all'];
-						}else{
-							$cond['OR']['h_first_last'] = $hash['h_first_last'];
-							$cond['OR']['h_last'] = $hash['h_last'];
-							$cond['OR']['h_first1_first2'] = $hash['h_first1_first2'];
-							$cond['OR']['h_last1_last2'] = $hash['h_last1_last2'];
-						}
-    				}
-
-    				/**
-    				* Verifica se o estado foi setado
-    				*/
-    				if(isset($params['state_id']) && !empty($params['state_id'])){
-    					$cond['Address.state_id'] = $params['state_id'];
-    				}
-
-    				/**
-    				* Verifica se a cidade foi setado
-    				*/
-    				if(isset($params['city_id']) && !empty($params['city_id'])){
-    					$cond['Address.city_id'] = $params['city_id'];
-    				}
-    			}
-
-    			$people_found = $this->Entity->find('list', array(
-    				'fields' => array('Entity.id', 'Entity.id'),
-    				'joins' => array(
-						array('table' => 'associations',
-					        'alias' => 'Association',
-					        'type' => 'INNER',
-					        'conditions' => array(
-					            'Association.entity_id = Entity.id',
-					        )
-					    ),
-						array('table' => 'addresses',
-					        'alias' => 'Address',
-					        'type' => 'INNER',
-					        'conditions' => array(
-					            'Address.id = Association.address_id',
-					        )
-					    ),
-						),
-    				'conditions' => $cond,
-    				'order' => array('Association.year' => 'desc', 'Entity.id')
-    				));
-
-				if(count($people_found) == 1){
-					$people = $this->Entity->findById($people_found[key($people_found)]);
-				}else if(count($people_found) > 1){
-					$params = array(
-						'conditions' => array(
-							'Entity.id' => $people_found,
-							),
-						);						
-					$this->index($params);
-				}    			
-    		}
-    	}
-
+    	/**
+    	* Carrega todos os demais dados a partir da entidade encontrada
+    	*/
     	if($people){
 			/**
 			* Carrega todas as chaves associativas da entidade
@@ -278,13 +134,16 @@ class EntitiesController extends ProjectController {
 	    	* Carrega os dados pertinentes ao produto 'Vizinhos'
 	    	*/
 	    	$neighborhood = $this->neighborhood($people, $address);
-	
 	    	/**
 	    	* Carrega os dados pertinentes ao produto 'Familia'
 	    	*/
 	    	$family = $this->family($people, $address);
 	
 	    	$this->set(compact('people', 'landline', 'address', 'locator', 'family', 'neighborhood'));
+    	}else{
+    		if(isset($msg) && $this->view == $this->action){
+				$this->Session->setFlash(__($msg) , FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
+    		}
     	}
 
     	/**
@@ -294,26 +153,276 @@ class EntitiesController extends ProjectController {
 	}	
 
 	/**
-	* Método redirectOnFound
-	* Este método redireciona para a funcao 'people' caso a entidade passada por parametro contenha somente 1 registro
-	* ou redireciona para a index caso contenha mais de uma entidade no parametro
+	* Método getByName
+	* Este método as regras de negocio responsaveis por encontrar a entidade a partir do nome
 	*
-	* @return void
+	* @param array $query (parametros de busca)
+	* @return array $people (dados da entidade encontrada)
 	*/
-	private function redirectOnFound($entity, $hash, $type_hash){
+	private function getByName($query){
 		/**
-		* Redireciona para o action INDEX passando o hash como parametro caso exista mais de uma entidade com o mesmo nome pesquisado
+		* Inicializa a variavel que contera os dados encontrados da entidade
 		*/
-		if(count($entity) > 1){
-			$this->redirect(array('action' => 'index', 't_hash' => $type_hash, 'hash' => $hash[$type_hash]));
-		}		
+		$people = false;
 
 		/**
-		* Carrega a entidade econtrada caso exista somente uma com o mesmo nome pesquisado
+		* Gera o hash do nome da entidade e
 		*/
-		if(count($entity) == 1){
-			$this->redirect(array('action' => 'people', $entity[key($entity)]['Entity']['id']));
+		$hash = $this->Import->getHash($this->Import->clearName($query['name']));
+
+		/**
+		* Verifica se o nome pesquisado é unico, ou seja, se foi passado somente o nome sem o sobre nome
+		*/
+		if(count(explode(' ', $query['name'])) == 1){
+			/**
+			* Caso nao encontre nenhuma entidade com o mesmo nome pesquisado
+			* procura por outras entidades com o mesmo sobre nome
+			*/
+			$params = array(
+				'conditions' => array(
+				'OR' => array(
+					'Entity.h1' => $hash['h1'],
+					'Entity.h2' => $hash['h1'],
+					'Entity.h3' => $hash['h1'],
+					'Entity.h4' => $hash['h1'],
+					'Entity.h5' => $hash['h1'],
+					)
+				)
+			);					
+			$people_found = $this->Entity->find('count', $params);
+
+			if($this->Entity->find('count', $params)){
+				$this->index($params);
+			}
+		}else{
+
+			/**
+			* Procura por outras entidades com o nome identico ao passado por parametro
+			*/
+			$params = array(
+				'conditions' => array(
+					'Entity.h_all' => $hash['h_all'],
+					),
+				);					
+			$people_found = $this->Entity->find('count', $params);
+			if($this->Entity->find('count', $params)){
+				$this->index($params);
+			}else{
+
+				/**
+				* Caso nao encontre nenhuma entidade com o mesmo nome pesquisado
+				* procura por outras entidades com o mesmo sobre nome
+				*/
+				$params = array(
+					'conditions' => array(
+						'Entity.h2' => $hash['h2'],
+						'Entity.h3' => $hash['h3'],
+						'Entity.h4' => $hash['h4'],
+						'Entity.h5' => $hash['h5'],
+						),
+					);					
+				if($this->Entity->find('count', $params)){
+					$this->index($params);
+				}else{
+
+					/**
+					* Caso nao encontre nenhuma entidade com o mesmo sobre nome
+					* procura por outras entidades os ultimos 2 nomes iguais
+					*/
+					$params = array(
+						'conditions' => array(
+							'Entity.h_last1_last2' => $hash['h_last1_last2'],
+							),
+						);					
+					if($this->Entity->find('count', $params)){
+						$this->index($params);
+					}else{
+			
+						/**
+						* Caso nao encontre nenhuma entidade com os ultimos 2 nomes iguais
+						* procura por entidades com qualquer semelhança no nome
+						*/			
+						$params = array(
+							'conditions' => array(
+								'OR' => array(
+									'Entity.h_all' => $hash['h_all'],
+									'Entity.h_last' => $hash['h_last'],
+									'Entity.h_first_last' => $hash['h_first_last'],
+									'Entity.h_last1_last2' => $hash['h_last1_last2'],
+									'Entity.h_first1_first2' => $hash['h_first1_first2'],
+									)
+								),
+							);					
+						$this->index($params);
+					}
+
+				}
+			}
 		}
+
+
+		return $people;
+	}
+
+	/**
+	* Método getByLandline
+	* Este método as regras de negocio responsaveis por encontrar a entidade a partir do telefone fixo
+	*
+	* @param array $query (parametros de busca)
+	* @return array $people (dados da entidade encontrada)
+	*/
+	private function getByLandline($query){
+		/**
+		* Inicializa a variavel que contera os dados encontrados da entidade
+		*/
+		$people = false;
+
+		/**
+		* Uni o ddd ao telefone pesquisado
+		*/
+		if(isset($query['ddd']) && !empty($query['ddd']) && isset($query['landline']) && !empty($query['landline'])){
+			$tel = "{$query['ddd']}{$query['landline']}";
+		}else if(isset($query['landline']) && !empty($query['landline'])){
+			$tel = $query['landline'];
+		}
+
+		$people_found = $this->Entity->find('list', array(
+			'fields' => array('Entity.id', 'Entity.id'),
+			'joins' => array(
+				array('table' => 'associations',
+			        'alias' => 'Association',
+			        'type' => 'INNER',
+			        'conditions' => array(
+			            'Association.entity_id = Entity.id',
+			        )
+			    ),
+				array('table' => 'landlines',
+			        'alias' => 'Landline',
+			        'type' => 'INNER',
+			        'conditions' => array(
+			            'Landline.id = Association.landline_id',
+			        )
+			    ),
+				),
+			'conditions' => array(
+				'OR' => array(
+					'Landline.tel' => $tel,
+					'Landline.tel_full' => $tel,
+					)
+				),
+			'order' => array('Association.year' => 'desc', 'Entity.id')
+			));
+
+		$params = array(
+			'conditions' => array(
+				'Entity.id' => $people_found,
+				),
+			);						
+		$this->index($params);
+
+		return $people;
+	}
+
+	/**
+	* Método getByAddress
+	* Este método as regras de negocio responsaveis por encontrar a entidade a partir do endereço
+	*
+	* @param array $query (parametros de busca)
+	* @return array $people (dados da entidade encontrada)
+	*/
+	private function getByAddress($query){
+		/**
+		* Inicializa a variavel que contera os dados encontrados da entidade
+		*/
+		$people = false;
+
+		/**
+		* Inicializa a variavel que guardara as condicoes de busca por endereco
+		*/
+		$cond = array();
+		/**
+		* Verifica se a numeracao do endereco foi preenchida
+		*/
+		if(isset($query['number_ini']) && !empty($query['number_ini'])){
+			$cond['Address.number >'] = $query['number_ini'];
+			if(isset($query['number_end']) && !empty($query['number_end'])){
+				unset($cond['Address.number >']);
+				$cond['Address.number BETWEEN ? AND ?'] = array($query['number_ini'], $query['number_end']);
+			}
+		}
+		
+		/**
+		* Verifica se o cep do endereço foi prennchido
+		*/
+		if(isset($query['zipcode']) && !empty($query['zipcode'])){
+			$zipcode = $this->Entity->Address->Zipcode->find('first', array('conditions' => array('Zipcode.code' => $query['zipcode'])));
+			if(count($zipcode)){
+				$cond['Address.zipcode_id'] = $zipcode['Zipcode']['id'];
+			}
+		}else{
+			/**
+			* Verifica se o nome da rua do endereço foi prenchido
+			*/
+			if(isset($query['street']) && !empty($query['street'])){
+				/**
+				* Gera o hash do nome da rua
+				*/
+				$hash = $this->Import->getHash($query['street']);
+				$hasAddress = $this->Entity->Address->find('count', array('conditions' => array('h_all' => $hash['h_all'])));
+				if($hasAddress){
+					$cond['Address.h_all'] = $hash['h_all'];
+				}else{
+					$cond['OR']['Address.h_first_last'] = $hash['h_first_last'];
+					$cond['OR']['Address.h_last'] = $hash['h_last'];
+					$cond['OR']['Address.h_first1_first2'] = $hash['h_first1_first2'];
+					$cond['OR']['Address.h_last1_last2'] = $hash['h_last1_last2'];
+				}
+			}
+
+			/**
+			* Verifica se o estado foi setado
+			*/
+			if(isset($query['state_id']) && !empty($query['state_id'])){
+				$cond['Address.state_id'] = $query['state_id'];
+			}
+
+			/**
+			* Verifica se a cidade foi setado
+			*/
+			if(isset($query['city_id']) && !empty($query['city_id'])){
+				$cond['Address.city_id'] = $query['city_id'];
+			}
+		}
+
+		$people_found = $this->Entity->find('list', array(
+			'fields' => array('Entity.id', 'Entity.id'),
+			'joins' => array(
+				array('table' => 'associations',
+			        'alias' => 'Association',
+			        'type' => 'INNER',
+			        'conditions' => array(
+			            'Association.entity_id = Entity.id',
+			        )
+			    ),
+				array('table' => 'addresses',
+			        'alias' => 'Address',
+			        'type' => 'INNER',
+			        'conditions' => array(
+			            'Address.id = Association.address_id',
+			        )
+			    ),
+				),
+			'conditions' => $cond,
+			));
+
+		$params = array(
+			'conditions' => array(
+				'Entity.id' => $people_found,
+				),
+			);						
+		$this->index($params);
+
+		return $people;
 	}
 
 	/**
@@ -413,16 +522,52 @@ class EntitiesController extends ProjectController {
 						),
 					'limit' => 1
 				));
+
+				if(isset($map['Family']['mother']['Entity']['id'])){
+					/**
+					* Carrega os ids dos parentes encontrados
+					*/
+					$members_found[] = $map['Family']['mother']['Entity']['id'];
+				}
+
+				/**
+				* Remove a mae da entidade encontrada cado a mae tenha idade registrada e essa idade seja menos do que a da entidade
+				*/
 				if(isset($map['Family']['mother']['Entity']['age']) && $map['Family']['mother']['Entity']['age'] < $people['Entity']['age']){
 					$map['Family']['mother'] = array();
 				}
 			}
 
 			/**
+			* Busca pelos filhos da entidade, caso seja mulher
+			*/
+			if($people['Entity']['gender'] == FEMALE){
+				$brothers = $this->Entity->find('all', array(
+					'fields' => '*',
+					'conditions' => array(
+						'Entity.id NOT' => $people['Entity']['id'],
+						'Entity.type !=' => TP_CNPJ,
+						'Entity.h_all NOT' => $people['Entity']['h_all'],
+						'Entity.h_mother' => $people['Entity']['h_all'],
+						),
+					'limit' => LIMIT_FAMILY
+					));
+
+				foreach ($brothers as $k => $v) {
+					$map['Family']['children'][] = $v;
+					/**
+					* Carrega os ids dos parentes encontrados
+					*/
+					$members_found[] = $v['Entity']['id'];
+				}
+ 			}				
+
+			/**
 			* Busca os irmaos da entidade comparando outras entidades 
 			* com o mesmo nome da mae
 			*/
 			if($people['Entity']['h_mother'] > 0){
+				$limit_family = LIMIT_FAMILY - count($members_found);
 				$brothers = $this->Entity->find('all', array(
 					'fields' => '*',
 					'conditions' => array(
@@ -431,7 +576,7 @@ class EntitiesController extends ProjectController {
 						'Entity.h_all NOT' => $people['Entity']['h_all'],
 						'Entity.h_mother' => $people['Entity']['h_mother'],
 						),
-					'limit' => LIMIT_FAMILY
+					'limit' => $limit_family
 					));
 
 				foreach ($brothers as $k => $v) {
@@ -465,21 +610,25 @@ class EntitiesController extends ProjectController {
 					));
 
 				foreach ($brothers as $k => $v) {
-					/**
-					* Caso o nome da entidade encontrada seja igual ao nome da mae da entidade pesquisada, é um forte indicio de que seja a sua mae
-					*/
-					if(!count($map['Family']['mother']) && $v['Entity']['h_all'] == $people['Entity']['h_mother']){
-						$map['Family']['mother'] = $v;
+					if(!in_array($v['Entity']['id'], $members_found)){
+						/**
+						* Caso o nome da entidade encontrada seja igual ao nome da mae da entidade pesquisada, é um forte indicio de que seja a sua mae
+						*/
+						if(!count($map['Family']['mother']) && $v['Entity']['h_all'] == $people['Entity']['h_mother']){
+							$map['Family']['mother'] = $v;
+
 						/**
 						* Caso o nome da mae da entidade encontrada seja igual ao nome da entidade pesquisada, é um forte indicio de que seja seu irmao
 						*/
-					}else if($v['Entity']['h_mother'] == $people['Entity']['h_all']){
-						$map['Family']['children'][] = $v;
+						}else if($v['Entity']['h_mother'] == $people['Entity']['h_all']){
+							$map['Family']['children'][] = $v;
+
 						/**
 						* Em todo caso, se a entidade encontrada tenha os mesmos sobre nome da entidade pesquisada, é um forte indicio de que seja da familia
 						*/
-					}else{
-						$map['Family']['members'][] = $v;
+						}else{
+							$map['Family']['members'][] = $v;
+						}
 					}
 
 					/**
@@ -528,14 +677,14 @@ class EntitiesController extends ProjectController {
 			}
 
 			/**
-			* Percorre por todos os endereços encontrados da entidade buscando um possivel conjuje
+			* Percorre por todos os endereços encontrados da entidade buscando um possivel conjuge
 			*/
 			foreach ($address as $k => $v) {
 				/**
-				* Busca o conjuje da entidade comparando outras entidades 
+				* Busca o conjuge da entidade comparando outras entidades 
 				* com o endereço identico, sexo oposto e nome das maes diferente
 				*/
-				if(!empty($v['Address']['complement']) && !empty($v['Address']['zipcode_id']) && !empty($people['Entity']['gender']) && $people['Entity']['h_mother'] > 0 && !empty($v['Address']['number'])){
+				if(!empty($v['Address']['complement']) && !empty($v['Address']['zipcode_id']) && !empty($people['Entity']['gender']) && !empty($v['Address']['number'])){
 					switch ($people['Entity']['gender']) {
 						case FEMALE:
 							$opposit_gender = MALE;
@@ -544,6 +693,7 @@ class EntitiesController extends ProjectController {
 							$opposit_gender = FEMALE;
 							break;
 					}
+
 					$spouse = $this->Entity->find('first', array(
 						'fields' => '*',
 						'joins' => array(
@@ -566,6 +716,7 @@ class EntitiesController extends ProjectController {
 							'Entity.type !=' => TP_CNPJ,
 							'Entity.gender' => $opposit_gender,
 							'Entity.h_mother >' => 0,
+							'Entity.h_all !=' => $people['Entity']['h_mother'],
 							'Entity.h_mother !=' => $people['Entity']['h_mother'],
 							'Address.zipcode_id' => $v['Address']['zipcode_id'],
 							'Address.h_complement' => $v['Address']['h_complement'],
@@ -596,15 +747,16 @@ class EntitiesController extends ProjectController {
 	*/
 	public function neighborhood($people, $address){
 		$map = array('Neighborhood' => array());
-		$neighbors_found = array('same_house' => array(), 'same_floor' => array(), 'same_street' => array());
-		$limit_neighbors = 0;
+		$neighbors_found = array('same_address' => array(), 'same_floor' => array(), 'same_street' => array());
+		$limit_neighbors = LIMIT_NEIGHBORS;
+
 		/**
 		* Percorre por todos os enderecos da entidade encontrada
 		*/
 		foreach ($address as $k => $v) {
-			if((count($neighbors_found['same_house']) + count($neighbors_found['same_floor'])) < LIMIT_NEIGHBORS){
+			if($limit_neighbors > 0){
 				/**
-				* Procura por entidades que morem na mesma residencia
+				* Procura por entidades com o mesmo endereço
 				*/
 				$neighbor = $this->Entity->Association->find('all', array(
 					'fields' => '*',
@@ -616,50 +768,51 @@ class EntitiesController extends ProjectController {
 					'limit' => LIMIT_NEIGHBORS
 					));
 				foreach ($neighbor as $v2) {
-					$neighbors_found['same_house'][$v2['Association']['entity_id']] = $v2['Association']['entity_id'];
+					$neighbors_found['same_address'][$v2['Association']['entity_id']] = $v2['Association']['entity_id'];
+					$limit_neighbors--;
 				}
-				$limit_neighbors = LIMIT_NEIGHBORS - count($neighbors_found['same_house']);
 
 				/**
 				* Procura por vizinhos que estejam no mesmo andar do endereço encontrado da entidade
 				*/
-				$apto = $this->sameApto($v);
-				if($apto && count($neighbors_found['same_house']) < LIMIT_NEIGHBORS){
+				$regexp = $this->regexpApto($v);
+				if($regexp && $limit_neighbors > 0){
 					$neighbor = $this->Entity->Address->find('all', array(
 						'fields' => '*',
                         'joins' => array(
-                                array(
-                                        'table' => 'associations',
-				                         'alias' => 'Association',
-				                         'type' => 'INNER',
-				                         'conditions' => array(
-				                         'Association.address_id = Address.id',
-				                         )
-                                )
+                            array(
+                                'table' => 'associations',
+		                         'alias' => 'Association',
+		                         'type' => 'INNER',
+		                         'conditions' => array(
+		                         'Association.address_id = Address.id',
+		                         )
+                            )
                         ),
 						'conditions' => array(
+							'Association.entity_id !=' => $people['Entity']['id'],
 							'Address.id !=' => $v['Address']['id'],
-							'Address.id NOT' => $neighbors_found['same_house'],
+							'Address.id NOT' => $neighbors_found['same_address'],
 							'Address.zipcode_id' => $v['Address']['zipcode_id'],
 							'Address.number' => $v['Address']['number'],
-							"Address.complement REGEXP '{$apto}[1-9]'",
+							"Address.complement REGEXP '{$regexp}'",
 							),
 						'group' => 'Association.entity_id',
-						'limit' => LIMIT_NEIGHBORS
+						'limit' => $limit_neighbors
 						));
 					foreach ($neighbor as $v2) {
 						$neighbors_found['same_floor'][$v2['Association']['entity_id']] = $v2['Association']['entity_id'];
+						$limit_neighbors--;
 					}
 				}
-				$limit_neighbors = LIMIT_NEIGHBORS - (count($neighbors_found['same_house']) + count($neighbors_found['same_floor']));
 
 				/**
 				* Procura por vizinhos da mesma rua do endereço encontrado da entidade
 				*/
-				if((count($neighbors_found['same_house']) + count($neighbors_found['same_floor'])) < LIMIT_NEIGHBORS){
+				if($limit_neighbors > 0){
 					$cond = array(
 							'Address.id !=' => $v['Address']['id'],
-							'Address.id NOT' => $neighbors_found['same_house'],
+							'Address.id NOT' => $neighbors_found['same_address'],
 							'Address.id NOT' => $neighbors_found['same_floor'],
 							'Address.zipcode_id' => $v['Address']['zipcode_id'],
 							);
@@ -674,14 +827,14 @@ class EntitiesController extends ProjectController {
 					$neighbor = $this->Entity->Address->find('all', array(
 						'fields' => '*',
                         'joins' => array(
-									array(
-										'table' => 'associations',
-										'alias' => 'Association',
-										'type' => 'INNER',
-										'conditions' => array(
-										'Association.address_id = Address.id',
-										)
-									)
+							array(
+								'table' => 'associations',
+								'alias' => 'Association',
+								'type' => 'INNER',
+								'conditions' => array(
+								'Association.address_id = Address.id',
+								)
+							)
                         ),
 						'conditions' => $cond,
 						'group' => 'Association.entity_id',
@@ -692,7 +845,6 @@ class EntitiesController extends ProjectController {
 						$neighbors_found['same_street'][$v2['Association']['entity_id']] = $v2['Association']['entity_id'];
 					}
 				}
-				
 			}
 		}
 
@@ -733,23 +885,23 @@ class EntitiesController extends ProjectController {
 	}
 
 	/**
-	* Método sameApto
-	* Este metodo informa se a entidade esta localizado em apartamento, sala ou loja a partir do complemento
-	* do endereço passado por parametro
-	*
-	* Caso encontre, retorna a numeraçao do ap/sala/loja sem a ultima casa numerica para ser usado como busca de vizinhos
+	* Método regexpApto
+	* Este metodo monta um aexpressao regular para os endereços de apartamento, com ele, 
+	* consigo encontrar vizinhos do mesmo apartamento da entidade pesquisada
 	*
 	* @return string
 	*/
-	private function sameApto($address){
-		$lives = false;
+	private function regexpApto($address){
+		$regexp = false;
 
 		if(!empty($address['Address']['complement'])){
-			preg_match('/(apartamento|apto|ap|sl|lj).?[0-9]*/si', $address['Address']['complement'], $vet);
-			$lives = isset($vet[0])?substr(trim($vet[0]), 0, -1):false;
+			preg_match('/(apartamento|apto|apt|ap|sl|lj).?([0-9]{1,})*/si', $address['Address']['complement'], $vet);
+			if(isset($vet[2])){
+				$regexp = '(apartamento|apto|apt|ap|sl|lj).?' . substr($vet[2], 0, -1) . '[0-9]';
+			}
 		}
 
-		return $lives;
+		return $regexp;
 	}
 
 	/**

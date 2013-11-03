@@ -17,7 +17,7 @@
 					echo $this->Html->link('<i class="glyphicon-globe"></i> ' . __('Locator'), '#', array('class' => 'btn', 'escape' => false));
 					echo $this->Html->link('<i class="glyphicon-building"></i> ' . __('Shareholding'), '#', array('class' => 'btn', 'escape' => false));
 					echo $this->Html->link('<i class="glyphicon-parents"></i> ' . __('Family'), '#', array('class' => 'btn', 'escape' => false));
-					echo $this->Html->link('<i class="glyphicon-home"></i> ' . __('Neighbor'), '#', array('class' => 'btn', 'escape' => false));
+					echo $this->Html->link('<i class="glyphicon-home"></i> ' . __('Neighbors'), '#', array('class' => 'btn', 'escape' => false));
 					?>
 				</div>
 			</div>

@@ -229,6 +229,121 @@ class AppUtilsHelper extends AppHelper {
 		return $return;
 	}
 
+	/**
+	* Método cnpj
+	* Formata os numeros passados pelo parametro nos padroes de CPF
+	* Ex.: $cpf = $this->AppUtils->cpf('123321000112');
+	* No exemplo acima, a variavel $cpf tera o cpf formatado como: 00.123.321/0001-12
+	*
+	* @param string $cpf
+	* @return string $mask
+	*/
+	public function cnpj($cnpj){
+		// Elimina possivel mascara
+		$cnpj = preg_replace('[^0-9]', '', $cnpj);
+		$cnpj = str_pad(substr($cnpj, -14), 14, '0', STR_PAD_LEFT);
+	 
+		// Verifica se o numero de digitos informados é igual a 14 
+		if (strlen($cnpj) != 14) {
+		    return false;
+		}
+
+		$cnpj = $this->format($cnpj, '##.###.###/####-##', 14);
+
+		return $cnpj;
+	}
+
+	/**
+	* Método cpf
+	* Formata os numeros passados pelo parametro nos padroes de CPF
+	* Ex.: $cpf = $this->AppUtils->cpf('123456789');
+	* No exemplo acima, a variavel $cpf tera o cpf formatado como: 001.234.567-89
+	*
+	* @param string $cpf
+	* @return string $mask
+	*/
+	public function cpf($cpf){
+		// Elimina possivel mascara
+		$cpf = preg_replace('[^0-9]', '', $cpf);
+		$cpf = str_pad(substr($cpf, -11), 11, '0', STR_PAD_LEFT);
+	 
+		// Verifica se o numero de digitos informados é igual a 11 
+		if (strlen($cpf) != 11) {
+		    return false;
+		}
+
+		$cpf = $this->format($cpf, '###.###.###-##');
+
+		return $cpf;
+	}
+
+	/**
+	* Método tel
+	* Formata os numeros passados pelo parametro nos padroes de Telefone
+	* Ex.: $tel = $this->AppUtils->tel('2733411002');
+	* No exemplo acima, a variavel $tel tera o tel formatado como: (27) 3341-1002
+	*
+	* @param string $tel
+	* @return string $mask
+	*/
+	public function tel($tel){
+		$tel_size = strlen(preg_replace('[^0-9]', '', $tel));
+		switch ($tel_size) {
+			case 10:
+				$tel = $this->format($tel, '(##) ####-####');
+				break;
+			case 8:
+				$tel = $this->format($tel, '####-####');
+				break;
+		}
+
+		return $tel;
+	}
+
+	/**
+	* Método zipcode
+	* Formata os numeros passados pelo parametro nos padroes de CEP
+	* Ex.: $zipcode = $this->AppUtils->zipcode('29168450');
+	* No exemplo acima, a variavel $zipcode tera o CEP formatado como: 29168-450
+	*
+	* @param string $zipcode
+	* @return string $mask
+	*/
+	public function zipcode($zipcode){
+		$zipcode = $this->format($zipcode, '#####-###');
+
+		return $zipcode;
+	}
+
+	/**
+	* Método format
+	* Formata qualquer numero/documento com base na mascara passada por parametro
+	* Ex.: $cpf = $this->AppUtils->format('123456789', '###.###.###-##', 11);
+	* No exemplo acima, a variavel $cpf tera o cpf formatado como: 001.234.567-89
+	*
+	* @param string $doc
+	* @param string $mask
+	* @param string $digits
+	* @return string $mask
+	*/
+	private function format($doc, $mask){
+		// Elimina possivel mascara
+		$doc = preg_replace('[^0-9]', '', $doc);
+
+		/**
+		* Aplica a mascara ao numero
+		*/
+		$index = -1;
+		for ($i=0; $i < strlen($mask); $i++){
+			if ($mask[$i]=='#'){
+				$mask[$i] = $doc[++$index];
+			} 
+		}
+
+		return $mask;
+	}
+
+
 
 	/**
 	 * Carrega os templates

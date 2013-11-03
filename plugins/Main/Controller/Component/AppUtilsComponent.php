@@ -120,6 +120,40 @@ class AppUtilsComponent extends Component {
 	}
 
 	/**
+	* Método formatCpf
+	* Formata os numeros passados pelo parametro nos padroes de CPF
+	* Ex.: $cpf = $this->AppUtils->formatCPF('123456789');
+	* No exemplo acima, a variavel $cpf tera o cpf formatado como: 001.234.567-89
+	*
+	* @param string $cpf
+	* @return string $mask
+	*/
+	public function formatCPF($cpf){
+		// Elimina possivel mascara
+		$cpf = preg_replace('[^0-9]', '', $cpf);
+		$cpf = str_pad(substr($cpf, -11), 11, '0', STR_PAD_LEFT);
+	 
+		// Verifica se o numero de digitos informados é igual a 11 
+		if (strlen($cpf) != 11) {
+		    return false;
+		}
+
+		/**
+		* Aplica a mascara ao numero
+		*/
+		$mask = '###.###.###-##'; 
+		$index = -1;
+		for ($i=0; $i < strlen($mask); $i++){
+			if ($mask[$i]=='#'){
+				$mask[$i] = $cpf[++$index];
+			} 
+		}
+
+		return $mask;
+	}
+
+
+	/**
 	* Método removeAcentos
 	* Remove todos os caracteres com acentos do texto passado pelo parametro
 	* Ex.: $desc = $this->AppUtils->removeAcentos('Méto que remóvê acêntòs');

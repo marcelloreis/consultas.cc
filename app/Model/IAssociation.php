@@ -19,6 +19,12 @@ App::uses('AppModelClean', 'Model');
  */
 class Iassociation extends AppModelClean {
 	public $useTable = 'i_associations';
+	/**
+	* Recursive
+	*
+	* @var integer
+	*/
+	public $recursive = -1;
 
 	public function findImport($type, $params){
 		$hasCreated = $this->find($type, $params);				

@@ -101,6 +101,7 @@ class TranslationsController extends ProjectController {
 
 		if(isset($this->Translation->id)){
 			$this->loadLocale();
+			$this->redirect('index');
 		}
 
 

@@ -19,6 +19,12 @@ App::uses('AppModelClean', 'Model');
  */
 class Ientity extends AppModelClean {
 	public $useTable = 'i_entities';
+	/**
+	* Recursive
+	*
+	* @var integer
+	*/
+	public $recursive = -1;
 
 
 	public function findImport($type, $params){

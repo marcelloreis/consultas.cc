@@ -9,14 +9,5 @@
 		<li class="lime">
 			<?php echo $this->Html->link('<span><i class="glyphicon-check"></i></span><span class="name">' . __('Check') . '</span>', array('controller' => 'checklist', 'plugin' => false), array('escape' => false))?>
 		</li>
-		<li class="brown">
-			<?php echo $this->Html->link('<span><i class="glyphicon-bank"></i></span><span class="name">' . __('Bacen') . '</span>', array('controller' => 'bacen', 'plugin' => false), array('escape' => false))?>
-		</li>
-		<li class="blue">
-			<?php echo $this->Html->link('<span><i class="icon-ambulance"></i></span><span class="name">' . __('Deaths') . '</span>', array('controller' => 'deaths', 'plugin' => false), array('escape' => false))?>
-		</li>
-		<li class="blue">
-			<?php echo $this->Html->link('<span><i class="icon-search"></i></span><span class="name">' . __('Locator') . '</span>', array('controller' => 'locator', 'plugin' => false), array('escape' => false))?>
-		</li>
 	</ul>
 </div>

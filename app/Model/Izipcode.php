@@ -19,6 +19,12 @@ App::uses('AppModelClean', 'Model');
  */
 class Izipcode extends AppModelClean {
 	public $useTable = 'i_zipcodes';
+	/**
+	* Recursive
+	*
+	* @var integer
+	*/
+	public $recursive = -1;
 
 	public function findImport($type, $params){
 		$hasZipcode = $this->find($type, $params);				

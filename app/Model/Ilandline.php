@@ -19,6 +19,12 @@ App::uses('AppModelClean', 'Model');
  */
 class Ilandline extends AppModelClean {
 	public $useTable = 'i_landlines';
+	/**
+	* Recursive
+	*
+	* @var integer
+	*/
+	public $recursive = -1;
 
 	public function findImport($type, $params){
 		$hasLandline = $this->find($type, $params);				

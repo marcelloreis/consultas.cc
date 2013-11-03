@@ -410,8 +410,10 @@ class ImportController extends AppController {
 		* Verifica se a entidade que sera importada já existe na base de dados
 		*/
 		$hasEntity = $this->Ientity->findImport('first', array(
-			'recursive' => '-1',
-			'conditions' => array('doc' => $entity['Ientity']['doc'])
+			'conditions' => array(
+				'doc' => $entity['Ientity']['doc'],
+				'type' => $entity['Ientity']['type'],
+				)
 			));				
 
 		if(count($hasEntity)){
@@ -451,7 +453,6 @@ class ImportController extends AppController {
 			* Verifica se o telefone que sera importado já existe na base de dados
 			*/
 			$hasLandline = $this->Ilandline->findImport('first', array(
-				'recursive' => '-1',
 				'conditions' => array(
 					'tel_full' => $landline['Ilandline']['tel_full'],
 					)
@@ -495,7 +496,6 @@ class ImportController extends AppController {
 			* Verifica se o telefone que sera importado já existe na base de dados
 			*/
 			$hasZipcode = $this->Izipcode->findImport('first', array(
-				'recursive' => '-1',
 				'conditions' => array(
 					'code' => $zipcode['Izipcode']['code'],
 					)
@@ -532,7 +532,6 @@ class ImportController extends AppController {
 		* Verifica se o telefone que sera importado já existe na base de dados
 		*/
 		$hasAddress = $this->Iaddress->findImport('first', array(
-			'recursive' => '-1',
 			'conditions' => array(
 				'zipcode_id' => $address['Iaddress']['zipcode_id'],
 				'number' => $address['Iaddress']['number'],
@@ -584,7 +583,6 @@ class ImportController extends AppController {
 			* Verifica se a junção já existe
 			*/
 			$hasAssociation = $this->Iassociation->findImport('first', array(
-				'recursive' => '-1',
 				'conditions' => array(
 					'entity_id' => $entityLandlineAddress['Iassociation']['entity_id'],
 					'landline_id' => $entityLandlineAddress['Iassociation']['landline_id'],

@@ -4,11 +4,11 @@
 */
 echo $this->element('Index/Entities/panel');
 
+/**
+* Atalhos
+*/
+// echo $this->element('Index/Entities/products');
 if(isset($people)){
-	/**
-	* Atalhos
-	*/
-	echo $this->element('Index/Entities/products');
 	/**
 	* Obito
 	*/
@@ -31,7 +31,7 @@ if(isset($people)){
 	* Endereços que nao estao ligados a nenhum telefone fixo
 	*/
 	if(isset($locator) && is_array($locator)){
-		echo $this->element('Index/Entities/locator');
+		// echo $this->element('Index/Entities/locator');
 	}
 	/**
 	* Participacao Societaria

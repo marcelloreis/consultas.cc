@@ -5,6 +5,13 @@
                 <h3><i class="icon-phone"></i> <?php echo __('Landline Data')?></h3>
             </div>
             <div class="box-content">
+
+                <?php 
+                if(!count($landline)){
+                    echo $this->element('Components/flash-message', array('message' => __('No Landline Found')));
+                }
+                ?>
+
                 <!-- Telefone 1 -->
                 <?php foreach($landline as $k => $v):?>
                     <blockquote>
@@ -33,21 +40,21 @@
                             <div class="control-group">
                                 <label class="control-label"><?php echo __('Landline')?></label>
                                 <div class="controls">
-                                    <?php echo $v['Landline']['tel_full']?>
+                                    <?php echo $this->html->link($this->AppUtils->tel($v['Landline']['tel_full']), array('ddd' => $v['Landline']['ddd'], 'landline' => $v['Landline']['tel']))?>
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label" style="padding:10px 0 10px 30px; width:auto;"><i class="glyphicon-globe"></i>&nbsp;<?php echo __('Address Installation')?></label>
                             </div>
 
-                            <div class="span6">
-                                <div class="control-group">
-                                    <label class="control-label"><?php echo __('Landline')?></label>
-                                    <div class="controls">
-                                        <?php echo $v['Landline']['tel_full']?>
-                                    </div>
+                            <div class="control-group">
+                                <label class="control-label"><?php echo !empty($address[$k]['Address']['type_address'])?$address[$k]['Address']['type_address']:'<small>' . __('Not Foud') . '</small>';?></label>
+                                <div class="controls">
+                                    <?php echo !empty($address[$k]['Address']['street'])?$address[$k]['Address']['street']:'<small>' . __('Not Foud') . '</small>';?>
                                 </div>
+                            </div>
 
+                            <div class="span6">
                                 <div class="control-group">
                                     <label class="control-label"><?php echo __('Number')?></label>
                                     <div class="controls">
@@ -69,17 +76,11 @@
                             </div>
 
                             <div class="span6">
-                                <div class="control-group">
-                                    <label class="control-label"><?php echo !empty($address[$k]['Address']['type_address'])?$address[$k]['Address']['type_address']:'<small>' . __('Not Foud') . '</small>';?></label>
-                                    <div class="controls">
-                                        <?php echo !empty($address[$k]['Address']['street'])?$address[$k]['Address']['street']:'<small>' . __('Not Foud') . '</small>';?>
-                                    </div>
-                                </div>
 
                                 <div class="control-group">
                                     <label class="control-label"><?php echo __('Zipcode')?></label>
                                     <div class="controls">
-                                        <?php echo !empty($address[$k]['Address']['zipcode'])?$address[$k]['Address']['zipcode']:'<small>' . __('Not Foud') . '</small>';?>
+                                        <?php echo !empty($address[$k]['Address']['zipcode'])?$this->AppUtils->zipcode($address[$k]['Address']['zipcode']):'<small>' . __('Not Foud') . '</small>';?>
                                     </div>
                                 </div>
                                 <div class="control-group">

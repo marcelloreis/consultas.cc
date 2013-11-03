@@ -6,7 +6,7 @@
 		</div>
     <?php endforeach?>
 <?php elseif(isset($message)):?>
-		<div class="alert <?php echo $class?>">
+		<div class="alert <?php echo isset($class)?$class:'warning';?>">
 			<button type="button" class="close" data-dismiss="alert">&times;</button>
             <?php echo $message?>
 		</div>

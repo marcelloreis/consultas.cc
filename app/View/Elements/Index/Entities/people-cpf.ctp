@@ -8,7 +8,10 @@
 <div class="control-group">
     <label class="control-label"><?php echo __('Mother')?></label>
     <div class="controls">
-        <?php echo !empty($people['Entity']['mother'])?$this->Html->link($people['Entity']['mother'], array('controller' => '', 'action' => ''), array('escape' => false)):'<small style="color: #999999;display: block;line-height: 20px;">— ' . __('Not Found') . '</small>';?>
+        <?php 
+        $url = isset($family['Family']['mother']['Entity']['id'])?array($family['Family']['mother']['Entity']['id']):array('name' => $people['Entity']['mother']);
+        ?>
+        <?php echo !empty($people['Entity']['mother'])?$this->Html->link($people['Entity']['mother'], $url, array('escape' => false)):'<small style="color: #999999;display: block;line-height: 20px;">— ' . __('Not Found') . '</small>';?>
     </div>
 </div>
 
@@ -16,13 +19,13 @@
     <div class="control-group">
         <label class="control-label"><?php echo __('CPF')?></label>
         <div class="controls">
-            <?php echo $people['Entity']['doc']?>
+            <?php echo $this->AppUtils->cpf($people['Entity']['doc'])?>
         </div>
     </div>
     <div class="control-group">
         <label class="control-label"><?php echo __('Updated')?></label>
         <div class="controls">
-            <?php echo $people['Entity']['modified']?>
+            <?php echo $this->AppUtils->dt2br($people['Entity']['modified'], true)?>
         </div>
     </div>
     <div class="control-group">
@@ -56,7 +59,7 @@
     <div class="control-group">
         <label class="control-label"><?php echo __('Birthday')?></label>
         <div class="controls">
-            <?php echo !empty($people['Entity']['birthday'])?$people['Entity']['birthday']:'<small style="color: #999999;display: block;line-height: 20px;">— ' . __('Not Found') . '</small>';?>
+            <?php echo !empty($people['Entity']['birthday'])?$this->AppUtils->dt2br($people['Entity']['birthday']):'<small style="color: #999999;display: block;line-height: 20px;">— ' . __('Not Found') . '</small>';?>
         </div>
     </div>
     <div class="control-group">

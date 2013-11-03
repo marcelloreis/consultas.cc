@@ -66,9 +66,9 @@ $params = $this->params['named'];
                     <div class="tab-pane <?php echo isset($params['landline'])?'active':'';?>" id="t3">
                         <?php echo $this->AppForm->create($modelClass, array('defaultSize' => 'input-xlarge', 'classForm' => 'form-horizontal form-column form-bordered'))?>
                             <?php echo $this->form->hidden('q', array('value' => $requestHandler));?>
-                            <div class="span5">
+                            <div class="span4">
                                 <div class="control-group">
-                                    <label class="control-label" for="textfield"><?php echo __('Type DDD')?></label>
+                                    <label class="control-label" for="textfield" style="width:20%;"><?php echo __('Type DDD')?></label>
                                     <div class="controls">
                                         <div class="input-append input-prepend">
                                             <span class="add-on"><i class="icon-phone"></i></span>
@@ -78,7 +78,7 @@ $params = $this->params['named'];
                                     </div>
                                 </div>
                             </div>
-                            <div class="span7">
+                            <div class="span8">
                                 <div class="control-group">
                                     <label class="control-label" for="textfield"><?php echo __('Type Landline')?></label>
                                     <div class="controls">

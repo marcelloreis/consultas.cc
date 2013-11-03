@@ -9,3 +9,12 @@
 2013-10-31 00:04:27 Error: Fatal Error (1): Call to a member function getDataSource() on a non-object in [/var/www/nasza/plugins/Main/Controller/Component/AppUtilsComponent.php, line 148]
 2013-10-31 00:06:35 Error: Fatal Error (1): Call to a member function getDataSource() on a non-object in [/var/www/nasza/plugins/Main/Controller/Component/AppUtilsComponent.php, line 154]
 2013-10-31 00:07:09 Error: Fatal Error (1): Call to undefined method EntitiesController::getDataSource() in [/var/www/nasza/plugins/Main/Controller/Component/AppUtilsComponent.php, line 154]
+2013-11-02 15:09:43 Error: Fatal Error (4): syntax error, unexpected ';' in [/var/www/nasza/app/View/Elements/Index/Entities/family.ctp, line 132]
+2013-11-02 17:11:40 Error: Fatal Error (4): syntax error, unexpected ';' in [/var/www/nasza/app/Controller/EntitiesController.php, line 43]
+2013-11-02 18:08:06 Error: Fatal Error (1): preg_replace(): Failed evaluating code: 
+(apto|apt|apt).*?substr(&quot;601&quot;, -1)[0-9]* in [/var/www/nasza/app/Controller/EntitiesController.php, line 899]
+2013-11-02 18:08:49 Error: Fatal Error (1): preg_replace(): Failed evaluating code: 
+(apto|apt|apt).*?substr(&quot;601&quot;, -1)[0-9]* in [/var/www/nasza/app/Controller/EntitiesController.php, line 899]
+2013-11-02 19:41:17 Error: Fatal Error (64): Cannot redeclare AppUtilsHelper::cpf() in [/var/www/nasza/plugins/Main/View/Helper/AppUtilsHelper.php, line 256]
+2013-11-02 19:43:05 Error: Fatal Error (64): Cannot redeclare AppUtilsHelper::cpf() in [/var/www/nasza/plugins/Main/View/Helper/AppUtilsHelper.php, line 256]
+2013-11-02 19:43:08 Error: Fatal Error (64): Cannot redeclare AppUtilsHelper::cpf() in [/var/www/nasza/plugins/Main/View/Helper/AppUtilsHelper.php, line 256]

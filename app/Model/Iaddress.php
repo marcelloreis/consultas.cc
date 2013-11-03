@@ -19,6 +19,12 @@ App::uses('AppModelClean', 'Model');
  */
 class Iaddress extends AppModelClean {
 	public $useTable = 'i_addresses';
+	/**
+	* Recursive
+	*
+	* @var integer
+	*/
+	public $recursive = -1;
 
 	public function findImport($type, $params){
 		$hasAddress = $this->find($type, $params);				
