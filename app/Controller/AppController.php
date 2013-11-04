@@ -453,6 +453,7 @@ class AppController extends Controller {
 			$defaults = array(
 							'limit' => LIMIT
 				);
+// debug($params);			
 			$params = array_merge($defaults, $params);
 	    	$this->paginate = array($this->modelClass => $params);
 
@@ -463,24 +464,24 @@ class AppController extends Controller {
 			/**
 			* Conta quantos registros NAO foram enviados para a lixeiro e nem deletados
 			*/
-			unset($params['conditions']["{$this->modelClass}." . ACTION_TRASH]);
-			unset($params['conditions']["{$this->modelClass}." . ACTION_DELETE]);
-			$inbox = $this->Model->find('count', $params);
-			$this->set(compact('inbox'));
+			// unset($params['conditions']["{$this->modelClass}." . ACTION_TRASH]);
+			// unset($params['conditions']["{$this->modelClass}." . ACTION_DELETE]);
+			// $inbox = $this->Model->find('count', $params);
+			// $this->set(compact('inbox'));
 			
 			/**
 			* Conta quantos registros enviados para lixeira existem com os mesmos parametros de busca
 			*/
-			$params['conditions']["{$this->modelClass}." . ACTION_TRASH] = true;
-			$trashed = $this->Model->find('count', $params);
-			$this->set(compact('trashed'));
+			// $params['conditions']["{$this->modelClass}." . ACTION_TRASH] = true;
+			// $trashed = $this->Model->find('count', $params);
+			// $this->set(compact('trashed'));
 			
 			/**
 			* Conta quantos registros deletados existem com os mesmos parametros de busca
 			*/
-			$params['conditions']["{$this->modelClass}." . ACTION_DELETE] = true;
-			$deleted = $this->Model->find('count', $params);
-			$this->set(compact('deleted'));
+			// $params['conditions']["{$this->modelClass}." . ACTION_DELETE] = true;
+			// $deleted = $this->Model->find('count', $params);
+			// $this->set(compact('deleted'));
 
 	    	return $map;
 		}

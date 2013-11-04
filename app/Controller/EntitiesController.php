@@ -33,6 +33,15 @@ class EntitiesController extends ProjectController {
 	* @return void
 	*/
 	public function index($params=array()){
+		$params['joins'] = array(
+				array('table' => 'associations',
+			        'alias' => 'Association',
+			        'type' => 'INNER',
+			        'conditions' => array(
+			            'Association.entity_id = Entity.id',
+			        )
+			    )
+			);
 		//@override
 		parent::index($params);
 
@@ -40,7 +49,7 @@ class EntitiesController extends ProjectController {
 		* Carrega as entidades econtradas
 		*/
 		$entities = isset($this->viewVars['entity'])?$this->viewVars['entity']:array();
-
+debug($entities);
 		/**
 		* Redireciona para pagina de exibicao de dados da entidade caso só retorne um entidade
 		*/
@@ -164,6 +173,7 @@ class EntitiesController extends ProjectController {
 	* @return array $people (dados da entidade encontrada)
 	*/
 	private function getByName($query){
+
 		/**
 		* Inicializa a variavel que contera os dados encontrados da entidade
 		*/
@@ -204,7 +214,6 @@ class EntitiesController extends ProjectController {
 					'Entity.h_all' => $hash['h_all'],
 					),
 				);					
-			$people_found = $this->Entity->find('count', $params);
 			if($this->Entity->find('count', $params)){
 				$this->index($params);
 			}else{
@@ -286,23 +295,16 @@ class EntitiesController extends ProjectController {
 			$tel = $query['landline'];
 		}
 
-		$people_found = $this->Entity->find('list', array(
-			'fields' => array('Entity.id', 'Entity.id'),
+		$people_found = $this->Entity->Landline->find('list', array(
+			'fields' => array('Association.entity_id', 'Association.entity_id'),
 			'joins' => array(
 				array('table' => 'associations',
 			        'alias' => 'Association',
 			        'type' => 'INNER',
 			        'conditions' => array(
-			            'Association.entity_id = Entity.id',
+			            'Association.landline_id = Landline.id',
 			        )
-			    ),
-				array('table' => 'landlines',
-			        'alias' => 'Landline',
-			        'type' => 'INNER',
-			        'conditions' => array(
-			            'Landline.id = Association.landline_id',
-			        )
-			    ),
+			    )
 				),
 			'conditions' => array(
 				'OR' => array(
@@ -395,21 +397,14 @@ class EntitiesController extends ProjectController {
 			}
 		}
 
-		$people_found = $this->Entity->find('list', array(
-			'fields' => array('Entity.id', 'Entity.id'),
+		$people_found = $this->Entity->Address->find('list', array(
+			'fields' => array('Association.entity_id', 'Association.entity_id'),
 			'joins' => array(
 				array('table' => 'associations',
 			        'alias' => 'Association',
 			        'type' => 'INNER',
 			        'conditions' => array(
-			            'Association.entity_id = Entity.id',
-			        )
-			    ),
-				array('table' => 'addresses',
-			        'alias' => 'Address',
-			        'type' => 'INNER',
-			        'conditions' => array(
-			            'Address.id = Association.address_id',
+			            'Association.address_id = Address.id',
 			        )
 			    ),
 				),

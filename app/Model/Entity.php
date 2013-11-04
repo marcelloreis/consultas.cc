@@ -26,6 +26,13 @@ class Entity extends AppModelClean {
 	public $displayField = 'name';
 
 	/**
+	* Fields
+	*
+	* @var string
+	*/
+	public $displayField = 'name';
+
+	/**
 	* Virtual fields
 	*
 	* @var string
