@@ -20,6 +20,10 @@ class EntitiesController extends ProjectController {
 	*/
 	public $components = array('Import');
 
+	public function map(){
+
+	}
+
 	/**
 	* Método index
 	* Este método contem regras de negocios visualizar todos os registros contidos na entidade do controlador
@@ -173,7 +177,7 @@ class EntitiesController extends ProjectController {
 		/**
 		* Verifica se o nome pesquisado é unico, ou seja, se foi passado somente o nome sem o sobre nome
 		*/
-		if(count(explode(' ', $query['name'])) == 1){
+		if(!$hash['h2']){
 			/**
 			* Caso nao encontre nenhuma entidade com o mesmo nome pesquisado
 			* procura por outras entidades com o mesmo sobre nome
@@ -189,11 +193,7 @@ class EntitiesController extends ProjectController {
 					)
 				)
 			);					
-			$people_found = $this->Entity->find('count', $params);
-
-			if($this->Entity->find('count', $params)){
-				$this->index($params);
-			}
+			$this->index($params);
 		}else{
 
 			/**

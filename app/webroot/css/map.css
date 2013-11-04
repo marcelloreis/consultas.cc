@@ -1,6 +1,5 @@
-<style type="text/css">
 	.active { display:inherit; }
-	ul#map {display: block; margin:0px 0px 0px -50px; padding: 0; background: url('Mapa.png') no-repeat;width: 570px; height: 585px;}/* 570px */
+	ul#map {display: block; margin:0px 0px 0px -50px; padding: 0; background: url('../img/mapa.png') no-repeat;width: 570px; height: 585px;}/* 570px */
 	ul#map li {display: block; padding: 0; position: absolute;}
 	li#crs {margin-top: 485px; margin-left: 237px;}
 	li#csc {margin-top: 467px; margin-left: 292px;}
@@ -60,7 +59,7 @@
 	a#ce {width: 61px; height: 76px; }
 	a#pi {width: 83px; height: 124px; }
 
-	/* C�digo pronto via http://css.spritegen.com (com altera��es nos seletores) */
+	/* Codigo pronto via http://css.spritegen.com (com alteracoes nos seletores) */
 
 	a.ativo, a#pa:hover, a#pa:active, a#am:hover, a#am:active, a#mt:hover, a#mt:active, a#ba:hover, a#ba:active, a#ma:hover, a#ma:active,
 	a#mg:hover, a#mg:active, a#to:hover, a#to:active, a#pi:hover, a#pi:active, a#go:hover, a#go:active, a#ms:hover, a#ms:active,
@@ -68,7 +67,7 @@
 	a#ce:hover, a#ce:active, a#pr:hover, a#pr:active, a#ac:hover, a#ac:active, a#sc:hover, a#sc:active, a#es:hover, a#es:active,
 	a#rj:hover, a#rj:active, a#pb:hover, a#pb:active, a#pe:hover, a#pe:active, a#rn:hover, a#rn:active, a#se:hover, a#se:active,
 	a#al:hover, a#al:active, a#df:hover, a#df:active
-	{ display: block; background: url('sprite.gif') no-repeat;}
+	{ display: block; background: url('../img/sprite.gif') no-repeat;}
 
 	a#pa:hover, a#pa:active { background-position: -10px -0px; width: 188px; height: 187px; }
 	a#am:hover, a#am:active { background-position: -10px -197px; width: 258px; height: 181px; }
@@ -130,39 +129,3 @@
 
 	ul#map li a{cursor:pointer;}
 	ul#map li a img {border: 0; width: inherit; height: inherit;}
-</style>
-
-
-
-
-<div align="center" class="span7">
-	<ul id="map">
-		<li estado="rs" id="crs"><a class="" title="RS" id="rs"><img alt="RS" src="http://www.assecc.com.br/sitenovo/images/null.gif"></a></li>
-		<li estado="sc" id="csc"><a class="" title="SC" id="sc"><img alt="SC" src="http://www.assecc.com.br/sitenovo/images/null.gif"></a></li>
-		<li estado="pr" id="cpr"><a class="" title="PR" id="pr"><img alt="PR" src="http://www.assecc.com.br/sitenovo/images/null.gif"></a></li>
-		<li estado="sp" id="csp"><a class="" title="SP" id="sp"><img alt="SP" src="http://www.assecc.com.br/sitenovo/images/null.gif"></a></li>
-		<li estado="ms" id="cms"><a class="" title="MS" id="ms"><img alt="MS" src="http://www.assecc.com.br/sitenovo/images/null.gif"></a></li>
-		<li estado="rj" id="crj"><a class="" title="RJ" id="rj"><img alt="RJ" src="http://www.assecc.com.br/sitenovo/images/null.gif"></a></li>
-		<li estado="es" id="ces"><a class="" title="ES" id="es"><img alt="ES" src="http://www.assecc.com.br/sitenovo/images/null.gif"></a></li>
-		<li estado="mg" id="cmg"><a class="" title="MG" id="mg"><img alt="MG" src="http://www.assecc.com.br/sitenovo/images/null.gif"></a></li>
-		<li estado="go" id="cgo"><a class="" title="GO" id="go"><img alt="GO" src="http://www.assecc.com.br/sitenovo/images/null.gif"></a></li>
-		<li estado="df" id="cdf"><a class="" title="DF" id="df"><img alt="DF" src="http://www.assecc.com.br/sitenovo/images/null.gif"></a></li>
-		<li estado="ba" id="cba"><a class="" title="BA" id="ba"><img alt="BA" src="http://www.assecc.com.br/sitenovo/images/null.gif"></a></li>
-		<li estado="mt" id="cmt"><a class="" title="MT" id="mt"><img alt="MT" src="http://www.assecc.com.br/sitenovo/images/null.gif"></a></li>
-		<li estado="ro" id="cro"><a class="" title="RO" id="ro"><img alt="RO" src="http://www.assecc.com.br/sitenovo/images/null.gif"></a></li>
-		<li estado="ac" id="cac"><a class="" title="AC" id="ac"><img alt="AC" src="http://www.assecc.com.br/sitenovo/images/null.gif"></a></li>
-		<li estado="am" id="cam"><a class="" title="AM" id="am"><img alt="AM" src="http://www.assecc.com.br/sitenovo/images/null.gif"></a></li>
-		<li estado="rr" id="crr"><a class="" title="RR" id="rr"><img alt="RR" src="http://www.assecc.com.br/sitenovo/images/null.gif"></a></li>
-		<li estado="pa" id="cpa"><a class="" title="PA" id="pa"><img alt="PA" src="http://www.assecc.com.br/sitenovo/images/null.gif"></a></li>
-		<li estado="ap" id="cap"><a class="" title="AP" id="ap"><img alt="AP" src="http://www.assecc.com.br/sitenovo/images/null.gif"></a></li>
-		<li estado="ma" id="cma"><a class="" title="MA" id="ma"><img alt="MA" src="http://www.assecc.com.br/sitenovo/images/null.gif"></a></li>
-		<li estado="to" id="cto"><a class="" title="TO" id="to"><img alt="TO" src="http://www.assecc.com.br/sitenovo/images/null.gif"></a></li>
-		<li estado="se" id="cse"><a class="" title="SE" id="se"><img alt="SE" src="http://www.assecc.com.br/sitenovo/images/null.gif"></a></li>
-		<li estado="al" id="cal"><a class="" title="AL" id="al"><img alt="AL" src="http://www.assecc.com.br/sitenovo/images/null.gif"></a></li>
-		<li estado="pe" id="cpe"><a class="" title="PE" id="pe"><img alt="PE" src="http://www.assecc.com.br/sitenovo/images/null.gif"></a></li>
-		<li estado="pb" id="cpb"><a class="" title="PB" id="pb"><img alt="PB" src="http://www.assecc.com.br/sitenovo/images/null.gif"></a></li>
-		<li estado="rn" id="crn"><a class="" title="RN" id="rn"><img alt="RN" src="http://www.assecc.com.br/sitenovo/images/null.gif"></a></li>
-		<li estado="ce" id="cce"><a class="" title="CE" id="ce"><img alt="CE" src="http://www.assecc.com.br/sitenovo/images/null.gif"></a></li>
-		<li estado="pi" id="cpi"><a class="" title="PI" id="pi"><img alt="PI" src="http://www.assecc.com.br/sitenovo/images/null.gif"></a></li>
-	</ul>
-</div>

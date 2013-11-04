@@ -1,5 +1,5 @@
 <div class="container-fluid" id="content">
-	<?php echo $this->element('Components/sidebar')?>
+	<?php //echo $this->element('Components/sidebar')?>
 	<div id="main">
 		<div class="container-fluid">
 			<div class="page-header">

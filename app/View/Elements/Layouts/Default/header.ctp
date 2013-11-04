@@ -29,7 +29,7 @@
         */
         echo $this->Html->css(array(
             'bootstrap.min.css',
-            // 'bootstrap-responsive.min.css',
+            'bootstrap-responsive.min.css',
             'plugins/jquery-ui/smoothness/jquery-ui',
             'plugins/jquery-ui/smoothness/jquery.ui.theme',
             // 'plugins/datatable/TableTools',
@@ -48,6 +48,7 @@
             // 'plugins/icheck/all.css',
             'style.css',
             'themes.css',
+            'map.css',
         ));
 
 
@@ -58,17 +59,18 @@
             'jquery.min',
             // 'plugins/nicescroll/jquery.nicescroll.min',
             
-            // 'plugins/jquery-ui/jquery.ui.core.min',
-            // 'plugins/jquery-ui/jquery.ui.widget.min',
-            // 'plugins/jquery-ui/jquery.ui.mouse.min',
-            // 'plugins/jquery-ui/jquery.ui.draggable.min',
-            // 'plugins/jquery-ui/jquery.ui.resizable.min',
-            // 'plugins/jquery-ui/jquery.ui.sortable.min',
-            // 'plugins/jquery-ui/jquery.ui.spinner.js',
-            // 'plugins/jquery-ui/jquery.ui.slider.js',
+            'plugins/jquery-ui/jquery.ui.core.min',
+            'plugins/jquery-ui/jquery.ui.widget.min',
+            'plugins/jquery-ui/jquery.ui.mouse.min',
+            'plugins/jquery-ui/jquery.ui.draggable.min',
+            'plugins/jquery-ui/jquery.ui.resizable.min',
+            'plugins/jquery-ui/jquery.ui.sortable.min',
+            'plugins/jquery-ui/jquery.ui.spinner.js',
+            'plugins/jquery-ui/jquery.ui.slider.js',
 
             // 'plugins/touch-punch/jquery.touch-punch.min',
-            // 'plugins/slimscroll/jquery.slimscroll.min',
+
+            'plugins/slimscroll/jquery.slimscroll.min',
 
             'bootstrap.min',
 
@@ -124,7 +126,7 @@
 
             // 'eakroko.min',
 
-            // 'application.min',
+            'application.min',
 
             // 'demonstration.min',
 

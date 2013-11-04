@@ -264,7 +264,12 @@ class LandlinesImportController extends AppController {
 							* Trata os dados do endereço para a importacao
 							*/	
 							$this->Import->timing_ini(10, 'Trata os dados do endereço para a importacao');
+							
 							$state_id = $this->Import->getState($v['endereco']['UF'], $this->uf);
+							$city_id = $this->Import->getCityId($v['endereco']['CIDADE'], $state_id, $this->Izipcode->id);
+							$city = $this->Import->getCity($v['endereco']['CIDADE']);
+							$zipcode = $this->Import->getZipcode($v['endereco']['CEP']);
+							$number = $this->Import->getStreetNumber($v['NUMERO'], $v['endereco']['NOME_RUA']);
 
 							/**
 							* Trata o nome da rua
@@ -290,13 +295,13 @@ class LandlinesImportController extends AppController {
 								'Iaddress' => array(
 									'state_id' => $state_id,
 									'zipcode_id' => $this->Izipcode->id,
-									'city_id' => $this->Import->getCityId($v['endereco']['CIDADE'], $state_id, $this->Izipcode->id),
+									'city_id' => $city_id,
 									'state' => $map_states[$state_id],
-									'zipcode' => $this->Import->getZipcode($v['endereco']['CEP']),
-									'city' => $this->Import->getCity($v['endereco']['CIDADE']),
+									'zipcode' => $zipcode,
+									'city' => $city,
 									'type_address' => $this->Import->getTypeAddress($v['endereco']['RUA'], $v['endereco']['NOME_RUA']),
 									'street' => $street,
-									'number' => $this->Import->getStreetNumber($v['NUMERO'], $v['endereco']['NOME_RUA']),
+									'number' => $number,
 									'neighborhood' => $this->Import->getNeighborhood($v['endereco']['BAIRRO']),
 									'complement' => $this->Import->getComplement($v['COMPLEMENTO']),
 									'h1' => $hash['h1'],
@@ -335,6 +340,13 @@ class LandlinesImportController extends AppController {
 									'entity_id' => $this->Ientity->id,
 									'landline_id' => $this->Ilandline->id,
 									'address_id' => $this->Iaddress->id,
+									'state_id' => $state_id,
+									'city_id' => $city_id,
+									'zipcode_id' => $this->Izipcode->id,
+									'state' => $map_states[$state_id],
+									'city' => $city,
+									'zipcode' => $zipcode,
+									'number' => $number,
 									'year' => $year,
 									)
 								);
