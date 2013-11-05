@@ -20,6 +20,7 @@ define('TP_INVALID', 4);
 define('LIMIT_HASH', 5);
 define('LIMIT_FAMILY', 6);
 define('LIMIT_NEIGHBORS', 6);
+define('PROGRESSBAR_INTERVAL', 2000);
 
 define('THEME', 'theme-satblue');
 

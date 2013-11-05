@@ -1249,124 +1249,136 @@ class ImportComponent extends Component {
 	    // if we go over our bound, just ignore it
 	    static $startTime;
 	    static $date_begin;
+    	static $interval;
 
-	    $status_bar="\n[";
-
-	    if($done > $total){
-	    	$status_bar="\n########## IMPORTACAO ENCERRADA ##########";
-	    	$status_bar.="\n[";
-	    } 
-
-	    if(empty($startTime)){
-	    	$startTime=time();
-	    } 
-
-	    if(empty($date_begin)){
-	    	$date_begin=date('d/m/Y H:i:s');
-	    } 
-
-	    $now = time();
-	    $perc=(double)($done/$total);
-	    $bar=floor($perc*$size);
-
-	    $status_bar.=str_repeat("=", $bar);
-
-	    if($bar<$size){
-	        $status_bar.=">";
-	        $status_bar.=str_repeat(" ", $size-$bar);
-	    } else {
-	        $status_bar.="=";
+	    if(!isset($interval)){
+	    	$interval = PROGRESSBAR_INTERVAL;
 	    }
 
-	    $disp=number_format($perc*100, 0);
+	    if($done == 1 || ($done > 0 && ($done/$interval) === 1)){
+	    	$this->__flush();
 
-	    $status_bar.="] $disp%  " . number_format($done, 0, '', '.') . "/" . number_format($total, 0, '', '.');
-
-	    $rate = ($now-$startTime)/$done;
-	    $left = $total - $done;
-	    $eta = round($rate * $left, 2);
-
-	    $elapsed = $now - $startTime;
-	    $elapsed_minuts = $elapsed / 60;
-	    $elapsed_day = floor($elapsed / 86400);
-
-	    /**
-	    * Tempo percorrido
-	    */
-		$day = str_pad(floor($elapsed/86400), 2, '0', STR_PAD_LEFT);
-		$hour = str_pad(floor(($elapsed/3600) - ($day*24)), 2, '0', STR_PAD_LEFT);
-		$min = str_pad(floor(($elapsed/60) - (($day*1440) + ($hour*60))), 2, '0', STR_PAD_LEFT);
-		$sec = str_pad(floor($elapsed - (($day*86400) + ($hour*3600) + ($min*60))), 2, '0', STR_PAD_LEFT);
-		$elapsed = "{$hour}:{$min}:{$sec}";
-		if($day != '00'){
-			$elapsed = "{$day}d {$hour}:{$min}:{$sec}";
-		}
-
-	    /**
-	    * Tempo Restante
-	    */
-		$day = str_pad(floor($eta/86400), 2, '0', STR_PAD_LEFT);
-		$hour = str_pad(floor(($eta/3600) - ($day*24)), 2, '0', STR_PAD_LEFT);
-		$min = str_pad(floor(($eta/60) - (($day*1440) + ($hour*60))), 2, '0', STR_PAD_LEFT);
-		$sec = str_pad(floor($eta - (($day*86400) + ($hour*3600) + ($min*60))), 2, '0', STR_PAD_LEFT);
-		$eta = "{$hour}:{$min}:{$sec}";
-		if($day != '00'){
-			$eta = "{$day}d {$hour}:{$min}:{$sec}";
-		}
+	    	$interval+= PROGRESSBAR_INTERVAL;
 
 
-		$map = $this->Log->query('select @@foreign_key_checks');
-		$foreign_key_checks = $map[0][0]['@@foreign_key_checks'];
+		    $status_bar="\n[";
 
-		$map = $this->Log->query('select @@unique_checks');
-		$unique_checks = $map[0][0]['@@unique_checks'];
+		    if($done > $total){
+		    	$status_bar="\n########## IMPORTACAO ENCERRADA ##########";
+		    	$status_bar.="\n[";
+		    } 
 
-		$map = $this->Log->query('select @@autocommit');
-		$autocommit = $map[0][0]['@@autocommit'];
+		    if(empty($startTime)){
+		    	$startTime=time();
+		    } 
 
-		$map = $this->Log->query('select @@query_cache_type');
-		$query_cache_type = $map[0][0]['@@query_cache_type'];
+		    if(empty($date_begin)){
+		    	$date_begin=date('d/m/Y H:i:s');
+		    } 
 
-		$map = $this->Log->query('select @@query_cache_size');
-		$query_cache_size = ($map[0][0]['@@query_cache_size']/1024)/1024;
+		    $now = time();
+		    $perc=(double)($done/$total);
+		    $bar=floor($perc*$size);
 
-		if(isset($this->counter['realods'])){
-			$reloads_eta = ceil($total/$this->sizeReload) - $this->counter['realods'];
-		}
+		    $status_bar.=str_repeat("=", $bar);
 
-	    $status_bar .= "\n";
-		$status_bar .= "###################################################################\n";
-		$status_bar .= "Start: {$date_begin}\n";
-	    $status_bar .= "Tempo Restante:\t\t{$eta}\n";
-	    $status_bar .= "Tempo percorrido:\t{$elapsed}\n";
-		$status_bar .= "===================================================================\n";
-		$status_bar .= "Estado processado: {$uf}\n";
-		$status_bar .= "===================================================================\n";
-		if(isset($this->counter['realods'])){
-			$status_bar .= "Qtd buscas/Buscas Restante: {$this->counter['realods']}/{$reloads_eta}\n";
-			$status_bar .= "===================================================================\n";
-		}
-	    $status_bar .= "Status do processo de importacao\n";
-		$status_bar .= "___________________________________________________________________\n";
-	    $status_bar .= "Min\t\t\tImport\t\tTable\n";
-		$status_bar .= "___________________________________________________________________\n";
-	    if(isset($this->counter) && count($this->counter)){
-		    foreach ($this->counter as $k => $v) {
-		    	if(isset($v['success'])){
-			    	$per_minuts = ($v['success'] == 0 || $elapsed_minuts == 0)?0:round($v['success'] / $elapsed_minuts);
-		    		$status_bar .= number_format($per_minuts, 0, '', '.') . "\t\t\t" . number_format($v['success'], 0, '', '.') . "\t\t{$k}\n";
-		    	}
+		    if($bar<$size){
+		        $status_bar.=">";
+		        $status_bar.=str_repeat(" ", $size-$bar);
+		    } else {
+		        $status_bar.="=";
 		    }
-	    }
-		$status_bar .= "\n";
-		$status_bar .= "===================================================================\n";
-	    $status_bar .= "Configuracao do banco\n";
-		$status_bar .= "___________________________________________________________________\n";
-		$status_bar .= "fk\tunique\tautocommit\tquery_cache\tcache_size\n";
-		$status_bar .= "___________________________________________________________________\n";
-		$status_bar .= "{$foreign_key_checks}\t{$unique_checks}\t{$autocommit}\t\t{$query_cache_type}\t\t{$query_cache_size}M\n";
 
-	    echo "$status_bar  ";
+		    $disp=number_format($perc*100, 0);
+
+		    $status_bar.="] $disp%  " . number_format($done, 0, '', '.') . "/" . number_format($total, 0, '', '.');
+
+		    $rate = ($now-$startTime)/$done;
+		    $left = $total - $done;
+		    $eta = round($rate * $left, 2);
+
+		    $elapsed = $now - $startTime;
+		    $elapsed_minuts = $elapsed / 60;
+		    $elapsed_day = floor($elapsed / 86400);
+
+		    /**
+		    * Tempo percorrido
+		    */
+			$day = str_pad(floor($elapsed/86400), 2, '0', STR_PAD_LEFT);
+			$hour = str_pad(floor(($elapsed/3600) - ($day*24)), 2, '0', STR_PAD_LEFT);
+			$min = str_pad(floor(($elapsed/60) - (($day*1440) + ($hour*60))), 2, '0', STR_PAD_LEFT);
+			$sec = str_pad(floor($elapsed - (($day*86400) + ($hour*3600) + ($min*60))), 2, '0', STR_PAD_LEFT);
+			$elapsed = "{$hour}:{$min}:{$sec}";
+			if($day != '00'){
+				$elapsed = "{$day}d {$hour}:{$min}:{$sec}";
+			}
+
+		    /**
+		    * Tempo Restante
+		    */
+			$day = str_pad(floor($eta/86400), 2, '0', STR_PAD_LEFT);
+			$hour = str_pad(floor(($eta/3600) - ($day*24)), 2, '0', STR_PAD_LEFT);
+			$min = str_pad(floor(($eta/60) - (($day*1440) + ($hour*60))), 2, '0', STR_PAD_LEFT);
+			$sec = str_pad(floor($eta - (($day*86400) + ($hour*3600) + ($min*60))), 2, '0', STR_PAD_LEFT);
+			$eta = "{$hour}:{$min}:{$sec}";
+			if($day != '00'){
+				$eta = "{$day}d {$hour}:{$min}:{$sec}";
+			}
+
+
+			$map = $this->Log->query('select @@foreign_key_checks');
+			$foreign_key_checks = $map[0][0]['@@foreign_key_checks'];
+
+			$map = $this->Log->query('select @@unique_checks');
+			$unique_checks = $map[0][0]['@@unique_checks'];
+
+			$map = $this->Log->query('select @@autocommit');
+			$autocommit = $map[0][0]['@@autocommit'];
+
+			$map = $this->Log->query('select @@query_cache_type');
+			$query_cache_type = $map[0][0]['@@query_cache_type'];
+
+			$map = $this->Log->query('select @@query_cache_size');
+			$query_cache_size = ($map[0][0]['@@query_cache_size']/1024)/1024;
+
+			if(isset($this->counter['realods'])){
+				$reloads_eta = ceil($total/$this->sizeReload) - $this->counter['realods'];
+			}
+
+		    $status_bar .= "\n";
+			$status_bar .= "###################################################################\n";
+			$status_bar .= "Start: {$date_begin}\n";
+		    $status_bar .= "Tempo Restante:\t\t{$eta}\n";
+		    $status_bar .= "Tempo percorrido:\t{$elapsed}\n";
+			$status_bar .= "===================================================================\n";
+			$status_bar .= "Estado processado: {$uf}\n";
+			$status_bar .= "===================================================================\n";
+			if(isset($this->counter['realods'])){
+				$status_bar .= "Qtd buscas/Buscas Restante: {$this->counter['realods']}/{$reloads_eta}\n";
+				$status_bar .= "===================================================================\n";
+			}
+		    $status_bar .= "Status do processo de importacao\n";
+			$status_bar .= "___________________________________________________________________\n";
+		    $status_bar .= "Min\t\t\tImport\t\tTable\n";
+			$status_bar .= "___________________________________________________________________\n";
+		    if(isset($this->counter) && count($this->counter)){
+			    foreach ($this->counter as $k => $v) {
+			    	if(isset($v['success'])){
+				    	$per_minuts = ($v['success'] == 0 || $elapsed_minuts == 0)?0:round($v['success'] / $elapsed_minuts);
+			    		$status_bar .= number_format($per_minuts, 0, '', '.') . "\t\t\t" . number_format($v['success'], 0, '', '.') . "\t\t{$k}\n";
+			    	}
+			    }
+		    }
+			$status_bar .= "\n";
+			$status_bar .= "===================================================================\n";
+		    $status_bar .= "Configuracao do banco\n";
+			$status_bar .= "___________________________________________________________________\n";
+			$status_bar .= "fk\tunique\tautocommit\tquery_cache\tcache_size\n";
+			$status_bar .= "___________________________________________________________________\n";
+			$status_bar .= "{$foreign_key_checks}\t{$unique_checks}\t{$autocommit}\t\t{$query_cache_type}\t\t{$query_cache_size}M\n";
+
+		    echo "{$status_bar}  ";
+	    }
 	    // when done, send a newline
 	    if($done == $total) {
 	        echo "\n";

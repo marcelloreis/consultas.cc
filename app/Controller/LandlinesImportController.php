@@ -185,7 +185,6 @@ class LandlinesImportController extends AppController {
 					/**
 					* Exibe o status da importacao no console 
 					*/
-					$this->Import->__flush();
 					$this->qt_imported++;
 					$this->Import->progressBar($this->qt_imported, $this->qt_reg, $this->uf);
 
