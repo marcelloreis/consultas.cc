@@ -1,5 +1,5 @@
 <?php
-App::uses('AppModel', 'Model');
+App::uses('AppModelClean', 'Model');
 /**
  * Counter Model
  *
@@ -14,6 +14,6 @@ App::uses('AppModel', 'Model');
  *
  * Counter Model
  */
-class Counter extends AppModel {
+class Counter extends AppModelClean {
 	public $useTable = '_counter';
 }

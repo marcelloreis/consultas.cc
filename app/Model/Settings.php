@@ -29,13 +29,14 @@ class Settings extends AppModelClean {
 		if(!$isActive){
 			$content = "\n\n\n\n";
 			$content .= "###################################################################\n";
-			$content .= "Time: " . date('Y/m/d H:i:s') . "\n";
+			$content .= "Time: " . date('Y-m-d H:i:s') . "\n";
 			$content .= "===================================================================\n";
-			$content .= "Importacao pausada.\n";
+			$content .= "Importacao Pausada.\n";
 			$content .= "===================================================================\n";
 
 			echo $content;		
-			die;	
 		}
+
+		return $isActive;
 	}
 }

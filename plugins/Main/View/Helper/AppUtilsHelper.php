@@ -81,6 +81,16 @@ class AppUtilsHelper extends AppHelper {
 	}
 
 	/**
+	* Método num2qt
+	* Retorna o valor passador por parametro no quantitativo
+	* Ex.: $valor = $this->AppUtils->num2qt('1000000');
+	* No exemplo acima, a variavel $valor tera o numero formatado como: 1.000.000
+	*/
+	public function num2qt($number){
+		return number_format($number, 0, '', '.');
+	}
+
+	/**
 	* Método dt2br
 	* Transforma uma data no formato americado para o formato brasileiro
 	* Ex.: $data = $this->AppUtils->dt2br('20130130');

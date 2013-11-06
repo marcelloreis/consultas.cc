@@ -14,7 +14,7 @@ App::import('Vendor', 'names');
  * Application Component
  *
  */
-class ImportComponent extends Component {
+class AppImportComponent extends Component {
 	private $Log;
 	private $City;
 	private $Iaddress;
@@ -1125,9 +1125,10 @@ class ImportComponent extends Component {
 	* @param string $content
 	* @return void
 	*/
-	public function __log($log, $uf, $status=true, $table=null, $pk=null, $data=null, $mysql_error=null){	
+	public function __log($log, $type, $uf, $status=true, $table=null, $pk=null, $data=null, $mysql_error=null){	
 		$Log['Log'] = array(
 			'log' => $log,
+			'type' => $type,
 			'mysql_error' => $mysql_error,
 			'uf' => $uf,
 			'table' => $table,
@@ -1135,8 +1136,8 @@ class ImportComponent extends Component {
 			'data' => $data,
 			'status' => $status,
 			);
-		$this->Log->create($Log);
-		$this->Log->save();
+		$this->Log->create();
+		$this->Log->save($Log);
 	}
 
 	/**
@@ -1149,10 +1150,6 @@ class ImportComponent extends Component {
 	*/
 	public function __counter($table){
 		$values = array();
-		$conditions = array(
-				'table' => $table,
-				'active' => '1'
-				);
 		if(isset($this->counter[$table]['success'])){
 			$values['success'] = $this->counter[$table]['success'];
 		}
@@ -1162,25 +1159,9 @@ class ImportComponent extends Component {
 		}
 
 		if(count($values)){
-			$this->ModelCounter->updateAll($values, $conditions);
+			$this->ModelCounter->updateAll($values, array('table' => $table, 'active' => '1'));
 		}
 
-	}
-
-	/**
-	* Método reload
-	* Este método conta quantas vezes o sistema de importacao efetuou a busca na base de extracao
-	*
-	* @override Metodo AppController.reload
-	* @param string $content
-	* @return void
-	*/
-	public function reloadCount(){
-		if(!isset($this->counter['realods'])){
-			$this->counter['realods'] = 1;
-		}else{
-			$this->counter['realods']++;
-		}
 	}
 
 	/**
@@ -1341,10 +1322,6 @@ class ImportComponent extends Component {
 			$map = $this->Log->query('select @@query_cache_size');
 			$query_cache_size = ($map[0][0]['@@query_cache_size']/1024)/1024;
 
-			if(isset($this->counter['realods'])){
-				$reloads_eta = ceil($total/$this->sizeReload) - $this->counter['realods'];
-			}
-
 		    $status_bar .= "\n";
 			$status_bar .= "###################################################################\n";
 			$status_bar .= "Start: {$date_begin}\n";
@@ -1353,10 +1330,6 @@ class ImportComponent extends Component {
 			$status_bar .= "===================================================================\n";
 			$status_bar .= "Estado processado: {$uf}\n";
 			$status_bar .= "===================================================================\n";
-			if(isset($this->counter['realods'])){
-				$status_bar .= "Qtd buscas/Buscas Restante: {$this->counter['realods']}/{$reloads_eta}\n";
-				$status_bar .= "===================================================================\n";
-			}
 		    $status_bar .= "Status do processo de importacao\n";
 			$status_bar .= "___________________________________________________________________\n";
 		    $status_bar .= "Min\t\t\tImport\t\tTable\n";
@@ -1395,27 +1368,18 @@ class ImportComponent extends Component {
 	/**
 	* Mensura o tempo gasto nas consultas
 	*/
-	public function timing_ini($query_id, $query_desc){
-		// $this->time_start = microtime(true);
-		// $this->time_id = $query_id;
-		// $this->time_desc = $query_desc;
+	public function timing_ini($time_id){
+		$this->time_start = microtime(true);
+		$this->time_id = $time_id;
 	}
 
 	/**
 	* Mensura o tempo gasto nas consultas
 	*/
 	public function timing_end(){
-		// $this->time_end = microtime(true);
-		// $time = $this->time_end - $this->time_start;
-		// $data = array(
-		// 	'Timing' => array(
-		// 		'query_id' => $this->time_id,
-		// 		'query_desc' => $this->time_desc,
-		// 		'time' => $time,
-		// 		)
-		// 	);
-		// $this->Timing->create($data);
-		// $this->Timing->save();
+		$this->time_end = microtime(true);
+		$time = $this->time_end - $this->time_start;
+		$this->Timing->updateAll(array('Timing.time' => $time), array('Timing.id' => $this->time_id));
 	}
 
 }

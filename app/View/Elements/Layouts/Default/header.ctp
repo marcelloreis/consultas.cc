@@ -28,8 +28,8 @@
         * Styles da aplicacao
         */
         echo $this->Html->css(array(
-            'bootstrap.min.css',
-            'bootstrap-responsive.min.css',
+            'bootstrap.min',
+            'bootstrap-responsive.min',
             'plugins/jquery-ui/smoothness/jquery-ui',
             'plugins/jquery-ui/smoothness/jquery.ui.theme',
             // 'plugins/datatable/TableTools',
@@ -45,11 +45,17 @@
             // 'plugins/daterangepicker/daterangepicker',
             // 'plugins/plupload/jquery.plupload.queue',
             // 'plugins/select2/select2',
-            // 'plugins/icheck/all.css',
-            'style.css',
-            'themes.css',
-            'map.css',
+            // 'plugins/icheck/all',
+            // 'plugins/easy-pie-chart/jquery.easy-pie-chart',
+            'style',
+            'themes',
+            'map',
         ));
+
+        /**
+        * CSS adicionados on demand
+        */
+        echo $this->fetch('css-on-demand');
 
 
         /**
@@ -93,6 +99,9 @@
 
             // 'plugins/colorpicker/bootstrap-colorpicker',
 
+            // 'plugins/sparklines/jquery.sparklines.min',
+            // 'plugins/easy-pie-chart/jquery.easy-pie-chart.min',
+
             // 'plugins/flot/jquery.flot.min',
             // 'plugins/flot/jquery.flot.bar.order.min',
             // 'plugins/flot/jquery.flot.pie.min',
@@ -124,7 +133,7 @@
             // 'plugins/complexify/jquery.complexify-banlist.min',
             // 'plugins/complexify/jquery.complexify.min',
 
-            // 'eakroko.min',
+            'eakroko.min',
 
             'application.min',
 
@@ -134,11 +143,23 @@
             // 'plugins/validation/additional-methods.min',
             
             'check-all',
-            
-            '_main',
         ));
 
-        //Scripts dos plugins
+        /**
+        * Scripts adicionados on demand
+        */
+        echo $this->fetch('scrips-on-demand');
+
+        /**
+        * Scripts extras do FW
+        */
+        echo $this->Html->script(array(
+            '_main'
+        ));
+
+        /**
+        * Scripts dos plugins
+        */
         echo $this->Html->script(array(
             '/Main/js/main'
         ));
