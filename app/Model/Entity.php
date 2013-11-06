@@ -26,6 +26,11 @@ class Entity extends AppModelClean {
 	public $displayField = 'name';
 
 	/**
+	* Behavior
+	*/
+	public $actsAs = array('Containable');
+
+	/**
 	* Virtual fields
 	*
 	* @var string

@@ -37,6 +37,7 @@ class AppController extends Controller {
 	private $Model;
 	private $isRedirect = true;
 	public $saveType = 'save';
+	public $limit;
 	public $userLogged;
 
 	/**
@@ -79,6 +80,11 @@ class AppController extends Controller {
 	public function beforeFilter() {
 		//@override
 		parent::beforeFilter();
+
+		/**
+		 * Inicializa o atributo limit com os limit padrao do sistema setado no bootstrap
+		 */
+		$this->limit = LIMIT;
 
 		/**
 		 * Inicializa o atributo userLogged com os dados do usuario logado
@@ -162,7 +168,7 @@ class AppController extends Controller {
 	}
 
     /**
-     * Chamado depois controlador com as regras de negócio, mas antes da visão ser renderizada.
+    * Chamado depois controlador com as regras de negócio, mas antes da visão ser renderizada.
 	*
 	* @override Metodo Controller.beforeRender
 	* @return void
@@ -451,7 +457,7 @@ class AppController extends Controller {
 
 			//Configurações padrao da busca
 			$defaults = array(
-							'limit' => LIMIT
+							'limit' => $this->limit
 				);
 // debug($params);			
 			$params = array_merge($defaults, $params);
@@ -792,7 +798,7 @@ class AppController extends Controller {
 		            'conditions' => "{$habtm['with']}.{$habtm['associationForeignKey']} = {$habtm['className']}.id"
 		        )
 		    ),
-		    'limit' => LIMIT,
+		    'limit' => $this->limit,
 		    'order' => array(
 		        "{$habtm['className']}.{$this->Model->$habtm['className']->getFieldText()}" => 'asc'
 		    )
