@@ -20,8 +20,35 @@ class EntitiesController extends ProjectController {
 	*/
 	public $components = array('Import');
 
-	public function map(){
+    /**
+    * Chamado depois controlador com as regras de negócio, mas antes da visão ser renderizada.
+	*
+	* @override Metodo AppController.beforeRender
+	* @return void
+     */
+    public function beforeRender(){
+		//@override
+    	parent::beforeRender();
 
+		/**
+		* Carrega todos os estados cadastrados
+		*/
+		$states = $this->Entity->Address->State->find('list');
+
+		/**
+		* Carrega todos os estados cadastrados
+		*/
+		$uf = $this->Entity->Address->State->find('list', array('fields' => array('State.id', 'State.uf')));
+
+		/**
+		* Carrega todos as cidades cadastrados
+		*/
+		$cities = array();
+
+    	/**
+    	* Carrega as variaveis de ambiente
+    	*/
+    	$this->set(compact('states', 'uf', 'cities'));
 	}
 
 	/**
@@ -33,32 +60,76 @@ class EntitiesController extends ProjectController {
 	* @return void
 	*/
 	public function index($params=array()){
-		$params['joins'] = array(
-				array('table' => 'associations',
-			        'alias' => 'Association',
-			        'type' => 'INNER',
-			        'conditions' => array(
-			            'Association.entity_id = Entity.id',
-			        )
-			    )
-			);
+		$this->Entity->recursive = -1;
+		$this->limit = 10;
+
+		/**
+		* Carrega os parametros de busca comun a todos os produtos
+		*/
+		if(isset($this->params['named']['state_id']) && !empty($this->params['named']['state_id'])){
+			// $params['Address.state_id'] = $this->params['named']['state_id'];
+			// $params['contain'] = "Address.state_id = {$this->params['named']['state_id']}";
+		}
+		if(isset($this->params['named']['city_id']) && !empty($this->params['named']['city_id'])){
+			// $params['Address.city_id'] = $this->params['named']['city_id'];
+			// $params['conditions']['Address']['Address.city_id'] = $this->params['named']['city_id'];
+		}
+// $params['contain'] = "Address.city_id = {$this->params['named']['city_id']}";
+$params['Address']['Address.city_id2'] = $this->params['named']['city_id'];		
 		//@override
 		parent::index($params);
 
+// debug($this->viewVars['entity']);die;
+
 		/**
-		* Carrega as entidades econtradas
+		* Carrega todas as entidades econtradas
 		*/
-		$entities = isset($this->viewVars['entity'])?$this->viewVars['entity']:array();
-debug($entities);
+		$entities = $this->Entity->find('all', $params);
+debug($entities);die;
+		/**
+		* Conta quantas entidades foram encontradas
+		*/
+		$qt_entities = count($entities);
+
 		/**
 		* Redireciona para pagina de exibicao de dados da entidade caso só retorne um entidade
 		*/
-		if(count($params) && count($entities) == 1){
+		if(count($params) && $qt_entities == 1){
 			$this->redirect(array('action' => 'people', $entities[0]['Entity']['id']));
 		}
 
+		/**
+		* Monta as URLs contidas no mapa
+		*/
+		$url = $this->params['named'];
+		unset($url['page']);
+		$map = array();
+		foreach ($entities as $k => $v) {
+			foreach ($v['Address'] as $k2 => $v2) {
+				$url['state_id'] = $v2['state_id'];
+				$url['city_id'] = $v2['city_id'];
+				$map[$v2['state_id']][$v2['city_id']]['city'] = $v2['city'];
+				$map[$v2['state_id']][$v2['city_id']]['url'] = $url;
+				if(!isset($map[$v2['state_id']][$v2['city_id']]['qt'])){
+					$map[$v2['state_id']][$v2['city_id']]['qt'] = 1;
+				}else{
+					$map[$v2['state_id']][$v2['city_id']]['qt']++;
+				}
+			}
+		}	
 
+		/**
+		* Organiza as urls montadas
+		*/
+		foreach ($map as $k => $v) {
+			foreach ($v as $k2 => $v2) {
+				$map_found[$k]["{$v2['qt']}-{$k2}"] = $v2;
+			}
+			krsort($map_found[$k], SORT_NUMERIC);
+			$map_found[$k] = array_slice($map_found[$k], 0, 10);
+		}
 
+		$this->set(compact('map_found'));
 	}		
 
 	/**
@@ -69,16 +140,6 @@ debug($entities);
 	* @return void
 	*/
 	public function people($id=null){
-		/**
-		* Carrega todos os estados cadastrados
-		*/
-		$states = $this->Entity->Address->State->find('list');
-
-		/**
-		* Carrega todos as cidades cadastrados
-		*/
-		$cities = array();
-
     	/**
 		 * Se o campo "q" for igual a 1, simula o envio do form por get
 		 * redirecionando para http://[domain]/[controller]/[action]/seach:value1/namedN:valueN
@@ -158,11 +219,6 @@ debug($entities);
 				$this->Session->setFlash(__($msg) , FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
     		}
     	}
-
-    	/**
-    	* Carrega as variaveis de ambiente
-    	*/
-    	$this->set(compact('states', 'cities'));
 	}	
 
 	/**
@@ -312,7 +368,7 @@ debug($entities);
 					'Landline.tel_full' => $tel,
 					)
 				),
-			'order' => array('Association.year' => 'desc', 'Entity.id')
+			'order' => array('Association.year' => 'desc', 'Association.entity_id')
 			));
 
 		$params = array(

@@ -1,4 +1,15 @@
 $(document).ready(function(){
+	/**
+	* Anula todos os links que tenham # em seu href
+	*/
+	$('a[href=#]').click(function(){
+		return false;
+	});
+
+	/**
+	* Ativa todos os popovers que forem manuais
+	*/
+	$('a[rel=popover][data-trigger=manual]').popover('show');
 
 	/**
 	* Sistema de selecao de estados/cidades
