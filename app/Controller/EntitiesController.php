@@ -18,7 +18,7 @@ class EntitiesController extends ProjectController {
 	/**
 	* Declaracao dos componentes
 	*/
-	public $components = array('Import');
+	public $components = array('AppImport');
 
     /**
     * Chamado depois controlador com as regras de negócio, mas antes da visão ser renderizada.
