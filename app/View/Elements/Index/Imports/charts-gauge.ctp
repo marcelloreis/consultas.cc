@@ -17,8 +17,8 @@
 
         var options = {
           width: '100%', height: '100%',
-          redFrom: 90, redTo: 100,
-          yellowFrom:75, yellowTo: 90,
+          redFrom: 1700, redTo: 2000,
+          yellowFrom:1400, yellowTo: 1700,
           minorTicks: 5,
           max: 2000
         };
@@ -37,10 +37,10 @@
 
         var options = {
           width: '100%', height: '100%',
-          redFrom: 90, redTo: 100,
-          yellowFrom:75, yellowTo: 90,
+          redFrom: (1700*60), redTo: (2000*60),
+          yellowFrom:(1400*60), yellowTo: (1700*60),
           minorTicks: 5,
-          max: (2000*24)
+          max: (2000*60)
         };
 
         var chart = new google.visualization.Gauge(document.getElementById('chart_hour'));
