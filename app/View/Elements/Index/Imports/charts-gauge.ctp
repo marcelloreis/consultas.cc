@@ -11,7 +11,7 @@
         var data = google.visualization.arrayToDataTable([
           ['Label', 'Value']
 <?php foreach($imports['counters'] as $k => $v):?>
-          ,['<?php echo $k?>', <?php echo $this->AppUtils->num2qt($v['process_per_min'])?>]
+          ,['<?php echo $k?>', <?php echo $v['process_per_min']?>]
 <?php endforeach?>
         ]);
 
@@ -31,7 +31,7 @@
         var data = google.visualization.arrayToDataTable([
           ['Label', 'Value']
 <?php foreach($imports['counters'] as $k => $v):?>
-          ,['<?php echo $k?>', <?php echo $this->AppUtils->num2qt($v['process_per_hour'])?>]
+          ,['<?php echo $k?>', <?php echo $v['process_per_hour']?>]
 <?php endforeach?>
         ]);
 
