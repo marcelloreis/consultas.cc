@@ -139,11 +139,11 @@ echo $this->element('Index/Imports/charts-gauge')
 					<div class="row-fluid">
 						<ul class="tiles tiles-small">
 							<li class="green">
-								<span class="label label-info"><?php echo $v['success']?></span>
+								<span class="label label-info"><?php echo $this->AppUtils->num2qt($v['success'])?></span>
 								<a href="#"><span><i class="glyphicon-ok_2"></i></span><span class='name'><?php echo __('Success')?></span></a>
 							</li>
 							<li class="lightred">
-								<span class="label label-info"><?php echo $v['fails']?></span>
+								<span class="label label-info"><?php echo $this->AppUtils->num2qt($v['fails'])?></span>
 								<a href="#"><span><i class="icon-ban-circle"></i></span><span class='name'><?php echo __('Fails')?></span></a>
 							</li>
 						</ul>
