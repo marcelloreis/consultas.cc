@@ -60,42 +60,62 @@ class EntitiesController extends ProjectController {
 	* @return void
 	*/
 	public function index($params=array()){
-		$this->Entity->recursive = -1;
 		$this->limit = 10;
+
+		$params['contain'] = "Address";
 
 		/**
 		* Carrega os parametros de busca comun a todos os produtos
 		*/
+		$joins = array(
+			array('table' => 'associations',
+		        'alias' => 'Association',
+		        'type' => 'INNER',
+		        'conditions' => array(
+		            'Association.entity_id = Entity.id',
+		        )
+	    	),
+			array('table' => 'addresses',
+		        'alias' => 'Address',
+		        'type' => 'INNER',
+		        'conditions' => array(
+		            'Association.address_id = Address.id',
+		        )
+		    )
+		);
 		if(isset($this->params['named']['state_id']) && !empty($this->params['named']['state_id'])){
-			// $params['Address.state_id'] = $this->params['named']['state_id'];
-			// $params['contain'] = "Address.state_id = {$this->params['named']['state_id']}";
+			$params['joins'] = $joins;
+			$params['conditions']['Address.state_id'] = $this->params['named']['state_id'];
+			$params['group'] = array('Entity.id');
+			$params['fields'] = array('Entity.*', 'Address.*');
 		}
 		if(isset($this->params['named']['city_id']) && !empty($this->params['named']['city_id'])){
-			// $params['Address.city_id'] = $this->params['named']['city_id'];
-			// $params['conditions']['Address']['Address.city_id'] = $this->params['named']['city_id'];
+			$params['joins'] = $joins;
+			$params['conditions']['Address.city_id'] = $this->params['named']['city_id'];
+			$params['group'] = array('Entity.id');
+			$params['fields'] = array('Entity.*', 'Address.*');
 		}
-// $params['contain'] = "Address.city_id = {$this->params['named']['city_id']}";
-$params['Address']['Address.city_id2'] = $this->params['named']['city_id'];		
-		//@override
-		parent::index($params);
 
-// debug($this->viewVars['entity']);die;
+		
+
+
+		$this->view = 'index';
 
 		/**
 		* Carrega todas as entidades econtradas
 		*/
-		$entities = $this->Entity->find('all', $params);
-debug($entities);die;
+		$entity = $this->Entity->find('all', $params);
+
 		/**
 		* Conta quantas entidades foram encontradas
 		*/
-		$qt_entities = count($entities);
+		$qt_entities = count($entity);
 
 		/**
 		* Redireciona para pagina de exibicao de dados da entidade caso só retorne um entidade
 		*/
 		if(count($params) && $qt_entities == 1){
-			$this->redirect(array('action' => 'people', $entities[0]['Entity']['id']));
+			$this->redirect(array('action' => 'people', $entity[0]['Entity']['id']));
 		}
 
 		/**
@@ -104,7 +124,8 @@ debug($entities);die;
 		$url = $this->params['named'];
 		unset($url['page']);
 		$map = array();
-		foreach ($entities as $k => $v) {
+		foreach ($entity as $k => $v) {
+			$v['Address'] = isset($v['Address'][0])?$v['Address']:array($v['Address']);
 			foreach ($v['Address'] as $k2 => $v2) {
 				$url['state_id'] = $v2['state_id'];
 				$url['city_id'] = $v2['city_id'];
@@ -129,7 +150,7 @@ debug($entities);die;
 			$map_found[$k] = array_slice($map_found[$k], 0, 10);
 		}
 
-		$this->set(compact('map_found'));
+		$this->set(compact('map_found', 'entity'));
 	}		
 
 	/**
@@ -238,7 +259,7 @@ debug($entities);die;
 		/**
 		* Gera o hash do nome da entidade e
 		*/
-		$hash = $this->Import->getHash($this->Import->clearName($query['name']));
+		$hash = $this->AppImport->getHash($this->AppImport->clearName($query['name']));
 
 		/**
 		* Verifica se o nome pesquisado é unico, ou seja, se foi passado somente o nome sem o sobre nome
@@ -425,7 +446,7 @@ debug($entities);die;
 				/**
 				* Gera o hash do nome da rua
 				*/
-				$hash = $this->Import->getHash($query['street']);
+				$hash = $this->AppImport->getHash($query['street']);
 				$hasAddress = $this->Entity->Address->find('count', array('conditions' => array('h_all' => $hash['h_all'])));
 				if($hasAddress){
 					$cond['Address.h_all'] = $hash['h_all'];

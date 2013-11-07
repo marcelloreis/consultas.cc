@@ -22,3 +22,8 @@
 2013-11-05 23:33:43 Error: Fatal Error (1): Cannot use string offset as an array in [/var/www/nasza/app/Controller/EntitiesController.php, line 91]
 2013-11-05 23:55:16 Error: Fatal Error (4): syntax error, unexpected ',' in [/var/www/nasza/app/View/Elements/Index/Entities/map.ctp, line 14]
 2013-11-06 00:57:49 Error: Fatal Error (1): Call to a member function contain() on a non-object in [/var/www/nasza/app/Controller/EntitiesController.php, line 71]
+2013-11-07 19:12:43 Error: Fatal Error (1): Call to a member function getHash() on a non-object in [/var/www/nasza/app/Controller/EntitiesController.php, line 241]
+2013-11-07 19:51:00 Error: Fatal Error (1): Maximum execution time of 30 seconds exceeded in [/var/www/nasza/lib/Cake/Utility/Debugger.php, line 485]
+2013-11-07 19:51:53 Error: Fatal Error (1): Maximum execution time of 30 seconds exceeded in [/var/www/nasza/lib/Cake/Utility/Debugger.php, line 805]
+2013-11-07 19:52:38 Error: Fatal Error (1): Maximum execution time of 30 seconds exceeded in [/var/www/nasza/lib/Cake/Utility/Debugger.php, line 805]
+2013-11-07 19:59:59 Error: Fatal Error (1): Maximum execution time of 30 seconds exceeded in [/var/www/nasza/lib/Cake/Utility/Debugger.php, line 805]

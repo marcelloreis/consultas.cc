@@ -18,7 +18,7 @@ $columns['age'] = __('Age');
 $columns['action'] = __('Actions');
 
 
-echo $this->Html->tag('thead', $this->AppGrid->tr($columns));
+echo $this->Html->tag('thead', $this->AppGrid->tr($columns, array('sort' => false)));
 /**
 * Monta o body
 */
@@ -49,8 +49,3 @@ if(count($$map)){
 * Fecha a montagem da grid
 */                
 echo $this->AppGrid->end();
-
-/**
-* Adiciona o rodapé da grid
-*/
-echo $this->element('Index/footer');
