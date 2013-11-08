@@ -16,6 +16,7 @@ $columns['name'] = __('Name');
 $columns['mother'] = __('Mother');
 $columns['age'] = __('Age');
 $columns['action'] = __('Actions');
+$columns['action_width'] = '10';
 
 
 echo $this->Html->tag('thead', $this->AppGrid->tr($columns, array('sort' => false)));

@@ -84,19 +84,21 @@ class EntitiesController extends ProjectController {
 		    )
 		);
 		if(isset($this->params['named']['state_id']) && !empty($this->params['named']['state_id'])){
+			unset($params['contain']);
 			$params['joins'] = $joins;
 			$params['conditions']['Address.state_id'] = $this->params['named']['state_id'];
 			$params['group'] = array('Entity.id');
 			$params['fields'] = array('Entity.*', 'Address.*');
 		}
 		if(isset($this->params['named']['city_id']) && !empty($this->params['named']['city_id'])){
+			unset($params['contain']);
 			$params['joins'] = $joins;
 			$params['conditions']['Address.city_id'] = $this->params['named']['city_id'];
 			$params['group'] = array('Entity.id');
 			$params['fields'] = array('Entity.*', 'Address.*');
 		}
 
-		
+
 
 
 		$this->view = 'index';
@@ -124,19 +126,23 @@ class EntitiesController extends ProjectController {
 		$url = $this->params['named'];
 		unset($url['page']);
 		$map = array();
+		$group_by = array();
 		foreach ($entity as $k => $v) {
-			$v['Address'] = isset($v['Address'][0])?$v['Address']:array($v['Address']);
-			foreach ($v['Address'] as $k2 => $v2) {
-				$url['state_id'] = $v2['state_id'];
-				$url['city_id'] = $v2['city_id'];
-				$map[$v2['state_id']][$v2['city_id']]['city'] = $v2['city'];
-				$map[$v2['state_id']][$v2['city_id']]['url'] = $url;
-				if(!isset($map[$v2['state_id']][$v2['city_id']]['qt'])){
-					$map[$v2['state_id']][$v2['city_id']]['qt'] = 1;
-				}else{
-					$map[$v2['state_id']][$v2['city_id']]['qt']++;
+				$v['Address'] = isset($v['Address'][0])?$v['Address']:array($v['Address']);
+				foreach ($v['Address'] as $k2 => $v2) {
+					if(!in_array($v['Entity']['id'], $group_by)){
+						$group_by[] = $v['Entity']['id'];
+						$url['state_id'] = $v2['state_id'];
+						$url['city_id'] = $v2['city_id'];
+						$map[$v2['state_id']][$v2['city_id']]['city'] = $v2['city'];
+						$map[$v2['state_id']][$v2['city_id']]['url'] = $url;
+						if(!isset($map[$v2['state_id']][$v2['city_id']]['qt'])){
+							$map[$v2['state_id']][$v2['city_id']]['qt'] = 1;
+						}else{
+							$map[$v2['state_id']][$v2['city_id']]['qt']++;
+						}
+					}
 				}
-			}
 		}	
 
 		/**
@@ -791,9 +797,7 @@ class EntitiesController extends ProjectController {
 							'Entity.h_mother >' => 0,
 							'Entity.h_all !=' => $people['Entity']['h_mother'],
 							'Entity.h_mother !=' => $people['Entity']['h_mother'],
-							'Address.zipcode_id' => $v['Address']['zipcode_id'],
-							'Address.h_complement' => $v['Address']['h_complement'],
-							'Address.number' => $v['Address']['number'],
+							'Address.id' => $v['Address']['id'],
 							),
 						'limit' => 1
 						));

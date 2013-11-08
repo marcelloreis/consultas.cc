@@ -64,7 +64,7 @@
                                 <div class="control-group">
                                     <label class="control-label"><?php echo __('CPF')?></label>
                                     <div class="controls">
-                                        <?php echo !empty($family['Family']['spouse']['Entity']['doc'])?$THIS->AppUtils->cpf($family['Family']['spouse']['Entity']['doc']):'<small>' . __('Not Found') . '</small>';?>
+                                        <?php echo !empty($family['Family']['spouse']['Entity']['doc'])?$this->AppUtils->cpf($family['Family']['spouse']['Entity']['doc']):'<small>' . __('Not Found') . '</small>';?>
                                     </div>
                                 </div>
                             </div>
