@@ -160,28 +160,34 @@ class ImportsController extends AppController {
 	}
 
 	private function processPerTime(){
-		$elapsed = $this->elapsedTimes();
-		
+		$startTime = $this->counters['entities']['start_time'];
+		$now = time();
+	    $elapsed = $now - $startTime;
+	    $sec = floor($elapsed);
+	    $min = floor($elapsed / 60);
+	    $hour = floor($elapsed / 3600);
+	    $day = floor($elapsed / 86400);
+
 		foreach ($this->counters as $k => $v) {
 			$processed = ($v['success'] + $v['fails']);
-			if($elapsed['sec'] != '00'){
-				$this->counters[$k]['process_per_sec'] = floor($processed / $elapsed['sec']);
-				if($elapsed['min'] == '00'){
+			if($sec != '00'){
+				$this->counters[$k]['process_per_sec'] = floor($processed / $sec);
+				if(!$min){
 					$this->counters[$k]['process_per_min'] = $processed;
 				}else{
-					$this->counters[$k]['process_per_min'] = floor($processed / $elapsed['min']);	
+					$this->counters[$k]['process_per_min'] = floor($processed / $min);	
 				}
 
-				if($elapsed['hour'] == '00'){
+				if(!$hour){
 					$this->counters[$k]['process_per_hour'] = $processed;
 				}else{
-					$this->counters[$k]['process_per_hour'] = floor($processed / $elapsed['hour']);	
+					$this->counters[$k]['process_per_hour'] = floor($processed / $hour);	
 				}
 				
-				if($elapsed['day'] == '00'){
+				if(!$day){
 					$this->counters[$k]['process_per_day'] = $processed;
 				}else{
-					$this->counters[$k]['process_per_day'] = floor($processed / $elapsed['day']);	
+					$this->counters[$k]['process_per_day'] = floor($processed / $day);	
 				}
 				
 			}
