@@ -64,7 +64,77 @@ class ImportsController extends AppController {
 	}	
 
 	/**
-	* Método run
+	* Método reload
+	* Este método recarrega a importacao, migrando o que ja foi importado e zerando as tabelas de importacao
+	*
+	* @return void
+	*/
+	public function reload(){
+		/**
+		* Encerra a importacao
+		*/
+		file_put_contents(dirname(dirname(dirname(__FILE__))) . '/_db/settings/on_off', '0');
+
+		/**
+		* Zera as tabelas auxiliares
+		*/
+		// $this->Import->query('update naszaco_pessoas._counter set success = null, fails = null, extracted = null, start_time = null');
+		// $this->Import->query('update naszaco_pessoas._timing set time = null');
+		// $this->Import->query('truncate table naszaco_pessoas._logs');
+		
+		// /**
+		// * Migra todos os dados importados ate o momento
+		// */
+		// $this->Import->query('INSERT INTO naszaco_pessoas.entities SELECT * FROM naszaco_pessoas.i_entities');
+		// $this->Import->query('INSERT INTO naszaco_pessoas.landlines SELECT * FROM naszaco_pessoas.i_landlines');
+		// $this->Import->query('INSERT INTO naszaco_pessoas.mobiles SELECT * FROM naszaco_pessoas.i_mobiles');
+		// $this->Import->query('INSERT INTO naszaco_pessoas.zipcodes SELECT * FROM naszaco_pessoas.i_zipcodes');
+		// $this->Import->query('INSERT INTO naszaco_pessoas.addresses SELECT * FROM naszaco_pessoas.i_addresses');
+		// $this->Import->query('INSERT INTO naszaco_pessoas.associations SELECT * FROM naszaco_pessoas.i_associations');
+
+		// /**
+		// * Zera as tableas de importacao
+		// */
+		// $this->Import->query('TRUNCATE TABLE naszaco_pessoas.i_entities');
+		// $this->Import->query('TRUNCATE TABLE naszaco_pessoas.i_landlines');
+		// $this->Import->query('TRUNCATE TABLE naszaco_pessoas.i_mobiles');
+		// $this->Import->query('TRUNCATE TABLE naszaco_pessoas.i_zipcodes');
+		// $this->Import->query('TRUNCATE TABLE naszaco_pessoas.i_addresses');
+		// $this->Import->query('TRUNCATE TABLE naszaco_pessoas.i_associations');
+
+		// /**
+		// * Sincroniza o auto increment das tabelas de importacao e de producao
+		// */
+		// $map = $this->Import->query("SELECT AUTO_INCREMENT FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'naszaco_pessoas' AND TABLE_NAME = 'entities'");
+		// $this->Import->query("ALTER TABLE naszaco_pessoas.i_entities AUTO_INCREMENT = {$map[0]['TABLES']['AUTO_INCREMENT']}");
+
+		// $map = $this->Import->query("SELECT AUTO_INCREMENT FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'naszaco_pessoas' AND TABLE_NAME = 'associations'");
+		// $this->Import->query("ALTER TABLE naszaco_pessoas.i_associations AUTO_INCREMENT = {$map[0]['TABLES']['AUTO_INCREMENT']}");
+
+		// $map = $this->Import->query("SELECT AUTO_INCREMENT FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'naszaco_pessoas' AND TABLE_NAME = 'addresses'");
+		// $this->Import->query("ALTER TABLE naszaco_pessoas.i_addresses AUTO_INCREMENT = {$map[0]['TABLES']['AUTO_INCREMENT']}");
+
+		// $map = $this->Import->query("SELECT AUTO_INCREMENT FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'naszaco_pessoas' AND TABLE_NAME = 'zipcodes'");
+		// $this->Import->query("ALTER TABLE naszaco_pessoas.i_zipcodes AUTO_INCREMENT = {$map[0]['TABLES']['AUTO_INCREMENT']}");
+
+		// $map = $this->Import->query("SELECT AUTO_INCREMENT FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'naszaco_pessoas' AND TABLE_NAME = 'landlines'");
+		// $this->Import->query("ALTER TABLE naszaco_pessoas.i_landlines AUTO_INCREMENT = {$map[0]['TABLES']['AUTO_INCREMENT']}");
+
+		// $map = $this->Import->query("SELECT AUTO_INCREMENT FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'naszaco_pessoas' AND TABLE_NAME = 'mobiles'");
+		// $this->Import->query("ALTER TABLE naszaco_pessoas.i_mobiles AUTO_INCREMENT = {$map[0]['TABLES']['AUTO_INCREMENT']}");
+
+		// /**
+		// * Reinicia a importacao
+		// */
+		// file_put_contents(dirname(dirname(dirname(__FILE__))) . '/_db/settings/on_off', '1');
+
+		// echo shell_exec('cd /var/www/dados');
+		// echo shell_exec('php app/exec.php /landlines_import/run_block/es');
+
+	}
+
+	/**
+	* Método statistics
 	* Este método carrega as estatisticas da importacao vigente
 	*
 	* @return void

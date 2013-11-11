@@ -19,6 +19,28 @@ $this->end();
 echo $this->element('Index/Imports/charts-gauge')
 ?>
 
+<!-- <div class="row-fluid">
+	<div class="span12">
+		<div class="box box-color box-bordered">
+			<div class="box-title">
+				<h3>
+					<i class="glyphicon-stopwatch"></i>
+					<?php echo __('Tools')?>
+				</h3>
+			</div>
+			<div class="box-content">
+				<div class="row-fluid">
+					<div class="span3">
+						<p>
+							<?php echo $this->Html->link('Reload Import', array('action' => 'reload'), array('class' => 'btn-block btn btn-large'))?>
+						</p>
+					</div>					
+				</div>
+			</div>
+		</div>					
+	</div>
+</div>
+ -->
 
 
 <div class="row-fluid">
