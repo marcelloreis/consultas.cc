@@ -20,6 +20,7 @@ class AppImportComponent extends Component {
 	private $Iaddress;
 	private $ModelCounter;
 	private $Timing;
+	private $timing_avg;
 	private $counter;
 	private $time_start;
 	private $time_end;
@@ -1161,7 +1162,6 @@ class AppImportComponent extends Component {
 		if(count($values)){
 			$this->ModelCounter->updateAll($values, array('table' => $table, 'active' => '1'));
 		}
-
 	}
 
 	/**
@@ -1379,7 +1379,16 @@ class AppImportComponent extends Component {
 	public function timing_end(){
 		$this->time_end = microtime(true);
 		$time = $this->time_end - $this->time_start;
-		$this->Timing->updateAll(array('Timing.time' => $time), array('Timing.id' => $this->time_id));
+		if(!isset($this->timing_avg[$this->time_id])){
+			$this->timing_avg[$this->time_id][] = $time;
+		}else{
+			array_unshift($this->timing_avg[$this->time_id], $time);
+		}
+		$this->timing_avg[$this->time_id] = array_slice($this->timing_avg[$this->time_id], 0, 1000);
+
+		$avg = array_sum($this->timing_avg[$this->time_id])/count($this->timing_avg[$this->time_id]);
+
+		$this->Timing->updateAll(array('Timing.time' => $avg), array('Timing.id' => $this->time_id));
 	}
 
 }

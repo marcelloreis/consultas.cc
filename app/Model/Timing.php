@@ -1,5 +1,5 @@
 <?php
-App::uses('AppModel', 'Model');
+App::uses('AppModelClean', 'Model');
 /**
  * Timing Model
  *
@@ -14,6 +14,6 @@ App::uses('AppModel', 'Model');
  *
  * Timing Model
  */
-class Timing extends AppModel {
+class Timing extends AppModelClean {
 	public $useTable = '_timing';
 }

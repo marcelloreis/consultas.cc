@@ -20,6 +20,7 @@ define('TP_INVALID', 4);
 define('LIMIT_HASH', 5);
 define('LIMIT_FAMILY', 6);
 define('LIMIT_NEIGHBORS', 6);
+define('LIMIT_BUILD_SOURCE', 1000);
 define('PROGRESSBAR_INTERVAL', 1);
 
 define('THEME', 'theme-satblue');
@@ -69,3 +70,7 @@ define('TUNING_ADDRESS_IMPORT', 11);
 define('TUNING_LOAD_ALL_DATA', 12);
 //Executa a importacao dos dados coletados ate o momento
 define('TUNING_IMPORT_ALL_DATA', 13);
+//Carrega o arquivo com os dados serializados que serao importados
+define('TUNING_FILE_LOAD', 14);
+//Serializa o array
+define('TUNING_SERIALIZE', 15);

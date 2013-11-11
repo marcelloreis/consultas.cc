@@ -60,48 +60,17 @@ class EntitiesController extends ProjectController {
 	* @return void
 	*/
 	public function index($params=array()){
-		$this->limit = 10;
-
 		$params['contain'] = "Address";
+		$params['limit'] = 50;
+
+		$this->view = 'index';
 
 		/**
 		* Carrega os parametros de busca comun a todos os produtos
 		*/
-		$joins = array(
-			array('table' => 'associations',
-		        'alias' => 'Association',
-		        'type' => 'INNER',
-		        'conditions' => array(
-		            'Association.entity_id = Entity.id',
-		        )
-	    	),
-			array('table' => 'addresses',
-		        'alias' => 'Address',
-		        'type' => 'INNER',
-		        'conditions' => array(
-		            'Association.address_id = Address.id',
-		        )
-		    )
-		);
-		if(isset($this->params['named']['state_id']) && !empty($this->params['named']['state_id'])){
-			unset($params['contain']);
-			$params['joins'] = $joins;
-			$params['conditions']['Address.state_id'] = $this->params['named']['state_id'];
-			$params['group'] = array('Entity.id');
-			$params['fields'] = array('Entity.*', 'Address.*');
+		if(isset($this->params['named']['state_id']) || isset($this->params['named']['city_id'])){
+			$this->search_by_state_city($params);
 		}
-		if(isset($this->params['named']['city_id']) && !empty($this->params['named']['city_id'])){
-			unset($params['contain']);
-			$params['joins'] = $joins;
-			$params['conditions']['Address.city_id'] = $this->params['named']['city_id'];
-			$params['group'] = array('Entity.id');
-			$params['fields'] = array('Entity.*', 'Address.*');
-		}
-
-
-
-
-		$this->view = 'index';
 
 		/**
 		* Carrega todas as entidades econtradas
@@ -123,6 +92,56 @@ class EntitiesController extends ProjectController {
 		/**
 		* Monta as URLs contidas no mapa
 		*/
+		$map_found = $this->map_found($entity);
+
+		/**
+		* Carrega as variaveis de ambiente
+		*/
+		$this->set(compact('map_found', 'entity'));
+	}	
+
+	/**
+	* Método search_by_state_city
+	* Este método retorna um array com a os parametros de busca segmentados pela cidade/estado que foram solicitados
+	*
+	* @return array
+	*/
+	private function search_by_state_city(&$params){
+		unset($params['contain']);
+		$params['group'] = array('Entity.id');
+		$params['fields'] = array('Entity.*', 'Address.*');
+		$params['joins'] = array(
+			array('table' => 'associations',
+		        'alias' => 'Association',
+		        'type' => 'INNER',
+		        'conditions' => array(
+		            'Association.entity_id = Entity.id',
+		        )
+	    	),
+			array('table' => 'addresses',
+		        'alias' => 'Address',
+		        'type' => 'INNER',
+		        'conditions' => array(
+		            'Association.address_id = Address.id',
+		        )
+		    )
+		);
+		if(isset($this->params['named']['state_id']) && !empty($this->params['named']['state_id'])){
+			$params['conditions']['Address.state_id'] = $this->params['named']['state_id'];
+		}
+		if(isset($this->params['named']['city_id']) && !empty($this->params['named']['city_id'])){
+			$params['conditions']['Address.city_id'] = $this->params['named']['city_id'];
+		}
+	}	
+
+	/**
+	* Método map_found
+	* Este método retorna um array com a url montada de cada entidade encontrada a partir da pesquisa feita
+	*
+	* @param array $entity (entidades encontradas)
+	* @return array
+	*/
+	private function map_found($entity){
 		$url = $this->params['named'];
 		unset($url['page']);
 		$map = array();
@@ -154,10 +173,10 @@ class EntitiesController extends ProjectController {
 			}
 			krsort($map_found[$k], SORT_NUMERIC);
 			$map_found[$k] = array_slice($map_found[$k], 0, 10);
-		}
+		}	
 
-		$this->set(compact('map_found', 'entity'));
-	}		
+		return $map_found;
+	}	
 
 	/**
 	* Método people
@@ -889,6 +908,7 @@ class EntitiesController extends ProjectController {
 				if($limit_neighbors > 0){
 					$cond = array(
 							'Address.id !=' => $v['Address']['id'],
+							'Association.entity_id !=' => $people['Entity']['id'],
 							'Address.id NOT' => $neighbors_found['same_address'],
 							'Address.id NOT' => $neighbors_found['same_floor'],
 							'Address.zipcode_id' => $v['Address']['zipcode_id'],
@@ -1001,7 +1021,7 @@ class EntitiesController extends ProjectController {
 			}
 
 	        foreach ($this->params['named'] as $k => $v) {
-	        	if(!preg_match('/(page|search|doc|name|ddd|landline|zipcode|number_ini|number_end|street|state_id|city_id)/si', $k)){
+	        	if(preg_match('/(search_by)/si', $k)){
 	            	$redirect[$k] = $v;
 	        	}
 	        }

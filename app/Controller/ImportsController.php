@@ -24,16 +24,9 @@ App::uses('AppController', 'Controller');
 class ImportsController extends AppController {
 	public $uses = array(
 		"Import", 
-		"NattFixoTelefone", 
-		"NattFixoPessoa", 
-		"NattFixoEndereco",
-		"Ilandline",
-		"Ientity",
-		"Izipcode",
-		"Iaddress",
-		"Iassociation",
 		"Settings",
-		"Counter"
+		"Counter",
+		"Timing",
 		);
 
 	public $components = array('AppImport');
@@ -108,6 +101,11 @@ class ImportsController extends AppController {
 		$this->processPerTime();
 
 		/**
+		* Carrega o timing da importacao
+		*/
+		$imports['timing'] = $this->Timing->find('all');
+
+		/**
 		* Carrega as tableas que estao sendo alimentadas
 		*/
 		$imports['counters'] = $this->counters;
@@ -122,6 +120,7 @@ class ImportsController extends AppController {
 		$startTime = $this->counters['entities']['start_time'];
 		$now = time();
 	    $elapsed = $now - $startTime;
+
 		$day = str_pad(floor($elapsed/86400), 2, '0', STR_PAD_LEFT);
 		$hour = str_pad(floor(($elapsed/3600) - ($day*24)), 2, '0', STR_PAD_LEFT);
 		$min = str_pad(floor(($elapsed/60) - (($day*1440) + ($hour*60))), 2, '0', STR_PAD_LEFT);
@@ -171,28 +170,27 @@ class ImportsController extends AppController {
 		foreach ($this->counters as $k => $v) {
 			$processed = ($v['success'] + $v['fails']);
 			if($sec != '00'){
-				$this->counters[$k]['process_per_sec'] = floor($processed / $sec);
+				$this->counters[$k]['process_per_sec'] = round($processed / $sec);
 				if(!$min){
 					$this->counters[$k]['process_per_min'] = $processed;
 				}else{
-					$this->counters[$k]['process_per_min'] = floor($processed / $min);	
+					$this->counters[$k]['process_per_min'] = round($processed / $min);	
 				}
 
 				if(!$hour){
 					$this->counters[$k]['process_per_hour'] = $processed;
 				}else{
-					$this->counters[$k]['process_per_hour'] = floor($processed / $hour);	
+					$this->counters[$k]['process_per_hour'] = round($processed / $hour);	
 				}
 				
 				if(!$day){
 					$this->counters[$k]['process_per_day'] = $processed;
 				}else{
-					$this->counters[$k]['process_per_day'] = floor($processed / $day);	
+					$this->counters[$k]['process_per_day'] = round($processed / $day);	
 				}
 				
 			}
 		}
-
 	}
 
 	private function getElapsed(){

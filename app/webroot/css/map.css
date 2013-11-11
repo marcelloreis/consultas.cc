@@ -3,7 +3,7 @@ ul#map blockquote {
     padding: 0 0 0 5px;
 }
 
-ul#map {display: block; margin:10px 0px 0px -50px; padding: 0; background: url('../img/mapa.png') no-repeat;width: 570px; height: 585px;}/* 570px */
+ul#map {display: block; margin:10px 0px 0px 0px; padding: 0; background: url('../img/mapa.png') no-repeat;width: 570px; height: 585px;}/* 570px */
 ul#map li {display: block; padding: 0; position: absolute;}
 li#crs {margin-top: 485px; margin-left: 237px;}
 li#csc {margin-top: 467px; margin-left: 292px;}

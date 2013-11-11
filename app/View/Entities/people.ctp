@@ -1,4 +1,14 @@
 <?php 
+$this->start('title-view');
+echo $this->element('Components/People/title-view');
+$this->end();
+
+$this->start('sidebar');
+echo $this->element('Components/People/sidebar');
+$this->end();
+?>
+
+<?php 
 /**
 * Painel de pesquisas
 */

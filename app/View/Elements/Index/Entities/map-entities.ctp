@@ -16,7 +16,6 @@ $columns['name'] = __('Name');
 $columns['mother'] = __('Mother');
 $columns['age'] = __('Age');
 $columns['action'] = __('Actions');
-$columns['action_width'] = '10';
 
 
 echo $this->Html->tag('thead', $this->AppGrid->tr($columns, array('sort' => false)));
@@ -33,7 +32,6 @@ if(count($$map)){
         */
         $v[$modelClass]['doc_width'] = '50';
         $v[$modelClass]['age_width'] = '10';
-        $v[$modelClass]['action_width'] = '10';
     	
         $v[$modelClass]['action'] = $this->element('Index/Entities/action', array('id' => $v[$modelClass]['id']));
         $v[$modelClass]['id'] = $this->AppForm->input("{$modelClass}.id.{$k}", array('type' => 'checkbox', 'template' => 'form-input-clean', 'value' => $v[$modelClass]['id'], 'placeholder' => $v[$modelClass][$fieldText]));

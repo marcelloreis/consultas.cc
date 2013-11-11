@@ -23,6 +23,7 @@ class NattFixoTelefone extends AppModelClean {
 	public $primaryKey = 'CPF_CNPJ';
 	public $displayField = 'NOME_RAZAO';
 	public $order = 'NattFixoTelefone.CPF_CNPJ';
+    public $recursive = -1;
 
    public $belongsTo = array(
         'NattFixoEndereco' => array(

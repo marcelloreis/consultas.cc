@@ -1,4 +1,11 @@
 <?php 
+$this->start('title-view');
+echo $this->element('Components/People/title-view');
+$this->end();
+
+$this->start('sidebar');
+echo $this->element('Components/People/sidebar');
+$this->end();
 /**
 * Adiciona o painel de funcoes da grid
 */

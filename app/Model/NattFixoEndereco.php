@@ -18,4 +18,5 @@ class NattFixoEndereco extends AppModelClean {
 	public $useTable = false;
 	public $useDbConfig = 'natt';
 	public $primaryKey = 'COD_END';
+	public $recursive = -1;
 }

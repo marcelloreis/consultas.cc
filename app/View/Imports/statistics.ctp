@@ -92,7 +92,7 @@ echo $this->element('Index/Imports/charts-gauge')
 			<div class="box-title">
 				<h3>
 					<i class="glyphicon-stopwatch"></i>
-					<?php echo __('Processed Per Minuts')?>
+					<?php echo __('Process per Minuts')?>
 				</h3>
 			</div>
 			<div class="box-content">
@@ -110,12 +110,48 @@ echo $this->element('Index/Imports/charts-gauge')
 			<div class="box-title">
 				<h3>
 					<i class="glyphicon-stopwatch"></i>
-					<?php echo __('Processed Per Hour')?>
+					<?php echo __('Process per Hour')?>
 				</h3>
 			</div>
 			<div class="box-content">
 				<div class="row-fluid">
 					<div id='chart_hour'></div>
+				</div>
+			</div>
+		</div>					
+	</div>
+</div>
+
+<div class="row-fluid">
+	<div class="span12">
+		<div class="box box-color box-bordered">
+			<div class="box-title">
+				<h3>
+					<i class="glyphicon-stopwatch"></i>
+					<?php echo __('Process per Day')?>
+				</h3>
+			</div>
+			<div class="box-content">
+				<div class="row-fluid">
+					<div id='chart_day'></div>
+				</div>
+			</div>
+		</div>					
+	</div>
+</div>
+
+<div class="row-fluid">
+	<div class="span12">
+		<div class="box box-color box-bordered">
+			<div class="box-title">
+				<h3>
+					<i class="glyphicon-stopwatch"></i>
+					<?php echo __('Timing')?>
+				</h3>
+			</div>
+			<div class="box-content">
+				<div class="row-fluid">
+					<div id="chart_timing" style="width: 100%; height: 500px;"></div>
 				</div>
 			</div>
 		</div>					
