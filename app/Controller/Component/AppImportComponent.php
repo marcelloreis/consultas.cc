@@ -1217,7 +1217,6 @@ class AppImportComponent extends Component {
 		if(isset($this->counter[$table]['fails'])){
 			$values['fails'] = $this->counter[$table]['fails'];
 		}
-
 		if(count($values)){
 			$this->ModelCounter->updateAll($values, array('table' => $table, 'active' => '1'));
 		}
@@ -1228,17 +1227,7 @@ class AppImportComponent extends Component {
 	*/
 	public function success($table){
 		if(!isset($this->counter[$table]['success'])){
-			$map = $this->ModelCounter->find('first', array(
-				'recursive' => '-1',
-				'conditions' => array('table' => $table, 'active' => '1'),
-				'limit' => '1'
-				));
-
-			if(isset($map['Counter']['success']) && $map['Counter']['success'] > 0){
-				$this->counter[$table]['success'] = $map['Counter']['success'];
-			}else{
-				$this->counter[$table]['success'] = 1;
-			}
+			$this->counter[$table]['success'] = 1;
 		}else{
 			$this->counter[$table]['success']++;
 		}
@@ -1249,17 +1238,7 @@ class AppImportComponent extends Component {
 	*/
 	public function fail($table){
 		if(!isset($this->counter[$table]['fails'])){
-			$map = $this->ModelCounter->find('first', array(
-				'recursive' => '-1',
-				'conditions' => array('table' => $table, 'active' => '1'),
-				'limit' => '1'
-				));
-
-			if(isset($map['Counter']['fails']) && $map['Counter']['fails'] > 0){
-				$this->counter[$table]['fails'] = $map['Counter']['fails'];
-			}else{
-				$this->counter[$table]['fails'] = 1;
-			}
+			$this->counter[$table]['fails'] = 1;
 		}else{
 			$this->counter[$table]['fails']++;
 		}
