@@ -1,53 +1,25 @@
 $(document).ready(function(){
-	if($("#flot-audience").length > 0){
-		var data = [[1262304000000, 1300], [1264982400000, 2200], [1267401600000, 3600], [1270080000000, 5200], [1272672000000, 4500], [1275350400000, 3900], [1277942400000, 3600], [1280620800000, 4600], [1283299200000, 5300], [1285891200000, 7100], [1288569600000, 7800], [1291241700000, 8195]];
+    /**
+	* Configuracao das mascaras dos formularios
+	*/
+    // $('.msk-money').maskMoney({decimal:",", thousands:"."});
+    $('.msk-phone').mask('9999-9999');
+    $('.msk-phone-ddd').mask('(99) 9999-9999');
+    $('.msk-zipcode').mask('99999-999');
+    $('.msk-cpf').mask('999.999.999-99');
+    $('.msk-cnpj').mask('99.999.999/9999-99');
+    $('.msk-card').mask('9999 9999 9999 9999');
+    $('.msk-hour').mask('99:99:99');
+    $('.msk-2Digits').mask('99');
+    $('.msk-4Digits').mask('9999');
+    $('.msk-int').keyup(function(){
+            $(this).val($(this).val().replace(/[^0-9]/gi, ''));
+    })
+    $('.msk-alpha').keyup(function(){
+            $(this).val($(this).val().replace(/[0-9]/gi, ''));
+    })
 
-		$.plot($("#flot-audience"), [{ 
-			label: "Visits", 
-			data: data,
-			color: "#3a8ce5"
-		}], {
-			xaxis: {
-				min: (new Date(2009, 12, 1)).getTime(),
-				max: (new Date(2010, 11, 2)).getTime(),
-				mode: "time",
-				tickSize: [1, "month"],
-				monthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-			},
-			series: {
-				lines: {
-					show: true, 
-					fill: true
-				},
-				points: {
-					show: true,
-				}
-			},
-			grid: { hoverable: true, clickable: true },
-			legend: {
-				show: false
-			}
-		});
-
-		$("#flot-audience").bind("plothover", function (event, pos, item) {
-			if (item) {
-				if (previousPoint != item.dataIndex) {
-					previousPoint = item.dataIndex;
-
-					$("#tooltip").remove();
-					var y = item.datapoint[1].toFixed();
-
-					showTooltip(item.pageX, item.pageY,
-					            item.series.label + " = " + y);
-				}
-			}
-			else {
-				$("#tooltip").remove();
-				previousPoint = null;            
-			}
-		});
-
-	}
+	$('.map-tooltip').tooltip('hide');
 	
 	/**
 	* Anula todos os links que tenham # em seu href

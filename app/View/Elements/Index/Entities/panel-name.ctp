@@ -12,14 +12,11 @@
                     <div class="control-group">
                         <label class="control-label" for="textfield"><?php echo __('Type Name')?></label>
                         <div class="controls">
-                            <div class="input-append input-prepend">
-                                <span class="add-on"><i class="icon-search"></i></span>
-                                <?php $name = isset($this->params['named']['name']) && !empty($this->params['named']['name'])?$this->params['named']['name']:''?>
-                                <?php echo $this->AppForm->input('name', array('template' => 'form-input-clean', 'value' => $name, 'placeholder' => __('type name')))?>
-                                <button type="submit" class="btn"><?php echo __('Search')?></button>
-                            </div>
+                            <?php $name = isset($this->params['named']['name']) && !empty($this->params['named']['name'])?$this->params['named']['name']:''?>
+                            <?php echo $this->AppForm->input('name', array('template' => 'form-input-clean', 'class' => 'input-block-level msk-alpha', 'value' => $name, 'placeholder' => __('type name')))?>
                         </div>
                     </div>
+                    <?php echo $this->AppForm->btn('Search', array('template' => '/Entities/form-input-btn'));?>
                 <?php echo $this->AppForm->end()?>
             </div>
         </div>

@@ -143,6 +143,8 @@
             // 'plugins/validation/additional-methods.min',
             
             'check-all',
+            
+            'plugins/maskedinput/jquery.maskedinput.min',             
         ));
 
         /**

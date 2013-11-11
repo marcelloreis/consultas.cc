@@ -18,6 +18,7 @@ define('TP_AMBIGUO', 3);
 define('TP_INVALID', 4);
 
 define('LIMIT_HASH', 5);
+define('LIMIT_SEARCH', 50);
 define('LIMIT_FAMILY', 6);
 define('LIMIT_NEIGHBORS', 6);
 define('LIMIT_BUILD_SOURCE', 1000);

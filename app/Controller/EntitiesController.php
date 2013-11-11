@@ -61,7 +61,7 @@ class EntitiesController extends ProjectController {
 	*/
 	public function index($params=array()){
 		$params['contain'] = "Address";
-		$params['limit'] = 50;
+		$params['limit'] = LIMIT_SEARCH;
 
 		$this->view = 'index';
 
@@ -81,6 +81,11 @@ class EntitiesController extends ProjectController {
 		* Conta quantas entidades foram encontradas
 		*/
 		$qt_entities = count($entity);
+
+		if($qt_entities > LIMIT_SEARCH){
+			$this->Session->setFlash(__('Found more than ' . LIMIT_SEARCH . ' records with the information provided, please detail your search.') , FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
+			$this->redirect(array('action' => 'people', 'search_by' => $this->params['named']['search_by']));
+		}
 
 		/**
 		* Redireciona para pagina de exibicao de dados da entidade caso só retorne um entidade
@@ -147,35 +152,22 @@ class EntitiesController extends ProjectController {
 		$map = array();
 		$group_by = array();
 		foreach ($entity as $k => $v) {
-				$v['Address'] = isset($v['Address'][0])?$v['Address']:array($v['Address']);
-				foreach ($v['Address'] as $k2 => $v2) {
-					if(!in_array($v['Entity']['id'], $group_by)){
-						$group_by[] = $v['Entity']['id'];
-						$url['state_id'] = $v2['state_id'];
-						$url['city_id'] = $v2['city_id'];
-						$map[$v2['state_id']][$v2['city_id']]['city'] = $v2['city'];
-						$map[$v2['state_id']][$v2['city_id']]['url'] = $url;
-						if(!isset($map[$v2['state_id']][$v2['city_id']]['qt'])){
-							$map[$v2['state_id']][$v2['city_id']]['qt'] = 1;
-						}else{
-							$map[$v2['state_id']][$v2['city_id']]['qt']++;
-						}
+			$v['Address'] = isset($v['Address'][0])?$v['Address']:array($v['Address']);
+			foreach ($v['Address'] as $k2 => $v2) {
+				if(!in_array($v['Entity']['id'], $group_by)){
+					$group_by[] = $v['Entity']['id'];
+					$url['state_id'] = $v2['state_id'];
+					$map[$v2['state_id']]['url'] = $url;
+					if(!isset($map[$v2['state_id']]['qt'])){
+						$map[$v2['state_id']]['qt'] = 1;
+					}else{
+						$map[$v2['state_id']]['qt']++;
 					}
+				}
 				}
 		}	
 
-		/**
-		* Organiza as urls montadas
-		*/
-		foreach ($map as $k => $v) {
-			foreach ($v as $k2 => $v2) {
-				$map_found[$k]["{$v2['qt']}-{$k2}"] = $v2;
-			}
-			krsort($map_found[$k], SORT_NUMERIC);
-			$map_found[$k] = array_slice($map_found[$k], 0, 10);
-		}	
-
-		return $map_found;
+		return $map;
 	}	
 
 	/**
@@ -392,9 +384,9 @@ class EntitiesController extends ProjectController {
 		* Uni o ddd ao telefone pesquisado
 		*/
 		if(isset($query['ddd']) && !empty($query['ddd']) && isset($query['landline']) && !empty($query['landline'])){
-			$tel = "{$query['ddd']}{$query['landline']}";
+			$tel = preg_replace('/[^0-9]/', '', $query['ddd']) . preg_replace('/[^0-9]/', '', $query['landline']);
 		}else if(isset($query['landline']) && !empty($query['landline'])){
-			$tel = $query['landline'];
+			$tel = preg_replace('/[^0-9]/', '', $query['landline']);
 		}
 
 		$people_found = $this->Entity->Landline->find('list', array(
@@ -459,7 +451,7 @@ class EntitiesController extends ProjectController {
 		* Verifica se o cep do endereço foi prennchido
 		*/
 		if(isset($query['zipcode']) && !empty($query['zipcode'])){
-			$zipcode = $this->Entity->Address->Zipcode->find('first', array('conditions' => array('Zipcode.code' => $query['zipcode'])));
+			$zipcode = $this->Entity->Address->Zipcode->find('first', array('conditions' => array('Zipcode.code' => preg_replace('/[^0-9]/', '', $query['zipcode']))));
 			if(count($zipcode)){
 				$cond['Address.zipcode_id'] = $zipcode['Zipcode']['id'];
 			}
@@ -498,7 +490,6 @@ class EntitiesController extends ProjectController {
 				$cond['Address.city_id'] = $query['city_id'];
 			}
 		}
-
 		$people_found = $this->Entity->Address->find('list', array(
 			'fields' => array('Association.entity_id', 'Association.entity_id'),
 			'joins' => array(
@@ -511,7 +502,9 @@ class EntitiesController extends ProjectController {
 			    ),
 				),
 			'conditions' => $cond,
+			'limit' => LIMIT_SEARCH
 			));
+
 
 		$params = array(
 			'conditions' => array(
@@ -940,8 +933,10 @@ class EntitiesController extends ProjectController {
 
 					foreach ($neighbor as $v2) {
 						$neighbors_found['same_street'][$v2['Association']['entity_id']] = $v2['Association']['entity_id'];
+						$limit_neighbors--;
 					}
 				}
+
 			}
 		}
 

@@ -34,3 +34,7 @@
 2013-11-07 20:46:40 Error: Fatal Error (1): Call to a member function cpf() on a non-object in [/var/www/nasza/app/View/Elements/Index/Entities/family.ctp, line 67]
 2013-11-07 20:51:47 Error: Fatal Error (1): Maximum execution time of 30 seconds exceeded in [/var/www/nasza/lib/Cake/Utility/Debugger.php, line 472]
 2013-11-07 22:05:55 Error: Fatal Error (1): Allowed memory size of 134217728 bytes exhausted (tried to allocate 85 bytes) in [/var/www/nasza/lib/Cake/Model/Datasource/Database/Mysql.php, line 246]
+2013-11-11 15:26:13 Error: Fatal Error (1): Allowed memory size of 134217728 bytes exhausted (tried to allocate 32 bytes) in [/var/www/nasza/lib/Cake/Model/Datasource/Database/Mysql.php, line 242]
+2013-11-11 15:28:33 Error: Fatal Error (1): Allowed memory size of 134217728 bytes exhausted (tried to allocate 72 bytes) in [/var/www/nasza/lib/Cake/Model/Datasource/Database/Mysql.php, line 242]
+2013-11-11 15:30:23 Error: Fatal Error (1): Allowed memory size of 134217728 bytes exhausted (tried to allocate 64 bytes) in [/var/www/nasza/lib/Cake/Model/Datasource/Database/Mysql.php, line 246]
+2013-11-11 15:31:03 Error: Fatal Error (1): Allowed memory size of 134217728 bytes exhausted (tried to allocate 32 bytes) in [/var/www/nasza/lib/Cake/Model/Datasource/Database/Mysql.php, line 244]

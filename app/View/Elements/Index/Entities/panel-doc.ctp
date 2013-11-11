@@ -12,14 +12,11 @@
                     <div class="control-group">
                         <label class="control-label" for="textfield"><?php echo __('Type Document')?></label>
                         <div class="controls">
-                            <div class="input-append input-prepend">
-                                <span class="add-on"><i class="icon-search"></i></span>
-                                <?php $doc = isset($this->params['named']['doc']) && !empty($this->params['named']['doc'])?$this->params['named']['doc']:''?>
-                                <?php echo $this->AppForm->input('doc', array('template' => 'form-input-clean', 'value' => $doc, 'placeholder' => __('type document')))?>
-                                <button type="submit" class="btn"><?php echo __('Search')?></button>
-                            </div>
+                            <?php $doc = isset($this->params['named']['doc']) && !empty($this->params['named']['doc'])?$this->params['named']['doc']:''?>
+                            <?php echo $this->AppForm->input('doc', array('template' => 'form-input-clean', 'class' => 'input-block-level msk-int', 'value' => $doc, 'placeholder' => __('type document')))?>
                         </div>
                     </div>
+                    <?php echo $this->AppForm->btn('Search', array('template' => '/Entities/form-input-btn'));?>
                 <?php echo $this->AppForm->end()?>
             </div>
         </div>

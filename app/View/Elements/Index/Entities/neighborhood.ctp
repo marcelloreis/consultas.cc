@@ -37,6 +37,12 @@
                                 <?php echo $this->Html->link($v2['Entity']['name'], array('controller' => 'entities', 'action' => 'people', 'plugin' => false, $v2['Entity']['id']))?>
                             </h4>
                             <form style="border: 1px solid #DDDDDD;" class="form-horizontal form-column form-bordered" method="POST" action="#">
+                                <div class="control-group">
+                                    <label class="control-label"><?php echo __('Mother')?></label>
+                                    <div class="controls">
+                                        <?php echo !empty($v2['Entity']['mother'])?$v2['Entity']['mother']:'<small>' . __('Not Found') . '</small>';?>
+                                    </div>
+                                </div>
                                 <div class="span4">
                                     <div class="control-group">
                                         <label class="control-label"><?php echo __('CPF')?></label>
