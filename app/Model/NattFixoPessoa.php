@@ -21,9 +21,9 @@ class NattFixoPessoa extends AppModelClean {
     public $useTable = false;
 	public $recursive = -1;
 	public $useDbConfig = 'natt';
-	// public $primaryKey = 'CPF_CNPJ';
-	// public $displayField = 'NOME_RAZAO';
-	// public $order = 'NattFixoPessoa.CPF_CNPJ';
+	public $primaryKey = 'CPF_CNPJ';
+	public $displayField = 'NOME_RAZAO';
+	public $order = 'NattFixoPessoa.CPF_CNPJ';
 
 	public $hasMany = array(
         'NattFixoTelefone' => array(
