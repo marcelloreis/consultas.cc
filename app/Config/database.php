@@ -23,6 +23,17 @@ class DATABASE_CONFIG {
 		'encoding' => 'utf8',
 	);	
 
+	public $cel2010 = array(
+		'datasource' => 'Database/Mysql',
+		'persistent' => false,
+		'host' => 'localhost',
+		'login' => 'root',
+		'password' => '62792',
+		'database' => 'CEL2010',
+		'prefix' => '',
+		'encoding' => 'utf8',
+	);	
+
 //	public $default = array(
 //		'datasource' => 'Database/Mysql',
 //		'persistent' => false,

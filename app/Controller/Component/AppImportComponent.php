@@ -361,14 +361,15 @@ class AppImportComponent extends Component {
 	* Trata a data de atualizacao passada por parametro e retorna somente o ANO da atualizacao
 	*/
 	public function getUpdated($date){
+		$updated = substr($date, 0, 4);
+
 		/**
 		* Verifica se a data é consistente
 		*/
-		if(!preg_match('/[12][0-9]{3}-[01][0-9]-[0-3][0-9]$/si', $date)){
-			return null;
+		if(!preg_match('/^[12][0-9]{3}$/si', $updated)){
+			$updated = null;
 		}
 
-		$updated = substr($date, 0, 4);
 
 		return $updated;
 	}
@@ -815,6 +816,50 @@ class AppImportComponent extends Component {
 	}
 
 	/**
+	* Explode o telefone fixo separando o ddd do telefone
+	*/
+	private function explodeMobileNatt($tel, $item){
+		/**
+		* Analisa a situacao do telefone a partir da quantidade de numeros encontrados
+		*/
+		$qt_numbers = strlen($tel);
+
+		/**
+		* Trata o numero de acordo com os zeros iniciais
+		*/
+		switch ($qt_numbers) {
+			/**
+			* 10 Zero: Indica que o numero contem 8 digitos e esta acompanhado do DDD
+			*/
+			case 10:
+				$ddd = substr($tel, 0, 2);
+				$tel = substr($tel, 2);
+				break;
+
+			/**
+			* 8 Zeros: Indica que o numero contem 8 digitos e nao esta acompanhado do DDD
+			*/
+			case 8:
+				$ddd = null;
+				break;
+			
+			default:
+				/**
+				* Caso nao atenda a nenhuma das opcoes acima, o telefone sera considerado como nulo
+				*/
+				$ddd = null;
+				$tel = null;
+				break;
+		}
+
+		$map = array(
+			'ddd' => $ddd,
+			'tel' => $tel
+			);
+
+		return $map[$item];	}
+	
+	/**
 	* Explode o telefone separando o ddd do telefone
 	*/
 	private function explodeTelNatt($tel, $item){
@@ -897,6 +942,20 @@ class AppImportComponent extends Component {
 	*/
 	public function getTelefone($tel){
 		return $this->explodeTelNatt($tel, 'tel');
+	}	
+
+	/**
+	* Extrai o DDD do telefone passado por parametro
+	*/
+	public function getDDDMobile($tel){
+		return $this->explodeMobileNatt($tel, 'ddd');
+	}	
+
+	/**
+	* Extrai o Telefone separado do DDD
+	*/
+	public function getMobile($tel){
+		return $this->explodeMobileNatt($tel, 'tel');
 	}	
 
 	/**
