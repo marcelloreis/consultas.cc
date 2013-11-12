@@ -22,11 +22,9 @@ class Settings extends AppModelClean {
 
 
 	public function active($module){
-		$isActive = $this->find('count', array(
-			'conditions' => array('module' => $module, 'actived' => '1')
-			));
+		$isActive = file_get_contents(dirname(dirname(dirname(__FILE__))) . '/_db/settings/on_off');
 
-		if(!$isActive){
+		if($isActive == '0'){
 			$content = "\n\n\n\n";
 			$content .= "###################################################################\n";
 			$content .= "Time: " . date('Y-m-d H:i:s') . "\n";

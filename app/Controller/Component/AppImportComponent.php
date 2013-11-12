@@ -1186,18 +1186,18 @@ class AppImportComponent extends Component {
 	* @return void
 	*/
 	public function __log($log, $type, $uf, $status=true, $table=null, $pk=null, $data=null, $mysql_error=null){	
-		$Log['Log'] = array(
-			'log' => $log,
-			'type' => $type,
-			'mysql_error' => $mysql_error,
-			'uf' => $uf,
-			'table' => $table,
-			'pk' => $pk,
-			'data' => $data,
-			'status' => $status,
-			);
-		$this->Log->create();
-		$this->Log->save($Log);
+		// $Log['Log'] = array(
+		// 	'log' => $log,
+		// 	'type' => $type,
+		// 	'mysql_error' => $mysql_error,
+		// 	'uf' => $uf,
+		// 	'table' => $table,
+		// 	'pk' => $pk,
+		// 	'data' => $data,
+		// 	'status' => $status,
+		// 	);
+		// $this->Log->create();
+		// $this->Log->save($Log);
 	}
 
 	/**
@@ -1438,15 +1438,14 @@ class AppImportComponent extends Component {
 	public function timing_end(){
 		$this->time_end = microtime(true);
 		$time = $this->time_end - $this->time_start;
-		$avg = $time;
-		// if(!isset($this->timing_avg[$this->time_id])){
-		// 	$this->timing_avg[$this->time_id][] = $time;
-		// }else{
-		// 	array_unshift($this->timing_avg[$this->time_id], $time);
-		// }
-		// $this->timing_avg[$this->time_id] = array_slice($this->timing_avg[$this->time_id], 0, 1000);
+		if(!isset($this->timing_avg[$this->time_id])){
+			$this->timing_avg[$this->time_id][] = $time;
+		}else{
+			array_unshift($this->timing_avg[$this->time_id], $time);
+		}
+		$this->timing_avg[$this->time_id] = array_slice($this->timing_avg[$this->time_id], 0, LIMIT_BUILD_SOURCE);
 
-		// $avg = array_sum($this->timing_avg[$this->time_id])/count($this->timing_avg[$this->time_id]);
+		$avg = array_sum($this->timing_avg[$this->time_id])/count($this->timing_avg[$this->time_id]);
 
 		$this->Timing->updateAll(array('Timing.time' => $avg), array('Timing.id' => $this->time_id));
 	}

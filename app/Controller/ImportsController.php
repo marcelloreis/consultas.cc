@@ -163,9 +163,9 @@ class ImportsController extends AppController {
 		$now = time();
 	    $elapsed = $now - $startTime;
 	    $sec = floor($elapsed);
-	    $min = floor($elapsed / 60);
-	    $hour = floor($elapsed / 3600);
-	    $day = floor($elapsed / 86400);
+	    $min = ($elapsed / 60);
+	    $hour = ($elapsed / 3600);
+	    $day = ($elapsed / 86400);
 
 		foreach ($this->counters as $k => $v) {
 			$processed = ($v['success'] + $v['fails']);

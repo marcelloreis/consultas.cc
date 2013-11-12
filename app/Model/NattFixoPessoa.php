@@ -105,6 +105,8 @@ class NattFixoPessoa extends AppModelClean {
                 }else{
                     $map[$k] = array();
                 }
+
+                // $this->offset_block($v['NattFixoPessoa']['CPF_CNPJ']);
             }
         }
 
