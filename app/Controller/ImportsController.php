@@ -103,7 +103,7 @@ class ImportsController extends AppController {
 		/**
 		* Carrega o timing da importacao
 		*/
-		$imports['timing'] = $this->Timing->find('all');
+		$imports['timing'] = $this->Timing->find('all', array('conditions' => array('Timing.time NOT' => null)));
 
 		/**
 		* Carrega as tableas que estao sendo alimentadas
@@ -169,7 +169,7 @@ class ImportsController extends AppController {
 
 		foreach ($this->counters as $k => $v) {
 			$processed = ($v['success'] + $v['fails']);
-			if($sec != '00'){
+			if($sec){
 				$this->counters[$k]['process_per_sec'] = round($processed / $sec);
 				if(!$min){
 					$this->counters[$k]['process_per_min'] = $processed;

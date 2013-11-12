@@ -6,13 +6,6 @@ update naszaco_pessoas._counter set success = null, fails = null, extracted = nu
 update naszaco_pessoas._timing set time = null;
 update naszaco_pessoas._settings set actived = 1;
 
-#Migracao dos dados importados
-INSERT INTO naszaco_pessoas.entities SELECT * FROM naszaco_pessoas.i_entities;
-INSERT INTO naszaco_pessoas.landlines SELECT * FROM naszaco_pessoas.i_landlines;
-INSERT INTO naszaco_pessoas.zipcodes SELECT * FROM naszaco_pessoas.i_zipcodes;
-INSERT INTO naszaco_pessoas.addresses SELECT * FROM naszaco_pessoas.i_addresses;
-INSERT INTO naszaco_pessoas.associations SELECT * FROM naszaco_pessoas.i_associations;
-
 #Reseta todas as tabelas e deixa pronto para iniciar a importacao
 SET foreign_key_checks = 0;
 truncate table naszaco_pessoas._logs;
@@ -29,6 +22,13 @@ truncate table naszaco_pessoas.i_addresses;
 truncate table naszaco_pessoas.i_zipcodes;
 truncate table naszaco_pessoas.i_landlines;
 truncate table naszaco_pessoas.i_mobiles;
+
+#Migracao dos dados importados
+INSERT INTO naszaco_pessoas.entities SELECT * FROM naszaco_pessoas.i_entities;
+INSERT INTO naszaco_pessoas.landlines SELECT * FROM naszaco_pessoas.i_landlines;
+INSERT INTO naszaco_pessoas.zipcodes SELECT * FROM naszaco_pessoas.i_zipcodes;
+INSERT INTO naszaco_pessoas.addresses SELECT * FROM naszaco_pessoas.i_addresses;
+INSERT INTO naszaco_pessoas.associations SELECT * FROM naszaco_pessoas.i_associations;
 
 #Sincronizacao dos auto increments das tableas de importacao
 SELECT AUTO_INCREMENT FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'naszaco_pessoas' AND   TABLE_NAME   = 'entities';

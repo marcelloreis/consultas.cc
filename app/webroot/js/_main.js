@@ -1,4 +1,24 @@
 $(document).ready(function(){
+	if($("#flot-audience").length > 0){
+                $("#flot-audience").bind("plothover", function (event, pos, item) {
+                        if (item) {
+                                if (previousPoint != item.dataIndex) {
+                                        previousPoint = item.dataIndex;
+
+                                        $("#tooltip").remove();
+                                        var y = item.datapoint[1].toFixed();
+
+                                        showTooltip(item.pageX, item.pageY,
+                                         item.series.label + " = " + y);
+                                }
+                        }
+                        else {
+                                $("#tooltip").remove();
+                                previousPoint = null;
+                        }
+                });
+    }
+
     /**
 	* Configuracao das mascaras dos formularios
 	*/
