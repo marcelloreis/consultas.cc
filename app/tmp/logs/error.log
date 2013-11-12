@@ -40,3 +40,4 @@
 2013-11-11 15:31:03 Error: Fatal Error (1): Allowed memory size of 134217728 bytes exhausted (tried to allocate 32 bytes) in [/var/www/nasza/lib/Cake/Model/Datasource/Database/Mysql.php, line 244]
 2013-11-11 16:27:45 Error: Fatal Error (1): Call to a member function find() on a non-object in [/var/www/nasza/app/Controller/MobilesImportController.php, line 94]
 2013-11-11 16:28:51 Error: Fatal Error (1): Call to a member function find() on a non-object in [/var/www/nasza/app/Controller/MobilesImportController.php, line 94]
+2013-11-12 15:01:24 Error: Fatal Error (4): syntax error, unexpected ''Timing\'][\'timing_next\']?>'' (T_CONSTANT_ENCAPSED_STRING), expecting identifier (T_STRING) in [/var/www/dados/app/View/Elements/Index/Imports/charts-gauge.ctp, line 75]

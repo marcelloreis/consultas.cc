@@ -171,10 +171,16 @@ class ImportsController extends AppController {
 		$this->processPerTime();
 
 		/**
-		* Carrega o timing da importacao
+		* Carrega o timing da importacao sem o NEXT
 		*/
-		$imports['timing'] = $this->Timing->find('all', array('conditions' => array('Timing.time NOT' => null)));
+		$imports['timing'] = $this->Timing->find('list', array('fields' => array('Timing.time', 'Timing.description'), 'conditions' => array('Timing.time NOT' => null, 'Timing.id NOT' => TUNING_LOAD_NEXT_REGISTER)));
 
+		/**
+		* Carrega o timing do NEXT da importacao
+		*/
+		$imports['timing_next'] = $this->Timing->find('first', array('fields' => array('Timing.time', 'Timing.description'), 'conditions' => array('Timing.time NOT' => null, 'Timing.id' => TUNING_LOAD_NEXT_REGISTER)));
+
+// debug($imports['timing_next']);die;
 		/**
 		* Carrega as tableas que estao sendo alimentadas
 		*/
