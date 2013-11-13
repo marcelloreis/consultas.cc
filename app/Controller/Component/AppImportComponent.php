@@ -21,7 +21,6 @@ class AppImportComponent extends Component {
 	private $ModelCounter;
 	private $Timing;
 	private $timing_avg;
-	private $counter;
 	private $time_start;
 	private $time_end;
 	private $time_id;
@@ -30,6 +29,7 @@ class AppImportComponent extends Component {
 	private $male_names;
 	private $comapani_names;
 	public $sizeReload;
+	public $counter;
 
 	public function __construct() {
 	    $this->Log = ClassRegistry::init('Log');

@@ -57,4 +57,4 @@ mysql -u $user -p$password -e "ALTER TABLE naszaco_pessoas.i_associations AUTO_I
 
 # Reinicia a importacao
 echo '1' > "$app/_db/settings/on_off"
-php app/exec.php /landlines_import/run_block/es
+php app/exec.php /mobiles_import/run/es

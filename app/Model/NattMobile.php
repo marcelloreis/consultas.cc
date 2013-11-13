@@ -26,34 +26,37 @@ class NattMobile extends AppModelClean {
     public $order = 'NattMobile.CPF_CNPJ';
 
 
-    public function next(){
+    public function next($offset, $row_count){
         $map = array();
-        $pessoa = $this->find('first', array(
+        $pessoa = $this->find('all', array(
             'conditions' => array(
                 'CPF_CNPJ !=' => '00000000000000000000',
-                )
+                ),
+            'limit' => "{$offset},{$row_count}"
             ));
 
-        if(isset($pessoa['NattMobile'])){
-            $map['pessoa']['CPF_CNPJ'] = $pessoa['NattMobile']['CPF_CNPJ'];
-            $map['pessoa']['NOME_RAZAO'] = $pessoa['NattMobile']['NOME'];
-            $map['pessoa']['MAE'] = '';
-            $map['pessoa']['SEXO'] = '';
-            $map['pessoa']['DT_NASCIMENTO'] = '';
-            $map['telefone'][0]['TELEFONE'] = $pessoa['NattMobile']['TELEFONE'];
-            $map['telefone'][0]['DATA_ATUALIZACAO'] = $pessoa['NattMobile']['ATUALIZACAO_SISTEMA'];
-            $map['telefone'][0]['NUMERO'] = $pessoa['NattMobile']['NUMERO'];
-            $map['telefone'][0]['COMPLEMENTO'] = $pessoa['NattMobile']['COMP'];
-            $map['telefone'][0]['endereco']['CEP'] = $pessoa['NattMobile']['CEP'];
-            $map['telefone'][0]['endereco']['UF'] = $pessoa['NattMobile']['UF'];
-            $map['telefone'][0]['endereco']['CIDADE'] = $pessoa['NattMobile']['CIDADE'];
-            $map['telefone'][0]['endereco']['BAIRRO'] = $pessoa['NattMobile']['BAIRRO'];
-            $map['telefone'][0]['endereco']['RUA'] = '';
-            $map['telefone'][0]['endereco']['NOME_RUA'] = $pessoa['NattMobile']['ENDERECO'];
-            $map['telefone'][0]['endereco']['NUMERO'] = $pessoa['NattMobile']['NUMERO'];
-            $map['telefone'][0]['endereco']['COMPLEMENTO'] = $pessoa['NattMobile']['COMP'];
-
-            $this->offset($pessoa['NattMobile']['CPF_CNPJ'], $pessoa['NattMobile']['TELEFONE']);
+        if(count($pessoa)){
+            foreach ($pessoa as $k => $v) {
+                $map[$k]['pessoa']['CPF_CNPJ'] = $v['NattMobile']['CPF_CNPJ'];
+                $map[$k]['pessoa']['NOME_RAZAO'] = $v['NattMobile']['NOME'];
+                $map[$k]['pessoa']['MAE'] = '';
+                $map[$k]['pessoa']['SEXO'] = '';
+                $map[$k]['pessoa']['DT_NASCIMENTO'] = '';
+                $map[$k]['telefone'][0]['TELEFONE'] = $v['NattMobile']['TELEFONE'];
+                $map[$k]['telefone'][0]['DATA_ATUALIZACAO'] = $v['NattMobile']['ATUALIZACAO_SISTEMA'];
+                $map[$k]['telefone'][0]['NUMERO'] = $v['NattMobile']['NUMERO'];
+                $map[$k]['telefone'][0]['COMPLEMENTO'] = $v['NattMobile']['COMP'];
+                $map[$k]['telefone'][0]['endereco']['CEP'] = $v['NattMobile']['CEP'];
+                $map[$k]['telefone'][0]['endereco']['UF'] = $v['NattMobile']['UF'];
+                $map[$k]['telefone'][0]['endereco']['CIDADE'] = $v['NattMobile']['CIDADE'];
+                $map[$k]['telefone'][0]['endereco']['BAIRRO'] = $v['NattMobile']['BAIRRO'];
+                $map[$k]['telefone'][0]['endereco']['RUA'] = '';
+                $map[$k]['telefone'][0]['endereco']['NOME_RUA'] = $v['NattMobile']['ENDERECO'];
+                $map[$k]['telefone'][0]['endereco']['NUMERO'] = $v['NattMobile']['NUMERO'];
+                $map[$k]['telefone'][0]['endereco']['COMPLEMENTO'] = $v['NattMobile']['COMP'];
+            
+                $this->offset($v['NattMobile']['CPF_CNPJ'], $v['NattMobile']['TELEFONE']);
+            }
         }
 
         return $map;        

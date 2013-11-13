@@ -1,32 +1,28 @@
 <?php
-/**
- * Import content controller.
- *
- * Este arquivo ira renderizar as visões contidas em views/LandlinesImport/
- *
- * PHP 5
- *
- * @copyright     Copyright 2013-2013, Nasza Produtora
- * @link          http://www.nasza.com.br/ Nasza(tm) Project
- * @package       app.Controller
- */
-
 App::uses('AppController', 'Controller');
-
 /**
- * Import content controller
+ * Application level Controller
  *
- * Este controlador contem regras de negócio aplicadas ao model State
+ * Area destinada a funcoes especificas do projeto, estas funcoes nao pertencem a framework
  *
  * @package       app.Controller
- * @link http://.framework.nasza.com.br/2.0/controller/LandlinesImport.html
+ * @link http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class ImportsController extends AppController {
 	public $uses = array(
 		"Import", 
+		"Ientity",
+		"Izipcode",
+		"Iaddress",
+		"Iassociation",
 		"Settings",
 		"Counter",
-		"Timing",
+		"NattFixoTelefone", 
+		"NattFixoPessoa", 
+		"NattFixoEndereco",
+		"Ilandline",
+		"NattMobile", 
+		"Imobile",
 		);
 
 	public $components = array('AppImport');
@@ -34,219 +30,286 @@ class ImportsController extends AppController {
 	/**
 	* Atributos da classe
 	*/
-	private $db;
-	private $uf;
-	private $telefones_uf;
-	private $pessoa_uf;
-	private $endereco_uf;
-	private $counters;
-
+	protected $db;
+	protected $uf;
+	protected $qt_reg = 0;
+	protected $qt_imported = 0;	
 
 	/**
 	* Método beforeFilter
 	* Esta função é executada antes de todas ações do controlador. 
 	* E no caso da framework, esta sendo usado para checar uma sessão ativa e inspecionar permissões.
 	*
-	* @override Metodo AppController.beforeFilter
+	* @override Metodo Controller.beforeFilter
 	* @return void
 	*/
 	public function beforeFilter() {
 		//@override
-		parent::beforeFilter();
+	    parent::beforeFilter();
+
+		//Verifica se a acao foi chamada apartir da linha de comando
+		if (!defined('CRON_DISPATCHER')) { 
+			// $this->Session->setFlash("{$user['given_name']}, " . __('This page can not be executed on browser'), FLASH_TEMPLETE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
+			// $this->redirect($this->Auth->loginRedirect); 
+			// exit(); 
+		} 
+
+	    $this->layout=null;
+	}
+
+	/**
+	* Método importEntity
+	* Este método importa os dados da entidade
+	*
+	* @return void
+	*/
+	protected function importEntity($entity){
+		/**
+		* Inicializa o ID da entidade como null
+		*/
+		$this->Ientity->id = null;
 
 		/**
-		* Carrega os numeros dos contadores da importacao
+		* Verifica se a entidade que sera importada já existe na base de dados
 		*/
-		foreach ($this->Counter->findAllByActive(true) as $k => $v) {
-			$this->counters[$v['Counter']['table']] = $v['Counter'];
-		}		
-	}	
+		$hasEntity = $this->Ientity->findImport('first', array(
+			'conditions' => array(
+				'doc' => $entity['Ientity']['doc'],
+				'type' => $entity['Ientity']['type'],
+				)
+			));				
 
-	/**
-	* Método reload
-	* Este método recarrega a importacao, migrando o que ja foi importado e zerando as tabelas de importacao
-	*
-	* @return void
-	*/
-	public function reload(){
-		$path = dirname(dirname(dirname(__FILE__)));
-		echo shell_exec("setsid sh {$path}/_db/settings/reload.sh > /dev/null 2>/dev/null &");
-
-		$this->redirect($this->referer());
-	}
-
-	/**
-	* Método lock
-	* Este método trava/libera a importacao
-	*
-	* @return void
-	*/
-	public function lock($switch){
-		$path = dirname(dirname(dirname(__FILE__)));
-		file_put_contents("{$path}/_db/settings/on_off", $switch);
-
-		$this->redirect($this->referer());
-	}
-
-	/**
-	* Método statistics
-	* Este método carrega as estatisticas da importacao vigente
-	*
-	* @return void
-	*/
-	public function statistics(){
-		if(!empty($this->counters['entities']['success'])){
-			/**
-			* Carrega a quantidade de registros a serem importados
-			*/
-			$imports['records_to_process'] = $this->counters['entities']['extracted'];
-
-			/**
-			* Carrega a quantidade de registros ja processados
-			*/
-			$imports['records_processed'] = ($this->counters['entities']['success'] + $this->counters['entities']['fails']);
-
-			/**
-			* Calcula o progresso da importacao
-			*/
-			$imports['progress'] = floor(($imports['records_processed'] / $imports['records_to_process']) * 100);
-
-			/**
-			* Calcula o tempo percorrido da importacao
-			*/
-			$imports['elapsed'] = $this->getElapsed();
-
-			/**
-			* Calcula o tempo percorrido da importacao
-			*/
-			$imports['remaining'] = $this->getRemaining();
-
-			/**
-			* Carrega a quantidade de processos por tempo
-			*/
-			$this->processPerTime();
-
-			/**
-			* Carrega o timing da importacao sem o NEXT
-			*/
-			$imports['timing'] = $this->Timing->find('list', array('fields' => array('Timing.time', 'Timing.description'), 'conditions' => array('Timing.time NOT' => null, 'Timing.id NOT' => TUNING_LOAD_NEXT_REGISTER)));
-
-			/**
-			* Carrega o timing do NEXT da importacao
-			*/
-			$imports['timing_next'] = $this->Timing->find('first', array('fields' => array('Timing.time', 'Timing.description'), 'conditions' => array('Timing.time NOT' => null, 'Timing.id' => TUNING_LOAD_NEXT_REGISTER)));
-
-			/**
-			* Carrega as tableas que estao sendo alimentadas
-			*/
-			$imports['counters'] = $this->counters;
-
-		}
-
-		if ($this->RequestHandler->isAjax()) {
-			echo json_encode($imports);
-		}
-
-		/**
-		* Carrega as variaveis de ambiente
-		*/
-		$this->set(compact('imports'));
-	}	
-
-	private function elapsedTimes(){
-		$startTime = $this->counters['entities']['start_time'];
-		$now = time();
-	    $elapsed = $now - $startTime;
-
-		$day = str_pad(floor($elapsed/86400), 2, '0', STR_PAD_LEFT);
-		$hour = str_pad(floor(($elapsed/3600) - ($day*24)), 2, '0', STR_PAD_LEFT);
-		$min = str_pad(floor(($elapsed/60) - (($day*1440) + ($hour*60))), 2, '0', STR_PAD_LEFT);
-		$sec = str_pad(floor($elapsed - (($day*86400) + ($hour*3600) + ($min*60))), 2, '0', STR_PAD_LEFT);
-
-		$map = array(
-			'day' => $day,
-			'hour' => $hour,
-			'min' => $min,
-			'sec' => $sec,
-			);
-
-		return $map;
-	}
-
-	private function remainingTimes(){
-		$done = ($this->counters['entities']['success'] + $this->counters['entities']['fails']);
-		$now = time();
-	    $rate = ($now - $this->counters['entities']['start_time']) / $done;
-	    $left = $this->counters['entities']['extracted'] - $done;
-	    $eta = round($rate * $left, 2);
-
-		$day = str_pad(floor($eta/86400), 2, '0', STR_PAD_LEFT);
-		$hour = str_pad(floor(($eta/3600) - ($day*24)), 2, '0', STR_PAD_LEFT);
-		$min = str_pad(floor(($eta/60) - (($day*1440) + ($hour*60))), 2, '0', STR_PAD_LEFT);
-		$sec = str_pad(floor($eta - (($day*86400) + ($hour*3600) + ($min*60))), 2, '0', STR_PAD_LEFT);
-
-		$map = array(
-			'day' => $day,
-			'hour' => $hour,
-			'min' => $min,
-			'sec' => $sec,
-			);
-
-		return $map;
-	}
-
-	private function processPerTime(){
-		$startTime = $this->counters['entities']['start_time'];
-		$now = time();
-	    $elapsed = $now - $startTime;
-	    $sec = floor($elapsed);
-	    $min = ($elapsed / 60);
-	    $hour = ($elapsed / 3600);
-	    $day = ($elapsed / 86400);
-
-		foreach ($this->counters as $k => $v) {
-			$processed = ($v['success'] + $v['fails']);
-			if($sec){
-				$this->counters[$k]['process_per_sec'] = round($processed / $sec);
-				if(!$min){
-					$this->counters[$k]['process_per_min'] = $processed;
-				}else{
-					$this->counters[$k]['process_per_min'] = round($processed / $min);	
-				}
-
-				if(!$hour){
-					$this->counters[$k]['process_per_hour'] = $processed;
-				}else{
-					$this->counters[$k]['process_per_hour'] = round($processed / $hour);	
-				}
-				
-				if(!$day){
-					$this->counters[$k]['process_per_day'] = $processed;
-				}else{
-					$this->counters[$k]['process_per_day'] = round($processed / $day);	
-				}
-				
+		if(count($hasEntity)){
+			$this->Ientity->id = $hasEntity['Ientity']['id'];
+		}else{
+			$this->Ientity->create($entity);
+			if($this->Ientity->save()){
+				$this->AppImport->success('entities');
+			}else{
+				$this->AppImport->fail('entities');
+				$this->AppImport->__log("Falha ao importar a entidade", IMPORT_ENTITY_FAIL, $this->uf, false, $this->Ientity->useTable, null, $entity['Ientity']['doc'], $this->db['entity']->error);
 			}
+		}	
+	}
+
+	/**
+	* Método importLandline
+	* Este método importa os telefones relacionados a entidade
+	*
+	* @return void
+	*/
+	protected function importLandline($landline){
+		/**
+		* Inicializa o ID do telefone como null
+		*/
+		$this->Ilandline->id = null;
+
+		/**
+		* Aborta a insercao caso o telefone seja null (inconsistente)
+		*/		
+		if(!$landline['Ilandline']['tel']){
+			$this->AppImport->fail('landlines');
+			$this->AppImport->__log("Telefone inconsistente", IMPORT_LANDLINE_INCONSISTENT, $this->uf, false, $this->Ilandline->useTable, null, $landline['Ilandline']['tel_original']);
+		}else{
+			/**
+			* Verifica se o telefone que sera importado já existe na base de dados
+			*/
+			$hasLandline = $this->Ilandline->findImport('first', array(
+				'conditions' => array(
+					'tel_full' => $landline['Ilandline']['tel_full'],
+					)
+				));		
+
+			if(count($hasLandline)){
+				$this->Ilandline->id = $hasLandline['Ilandline']['id'];
+			}else{
+				$this->Ilandline->create($landline);
+				if($this->Ilandline->save()){
+					$this->AppImport->success('landlines');
+				}else{
+					$this->AppImport->fail('landlines');
+					$this->AppImport->__log("Falha ao importar o telefone.", IMPORT_LANDLINE_FAIL, $this->uf, false, $this->Ilandline->useTable, null, $landline['Ilandline']['tel_full'], $this->db['Ilandline']->error);
+				}
+			}	
 		}
 	}
 
-	private function getElapsed(){
-		$map = $this->elapsedTimes();
-		$elapsed = "{$map['hour']}:{$map['min']}:{$map['sec']}";
-		if($map['day'] != '00'){
-			$elapsed = "{$map['day']}d {$map['hour']}:{$map['min']}:{$map['sec']}";
-		}	
+	/**
+	* Método importMobile
+	* Este método importa os telefones relacionados a entidade
+	*
+	* @return void
+	*/
+	protected function importMobile($mobile){
+		/**
+		* Inicializa o ID do telefone como null
+		*/
+		$this->Imobile->id = null;
 
-		return $elapsed;	
+		/**
+		* Aborta a insercao caso o telefone seja null (inconsistente)
+		*/		
+		if(!$mobile['Imobile']['tel']){
+			$this->AppImport->fail('mobiles');
+			$this->AppImport->__log("Celular inconsistente", IMPORT_LANDLINE_INCONSISTENT, $this->uf, false, $this->Imobile->useTable, null, $mobile['Imobile']['tel_original']);
+		}else{
+			/**
+			* Verifica se o telefone que sera importado já existe na base de dados
+			*/
+			$hasMobile = $this->Imobile->findImport('first', array(
+				'conditions' => array(
+					'tel_full' => $mobile['Imobile']['tel_full'],
+					)
+				));		
+
+			if(count($hasMobile)){
+				$this->Imobile->id = $hasMobile['Imobile']['id'];
+			}else{
+				$this->Imobile->create();
+				if($this->Imobile->save($mobile)){
+					$this->AppImport->success('mobiles');
+				}else{
+					$this->AppImport->fail('mobiles');
+					$this->AppImport->__log("Falha ao importar o telefone.", IMPORT_LANDLINE_FAIL, $this->uf, false, $this->Imobile->useTable, null, $mobile['Imobile']['tel_full'], $this->db['Imobile']->error);
+				}
+			}	
+		}
 	}
 
-	private function getRemaining(){
-		$map = $this->remainingTimes();
-		$elapsed = "{$map['hour']}:{$map['min']}:{$map['sec']}";
-		if($map['day'] != '00'){
-			$elapsed = "{$map['day']}d {$map['hour']}:{$map['min']}:{$map['sec']}";
+	/**
+	* Método importZipcode
+	* Este método importa CEP relacionados ao telefone
+	*
+	* @return void
+	*/
+	protected function importZipcode($zipcode){
+		/**
+		* Inicializa o ID do CEP como null
+		*/
+		$this->Izipcode->id = null;
+
+		/**
+		* Aborta a insercao caso o CEP seja null (inconsistente)
+		*/		
+		if(!$zipcode['Izipcode']['code']){
+			$this->AppImport->fail('zipcodes');
+			$this->AppImport->__log("CEP inconsistente ou null", IMPORT_ZIPCODE_INCONSISTENT, $this->uf, false, $this->Izipcode->useTable, null, $zipcode['Izipcode']['code_original']);
+		}else{
+			/**
+			* Verifica se o telefone que sera importado já existe na base de dados
+			*/
+			$hasZipcode = $this->Izipcode->findImport('first', array(
+				'conditions' => array(
+					'code' => $zipcode['Izipcode']['code'],
+					)
+				));		
+
+			if(count($hasZipcode)){
+				$this->Izipcode->id = $hasZipcode['Izipcode']['id'];
+			}else{
+				$this->Izipcode->create($zipcode);
+				if($this->Izipcode->save()){
+					$this->AppImport->success('zipcodes');
+				}else{
+					$this->AppImport->fail('zipcodes');
+					$this->AppImport->__log("Falha ao importar o CEP.", IMPORT_ZIPCODE_FAIL, $this->uf, false, $this->Izipcode->useTable, null, $zipcode['Izipcode']['code_original'], $this->db['Izipcode']->error);
+				}
+			}	
+		}
+	}
+
+	/**
+	* Método importAddress
+	* Este método importa Endereço relacionados ao telefone
+	*
+	* @return void
+	*/
+	protected function importAddress($address){
+		/**
+		* Inicializa o ID do endereco como null
+		*/
+		$this->Iaddress->id = null;
+
+		/**
+		* Verifica se o telefone que sera importado já existe na base de dados
+		*/
+		$hasAddress = $this->Iaddress->findImport('first', array(
+			'conditions' => array(
+				'zipcode_id' => $address['Iaddress']['zipcode_id'],
+				'number' => $address['Iaddress']['number'],
+				'h_complement' => $address['Iaddress']['h_complement'],
+				)
+			));		
+
+		if(count($hasAddress)){
+			$this->Iaddress->id = $hasAddress['Iaddress']['id'];
+		}else{
+			$this->Iaddress->create($address);
+			if($this->Iaddress->save()){
+				$this->AppImport->success('addresses');
+			}else{
+				$this->AppImport->fail('addresses');
+				$this->AppImport->__log("Falha ao importar o endereço.", IMPORT_ADDRESS_FAIL, $this->uf, false, $this->Iaddress->useTable, null, $address['Iaddress']['state_id'], $this->db['Iaddress']->error);
+			}
+		}	
+	}
+
+	/**
+	* Método importAssociation
+	* Amarra os registros Entidade, Telefone, CEP e Endereço na tabela associations
+	*
+	* @return bool $hasCreated
+	*/
+	protected function importAssociation($association){
+		/**
+		* Inicializa o ID das juncoes como null
+		*/
+		$this->Iassociation->id = null;
+
+		/**
+		* Inicializa a variavel $asCreated com false
+		*/
+		$hasCreated = false;
+
+		if(
+			(!empty($association['Iassociation']['entity_id']) && $association['Iassociation']['entity_id'] != '0')
+			&& 
+			(
+				(!empty($association['Iassociation']['landline_id']) && $association['Iassociation']['landline_id'] != '0') 
+				|| 
+				(!empty($association['Iassociation']['address_id']) && $association['Iassociation']['address_id'] != '0'))
+			){
+
+			/**
+			* Verifica se a junção já existe
+			*/
+			$hasAssociation = $this->Iassociation->findImport('first', array(
+				'conditions' => array(
+					'entity_id' => $association['Iassociation']['entity_id'],
+					'landline_id' => $association['Iassociation']['landline_id'],
+					'mobile_id' => $association['Iassociation']['mobile_id'],
+					'address_id' => $association['Iassociation']['address_id'],
+					'year' => $association['Iassociation']['year'],
+					)
+				));	
+
+		}
+
+
+		if(isset($hasAssociation) && count($hasAssociation)){
+			$this->Iassociation->id = $hasAssociation['Iassociation']['id'];
+		}else{
+			$this->Iassociation->create($association);
+			$hasCreated = $this->Iassociation->save(); 
+			if($hasCreated){
+				$this->AppImport->success('associations');
+			}else{
+				$this->AppImport->fail('associations');
+				$this->AppImport->__log("Falha ao importar os dados da tabela associations", IMPORT_ASSOCIATION_FAIL, $this->uf, false, $this->Iassociation->useTable, $this->Ientity->id);
+			}
 		}	
 
-		return $elapsed;	
+		return $hasCreated;
 	}
+
 }

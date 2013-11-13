@@ -20,10 +20,10 @@
 
         var options = {
           width: '100%', height: '100%',
-          redFrom: 0, redTo: 500,
-          yellowFrom: 500, yellowTo: 800,
+          redFrom: 0, redTo: 800,
+          yellowFrom: 800, yellowTo: 1100,
           minorTicks: 5,
-          max: 2000
+          max: 3000
         };
 
         var chart = new google.visualization.Gauge(document.getElementById('chart_minuts'));
@@ -40,10 +40,10 @@
 
         var options = {
           width: '100%', height: '100%',
-          redFrom: 0, redTo: (500*60),
-          yellowFrom: (500*60), yellowTo: (800*60),
+          redFrom: 0, redTo: (800*60),
+          yellowFrom: (800*60), yellowTo: (1100*60),
           minorTicks: 5,
-          max: (2000*60)
+          max: (3000*60)
         };
 
         var chart = new google.visualization.Gauge(document.getElementById('chart_hour'));
@@ -60,10 +60,10 @@
 
         var options = {
           width: '100%', height: '100%',
-          redFrom: 0, redTo: (500*1440),
-          yellowFrom: (500*1440), yellowTo: (800*1440),
+          redFrom: 0, redTo: (800*1440),
+          yellowFrom: (800*1440), yellowTo: (1100*1440),
           minorTicks: 5,
-          max: (2000*1440)
+          max: (3000*1440)
         };
 
         var chart = new google.visualization.Gauge(document.getElementById('chart_day'));
@@ -94,7 +94,7 @@
         var data = google.visualization.arrayToDataTable([
           ['Processo', 'Tempo']
 <?php foreach($imports['timing'] as $k => $v):?>
-          ,['<?php echo $v?>', <?php echo substr(($k * 1000), 0, strrpos(($k * 1000), '.')+3)?>]
+          ,['<?php echo $v?>', <?php echo substr(($k * 1100), 0, strrpos(($k * 1100), '.')+3)?>]
 <?php endforeach?>
         ]);
 

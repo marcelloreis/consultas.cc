@@ -44,3 +44,4 @@
 2013-11-12 23:26:27 Error: Fatal Error (4): syntax error, unexpected 'echo' (T_ECHO), expecting ',' or ';' in [/var/www/dados/app/View/Imports/statistics.ctp, line 20]
 2013-11-12 23:26:27 Error: Fatal Error (4): syntax error, unexpected 'echo' (T_ECHO), expecting ',' or ';' in [/var/www/dados/app/View/Imports/statistics.ctp, line 20]
 2013-11-12 23:26:27 Error: Fatal Error (4): syntax error, unexpected 'echo' (T_ECHO), expecting ',' or ';' in [/var/www/dados/app/View/Imports/statistics.ctp, line 20]
+2013-11-13 18:39:26 Error: Fatal Error (1): Call to a member function find() on a non-object in [/var/www/dados/app/Controller/MobilesImportController.php, line 115]
