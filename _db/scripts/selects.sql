@@ -1,7 +1,7 @@
 #Tabelas auxiliares
 SELECT * FROM naszaco_pessoas._counter;
 SELECT * FROM naszaco_pessoas._settings;
-SELECT * FROM naszaco_pessoas._logs;
+SELECT * FROM naszaco_pessoas._logs order by `table`;
 SELECT * FROM naszaco_pessoas._timing;
 
 #Tempo medio das queries

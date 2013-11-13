@@ -493,11 +493,11 @@ class LandlinesImportController extends AppController {
 				/**
 				* Inicializa a transacao
 				*/
-				$this->db['entity']->begin();
-				$this->db['landline']->begin();
-				$this->db['address']->begin();
-				$this->db['zipcode']->begin();
-				$this->db['association']->begin();
+				// $this->db['entity']->begin();
+				// $this->db['landline']->begin();
+				// $this->db['address']->begin();
+				// $this->db['zipcode']->begin();
+				// $this->db['association']->begin();
 
 				/**
 				* Carrega o proximo registro das tabelas de pessoa, telefone e endereco q ainda nao foram importado
@@ -782,11 +782,11 @@ class LandlinesImportController extends AppController {
 				/**
 				* Registra todas as transacoes
 				*/
-				$this->db['entity']->commit();
-				$this->db['landline']->commit();
-				$this->db['address']->commit();
-				$this->db['zipcode']->commit();
-				$this->db['association']->commit();
+				// $this->db['entity']->commit();
+				// $this->db['landline']->commit();
+				// $this->db['address']->commit();
+				// $this->db['zipcode']->commit();
+				// $this->db['association']->commit();
 
 
 			}
