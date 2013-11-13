@@ -448,6 +448,13 @@ class LandlinesImportController extends AppController {
 	*/
 	public function run_block($uf=null){
 		/**
+		* Verifica se a chave do modulo de importacao esta ativa
+		*/
+		if(!$this->Settings->active($this->name)){
+			die;
+		}
+		
+		/**
 		* Verifica se foi passado algum estado por parametro
 		*/
 		if($uf){

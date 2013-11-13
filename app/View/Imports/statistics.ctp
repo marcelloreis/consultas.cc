@@ -20,7 +20,7 @@ echo $this->element('Index/Imports/charts-gauge');
 // echo $this->element('Index/Imports/real-time');
 ?>
 
-<!-- <div class="row-fluid">
+<div class="row-fluid">
 	<div class="span12">
 		<div class="box box-color box-bordered">
 			<div class="box-title">
@@ -38,6 +38,16 @@ echo $this->element('Index/Imports/charts-gauge');
 					</div>					
 					<div class="span3">
 						<p>
+							<?php echo $this->Html->link('Lock Import', array('action' => 'lock', 0), array('class' => 'btn-block btn btn-large'))?>
+						</p>
+					</div>					
+					<div class="span3">
+						<p>
+							<?php echo $this->Html->link('Unlock Import', array('action' => 'lock', 1), array('class' => 'btn-block btn btn-large'))?>
+						</p>
+					</div>					
+					<div class="span3">
+						<p>
 							<?php echo $this->Html->link('Real-Time', array('action' => 'real_time'), array('class' => 'btn-block btn btn-large'))?>
 						</p>
 					</div>					
@@ -45,7 +55,7 @@ echo $this->element('Index/Imports/charts-gauge');
 			</div>
 		</div>					
 	</div>
-</div> -->
+</div>
 
 <?php if(isset($imports['records_processed'])):?>
 	<div class="row-fluid">
@@ -78,14 +88,14 @@ echo $this->element('Index/Imports/charts-gauge');
 								<li class="lightgrey">
 									<i style="margin-top:10px;" class="glyphicon-inbox_out"></i>
 									<div class="details">
-										<span class="big"><?php echo $imports['records_to_process']?></span>
+										<span class="big"><?php echo $this->AppUtils->num2qt($imports['records_to_process'])?></span>
 										<span class="records_to_process"><?php echo __('Records to Process')?></span>
 									</div>
 								</li>
 								<li class="green">
 									<i style="margin-top:10px;" class="glyphicon-inbox_in"></i>
 									<div class="details">
-										<span class="big records_processed"><?php echo $imports['records_processed']?></span>
+										<span class="big records_processed"><?php echo $this->AppUtils->num2qt($imports['records_processed'])?></span>
 										<span><?php echo __('Records Processed')?></span>
 									</div>
 								</li>

@@ -18,9 +18,9 @@ SELECT * FROM naszaco_pessoas.zipcodes order by id desc;
 SELECT * FROM naszaco_pessoas.landlines order by id desc;
 SELECT * FROM naszaco_pessoas.mobiles order by id desc;
 
-SELECT * FROM naszaco_pessoas.i_entities order by id desc;
-SELECT * FROM naszaco_pessoas.i_associations order by id desc;
-SELECT * FROM naszaco_pessoas.i_addresses order by id desc;
-SELECT * FROM naszaco_pessoas.i_zipcodes order by id desc;
-SELECT * FROM naszaco_pessoas.i_landlines order by id desc;
+SELECT * FROM naszaco_pessoas.i_entities order by id;
+SELECT * FROM naszaco_pessoas.i_associations order by id;
+SELECT * FROM naszaco_pessoas.i_addresses order by id;
+SELECT * FROM naszaco_pessoas.i_zipcodes order by id;
+SELECT * FROM naszaco_pessoas.i_landlines order by id;
 SELECT * FROM naszaco_pessoas.i_mobiles;
