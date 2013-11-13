@@ -489,16 +489,6 @@ class LandlinesImportController extends AppController {
 			$this->db['association'] = $this->Iassociation->getDataSource();
 
 			for ($i=0; $i < $this->qt_reg; $i+=LIMIT_BUILD_SOURCE) { 
-
-				/**
-				* Inicializa a transacao
-				*/
-				// $this->db['entity']->begin();
-				// $this->db['landline']->begin();
-				// $this->db['address']->begin();
-				// $this->db['zipcode']->begin();
-				// $this->db['association']->begin();
-
 				/**
 				* Carrega o proximo registro das tabelas de pessoa, telefone e endereco q ainda nao foram importado
 				*/
@@ -518,11 +508,6 @@ class LandlinesImportController extends AppController {
 					$this->AppImport->timing_end();
 
 					if(isset($v['pessoa'])){
-						/**
-						* Inicialiaza a transacao
-						*/
-						// $this->db['entity']->begin();
-
 						/**
 						* Gera o hash do nome da entidade
 						*/
@@ -569,7 +554,7 @@ class LandlinesImportController extends AppController {
 						/**
 						* Exibe o status da importacao no console 
 						*/
-						$this->qt_imported++;
+						// $this->qt_imported++;
 						// $this->AppImport->progressBar($this->qt_imported, $this->qt_reg, $this->uf);
 
 						/**
@@ -577,14 +562,6 @@ class LandlinesImportController extends AppController {
 						*/
 						if(isset($v['telefone'])){
 							foreach ($v['telefone'] as $v2) {
-								/**
-								* Inicializa a transacao
-								*/
-								// $this->db['landline']->begin();
-								// $this->db['address']->begin();
-								// $this->db['zipcode']->begin();
-								// $this->db['association']->begin();
-
 								/**
 								* Desmembra o DDD do Telefone
 								*/
@@ -735,23 +712,7 @@ class LandlinesImportController extends AppController {
 								$this->AppImport->timing_end();
 								
 								$this->AppImport->timing_ini(TUNING_IMPORT_ALL_DATA);
-								if($this->importAssociation($data)){
-									/**
-									* Registra todas as transacoes
-									*/
-									// $this->db['landline']->commit();
-									// $this->db['address']->commit();
-									// $this->db['zipcode']->commit();
-									// $this->db['association']->commit();
-								}else{
-									/**
-									* Aborta todas as transacoes relacionadas a entidade
-									*/
-									// $this->db['landline']->rollback();
-									// $this->db['address']->rollback();
-									// $this->db['zipcode']->rollback();
-									// $this->db['association']->rollback();							
-								}
+								$this->importAssociation($data);
 								$this->AppImport->timing_end();
 
 								/**
@@ -769,26 +730,10 @@ class LandlinesImportController extends AppController {
 						* Salva as contabilizacoes na base de dados
 						*/					
 						$this->AppImport->__counter('entities');
-
-						/**
-						* Finaliza todas as transacoes
-						*/
-						// $this->db['entity']->commit();					
 					}else{
 						$this->AppImport->fail('entities');
 					}
 				}
-
-				/**
-				* Registra todas as transacoes
-				*/
-				// $this->db['entity']->commit();
-				// $this->db['landline']->commit();
-				// $this->db['address']->commit();
-				// $this->db['zipcode']->commit();
-				// $this->db['association']->commit();
-
-
 			}
 
 			/**

@@ -173,7 +173,8 @@ echo $this->element('Index/Imports/charts-gauge')
 			</div>
 			<div class="box-content">
 				<div class="row-fluid">
-					<div id="chart_timing" style="width: 100%; height: 500px;"></div>
+					<div class="span3" id="chart_next" style="height: 500px; padding-top: 100px;"></div>
+					<div class="span9" id="chart_timing" style="height: 500px;"></div>
 				</div>
 			</div>
 		</div>					
