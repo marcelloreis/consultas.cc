@@ -1244,7 +1244,6 @@ class AppImportComponent extends Component {
 		}
 	}
 
-
 	/**
 	 * show a status bar in the console
 	 * 

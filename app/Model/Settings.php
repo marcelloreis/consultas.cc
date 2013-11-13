@@ -23,6 +23,7 @@ class Settings extends AppModelClean {
 
 	public function active($module){
 		$isActive = file_get_contents(dirname(dirname(dirname(__FILE__))) . '/_db/settings/on_off');
+		$isActive = preg_replace('/[^0-1]/si', '', $isActive);
 
 		if($isActive == '0'){
 			$content = "\n\n\n\n";

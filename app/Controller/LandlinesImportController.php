@@ -478,16 +478,6 @@ class LandlinesImportController extends AppController {
 			* Inicia o processo de importacao
 			*/
 			$this->AppImport->__log("Importacao Iniciada.", IMPORT_BEGIN, $this->uf);
-
-			/**
-			* Inicializa a transacao das tabelas
-			*/
-			$this->db['entity'] = $this->Ientity->getDataSource();
-			$this->db['landline'] = $this->Ilandline->getDataSource();
-			$this->db['address'] = $this->Ilandline->getDataSource();
-			$this->db['zipcode'] = $this->Ilandline->getDataSource();
-			$this->db['association'] = $this->Iassociation->getDataSource();
-
 			for ($i=0; $i < $this->qt_reg; $i+=LIMIT_BUILD_SOURCE) { 
 				/**
 				* Carrega o proximo registro das tabelas de pessoa, telefone e endereco q ainda nao foram importado
