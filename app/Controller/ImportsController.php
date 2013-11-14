@@ -76,6 +76,19 @@ class ImportsController extends AppController {
 	}
 
 	/**
+	* Método lock
+	* Este método trava/libera a importacao
+	*
+	* @return void
+	*/
+	public function lock($switch){
+		$path = dirname(dirname(dirname(__FILE__)));
+		file_put_contents("{$path}/_db/settings/on_off", $switch);
+
+		$this->redirect($this->referer());
+	}
+
+	/**
 	* Método statistics
 	* Este método carrega as estatisticas da importacao vigente
 	*
@@ -86,12 +99,12 @@ class ImportsController extends AppController {
 			/**
 			* Carrega a quantidade de registros a serem importados
 			*/
-			$imports['records_to_process'] = $this->AppUtils->num2qt($this->counters['entities']['extracted']);
+			$imports['records_to_process'] = $this->counters['entities']['extracted'];
 
 			/**
 			* Carrega a quantidade de registros ja processados
 			*/
-			$imports['records_processed'] = $this->AppUtils->num2qt(($this->counters['entities']['success'] + $this->counters['entities']['fails']));
+			$imports['records_processed'] = ($this->counters['entities']['success'] + $this->counters['entities']['fails']);
 
 			/**
 			* Calcula o progresso da importacao
