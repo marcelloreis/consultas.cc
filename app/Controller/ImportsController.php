@@ -60,7 +60,6 @@ class ImportsController extends AppController {
 		foreach ($this->Counter->findAllByActive(true) as $k => $v) {
 			$this->counters[$v['Counter']['table']] = $v['Counter'];
 		}		
-
 	}	
 
 	/**
@@ -70,67 +69,10 @@ class ImportsController extends AppController {
 	* @return void
 	*/
 	public function reload(){
-		/**
-		* Encerra a importacao
-		*/
-		file_put_contents(dirname(dirname(dirname(__FILE__))) . '/_db/settings/on_off', '0');
+		$path = dirname(dirname(dirname(__FILE__)));
+		echo shell_exec("setsid sh {$path}/_db/settings/reload.sh > /dev/null 2>/dev/null &");
 
-		/**
-		* Zera as tabelas auxiliares
-		*/
-		// $this->Import->query('update naszaco_pessoas._counter set success = null, fails = null, extracted = null, start_time = null');
-		// $this->Import->query('update naszaco_pessoas._timing set time = null');
-		// $this->Import->query('truncate table naszaco_pessoas._logs');
-		
-		// /**
-		// * Migra todos os dados importados ate o momento
-		// */
-		// $this->Import->query('INSERT INTO naszaco_pessoas.entities SELECT * FROM naszaco_pessoas.i_entities');
-		// $this->Import->query('INSERT INTO naszaco_pessoas.landlines SELECT * FROM naszaco_pessoas.i_landlines');
-		// $this->Import->query('INSERT INTO naszaco_pessoas.mobiles SELECT * FROM naszaco_pessoas.i_mobiles');
-		// $this->Import->query('INSERT INTO naszaco_pessoas.zipcodes SELECT * FROM naszaco_pessoas.i_zipcodes');
-		// $this->Import->query('INSERT INTO naszaco_pessoas.addresses SELECT * FROM naszaco_pessoas.i_addresses');
-		// $this->Import->query('INSERT INTO naszaco_pessoas.associations SELECT * FROM naszaco_pessoas.i_associations');
-
-		// /**
-		// * Zera as tableas de importacao
-		// */
-		// $this->Import->query('TRUNCATE TABLE naszaco_pessoas.i_entities');
-		// $this->Import->query('TRUNCATE TABLE naszaco_pessoas.i_landlines');
-		// $this->Import->query('TRUNCATE TABLE naszaco_pessoas.i_mobiles');
-		// $this->Import->query('TRUNCATE TABLE naszaco_pessoas.i_zipcodes');
-		// $this->Import->query('TRUNCATE TABLE naszaco_pessoas.i_addresses');
-		// $this->Import->query('TRUNCATE TABLE naszaco_pessoas.i_associations');
-
-		// /**
-		// * Sincroniza o auto increment das tabelas de importacao e de producao
-		// */
-		// $map = $this->Import->query("SELECT AUTO_INCREMENT FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'naszaco_pessoas' AND TABLE_NAME = 'entities'");
-		// $this->Import->query("ALTER TABLE naszaco_pessoas.i_entities AUTO_INCREMENT = {$map[0]['TABLES']['AUTO_INCREMENT']}");
-
-		// $map = $this->Import->query("SELECT AUTO_INCREMENT FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'naszaco_pessoas' AND TABLE_NAME = 'associations'");
-		// $this->Import->query("ALTER TABLE naszaco_pessoas.i_associations AUTO_INCREMENT = {$map[0]['TABLES']['AUTO_INCREMENT']}");
-
-		// $map = $this->Import->query("SELECT AUTO_INCREMENT FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'naszaco_pessoas' AND TABLE_NAME = 'addresses'");
-		// $this->Import->query("ALTER TABLE naszaco_pessoas.i_addresses AUTO_INCREMENT = {$map[0]['TABLES']['AUTO_INCREMENT']}");
-
-		// $map = $this->Import->query("SELECT AUTO_INCREMENT FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'naszaco_pessoas' AND TABLE_NAME = 'zipcodes'");
-		// $this->Import->query("ALTER TABLE naszaco_pessoas.i_zipcodes AUTO_INCREMENT = {$map[0]['TABLES']['AUTO_INCREMENT']}");
-
-		// $map = $this->Import->query("SELECT AUTO_INCREMENT FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'naszaco_pessoas' AND TABLE_NAME = 'landlines'");
-		// $this->Import->query("ALTER TABLE naszaco_pessoas.i_landlines AUTO_INCREMENT = {$map[0]['TABLES']['AUTO_INCREMENT']}");
-
-		// $map = $this->Import->query("SELECT AUTO_INCREMENT FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'naszaco_pessoas' AND TABLE_NAME = 'mobiles'");
-		// $this->Import->query("ALTER TABLE naszaco_pessoas.i_mobiles AUTO_INCREMENT = {$map[0]['TABLES']['AUTO_INCREMENT']}");
-
-		// /**
-		// * Reinicia a importacao
-		// */
-		// file_put_contents(dirname(dirname(dirname(__FILE__))) . '/_db/settings/on_off', '1');
-
-		// echo shell_exec('cd /var/www/dados');
-		// echo shell_exec('php app/exec.php /landlines_import/run_block/es');
-
+		$this->redirect($this->referer());
 	}
 
 	/**
@@ -140,51 +82,57 @@ class ImportsController extends AppController {
 	* @return void
 	*/
 	public function statistics(){
-		/**
-		* Carrega a quantidade de registros a serem importados
-		*/
-		$imports['records_to_process'] = $this->counters['entities']['extracted'];
+		if(!empty($this->counters['entities']['success'])){
+			/**
+			* Carrega a quantidade de registros a serem importados
+			*/
+			$imports['records_to_process'] = $this->AppUtils->num2qt($this->counters['entities']['extracted']);
 
-		/**
-		* Carrega a quantidade de registros ja processados
-		*/
-		$imports['records_processed'] = ($this->counters['entities']['success'] + $this->counters['entities']['fails']);
+			/**
+			* Carrega a quantidade de registros ja processados
+			*/
+			$imports['records_processed'] = $this->AppUtils->num2qt(($this->counters['entities']['success'] + $this->counters['entities']['fails']));
 
-		/**
-		* Calcula o progresso da importacao
-		*/
-		$imports['progress'] = floor(($imports['records_processed'] / $imports['records_to_process']) * 100);
+			/**
+			* Calcula o progresso da importacao
+			*/
+			$imports['progress'] = floor(($imports['records_processed'] / $imports['records_to_process']) * 100);
 
-		/**
-		* Calcula o tempo percorrido da importacao
-		*/
-		$imports['elapsed'] = $this->getElapsed();
+			/**
+			* Calcula o tempo percorrido da importacao
+			*/
+			$imports['elapsed'] = $this->getElapsed();
 
-		/**
-		* Calcula o tempo percorrido da importacao
-		*/
-		$imports['remaining'] = $this->getRemaining();
+			/**
+			* Calcula o tempo percorrido da importacao
+			*/
+			$imports['remaining'] = $this->getRemaining();
 
-		/**
-		* Carrega a quantidade de processos por tempo
-		*/
-		$this->processPerTime();
+			/**
+			* Carrega a quantidade de processos por tempo
+			*/
+			$this->processPerTime();
 
-		/**
-		* Carrega o timing da importacao sem o NEXT
-		*/
-		$imports['timing'] = $this->Timing->find('list', array('fields' => array('Timing.time', 'Timing.description'), 'conditions' => array('Timing.time NOT' => null, 'Timing.id NOT' => TUNING_LOAD_NEXT_REGISTER)));
+			/**
+			* Carrega o timing da importacao sem o NEXT
+			*/
+			$imports['timing'] = $this->Timing->find('list', array('fields' => array('Timing.time', 'Timing.description'), 'conditions' => array('Timing.time NOT' => null, 'Timing.id NOT' => TUNING_LOAD_NEXT_REGISTER)));
 
-		/**
-		* Carrega o timing do NEXT da importacao
-		*/
-		$imports['timing_next'] = $this->Timing->find('first', array('fields' => array('Timing.time', 'Timing.description'), 'conditions' => array('Timing.time NOT' => null, 'Timing.id' => TUNING_LOAD_NEXT_REGISTER)));
+			/**
+			* Carrega o timing do NEXT da importacao
+			*/
+			$imports['timing_next'] = $this->Timing->find('first', array('fields' => array('Timing.time', 'Timing.description'), 'conditions' => array('Timing.time NOT' => null, 'Timing.id' => TUNING_LOAD_NEXT_REGISTER)));
 
-// debug($imports['timing_next']);die;
-		/**
-		* Carrega as tableas que estao sendo alimentadas
-		*/
-		$imports['counters'] = $this->counters;
+			/**
+			* Carrega as tableas que estao sendo alimentadas
+			*/
+			$imports['counters'] = $this->counters;
+
+		}
+
+		if ($this->RequestHandler->isAjax()) {
+			echo json_encode($imports);
+		}
 
 		/**
 		* Carrega as variaveis de ambiente

@@ -39,6 +39,9 @@ repair table naszaco_pessoas.i_zipcodes;
 repair table naszaco_pessoas.i_landlines;
 repair table naszaco_pessoas.i_mobiles;
 
+repair table NATT.PESSOA_ES;
+repair table NATT.TELEFONES_ES;
+
 #Migracao dos dados importados
 INSERT INTO naszaco_pessoas.entities SELECT * FROM naszaco_pessoas.i_entities;
 INSERT INTO naszaco_pessoas.landlines SELECT * FROM naszaco_pessoas.i_landlines;

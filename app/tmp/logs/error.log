@@ -41,3 +41,6 @@
 2013-11-11 16:27:45 Error: Fatal Error (1): Call to a member function find() on a non-object in [/var/www/nasza/app/Controller/MobilesImportController.php, line 94]
 2013-11-11 16:28:51 Error: Fatal Error (1): Call to a member function find() on a non-object in [/var/www/nasza/app/Controller/MobilesImportController.php, line 94]
 2013-11-12 15:01:24 Error: Fatal Error (4): syntax error, unexpected ''Timing\'][\'timing_next\']?>'' (T_CONSTANT_ENCAPSED_STRING), expecting identifier (T_STRING) in [/var/www/dados/app/View/Elements/Index/Imports/charts-gauge.ctp, line 75]
+2013-11-12 23:26:27 Error: Fatal Error (4): syntax error, unexpected 'echo' (T_ECHO), expecting ',' or ';' in [/var/www/dados/app/View/Imports/statistics.ctp, line 20]
+2013-11-12 23:26:27 Error: Fatal Error (4): syntax error, unexpected 'echo' (T_ECHO), expecting ',' or ';' in [/var/www/dados/app/View/Imports/statistics.ctp, line 20]
+2013-11-12 23:26:27 Error: Fatal Error (4): syntax error, unexpected 'echo' (T_ECHO), expecting ',' or ';' in [/var/www/dados/app/View/Imports/statistics.ctp, line 20]
