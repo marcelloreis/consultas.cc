@@ -50,7 +50,7 @@ class AppController extends Controller {
 		'Main.AppUtils',
 		'RequestHandler',
 		'Google.AppGoogle',
-		// 'DebugKit.Toolbar' => array('autoRun' => true),
+		'DebugKit.Toolbar' => array('autoRun' => true),
 		'Facebook.AppFacebook',
 		);
 	/**
@@ -459,7 +459,7 @@ class AppController extends Controller {
 			$defaults = array(
 							'limit' => $this->limit
 				);
-// debug($params);			
+	
 			$params = array_merge($defaults, $params);
 	    	$this->paginate = array($this->modelClass => $params);
 
@@ -924,7 +924,6 @@ class AppController extends Controller {
 			$habtm_id = $this->params['named']['habtm_id'];
 		}
 
-// debug($this->Model->hasAndBelongsToMany);die;
 		/**
 		* Verifica se existe uma associacao HABTM informada no model
 		*/

@@ -32,29 +32,30 @@ class AppImportComponent extends Component {
 	public $counter;
 
 	public function __construct() {
-	    $this->Log = ClassRegistry::init('Log');
+	    // $this->Log = ClassRegistry::init('Log');
 	    $this->City = ClassRegistry::init('City');
 	    $this->Iaddress = ClassRegistry::init('Iaddress');
 	    $this->ModelCounter = ClassRegistry::init('Counter');
 	    $this->Timing = ClassRegistry::init('Timing');
-		$map = $this->Log->query('select @@foreign_key_checks, @@unique_checks, @@autocommit, @@query_cache_type, @@query_cache_size');
+	    
+		// $map = $this->Log->query('select @@foreign_key_checks, @@unique_checks, @@autocommit, @@query_cache_type, @@query_cache_size');
 
 	    /**
 	    * Desabilita as verificacoes de chave estrangeira
 	    */
-	    $map = $this->Log->query('SET foreign_key_checks = 0');
+	    // $map = $this->Log->query('SET foreign_key_checks = 0');
 	    /**
 	    * Desabilita as verificacoes de chave unica
 	    */
-	    $map = $this->Log->query('SET unique_checks = 0');
+	    // $map = $this->Log->query('SET unique_checks = 0');
 	    /**
 	    * Desabilita o autocommit
 	    */
-	    $map = $this->Log->query('SET autocommit = 0');
+	    // $map = $this->Log->query('SET autocommit = 0');
 	    /**
 	    * Habilita o cache das consultas
 	    */
-	    $map = $this->Log->query('SET query_cache_type = 1');
+	    // $map = $this->Log->query('SET query_cache_type = 1');
 
 	    /**
 	    * Carrega o array de nomes femininos e masculinas para comparacao e deducao de sexo
@@ -1346,19 +1347,19 @@ class AppImportComponent extends Component {
 			}
 
 
-			$map = $this->Log->query('select @@foreign_key_checks');
+			// $map = $this->Log->query('select @@foreign_key_checks');
 			$foreign_key_checks = $map[0][0]['@@foreign_key_checks'];
 
-			$map = $this->Log->query('select @@unique_checks');
+			// $map = $this->Log->query('select @@unique_checks');
 			$unique_checks = $map[0][0]['@@unique_checks'];
 
-			$map = $this->Log->query('select @@autocommit');
+			// $map = $this->Log->query('select @@autocommit');
 			$autocommit = $map[0][0]['@@autocommit'];
 
-			$map = $this->Log->query('select @@query_cache_type');
+			// $map = $this->Log->query('select @@query_cache_type');
 			$query_cache_type = $map[0][0]['@@query_cache_type'];
 
-			$map = $this->Log->query('select @@query_cache_size');
+			// $map = $this->Log->query('select @@query_cache_size');
 			$query_cache_size = ($map[0][0]['@@query_cache_size']/1024)/1024;
 
 		    $status_bar .= "\n";
