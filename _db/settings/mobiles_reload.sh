@@ -20,7 +20,6 @@ mysql -u $user -p$password -e 'TRUNCATE table naszaco_pessoas._logs;'
 
 #Migra todos os dados importados ate o momento
 mysql -u $user -p$password -e 'INSERT INTO naszaco_pessoas.entities SELECT * FROM naszaco_pessoas.i_entities;'
-mysql -u $user -p$password -e 'INSERT INTO naszaco_pessoas.landlines SELECT * FROM naszaco_pessoas.i_landlines;'
 mysql -u $user -p$password -e 'INSERT INTO naszaco_pessoas.mobiles SELECT * FROM naszaco_pessoas.i_mobiles;'
 mysql -u $user -p$password -e 'INSERT INTO naszaco_pessoas.zipcodes SELECT * FROM naszaco_pessoas.i_zipcodes;'
 mysql -u $user -p$password -e 'INSERT INTO naszaco_pessoas.addresses SELECT * FROM naszaco_pessoas.i_addresses;'
@@ -28,7 +27,6 @@ mysql -u $user -p$password -e 'INSERT INTO naszaco_pessoas.associations SELECT *
 
 #Zera as tableas de importacao
 mysql -u $user -p$password -e 'TRUNCATE TABLE naszaco_pessoas.i_entities;'
-mysql -u $user -p$password -e 'TRUNCATE TABLE naszaco_pessoas.i_landlines;'
 mysql -u $user -p$password -e 'TRUNCATE TABLE naszaco_pessoas.i_mobiles;'
 mysql -u $user -p$password -e 'TRUNCATE TABLE naszaco_pessoas.i_zipcodes;'
 mysql -u $user -p$password -e 'TRUNCATE TABLE naszaco_pessoas.i_addresses;'
@@ -38,9 +36,6 @@ mysql -u $user -p$password -e 'TRUNCATE TABLE naszaco_pessoas.i_associations;'
 #Sincroniza o auto increment das tabelas de importacao e de producao
 ai=`mysql -u $user -p$password -e "SELECT AUTO_INCREMENT FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'naszaco_pessoas' AND TABLE_NAME = 'entities';" | sed 's/[^0-9]*//g'`
 mysql -u $user -p$password -e "ALTER TABLE naszaco_pessoas.i_entities AUTO_INCREMENT = $ai;"
-
-ai=`mysql -u $user -p$password -e "SELECT AUTO_INCREMENT FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'naszaco_pessoas' AND TABLE_NAME = 'landlines';" | sed 's/[^0-9]*//g'`
-mysql -u $user -p$password -e "ALTER TABLE naszaco_pessoas.i_landlines AUTO_INCREMENT = $ai;"
 
 ai=`mysql -u $user -p$password -e "SELECT AUTO_INCREMENT FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'naszaco_pessoas' AND TABLE_NAME = 'mobiles';" | sed 's/[^0-9]*//g'`
 mysql -u $user -p$password -e "ALTER TABLE naszaco_pessoas.i_mobiles AUTO_INCREMENT = $ai;"
@@ -57,4 +52,4 @@ mysql -u $user -p$password -e "ALTER TABLE naszaco_pessoas.i_associations AUTO_I
 
 # Reinicia a importacao
 echo '1' > "$app/_db/settings/on_off"
-php app/exec.php /landlines_import/run_block/es
+php app/exec.php /mobiles_import/run/es

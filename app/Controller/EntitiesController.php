@@ -213,6 +213,9 @@ class EntitiesController extends ProjectController {
 		}else if(isset($params['landline'])){
 			$people = $this->getByLandline($params);
 			$msg = 'No records found with the typed landline';
+		}else if(isset($params['mobile'])){
+			$people = $this->getByMobile($params);
+			$msg = 'No records found with the typed mobile';
 		}else if(isset($params['zipcode']) || isset($params['street'])){
 			$people = $this->getByAddress($params);
 			$msg = 'No records found with the typed address';
@@ -233,6 +236,11 @@ class EntitiesController extends ProjectController {
 	    	$landline = $this->landline($associations);
 
 	    	/**
+	    	* Carrega os dados pertinentes ao produto 'Telefone Movel'
+	    	*/
+	    	$mobile = $this->mobile($associations);
+
+	    	/**
 	    	* Carrega os dados pertinentes ao produto 'Endereços'
 	    	*/
 	    	$address = $this->address($associations);
@@ -251,7 +259,7 @@ class EntitiesController extends ProjectController {
 	    	*/
 	    	$family = $this->family($people, $address);
 	
-	    	$this->set(compact('people', 'landline', 'address', 'locator', 'family', 'neighborhood'));
+	    	$this->set(compact('people', 'landline', 'mobile', 'address', 'locator', 'family', 'neighborhood'));
     	}else{
     		if(isset($msg) && $this->view == $this->action){
 				$this->Session->setFlash(__($msg) , FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
@@ -420,6 +428,58 @@ class EntitiesController extends ProjectController {
 	}
 
 	/**
+	* Método getByMobile
+	* Este método as regras de negocio responsaveis por encontrar a entidade a partir do telefone fixo
+	*
+	* @param array $query (parametros de busca)
+	* @return array $people (dados da entidade encontrada)
+	*/
+	private function getByMobile($query){
+		/**
+		* Inicializa a variavel que contera os dados encontrados da entidade
+		*/
+		$people = false;
+
+		/**
+		* Uni o ddd ao telefone pesquisado
+		*/
+		if(isset($query['ddd']) && !empty($query['ddd']) && isset($query['mobile']) && !empty($query['mobile'])){
+			$tel = preg_replace('/[^0-9]/', '', $query['ddd']) . preg_replace('/[^0-9]/', '', $query['mobile']);
+		}else if(isset($query['mobile']) && !empty($query['mobile'])){
+			$tel = preg_replace('/[^0-9]/', '', $query['mobile']);
+		}
+
+		$people_found = $this->Entity->Mobile->find('list', array(
+			'fields' => array('Association.entity_id', 'Association.entity_id'),
+			'joins' => array(
+				array('table' => 'associations',
+			        'alias' => 'Association',
+			        'type' => 'INNER',
+			        'conditions' => array(
+			            'Association.mobile_id = Mobile.id',
+			        )
+			    )
+				),
+			'conditions' => array(
+				'OR' => array(
+					'Mobile.tel' => $tel,
+					'Mobile.tel_full' => $tel,
+					)
+				),
+			'order' => array('Association.year' => 'desc', 'Association.entity_id')
+			));
+
+		$params = array(
+			'conditions' => array(
+				'Entity.id' => $people_found,
+				),
+			);						
+		$this->index($params);
+
+		return $people;
+	}
+
+	/**
 	* Método getByAddress
 	* Este método as regras de negocio responsaveis por encontrar a entidade a partir do endereço
 	*
@@ -551,6 +611,40 @@ class EntitiesController extends ProjectController {
 	}
 
 	/**
+	* Método mobile
+	* Este método corresponde ao produto 'Telefones Moveis' e retorna todos os telefones moveis da entidade a partir dos id's contidos em $associations
+	*
+	* @return array
+	*/
+	public function mobile($associations){
+		$map = array();
+		$assoc_mobiles = array();
+    	if($associations){
+			/**
+			* Agrupa os telefones por ANO e ID
+			*/
+			foreach ($associations as $k => $v) {
+				if(!empty($v['Association']['mobile_id'])){
+					$assoc_mobiles["{$v['Association']['year']}{$v['Association']['mobile_id']}"] = $v['Association'];
+				}
+			}
+
+			/**
+			* Carrega todos os dados dos celulares contidos na associacao
+			*/
+    		foreach ($assoc_mobiles as $k => $v) {
+				$mobile = $this->Entity->Mobile->find('first', array(
+					'conditions' => array('Mobile.id' => $v['mobile_id'])
+					));
+				$mobile['Mobile']['year'] = $v['year'];
+				$map[$v['id']] = $mobile;
+    		}
+    	}
+
+    	return $map;
+	}
+
+	/**
 	* Método address
 	* Este método corresponde ao produto 'Endereços' e retorna todos os telefones fixos da entidade a partir dos id's contidos em $associations
 	*
@@ -559,26 +653,18 @@ class EntitiesController extends ProjectController {
 	public function address($associations){
 		$map = array();
 		$assoc_address = array();
-    	if($associations){
-			/**
-			* Agrupa os enderecos por ANO e ID
-			*/
-			foreach ($associations as $k => $v) {
-				if(!empty($v['Association']['address_id'])){
-					$assoc_address["{$v['Association']['year']}{$v['Association']['address_id']}"] = $v['Association'];
-				}
-			}
 
+    	if($associations){
 			/**
 			* Carrega todos os dados dos enderecos contidos na associacao
 			*/
-    		foreach ($assoc_address as $k => $v) {
+    		foreach ($associations as $k => $v) {
 				$address = $this->Entity->Address->find('first', array(
-					'conditions' => array('Address.id' => $v['address_id'])
+					'conditions' => array('Address.id' => $v['Association']['address_id'])
 					));
 
-				$address['Address']['year'] = $v['year'];
-				$map[$v['id']] = $address;
+				$address['Address']['year'] = $v['Association']['year'];
+				$map[$v['Association']['id']] = $address;
     		}
     	}
 

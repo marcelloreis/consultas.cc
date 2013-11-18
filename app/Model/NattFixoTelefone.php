@@ -19,11 +19,11 @@ App::uses('AppModelClean', 'Model');
  */
 class NattFixoTelefone extends AppModelClean {
 	public $useTable = false;
-	public $useDbConfig = 'natt';
-	public $primaryKey = 'CPF_CNPJ';
-	public $displayField = 'NOME_RAZAO';
-	public $order = 'NattFixoTelefone.CPF_CNPJ';
     public $recursive = -1;
+    public $useDbConfig = 'natt';
+    public $primaryKey = 'CPF_CNPJ';
+    public $displayField = 'NOME_RAZAO';
+    public $order = 'NattFixoTelefone.CPF_CNPJ';
 
    public $belongsTo = array(
         'NattFixoEndereco' => array(

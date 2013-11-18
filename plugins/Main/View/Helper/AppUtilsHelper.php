@@ -299,6 +299,9 @@ class AppUtilsHelper extends AppHelper {
 	public function tel($tel){
 		$tel_size = strlen(preg_replace('[^0-9]', '', $tel));
 		switch ($tel_size) {
+			case 11:
+				$tel = $this->format($tel, '(##) #####-####');
+				break;
 			case 10:
 				$tel = $this->format($tel, '(##) ####-####');
 				break;

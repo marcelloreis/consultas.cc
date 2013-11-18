@@ -21,7 +21,6 @@ class AppImportComponent extends Component {
 	private $ModelCounter;
 	private $Timing;
 	private $timing_avg;
-	private $counter;
 	private $time_start;
 	private $time_end;
 	private $time_id;
@@ -30,6 +29,7 @@ class AppImportComponent extends Component {
 	private $male_names;
 	private $comapani_names;
 	public $sizeReload;
+	public $counter;
 
 	public function __construct() {
 	    $this->Log = ClassRegistry::init('Log');
@@ -748,6 +748,7 @@ class AppImportComponent extends Component {
 		$street = preg_replace('/^trv\.?|trevo /si', '', $street);
 		$street = preg_replace('/^vl\.?|vila /si', '', $street);
 		$street = preg_replace('/^vd\.?|viaduto /si', '', $street);
+		$street = preg_replace('/comtipo r /si', '', $street);
 		$street = preg_replace('/cento e um/si', '101', $street);
 
 		/**
@@ -833,7 +834,7 @@ class AppImportComponent extends Component {
 			*/
 			case 10:
 				$ddd = substr($tel, 0, 2);
-				$tel = substr($tel, 2);
+				$tel = '9' . substr($tel, 2);
 				break;
 
 			/**
@@ -841,6 +842,7 @@ class AppImportComponent extends Component {
 			*/
 			case 8:
 				$ddd = null;
+				$tel = "9{$tel}";
 				break;
 			
 			default:

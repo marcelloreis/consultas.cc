@@ -23,7 +23,9 @@ $(document).ready(function(){
 	* Configuracao das mascaras dos formularios
 	*/
     // $('.msk-money').maskMoney({decimal:",", thousands:"."});
+    $.mask.definitions['~']='[9]';
     $('.msk-phone').mask('9999-9999');
+    $('.msk-phone-9').mask('~9999-9999');
     $('.msk-phone-ddd').mask('(99) 9999-9999');
     $('.msk-zipcode').mask('99999-999');
     $('.msk-cpf').mask('999.999.999-99');

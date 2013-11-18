@@ -6,6 +6,9 @@
 		<li class="green">
 			<?php echo $this->Html->link('<span><i class="glyphicon-pencil"></i></span><span class="name">' . __('Search by name') . '</span>', array('controller' => 'entities', 'action' => 'people', 'search_by' => 'name', 'plugin' => false), array('escape' => false))?>
 		</li>
+		<li class="grey">
+			<?php echo $this->Html->link('<span><i class="glyphicon-iphone"></i></span><span class="name">' . __('Search by mobile') . '</span>', array('controller' => 'entities', 'action' => 'people', 'search_by' => 'mobile', 'plugin' => false), array('escape' => false))?>
+		</li>
 		<li class="orange">
 			<?php echo $this->Html->link('<span><i class="icon-phone"></i></span><span class="name">' . __('Search by landline') . '</span>', array('controller' => 'entities', 'action' => 'people', 'search_by' => 'landline', 'plugin' => false), array('escape' => false))?>
 		</li>

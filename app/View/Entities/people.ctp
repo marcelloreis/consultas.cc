@@ -30,7 +30,9 @@ if(isset($people)){
 	/**
 	* Dados dos telefones
 	*/
-	// echo $this->element('Index/Entities/mobile');
+	if(isset($mobile) && is_array($mobile)){
+		echo $this->element('Index/Entities/mobile');
+	}
 	/**
 	* Dados dos telefones
 	*/

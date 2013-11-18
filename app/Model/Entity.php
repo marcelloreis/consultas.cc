@@ -114,6 +114,21 @@ class Entity extends AppModelClean {
 			'finderQuery' => '',
 			'deleteQuery' => '',
 			'insertQuery' => ''
+		),
+		'Mobile' => array(
+			'className' => 'Mobile',
+			'joinTable' => 'associations',
+			'foreignKey' => 'entity_id',
+			'associationForeignKey' => 'mobile_id',
+			'unique' => 'keepExisting',
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'finderQuery' => '',
+			'deleteQuery' => '',
+			'insertQuery' => ''
 		)
 	);
 }

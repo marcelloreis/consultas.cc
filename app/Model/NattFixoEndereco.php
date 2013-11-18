@@ -16,7 +16,8 @@ App::uses('AppModelClean', 'Model');
  */
 class NattFixoEndereco extends AppModelClean {
 	public $useTable = false;
+	public $recursive = -1;
 	public $useDbConfig = 'natt';
 	public $primaryKey = 'COD_END';
-	public $recursive = -1;
+	public $order = 'NattFixoEndereco.COD_END';
 }

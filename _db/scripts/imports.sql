@@ -41,22 +41,3 @@ INSERT INTO naszaco_pessoas.landlines SELECT * FROM naszaco_pessoas.i_landlines;
 INSERT INTO naszaco_pessoas.zipcodes SELECT * FROM naszaco_pessoas.i_zipcodes;
 INSERT INTO naszaco_pessoas.addresses SELECT * FROM naszaco_pessoas.i_addresses;
 INSERT INTO naszaco_pessoas.associations SELECT * FROM naszaco_pessoas.i_associations;
-
-#Sincronizacao dos auto increments das tableas de importacao
-SELECT AUTO_INCREMENT FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'naszaco_pessoas' AND   TABLE_NAME   = 'entities';
-ALTER TABLE naszaco_pessoas.i_entities AUTO_INCREMENT = 1239579;
-
-SELECT AUTO_INCREMENT FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'naszaco_pessoas' AND   TABLE_NAME   = 'associations';
-ALTER TABLE naszaco_pessoas.i_associations AUTO_INCREMENT = 2558424;
-
-SELECT AUTO_INCREMENT FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'naszaco_pessoas' AND   TABLE_NAME   = 'addresses';
-ALTER TABLE naszaco_pessoas.i_addresses AUTO_INCREMENT = 959216;
-
-SELECT AUTO_INCREMENT FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'naszaco_pessoas' AND   TABLE_NAME   = 'zipcodes';
-ALTER TABLE naszaco_pessoas.i_zipcodes AUTO_INCREMENT = 24728;
-
-SELECT AUTO_INCREMENT FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'naszaco_pessoas' AND   TABLE_NAME   = 'landlines';
-ALTER TABLE naszaco_pessoas.i_landlines AUTO_INCREMENT = 919704;
-
-SELECT AUTO_INCREMENT FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'naszaco_pessoas' AND   TABLE_NAME   = 'mobiles';
-ALTER TABLE naszaco_pessoas.i_mobiles AUTO_INCREMENT = 1;
