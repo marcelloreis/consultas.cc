@@ -1,3 +1,4 @@
+plugins/Google/Config/*
 _bkps/*
 _db/scripts/*
 tmp/*
