@@ -29,13 +29,20 @@ class NattFixoPessoa extends AppModelClean {
         'NattFixoTelefone' => array(
             'className' => 'NattFixoTelefone',
             'foreignKey' => 'CPF_CNPJ',
-            'type' => 'inner'
+            'type' => 'INNER'
         )
     );
 
     public function next($row_count){
         $map = array();
         $pessoa = $this->find('all', array(
+            'fields' => array(
+                'NattFixoPessoa.CPF_CNPJ',
+                'NattFixoPessoa.NOME_RAZAO',
+                'NattFixoPessoa.MAE',
+                'NattFixoPessoa.SEXO',
+                'NattFixoPessoa.DT_NASCIMENTO',
+                ),
             'conditions' => array(
                 'CPF_CNPJ !=' => '00000000000000000000',
                 ),
@@ -46,6 +53,15 @@ class NattFixoPessoa extends AppModelClean {
             foreach ($pessoa as $k => $v) {
                 $map[$k]['pessoa'] = $v['NattFixoPessoa'];
                 $telefone = $this->NattFixoTelefone->find('all', array(
+                    'fields' => array(
+                        'NattFixoTelefone.TELEFONE',
+                        'NattFixoTelefone.CPF_CNPJ',
+                        'NattFixoTelefone.CEP',
+                        'NattFixoTelefone.COD_END',
+                        'NattFixoTelefone.COMPLEMENTO',
+                        'NattFixoTelefone.NUMERO',
+                        'NattFixoTelefone.DATA_ATUALIZACAO'
+                        ),
                     'conditions' => array('CPF_CNPJ' => $v['NattFixoPessoa']['CPF_CNPJ']),
                     'order' => array('DATA_ATUALIZACAO' => 'DESC'),
                     'limit' => 10
@@ -54,6 +70,14 @@ class NattFixoPessoa extends AppModelClean {
                 if(count($telefone)){
                     foreach ($telefone as $k2 => $v2) {
                         $endereco = $this->NattFixoTelefone->NattFixoEndereco->find('first', array(
+                            'fields' => array(
+                                'NattFixoEndereco.RUA',
+                                'NattFixoEndereco.NOME_RUA',
+                                'NattFixoEndereco.BAIRRO',
+                                'NattFixoEndereco.CIDADE',
+                                'NattFixoEndereco.UF',
+                                'NattFixoEndereco.CEP'
+                                ),
                             'conditions' => array('COD_END' => $v2['NattFixoTelefone']['COD_END'])
                             ));
                         $map[$k]['telefone'][$k2] = $v2['NattFixoTelefone'];
@@ -62,7 +86,10 @@ class NattFixoPessoa extends AppModelClean {
                         }
                     }
                 }else{
-                    $map[$k] = array();
+                    /**
+                    * Elimina as entidades que nao tiverem ao menos 1 telefone relacionado
+                    */
+                    unset($map[$k]);
                 }
 
                 $this->offset($v['NattFixoPessoa']['CPF_CNPJ']);

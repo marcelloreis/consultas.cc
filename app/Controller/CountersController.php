@@ -68,9 +68,9 @@ class CountersController extends AppController {
 	*
 	* @return void
 	*/
-	public function reload(){
+	public function reload($controller, $uf){
 		$path = dirname(dirname(dirname(__FILE__)));
-		shell_exec("setsid sh {$path}/_db/settings/mobiles_reload.sh > /dev/null 2>/dev/null &");
+		shell_exec("setsid sh {$path}/_db/settings/{$controller}_reload.sh {$uf} > /dev/null 2>/dev/null &");
 
 		$this->redirect($this->referer());
 	}
@@ -94,8 +94,8 @@ class CountersController extends AppController {
 	*
 	* @return void
 	*/
-	public function statistics(){
-		if(!empty($this->counters['entities']['success']) || !empty($this->counters['entities']['fails'])){
+	public function statistics($uf){
+		if(!empty($uf) && (!empty($this->counters['entities']['success']) || !empty($this->counters['entities']['fails']))){
 			/**
 			* Carrega a quantidade de registros a serem importados
 			*/
@@ -151,7 +151,7 @@ class CountersController extends AppController {
 		/**
 		* Carrega as variaveis de ambiente
 		*/
-		$this->set(compact('imports'));
+		$this->set(compact('imports', 'uf'));
 	}	
 
 	private function elapsedTimes(){

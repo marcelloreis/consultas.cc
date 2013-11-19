@@ -32,7 +32,6 @@ mysql -u $user -p$password -e 'TRUNCATE TABLE naszaco_pessoas.i_zipcodes;'
 mysql -u $user -p$password -e 'TRUNCATE TABLE naszaco_pessoas.i_addresses;'
 mysql -u $user -p$password -e 'TRUNCATE TABLE naszaco_pessoas.i_associations;'
 
-
 #Sincroniza o auto increment das tabelas de importacao e de producao
 ai=`mysql -u $user -p$password -e "SELECT AUTO_INCREMENT FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'naszaco_pessoas' AND TABLE_NAME = 'entities';" | sed 's/[^0-9]*//g'`
 mysql -u $user -p$password -e "ALTER TABLE naszaco_pessoas.i_entities AUTO_INCREMENT = $ai;"
@@ -52,4 +51,4 @@ mysql -u $user -p$password -e "ALTER TABLE naszaco_pessoas.i_associations AUTO_I
 
 # Reinicia a importacao
 echo '1' > "$app/_db/settings/on_off"
-php app/exec.php /landlines_import/run/es
+php app/exec.php /landlines_import/run/$1

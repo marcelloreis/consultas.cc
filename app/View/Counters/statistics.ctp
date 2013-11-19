@@ -33,17 +33,17 @@ echo $this->element('Index/Imports/charts-gauge');
 				<div class="row-fluid">
 					<div class="span3">
 						<p>
-							<?php echo $this->Html->link('Reload Import', array('action' => 'reload'), array('class' => 'btn-block btn btn-large'))?>
+							<?php echo $this->Html->link('Load/Reload Landline', array('action' => 'reload', 'landlines', $uf), array('class' => 'btn-block btn btn-large'))?>
+						</p>
+					</div>					
+					<div class="span3">
+						<p>
+							<?php echo $this->Html->link('Load/Reload Mobile', array('action' => 'reload', 'mobiles', $uf), array('class' => 'btn-block btn btn-large'))?>
 						</p>
 					</div>					
 					<div class="span3">
 						<p>
 							<?php echo $this->Html->link('Lock Import', array('action' => 'lock', 0), array('class' => 'btn-block btn btn-large'))?>
-						</p>
-					</div>					
-					<div class="span3">
-						<p>
-							<?php echo $this->Html->link('Unlock Import', array('action' => 'lock', 1), array('class' => 'btn-block btn btn-large'))?>
 						</p>
 					</div>					
 					<div class="span3">

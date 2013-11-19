@@ -50,7 +50,7 @@ class AppController extends Controller {
 		'Main.AppUtils',
 		'RequestHandler',
 		'Google.AppGoogle',
-		'DebugKit.Toolbar' => array('autoRun' => true),
+		// 'DebugKit.Toolbar' => array('autoRun' => true),
 		'Facebook.AppFacebook',
 		);
 	/**
