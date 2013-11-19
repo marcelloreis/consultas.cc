@@ -101,10 +101,7 @@ class TranslationsController extends ProjectController {
 
 		if(isset($this->Translation->id)){
 			$this->loadLocale();
-			$this->redirect('index');
 		}
-
-
 	}	
 
 	/**
@@ -113,7 +110,7 @@ class TranslationsController extends ProjectController {
 	*
 	* @return void
 	*/
-	private function loadLocale(){
+	public function loadLocale(){
 		/**
 		* Carrega os diretorios
 		*/
@@ -142,6 +139,9 @@ class TranslationsController extends ProjectController {
 			$msg = "msgid \"{$k}\"\nmsgstr \"{$v}\"\n\n";
 			file_put_contents($dir_locale, $msg, FILE_APPEND | LOCK_EX);
 		}
+
+		$this->Session->setFlash(__("All translations were loaded."), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
+		$this->redirect('index');
 	}
 
 	public function translator(){

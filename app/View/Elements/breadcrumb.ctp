@@ -2,11 +2,10 @@
 	<!-- .breadcrumb -->
 	<ul class="breadcrumb">
 		<li>
-		<a href="#">
-		    <i class="icon-home"></i>Home</a>
+			<a href="#"><i class="icon-home"></i>Home</a>
 		</li>
 		<li>
-		<a href="#">Clientes</a>
+			<a href="#">Clientes</a>
 		</li>
 		<li class="active">Leonardo Cabral Quadros</li>
 	</ul>
