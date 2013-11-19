@@ -65,34 +65,48 @@ class ImportsController extends AppController {
 	*/
 	protected function importEntity($entity){
 		/**
-		* Inicializa o ID da entidade como null
+		* Variavel que guarda o status da importacao da entidade
 		*/
-		$this->Ientity->id = null;
+		$hasCreated = false;
 
 		/**
-		* Verifica se a entidade que sera importada já existe na base de dados
+		* Verifica se o nome da entidade é valido
 		*/
-		$hasEntity = $this->Ientity->findImport('first', array(
-			'conditions' => array(
-				'doc' => $entity['Ientity']['doc'],
-				)
-			));				
-
-		if(count($hasEntity)){
-			$this->Ientity->id = $hasEntity['Ientity']['id'];
+		if(empty($entity['Ientity']['name']) || empty($entity['Ientity']['h1'])){
 			$this->AppImport->fail('entities');
-			return true;
 		}else{
-			$this->Ientity->create($entity);
-			if($this->Ientity->save()){
-				$this->AppImport->success('entities');
-			}else{
-				$this->AppImport->fail('entities');
-				$this->AppImport->__log("Falha ao importar a entidade", IMPORT_ENTITY_FAIL, $this->uf, false, $this->Ientity->useTable, null, $entity['Ientity']['doc'], $this->db['entity']->error);
-			}
-		}	
+			/**
+			* Inicializa o ID da entidade como null
+			*/
+			$this->Ientity->id = null;
 
-		return false;
+			/**
+			* Verifica se a entidade que sera importada já existe na base de dados
+			*/
+			$hasEntity = $this->Ientity->findImport('first', array(
+				'conditions' => array(
+					'doc' => $entity['Ientity']['doc'],
+					)
+				));				
+
+			if(count($hasEntity)){
+				$this->Ientity->id = $hasEntity['Ientity']['id'];
+				$this->AppImport->success('entities');
+				$hasCreated = true;
+			}else{
+				$this->Ientity->create();
+				if($this->Ientity->save($entity)){
+					$this->AppImport->success('entities');
+					$hasCreated = true;
+				}else{
+					$this->AppImport->fail('entities');
+					$this->AppImport->__log("Falha ao importar a entidade", IMPORT_ENTITY_FAIL, $this->uf, false, $this->Ientity->useTable, null, $entity['Ientity']['doc'], $this->db['entity']->error);
+				}
+			}	
+		}
+
+
+		return $hasCreated;
 	}
 
 	/**
@@ -125,10 +139,10 @@ class ImportsController extends AppController {
 
 			if(count($hasLandline)){
 				$this->Ilandline->id = $hasLandline['Ilandline']['id'];
-				$this->AppImport->fail('landlines');
+				$this->AppImport->success('landlines');
 			}else{
-				$this->Ilandline->create($landline);
-				if($this->Ilandline->save()){
+				$this->Ilandline->create();
+				if($this->Ilandline->save($landline)){
 					$this->AppImport->success('landlines');
 				}else{
 					$this->AppImport->fail('landlines');
@@ -168,7 +182,7 @@ class ImportsController extends AppController {
 
 			if(count($hasMobile)){
 				$this->Imobile->id = $hasMobile['Imobile']['id'];
-				$this->AppImport->fail('mobiles');
+				$this->AppImport->success('mobiles');
 			}else{
 				$this->Imobile->create();
 				if($this->Imobile->save($mobile)){
@@ -211,10 +225,10 @@ class ImportsController extends AppController {
 
 			if(count($hasZipcode)){
 				$this->Izipcode->id = $hasZipcode['Izipcode']['id'];
-				$this->AppImport->fail('zipcodes');
+				$this->AppImport->success('zipcodes');
 			}else{
-				$this->Izipcode->create($zipcode);
-				if($this->Izipcode->save()){
+				$this->Izipcode->create();
+				if($this->Izipcode->save($zipcode)){
 					$this->AppImport->success('zipcodes');
 				}else{
 					$this->AppImport->fail('zipcodes');
@@ -249,10 +263,10 @@ class ImportsController extends AppController {
 
 		if(count($hasAddress)){
 			$this->Iaddress->id = $hasAddress['Iaddress']['id'];
-			$this->AppImport->fail('addresses');
+			$this->AppImport->success('addresses');
 		}else{
-			$this->Iaddress->create($address);
-			if($this->Iaddress->save()){
+			$this->Iaddress->create();
+			if($this->Iaddress->save($address)){
 				$this->AppImport->success('addresses');
 			}else{
 				$this->AppImport->fail('addresses');
@@ -305,10 +319,10 @@ class ImportsController extends AppController {
 
 		if(isset($hasAssociation) && count($hasAssociation)){
 			$this->Iassociation->id = $hasAssociation['Iassociation']['id'];
-			$this->AppImport->fail('associations');
+			$this->AppImport->success('associations');
 		}else{
-			$this->Iassociation->create($association);
-			$hasCreated = $this->Iassociation->save(); 
+			$this->Iassociation->create();
+			$hasCreated = $this->Iassociation->save($association); 
 			if($hasCreated){
 				$this->AppImport->success('associations');
 			}else{

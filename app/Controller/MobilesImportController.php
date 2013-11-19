@@ -74,10 +74,10 @@ class MobilesImportController extends ImportsController {
 				/**
 				* Recarrega a importacao
 				*/
-				$tot_reload = ($this->AppImport->counter['entities']['success'] + $this->AppImport->counter['entities']['fails']);
+				$tot_reload = (!empty($this->AppImport->counter['entities']['success']) && !empty($this->AppImport->counter['entities']['fail']))?($this->AppImport->counter['entities']['success'] + $this->AppImport->counter['entities']['fails']):0;
 				if(!empty($tot_reload) && $tot_reload >= $this->limit_per_reload){
 					$path = dirname(dirname(dirname(__FILE__)));
-					shell_exec("setsid sh {$path}/_db/settings/mobiles_reload.sh > /dev/null 2>/dev/null &");
+					shell_exec("setsid sh {$path}/_db/settings/mobiles_reload.sh {$this->uf} > /dev/null 2>/dev/null &");
 				}
 				/**
 				* Verifica se a chave do modulo de importacao esta ativa
@@ -161,7 +161,7 @@ class MobilesImportController extends ImportsController {
 						/**
 						* Inicializa a importacao dos telefones da entidade encontrada
 						*/
-						if(isset($v['telefone'])){
+						if(isset($v['telefone']) && $hasImported){
 							foreach ($v['telefone'] as $v2) {
 								/**
 								* Desmembra o DDD do Telefone

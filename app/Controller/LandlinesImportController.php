@@ -42,7 +42,6 @@ class LandlinesImportController extends ImportsController {
 		if(!$this->Settings->active($this->name)){
 			die;
 		}
-
 		/**
 		* Desabilita o contador mobile e habilita o landline
 		*/
@@ -72,7 +71,7 @@ class LandlinesImportController extends ImportsController {
 			/**
 			* Calcula o limite de importacao por reload
 			*/
-			$this->limit_Per_reload = ($this->Ientity->find('count') + LIMIT_TABLE_IMPORTS);
+			$this->limit_per_reload = ($this->Ientity->find('count') + LIMIT_TABLE_IMPORTS);
 
 			/**
 			* Calcula o total de registros que sera importado de cada tabela
@@ -90,10 +89,10 @@ class LandlinesImportController extends ImportsController {
 				/**
 				* Recarrega a importacao
 				*/
-				$tot_reload = ($this->AppImport->counter['entities']['success'] + $this->AppImport->counter['entities']['fails']);
+				@$tot_reload = $this->AppImport->counter['entities']['success'] + $this->AppImport->counter['entities']['fails'];
 				if(!empty($tot_reload) && $tot_reload >= $this->limit_per_reload){
 					$path = dirname(dirname(dirname(__FILE__)));
-					shell_exec("setsid sh {$path}/_db/settings/landlines_reload.sh > /dev/null 2>/dev/null &");
+					shell_exec("setsid sh {$path}/_db/settings/landlines_reload.sh {$this->uf} > /dev/null 2>/dev/null &");
 				}
 
 				/**
@@ -156,7 +155,7 @@ class LandlinesImportController extends ImportsController {
 						$this->AppImport->timing_end();
 
 						/**
-						* Habilitar este IF somente quando for importar o mesmo estado
+						* Habilitar este IF somente quando for reimportar o mesmo estado
 						*/
 						// if($hasImported){
 						// 	/**
@@ -178,7 +177,7 @@ class LandlinesImportController extends ImportsController {
 						/**
 						* Inicializa a importacao dos telefones da entidade encontrada
 						*/
-						if(isset($v['telefone'])){
+						if(isset($v['telefone']) && $hasImported){
 							foreach ($v['telefone'] as $v2) {
 								/**
 								* Desmembra o DDD do Telefone
