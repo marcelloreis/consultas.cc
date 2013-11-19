@@ -1,3 +1,4 @@
+<?php echo $this->assign('sidebar-class-hidden', 'nav-hidden')?>
 <?php echo $this->element('Index/panel')?>
 
 <table class="table table-hover table-nomargin">

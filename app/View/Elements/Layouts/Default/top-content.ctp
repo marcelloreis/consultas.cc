@@ -1,5 +1,5 @@
-<div class="container-fluid" id="content">
-	<?php echo $this->element('Components/sidebar')?>
+<div class="container-fluid  <?php echo $this->fetch('sidebar-class-hidden', '')?>" id="content">
+	<?php echo $this->fetch('sidebar', $this->element('Components/sidebar'))?>
 	<div id="main">
 		<div class="container-fluid">
 			<div class="page-header">
