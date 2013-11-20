@@ -10,7 +10,7 @@
 			<?php echo $this->Html->link('<span><i class="icon-trash"></i></span><span class="name">' . __('Trash') . '</span>', array('action' => 'index', ACTION_TRASH => true, 'plugin' => false), array('escape' => false))?>
 		</li>
 		<li class="green">
-			<?php echo $this->Html->link('<span><i class="glyphicon-restart"></i></span><span class="name">' . __('Load Locale') . '</span>', array('controller' => 'translations', 'action' => 'loadLocale', 'plugin' => false), array('escape' => false))?>
+			<?php echo $this->Html->link('<span><i class="glyphicon-restart"></i></span><span class="name">' . __('Translate') . '</span>', array('controller' => 'translations', 'action' => 'loadLocale', 'plugin' => false), array('escape' => false))?>
 		</li>
 	</ul>
 </div>

@@ -26,9 +26,7 @@
 
         //Styles da aplicacao
         echo $this->Html->css(array(
-            'bootstrap.min.css',
-            'bootstrap-responsive.min.css',
-            'plugins/icheck/all.css',
+            'all.min.css',
             'style.css',
             'themes.css',
         ));
@@ -36,19 +34,7 @@
         //Scrips da aplicacao
         echo $this->Html->script(array(
             'jquery.min',
-            'plugins/nicescroll/jquery.nicescroll.min',
-            'plugins/validation/jquery.validate.min',
-            'plugins/validation/additional-methods.min',
-            'plugins/icheck/jquery.icheck.min',
-            'bootstrap.min',
-            'eakroko',
         ));
-
-        //Scripts dos plugins
-        echo $this->Html->script(array(
-            '/Main/js/main'
-        ));
-
 
         echo $this->element('Layouts/ie-9');
         ?>
