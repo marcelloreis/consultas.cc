@@ -614,7 +614,7 @@ class AppController extends Controller {
 		* Carrega as listas para selecao dos models relacionados (belongsto)
 		*/
 		foreach ($this->Model->belongsTo as $k => $v) {
-			$this->set(Inflector::pluralize(Inflector::variable($v['className'])), $this->Model->{$v['className']}->find('list'));
+			$this->set(Inflector::pluralize(Inflector::variable($v['className'])), $this->Model->{$v['className']}->find('list', array('fields' => $v['fields'], 'conditions' => $v['conditions'])));
 		}
 	}
 

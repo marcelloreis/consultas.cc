@@ -12,28 +12,6 @@ $menu = array(
         'label' => '<span>' . __('Consultation Registration') . '</span>', 'controller' => 'entities', 'action' => 'people'
         ),
     /**
-    * Localizacoes
-    */
-    array(
-        'label' => '<span>' . __('Locales') . '</span>',
-        'params' => array('class' => 'dropdown-toggle', 'data-toggle' => 'dropdown'),
-        'icon_right' => '<span class="caret"></span>',
-        'children' => array(
-            /**
-            * Países
-            */
-            array('label' => __('Countries'), 'controller' => 'countries', 'plugin' => false),
-            /**
-            * Estados
-            */
-            array('label' => __('States'), 'controller' => 'states', 'plugin' => false),
-            /**
-            * Cidades
-            */
-            array('label' => __('Cities'), 'controller' => 'cities', 'plugin' => false),
-            )
-        ),
-    /**
     * Seguranca
     */
     array(
@@ -52,10 +30,64 @@ $menu = array(
             )
         ),
     /**
-    * Traducoes
+    * Administrativo
     */
     array(
-        'label' => '<span>' . __('Translations') . '</span>', 'controller' => 'translations', 'action'
+        'label' => '<span>' . __('Administrative') . '</span>',
+        'params' => array('class' => 'dropdown-toggle', 'data-toggle' => 'dropdown'),
+        'icon_right' => '<span class="caret"></span>',
+        'children' => array(
+            /**
+            * Administrativo/Clientes
+            */
+            array('label' => __('Clients'), 'controller' => 'clients'),
+            /**
+            * Administrativo/Clientes/Contas
+            */
+            array('label' => __('Accounts'), 'controller' => 'users', 'account' => true),
+            /**
+            * Administrativo/Pacotes
+            */
+            array('label' => __('Packages'), 'controller' => 'packages'),
+            /**
+            * Administrativo/Produtos
+            */
+            array('label' => __('Products'), 'controller' => 'products'),
+            /**
+            * Administrativo/Histórico
+            */
+            array('label' => __('Historical'), 'controller' => 'historical'),
+            /**
+            * Administrativo/Boleto
+            */
+            array('label' => __('Invoices'), 'controller' => 'invoices'),
+            )
+        ),
+    /**
+    * Configuracoes
+    */
+    array(
+        'label' => '<span>' . __('Settings') . '</span>',
+        'params' => array('class' => 'dropdown-toggle', 'data-toggle' => 'dropdown'),
+        'icon_right' => '<span class="caret"></span>',
+        'children' => array(
+            /**
+            * Países
+            */
+            array('label' => __('Countries'), 'controller' => 'countries', 'plugin' => false),
+            /**
+            * Estados
+            */
+            array('label' => __('States'), 'controller' => 'states', 'plugin' => false),
+            /**
+            * Cidades
+            */
+            array('label' => __('Cities'), 'controller' => 'cities', 'plugin' => false),
+            /**
+            * Cidades
+            */
+            array('label' => __('Translations'), 'controller' => 'translations', 'plugin' => false),
+            )
         ),
 
     );
