@@ -12,8 +12,8 @@
 		<li class="orange">
 			<?php echo $this->Html->link('<span><i class="icon-phone"></i></span><span class="name">' . __('Search by landline') . '</span>', array('controller' => 'entities', 'action' => 'people', 'search_by' => 'landline', 'plugin' => false), array('escape' => false))?>
 		</li>
-		<li class="red">
+		<!-- <li class="red">
 			<?php echo $this->Html->link('<span><i class="glyphicon-globe"></i></span><span class="name">' . __('Search by address') . '</span>', array('controller' => 'entities', 'action' => 'people', 'search_by' => 'address', 'plugin' => false), array('escape' => false))?>
-		</li>
+		</li> -->
 	</ul>
 </div>
