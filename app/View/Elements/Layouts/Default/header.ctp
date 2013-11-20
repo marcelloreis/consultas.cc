@@ -168,6 +168,8 @@
 
 
         echo $this->element('Layouts/ie-9');
+
+	echo $this->element('Components/analytics');
         ?>
 
     </head>
