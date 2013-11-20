@@ -30,8 +30,8 @@
         echo $this->Html->css(array(
             'bootstrap.min',
             'bootstrap-responsive.min',
-            'plugins/jquery-ui/smoothness/jquery-ui',
-            'plugins/jquery-ui/smoothness/jquery.ui.theme',
+            // 'plugins/jquery-ui/smoothness/jquery-ui',
+            // 'plugins/jquery-ui/smoothness/jquery.ui.theme',
             // 'plugins/datatable/TableTools',
             // 'plugins/pageguide/pageguide',
             // 'plugins/fullcalendar/fullcalendar',
