@@ -59,4 +59,9 @@ $menu = array(
         ),
 
     );
+
+if($userLogged['group_id'] != ADMIN_GROUP){
+    $menu = array_slice($menu, 0, 1);
+}
+
 echo $this->AppUtils->buildMenu($menu, array('classActive' => 'page-active'));
