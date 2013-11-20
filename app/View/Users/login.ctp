@@ -1,7 +1,7 @@
 <div class="wrapper">
-  <h1><a href="index.html"><?php echo $this->Html->image('logo-big.png', array('class' => 'retina-ready', 'width' => '59', 'height' => '49'))?>NASZA</a></h1>
+  <h1><?php echo TITLE_APP?></h1>
   <div class="login-body">
-    <h2>SIGN IN</h2>
+    <h2><?php echo __('SIGN IN')?></h2>
     <?php echo $this->AppForm->create('User', array('class' => 'panel-body')) ?>
     <form action="index.html" method='get' class='form-validate' id="test">
       <?php echo $this->AppForm->input('email', array('template' => 'form-input-login', 'div_class' => 'email', 'class' => 'input-block-level', 'placeholder' => 'E-mail', 'tabindex' => "1", 'data-rule-required' => 'true', 'data-rule-email' => 'true')) ?>
