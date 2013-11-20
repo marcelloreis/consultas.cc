@@ -24,9 +24,7 @@ App::uses('AppController', 'Controller');
 class UsersController extends AppController {
 
 	public function dashboard(){
-        if(!strstr($this->referer(), '/users/login')){
-            $this->Session->setFlash("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec aliquam justo sit amet odio aliquam semper. Phasellus eget lobortis nisi. Vivamus in nulla ut justo convallis tincidunt. Etiam rutrum suscipit dolor, vitae facilisis eros tincidunt gravida. Fusce vulputate lorem sed lacus pellentesque egestas adipiscing ipsum fringilla. Proin scelerisque elementum dui, eu scelerisque dolor rhoncus non. Sed justo velit, sollicitudin ac adipiscing sit amet, iaculis a tortor.", FLASH_TEMPLATE_DASHBOARD, array('class' => FLASH_CLASS_INFO, 'title' => "Big info dialog"), FLASH_TEMPLATE_DASHBOARD);
-        }
+        $this->redirect(array('controller' => 'entities', 'action' => 'people'));
 	}
 
     /**

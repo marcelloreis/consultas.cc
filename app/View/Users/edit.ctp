@@ -6,7 +6,7 @@
                 <?php echo $this->Form->input('id')?>
             </div>
             <?php 
-            echo $this->AppForm->input('group_id');
+            echo $this->AppForm->input('group_id', array('class' => 'chosen-select'));
             echo $this->AppForm->input('name');
             echo $this->AppForm->input('given_name');
             echo $this->AppForm->input('email');

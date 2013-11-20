@@ -69,27 +69,9 @@ class AppFormHelper extends AppHelper {
         unset($options['label']);
 
         //Verifica se o campo é uma chave estrangeira
-        // if(preg_match('/[a-z].+?_id/', $fieldName) && !isset($options['type'])){
-        //     $fk_model = ucfirst(preg_replace('/_id$/', '', $fieldName));
-        //     $fk_controller = strtolower(Inflector::pluralize($fk_model));
-        //     $options['field_name'] = $fieldName;
-        //     $options['data_source'] = "/{$fk_controller}/index/fkbox:belongsto";
-        //     $options['title_modal'] = __d('fields', $fk_controller);
-        //     $options['template'] = 'form-input-fk';
-        //     $options['type'] = 'hidden';
-        //     $options['placeholder'] = __("Click the magnifying glass to search the {$fk_model}");
-        //     $options['value_text'] = isset($options['value_text'])?$options['value_text']:'';
-
-        //     if(isset($this->data[$this->modelClass][$fieldName]) && !empty($this->data[$this->modelClass][$fieldName])){
-        //         $this->inputLabel = ucfirst(__d('fields', $fk_model));
-        //         $options['value'] = $this->data[$fk_model]['id'];
-
-        //         if(isset($this->data[$fk_model]['name']))
-        //             $options['value_text'] = $this->data[$fk_model]['name'];
-        //         if(isset($this->data[$fk_model]['text']))
-        //             $options['value_text'] = $this->data[$fk_model]['text'];
-        //     }
-        // }
+        if(preg_match('/[a-z].+?_id/', $fieldName) && !isset($options['type'])){
+            $options['template'] = 'form-input-fk';
+        }
 
 
         //Verifica se foi requisitado um template fora do padrao

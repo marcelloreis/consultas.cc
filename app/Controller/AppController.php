@@ -587,7 +587,6 @@ class AppController extends Controller {
 				}
 				$this->Session->setFlash(__(FLASH_SAVE_ERROR), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR, 'multiple' => $msgs), FLASH_SESSION_FORM);
 			}
-
 		} 
 
 		/**
