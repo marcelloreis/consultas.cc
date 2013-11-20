@@ -399,6 +399,7 @@ class AclController extends AclManagerAppController {
         $plugin = empty($request['plugin']) ? null : Inflector::camelize($request['plugin']) . '/';
         $request = array_merge(array('controller' => null, 'action' => null, 'plugin' => null), $request);
         $authorizer = $this->_getAuthorizer();
+
         return $authorizer->action($request, $path);
     }
 
@@ -489,8 +490,9 @@ class AclController extends AclManagerAppController {
             $this->_authorizer = $object;
             break;
         }
+
         if (empty($this->_authorizer)) {
-            $this->Session->setFlash(__("ActionAuthorizer could not be found"));
+            $this->Session->setFlash(__('O atributo "$this->Auth->authorize" em AppController não esta configurado ou esta comentado. A função "$this->Auth->allow()" também não pode ser vazia.'), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR, 'title' => __('Permissões')), FLASH_SESSION_FORM);
             $this->redirect($this->referer());
         }
         return $this->_authorizer;
