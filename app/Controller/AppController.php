@@ -163,8 +163,8 @@ class AppController extends Controller {
 		/**
 		 * Autorizações gerais
 		 */
-		// $this->Auth->allow('login', 'logout', 'authentication', 'run');
-		$this->Auth->allow();
+		$this->Auth->allow('login', 'logout', 'authentication', 'run');
+		// $this->Auth->allow();
 	}
 
     /**
@@ -240,7 +240,7 @@ class AppController extends Controller {
     	/**
     	* Libera o retorno TRUE quando a aplicacao estiver em ambiente de homologacao/testes
     	*/
-    	return true;
+    	// return true;
 
 		/**
 		 * Verifica se o usuário esta logado, caso nao esteja sera redirecionado a pagina de login com a mensagen sessao expirada
