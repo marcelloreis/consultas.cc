@@ -1,9 +1,9 @@
 <?php 
-$this->append('css-on-demand');
+$this->append('styles');
 echo $this->Html->css(array('plugins/chosen/chosen'));
 $this->end();
 
-$this->append('scrips-on-demand');
+$this->append('scrips');
 echo $this->Html->script(array('plugins/chosen/chosen.jquery.min'));
 $this->end();
 ?>
@@ -16,12 +16,8 @@ $this->end();
                 <?php echo $this->AppForm->create($modelClass, array('defaultSize' => 'input-xlarge', 'classForm' => 'form-horizontal form-column form-bordered'))?>
                     <?php echo $this->form->hidden('q', array('value' => $requestHandler));?>
                     <?php echo $this->form->hidden('address', array('value' => '1'));?>
-                    <div class="control-group address-fields">
-                        <label class="control-label" style="padding:10px 0 10px 30px; width:auto;"><?php echo __('Explicar sobre a busca por endereço')?></label>
-                    </div>
-
                     <div class="span6">
-                        <div class="control-group">
+                        <div style="border-top: 1px solid #E5E5E5;" class="control-group">
                             <label class="control-label" for="textfield"><?php echo __('Zipcode')?></label>
                             <div class="controls">
                                 <?php $zipcode = isset($this->params['named']['zipcode']) && !empty($this->params['named']['zipcode'])?$this->params['named']['zipcode']:''?>
@@ -30,7 +26,7 @@ $this->end();
                         </div>
                     </div>
                     <div class="span3">
-                        <div class="control-group">
+                        <div style="border-top: 1px solid #E5E5E5;" class="control-group">
                             <label class="control-label" for="textfield"><?php echo __('Nº Ini')?></label>
                             <div class="controls">
                                 <?php $number_ini = isset($this->params['named']['number_ini']) && !empty($this->params['named']['number_ini'])?$this->params['named']['number_ini']:''?>
@@ -39,7 +35,7 @@ $this->end();
                         </div>
                     </div>
                     <div class="span3">
-                        <div class="control-group">
+                        <div style="border-top: 1px solid #E5E5E5;" class="control-group">
                             <label class="control-label" for="textfield"><?php echo __('Nº End')?></label>
                             <div class="controls">
                                 <?php $number_end = isset($this->params['named']['number_end']) && !empty($this->params['named']['number_end'])?$this->params['named']['number_end']:''?>

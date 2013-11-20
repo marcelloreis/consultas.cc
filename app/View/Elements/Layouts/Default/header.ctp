@@ -28,8 +28,9 @@
         * Styles da aplicacao
         */
         echo $this->Html->css(array(
-            'bootstrap.min',
-            'bootstrap-responsive.min',
+            'all.min',
+            // 'bootstrap.min',
+            // 'bootstrap-responsive.min',
             // 'plugins/jquery-ui/smoothness/jquery-ui',
             // 'plugins/jquery-ui/smoothness/jquery.ui.theme',
             // 'plugins/datatable/TableTools',
@@ -62,23 +63,24 @@
         * Scrips da aplicacao
         */
         echo $this->Html->script(array(
-            'jquery.min',
+            'all.min',
+            // 'jquery.min',
             // 'plugins/nicescroll/jquery.nicescroll.min',
             
-            'plugins/jquery-ui/jquery.ui.core.min',
-            'plugins/jquery-ui/jquery.ui.widget.min',
-            'plugins/jquery-ui/jquery.ui.mouse.min',
-            'plugins/jquery-ui/jquery.ui.draggable.min',
-            'plugins/jquery-ui/jquery.ui.resizable.min',
-            'plugins/jquery-ui/jquery.ui.sortable.min',
-            'plugins/jquery-ui/jquery.ui.spinner.js',
-            'plugins/jquery-ui/jquery.ui.slider.js',
+            // 'plugins/jquery-ui/jquery.ui.core.min',
+            // 'plugins/jquery-ui/jquery.ui.widget.min',
+            // 'plugins/jquery-ui/jquery.ui.mouse.min',
+            // 'plugins/jquery-ui/jquery.ui.draggable.min',
+            // 'plugins/jquery-ui/jquery.ui.resizable.min',
+            // 'plugins/jquery-ui/jquery.ui.sortable.min',
+            // 'plugins/jquery-ui/jquery.ui.spinner.js',
+            // 'plugins/jquery-ui/jquery.ui.slider.js',
 
             // 'plugins/touch-punch/jquery.touch-punch.min',
 
-            'plugins/slimscroll/jquery.slimscroll.min',
+            // 'plugins/slimscroll/jquery.slimscroll.min',
 
-            'bootstrap.min',
+            // 'bootstrap.min',
 
             // 'plugins/vmap/jquery.vmap.min',
             // 'plugins/vmap/jquery.vmap.world',
@@ -133,18 +135,18 @@
             // 'plugins/complexify/jquery.complexify-banlist.min',
             // 'plugins/complexify/jquery.complexify.min',
 
-            'eakroko.min',
+            // 'eakroko.min',
 
-            'application.min',
+            // 'application.min',
 
             // 'demonstration.min',
 
             // 'plugins/validation/jquery.validate.min',
             // 'plugins/validation/additional-methods.min',
             
-            'check-all',
+            // 'check-all',
             
-            'plugins/maskedinput/jquery.maskedinput.min',             
+            // 'plugins/maskedinput/jquery.maskedinput.min',             
         ));
 
         /**

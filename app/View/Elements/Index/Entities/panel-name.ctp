@@ -5,11 +5,7 @@
                 <!-- Nome -->
                 <?php echo $this->AppForm->create($modelClass, array('defaultSize' => 'input-xlarge', 'classForm' => 'form-horizontal form-bordered'))?>
                     <?php echo $this->form->hidden('q', array('value' => $requestHandler));?>
-                    <div class="control-group address-fields">
-                        <label class="control-label" style="padding:10px 0 10px 30px; width:auto;"><?php echo __('Explicar sobre a busca por nome')?></label>
-                    </div>
-
-                    <div class="control-group">
+                    <div style="border-top: 1px solid #E5E5E5;" class="control-group">
                         <label class="control-label" for="textfield"><?php echo __('Type Name')?></label>
                         <div class="controls">
                             <?php $name = isset($this->params['named']['name']) && !empty($this->params['named']['name'])?$this->params['named']['name']:''?>

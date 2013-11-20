@@ -33,7 +33,7 @@ $(document).ready(function(){
     $('.msk-card').mask('9999 9999 9999 9999');
     $('.msk-hour').mask('99:99:99');
     $('.msk-2Digits').mask('99',{completed:function(){
-    	$(this).parents('form:eq(0)').find('input[name*=landline]').focus();
+    	$(this).parents('form:eq(0)').find('input[name!=ddd]').focus();
     }});
     $('.msk-4Digits').mask('9999');
     $('.msk-int').keyup(function(){

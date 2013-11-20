@@ -5,12 +5,8 @@
                 <!-- Telefone Fixo -->
                 <?php echo $this->AppForm->create($modelClass, array('defaultSize' => 'input-xlarge', 'classForm' => 'form-horizontal form-column form-bordered'))?>
                     <?php echo $this->form->hidden('q', array('value' => $requestHandler));?>
-                    <div class="control-group address-fields">
-                        <label class="control-label" style="padding:10px 0 10px 30px; width:auto;"><?php echo __('Explicar sobre a busca por telefone fixo')?></label>
-                    </div>
-
                     <div class="span3">
-                        <div class="control-group">
+                        <div style="border-top: 1px solid #E5E5E5;" class="control-group">
                             <label class="control-label" for="textfield" style="width:40%;"><?php echo __('Type DDD')?></label>
                             <div class="controls">
                                 <?php $ddd = isset($this->params['named']['ddd']) && !empty($this->params['named']['ddd'])?$this->params['named']['ddd']:''?>
@@ -19,7 +15,7 @@
                         </div>
                     </div>
                     <div class="span9">
-                        <div class="control-group">
+                        <div style="border-top: 1px solid #E5E5E5;" class="control-group">
                             <label class="control-label" for="textfield"><?php echo __('Type Landline')?></label>
                             <div class="controls">
                                 <?php $landline = isset($this->params['named']['landline']) && !empty($this->params['named']['landline'])?$this->params['named']['landline']:''?>

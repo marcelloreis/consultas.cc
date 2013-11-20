@@ -351,7 +351,6 @@ class AppModel extends Model {
 		return $results;
 	}
 
-
 	/**
 	* Método getFieldText
 	* Retorna o nome do primeiro campo do tipo string da tabela/model

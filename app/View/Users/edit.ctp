@@ -1,3 +1,9 @@
+<?php 
+/**
+* Adiciona os CSSs e Scripts especificas dos formularios
+*/
+echo $this->element('OnDemand/edit');
+?>
 <div class="box box-bordered">
     <?php echo $this->element('Edit/panel')?>
     <div class="box-content nopadding">

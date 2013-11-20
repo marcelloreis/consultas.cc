@@ -10,4 +10,4 @@
 				</div>
 			<?php endif?>
 			<?php echo $this->fetch('title-view')?>
-			<div class="nopadding">
+			<div class="box-content">

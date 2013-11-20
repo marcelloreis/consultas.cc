@@ -7,7 +7,7 @@
                     <!-- Carrega o campo de busca -->
                     <div class="span12" style="margin-left: 0px;">
                         <div class="span12">
-                            <div class="control-group">
+                            <div style="border-top: 1px solid #E5E5E5;" class="control-group">
                                 <label for="textfield" class="control-label"><?php echo __('Search')?></label>
                                 <div class="controls">
                                     <div class="input-append input-prepend">
