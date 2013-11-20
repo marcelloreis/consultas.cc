@@ -20,7 +20,7 @@
                         $perm = ($v['allowed'])?'allow':'deny';
 
                         echo $this->Form->hidden($v['input_name'], array('value' => $perm));
-                        echo $this->Html->link(__($v['alias']), "#aco-{$v['id']}", array('id' => "ped-{$v['id']}", 'title' => $v['Action'], 'class' => "btn {$allowed_class}", 'escape' => false)) . "&nbsp;";
+                        echo $this->Html->link(__($v['alias']), "#aco-{$v['id']}", array('id' => "ped-{$v['id']}", 'title' => $v['Action'], 'class' => "perms-toggle-single btn {$allowed_class}", 'escape' => false)) . "&nbsp;";
                         ?>
                         <?php
                     }
@@ -34,7 +34,7 @@
                         $perm = ($v['allowed'])?'allow':'deny';
 
                         echo $this->Form->hidden($v['input_name'], array('value' => $perm));
-                        echo $this->Html->link(__($v['alias']), "#aco-{$v['id']}", array('id' => "ped-{$v['id']}", 'title' => $v['Action'], 'class' => "btn {$allowed_class}", 'escape' => false)) . "&nbsp;";
+                        echo $this->Html->link(__($v['alias']), "#aco-{$v['id']}", array('id' => "ped-{$v['id']}", 'title' => $v['Action'], 'class' => "perms-toggle-single btn {$allowed_class}", 'escape' => false)) . "&nbsp;";
                     }
                     ?>                    
                 </p>

@@ -46,22 +46,16 @@ $(document).ready(function(){
 	$('.map-tooltip').tooltip('hide');
 	
 	/**
-	* Anula todos os links que tenham # em seu href
+	* Acoes em massa
 	*/
-	// $('a[href=#]').click(function(){
-	// 	return false;
-	// });
+	$('.bulkAction').click(function(){
+		var url = $(this).attr('data-url');
+		var data_id = '#' + $(this).attr('data-id');
+		var data = $(':checkbox:checked', data_id).not('#check-all').serialize();
 
-	/**
-	* Ativa todos os popovers que forem manuais
-	*/
-	$('a[rel=popover][data-trigger=manual]').popover('show');
-
-	/**
-	* Sistema de selecao de estados/cidades
-	*/
-	$('.select-state').change(function(){
-		Nz.loadCities(this);
+		if(url != '' && data != ''){
+			location.href = url + '/?' + data;
+		}
 	});
 
 	/**
@@ -84,29 +78,9 @@ $(document).ready(function(){
 	/**
 	* Carrega os checkbox mestres
 	*/
-	$('#check-all').checkAll('#index-table input:checkbox');
+	$('#check-all').checkAll('.index-table input:checkbox');
 });
 
 var Nz = {
-	loadCities:function(el){
-		var divCity = $('select[name*=city]').parents('div:eq(0)');
-		var state_id = $(el).val();
-		var model = $(el).attr('id').replace(/StateId/gi, '');
 
-		$.get('/cities/options/' + state_id + '/model:' + model, function(data){
-		        if(data.length > 10){
-					divCity.html(data);
-					$('select', divCity).each(function(){
-						var $el = $(this);
-						var search = ($el.attr("data-nosearch") === "true") ? true : false,
-						opt = {};
-						if(search) opt.disable_search_threshold = 9999999;
-						$el.chosen(opt);
-					});		        	
-		        }
-		});		
-	},
-	lockAddress:function(){
-
-	}
 }

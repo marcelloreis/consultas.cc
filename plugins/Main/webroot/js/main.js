@@ -2,21 +2,25 @@ $(document).ready(function(){
     /**
      * Configurações do plugin ACL
      */
+     $('.perms-toggle-single').click(function(){
+        Acl.toggleAction(this);
+        return false;
+    });
      $('.perms-toggle').click(function(){
-        Acl.toggleAction($(this).parents('.box-perms:eq(0)'));
+        Acl.toggleActionBox($(this).parents('.box-perms:eq(0)'));
         return false;
     });
      $('.perms-toggle-all').click(function(){
         var link = this;
         $('.box-perms').each(function(){
-            Acl.toggleActionAll(this, $(link));
+            Acl.toggleActionBoxAll(this, $(link));
         });
         return false;
     });
 })
 
 var Acl = {
-    toggleActionAll:function(box, link){
+    toggleActionBoxAll:function(box, link){
         /**
         * Carrega o elemento BOX
         */
@@ -91,7 +95,7 @@ var Acl = {
 
         // console.log($(':hidden[name*=Perms]', $el).serialize());
     },
-    toggleAction:function(box){
+    toggleActionBox:function(box){
         /**
         * Carrega o elemento BOX
         */
@@ -149,41 +153,53 @@ var Acl = {
 
         // console.log($(':hidden[name*=Perms]', $el).serialize());
     },
-    bulkAction:function(a, bulkAction){
-        var label;
-        var color;
-        var dayBlock;
-        var action;
-        var btn;
-        $(a).each(function(){
-            btn = this;
-            dayBlock = $(btn).parents('.day-block:eq(0)');
-            action = (bulkAction)?bulkAction:$(btn).attr('rel');
+    toggleAction:function(a){
+        /**
+        * Carrega o link clicado
+        */
+        var link = $(a);
 
-            dayBlock.find(':hidden:eq(0)').val(action);
-            dayBlock.find('a[class*=permsBtn-]')
-            .removeClass('custom-green')
-            .removeClass('custom-red')
-            .removeClass('custom-grey');
-            switch(action){
-                case 'allow':
-                    label = 'Permitir';
-                    color = 'green';
-                break;
-                case 'deny':
-                    label = 'Negar';
-                    color = 'red';
-                break;
-                case 'inherit':
-                    label = 'Herdar';
-                    color = 'grey';
-                break;
-            }
-            dayBlock.find('a[rel=' + action + ']').addClass('custom-' + color);
+        /**
+        * Carrega a permissao
+        */
+        var perms = link.hasClass('allow')?'allow':'deny';
 
-            dayBlock.find('.txt-info')
-            .css('color', color)
-            .html(label);
+        /**
+        * Carrega o status conforme a permissao
+        */
+        var status = link.hasClass('allow')?'btn-success':'btn-red';
+
+        /**
+        * Alterna a permissao do link
+        */
+        link.toggleClass('allow');
+
+        /**
+        * Altera a cor do controle conforme a sua permissao
+        */
+        link.removeClass('btn-success').removeClass('btn-red');
+        link.addClass(status);
+
+        /**
+        * Carrega a permissao de todos os actions do box
+        */
+        link.prev().val(perms);
+
+        /**
+        * Carrega as permissoes setadas
+        */
+        var data_perms = link.prev().serialize();
+
+        $.ajax({
+            type: 'POST',
+            beforeSend:function(){
+                link.css({'pointer-events':'none', 'opacity':'0.2'});
+            },
+            url: "/main/acl/ajax_permissions",
+            data: data_perms
+            })
+        .done(function(data, status) {
+            link.removeAttr('style');
         });
     }
 }

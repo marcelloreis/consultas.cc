@@ -178,6 +178,8 @@ class AppController extends Controller {
     	parent::beforeRender();
 
     	//Carrega a variavel de ambiente userLogged com as informações do usuario logado
+    	$map = explode(' ', $this->userLogged['name']);
+    	$this->userLogged['given_name'] = empty($this->userLogged['given_name'])?$map[0]:$this->userLogged['given_name'];
     	$this->set('userLogged', $this->userLogged);
 		//Carrega o nome do model nas variaveis de ambiente para ser acessado na view
 		$this->set('modelClass', $this->modelClass);
@@ -241,6 +243,14 @@ class AppController extends Controller {
     	* Libera o retorno TRUE quando a aplicacao estiver em ambiente de homologacao/testes
     	*/
     	// return true;
+
+    	/**
+    	* Carrega o nome do usuario logado
+    	*/
+    	if(empty($user['given_name'])){
+    		$map = explode(' ', $user['name']);
+    		$user['given_name'] = $map[0];
+    	}
 
 		/**
 		 * Verifica se o usuário esta logado, caso nao esteja sera redirecionado a pagina de login com a mensagen sessao expirada
@@ -391,16 +401,16 @@ class AppController extends Controller {
 	    	$this->__post2get();
 
 	    	/**
-	    	* Verifica se foi passado algum valor na variavel padrao de busca
+	    	* Carrega a variavel $search verificando de onde esta vindo a quary
 	    	*/
-			if(isset($this->params['named']['search']) && !empty($this->params['named']['search'])){
+			if(!empty($this->params['named']['search'])){
 				$search = $this->params['named']['search'];
 			}else if(isset($this->params->query['data'][$this->modelClass]['search']) && !empty($this->params->query['data'][$this->modelClass]['search'])){
 				$search = $this->params->query['data'][$this->modelClass]['search'];
 			}
 
 			/**
-			* Caso a variavel padrao de busca esteja setada, monta as condicoes de busca
+			* Caso a variavel padrao de busca 'search' esteja setada, monta as condicoes de busca
 			*
 			* PARA QUE A BUSCA DINAMICA FUNCIONE, É NECESSARIO QUE TODAS AS ASSOCIACOES ESTEJAM DEVIDAMENTE
 			* DECLARADAS EM Model/NomeDoModel.php
@@ -431,7 +441,11 @@ class AppController extends Controller {
 
 				//Carrega o parametro 'conditions' com as condicoes montadas dinamicamente
 				if(isset($params['conditions']) && is_array($params['conditions'])){
-					array_push($params['conditions'], $searchMap);
+					if(isset($params['combine']) && $params['combine'] === false){
+						unset($params['combine']);
+					}else{
+						array_push($params['conditions'], $searchMap);
+					}
 				}else{
 					$params['conditions'] = $searchMap;
 				}
@@ -459,7 +473,7 @@ class AppController extends Controller {
 			$defaults = array(
 							'limit' => $this->limit
 				);
-	
+
 			$params = array_merge($defaults, $params);
 	    	$this->paginate = array($this->modelClass => $params);
 
@@ -617,7 +631,12 @@ class AppController extends Controller {
 		/**
 		* Carrega o model com os dados vindo do post
 		*/
-		$this->Model->set($this->request->data);
+		if(count($this->request->data)){
+			$data = $this->request->data;
+		}else if(count($this->params->query['data'])){
+			$data = $this->params->query['data'];
+		}
+		$this->Model->set($data);
 
 		/**
 		* Carrega o id do model caso o ID do registro venho por GET
@@ -750,7 +769,7 @@ class AppController extends Controller {
 		/**
     	* Verifica se foi passado alguma valor na variavel padrao de busca
     	*/
-		if(isset($this->params['named']['search']) && !empty($this->params['named']['search'])){
+		if(!empty($this->params['named']['search'])){
 			$search = $this->params['named']['search'];
 		}
 

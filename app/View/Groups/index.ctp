@@ -7,7 +7,7 @@ echo $this->element('Index/panel');
 /**
 * Inicia a montagem da grid
 */
-echo $this->AppGrid->create($modelClass, array('id' => 'index-table', 'tableClass' => 'table table-hover table-nomargin'));
+echo $this->AppGrid->create($modelClass, array('id' => $modelClass, 'tableClass' => 'index-table table table-hover table-nomargin'));
 
 /**
 * Monta o cabeçalho

@@ -12,7 +12,8 @@ $this->assign('icon-view', '<i class="icon-unlock"></i>');
 /**
 * Carrega o titulo da view
 */
-$this->assign('title-view', __('%s Permissions', __($aro_list[$aro_id])));
+// $this->assign('title-view', __('%s Permissions', __($aro_list[$aro_id])));
+$this->assign('title-view', $this->element('Acl/title-view', compact('aro_list', 'aro_id')));
 
 /**
 * Adiciona o topo com o titulo da grid
