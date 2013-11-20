@@ -1,4 +1,10 @@
 <?php 
+$this->append('css-on-demand');
+echo $this->Html->css(array(
+    'plugins/easy-pie-chart/jquery.easy-pie-chart',
+            ));
+$this->end();
+
 $this->append('scrips-on-demand');
 echo $this->Html->script(array(
     'plugins/sparklines/jquery.sparklines.min',
@@ -8,13 +14,6 @@ echo $this->Html->script(array(
     'https://www.google.com/jsapi',
             ));
 $this->end();
-
-$this->append('css-on-demand');
-echo $this->Html->css(array(
-    'plugins/easy-pie-chart/jquery.easy-pie-chart',
-            ));
-$this->end();
-
 
 echo $this->element('Index/Imports/charts-gauge');
 // echo $this->element('Index/Imports/real-time');

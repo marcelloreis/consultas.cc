@@ -1,3 +1,10 @@
+<?php 
+$this->append('css-on-demand');
+echo $this->Html->css(array('map'));
+$this->end();
+?>
+
+
 <style type="text/css">
 .popover {width: 200px !important;}
 </style>

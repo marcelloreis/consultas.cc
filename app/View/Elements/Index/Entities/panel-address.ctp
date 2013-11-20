@@ -1,3 +1,13 @@
+<?php 
+$this->append('css-on-demand');
+echo $this->Html->css(array('plugins/chosen/chosen'));
+$this->end();
+
+$this->append('scrips-on-demand');
+echo $this->Html->script(array('plugins/chosen/chosen.jquery.min'));
+$this->end();
+?>
+
 <div class="row-fluid">
     <div class="span12">
         <div class="box box-bordered">

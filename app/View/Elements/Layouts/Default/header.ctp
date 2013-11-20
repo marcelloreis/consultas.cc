@@ -37,7 +37,7 @@
             // 'plugins/fullcalendar/fullcalendar',
             // 'plugins/fullcalendar/fullcalendar.print',
             // 'plugins/tagsinput/jquery.tagsinput',
-            'plugins/chosen/chosen',
+            // 'plugins/chosen/chosen',
             // 'plugins/multiselect/multi-select',
             // 'plugins/timepicker/bootstrap-timepicker.min',
             // 'plugins/colorpicker/colorpicker',
@@ -49,7 +49,7 @@
             // 'plugins/easy-pie-chart/jquery.easy-pie-chart',
             'style',
             'themes',
-            'map',
+            // 'map',
         ));
 
         /**
@@ -113,7 +113,7 @@
 
             // 'plugins/fullcalendar/fullcalendar.min',
 
-            'plugins/chosen/chosen.jquery.min',
+            // 'plugins/chosen/chosen.jquery.min',
 
             // 'plugins/multiselect/jquery.multi-select',
             
