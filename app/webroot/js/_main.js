@@ -46,9 +46,9 @@ $(document).ready(function(){
 	/**
 	* Anula todos os links que tenham # em seu href
 	*/
-	$('a[href=#]').click(function(){
-		return false;
-	});
+	// $('a[href=#]').click(function(){
+	// 	return false;
+	// });
 
 	/**
 	* Ativa todos os popovers que forem manuais
