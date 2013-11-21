@@ -2,8 +2,8 @@
 /**
  * Textos padroes da aplicação
  */	
-define('TITLE_HEADER', 'Consultas Cadastrais');
-define('TITLE_APP', 'Consultas Cadastrais');
+define('TITLE_HEADER', 'consultas.cc');
+define('TITLE_APP', 'consultas.cc');
 define('VERSION_APP', '1.0');
 define('COPYRIGHT', 'Nasza Produtora');
 define('COPYRIGHT_LINK', 'http://nasza.com.br');
