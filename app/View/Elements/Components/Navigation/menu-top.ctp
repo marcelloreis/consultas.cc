@@ -9,7 +9,7 @@ $menu = array(
     * Produtos
     */
     array(
-        'label' => '<span>' . __('People Location') . '</span>', 'controller' => 'entities', 'action' => 'people'
+        'label' => '<span>' . __('Consultation Registration') . '</span>', 'controller' => 'entities', 'action' => 'people'
         ),
     /**
     * Localizacoes

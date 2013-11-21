@@ -1,4 +1,9 @@
 <?php 
+$this->start('sidebar');
+echo $this->element('Components/Translations/sidebar');
+$this->end();
+
+
 /**
 * Adiciona o painel de funcoes da grid
 */
