@@ -1,28 +1,30 @@
 $(document).ready(function(){
 	if($("#flot-audience").length > 0){
-                $("#flot-audience").bind("plothover", function (event, pos, item) {
-                        if (item) {
-                                if (previousPoint != item.dataIndex) {
-                                        previousPoint = item.dataIndex;
+        $("#flot-audience").bind("plothover", function (event, pos, item) {
+            if (item) {
+                if (previousPoint != item.dataIndex) {
+                    previousPoint = item.dataIndex;
 
-                                        $("#tooltip").remove();
-                                        var y = item.datapoint[1].toFixed();
+                    $("#tooltip").remove();
+                    var y = item.datapoint[1].toFixed();
 
-                                        showTooltip(item.pageX, item.pageY,
-                                         item.series.label + " = " + y);
-                                }
-                        }
-                        else {
-                                $("#tooltip").remove();
-                                previousPoint = null;
-                        }
-                });
+                    showTooltip(item.pageX, item.pageY,
+                     item.series.label + " = " + y);
+                }
+            }
+            else {
+                $("#tooltip").remove();
+                previousPoint = null;
+            }
+        });
     }
 
     /**
 	* Configuracao das mascaras dos formularios
 	*/
-    // $('.msk-money').maskMoney({decimal:",", thousands:"."});
+    if($('.msk-money').size()){
+        $('.msk-money').maskMoney({decimal:",", thousands:"."});
+    }
     $.mask.definitions['~']='[9]';
     $('.msk-phone').mask('9999-9999');
     $('.msk-phone-9').mask('~9999-9999');
@@ -57,6 +59,25 @@ $(document).ready(function(){
 			location.href = url + '/?' + data;
 		}
 	});
+
+    /**
+    * Cidades por demanda
+    */
+    $('select[name*=state_id]')
+    .chosen()
+    .change(function(){
+        var form = $(this).parents('form:eq(0)');
+        var state_id = $(this).val();
+        var select_city = form.find('select[name*=city_id]');
+        var box_select_city = select_city.parents('.controls:eq(0)');
+
+        select_city.remove();
+        $.get('/cities/options/' + state_id, function(data){
+            box_select_city.html(data);
+            $('select', box_select_city).chosen();
+        });
+        
+    });
 
 	/**
 	* Controle de busca por endereco

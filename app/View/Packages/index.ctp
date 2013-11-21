@@ -14,6 +14,7 @@ echo $this->AppGrid->create($modelClass, array('id' => $modelClass, 'tableClass'
 */
 $columns['id'] = $this->AppForm->input("", array('id' => 'check-all', 'type' => 'checkbox', 'template' => 'form-input-clean'));
 $columns['action'] = __('Actions');
+
 echo $this->Html->tag('thead', $this->AppGrid->tr($columns));
 
 /**
@@ -26,10 +27,11 @@ if(count($$map)){
         /**
         * Seta as larguras das colunas
         */
-    	$v[$modelClass]['action_width'] = '150';
-    	
-        $v[$modelClass]['action'] = $this->element('Index/Groups/action', array('id' => $v[$modelClass]['id']));
+        $v[$modelClass]['action'] = $this->element('Index/action', array('id' => $v[$modelClass]['id']));
         $v[$modelClass]['id'] = $this->AppForm->input("{$modelClass}.id.{$k}", array('type' => 'checkbox', 'template' => 'form-input-clean', 'value' => $v[$modelClass]['id'], 'placeholder' => $v[$modelClass][$fieldText]));
+        $v[$modelClass]['limit_exceeded'] = $this->AppUtils->boolTxt($v[$modelClass]['limit_exceeded']);
+        $v[$modelClass]['repeat_limit_exceeded'] = $this->AppUtils->boolTxt($v[$modelClass]['repeat_limit_exceeded']);
+        $v[$modelClass]['group_id'] = $v['Group']['name'];
         $body .= $this->AppGrid->tr($v[$modelClass]);
     }
     echo $this->Html->tag('tbody', $body);

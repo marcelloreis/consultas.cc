@@ -26,10 +26,11 @@ if(count($$map)){
         /**
         * Seta as larguras das colunas
         */
-    	$v[$modelClass]['action_width'] = '150';
-    	
-        $v[$modelClass]['action'] = $this->element('Index/Groups/action', array('id' => $v[$modelClass]['id']));
+        $v[$modelClass]['action'] = $this->element('Index/action', array('id' => $v[$modelClass]['id']));
         $v[$modelClass]['id'] = $this->AppForm->input("{$modelClass}.id.{$k}", array('type' => 'checkbox', 'template' => 'form-input-clean', 'value' => $v[$modelClass]['id'], 'placeholder' => $v[$modelClass][$fieldText]));
+        $v[$modelClass]['client_id'] = $v['Client']['name'];
+        $v[$modelClass]['is_paid'] = $this->AppUtils->boolTxt($v[$modelClass]['is_paid']);
+        $v[$modelClass]['is_separete'] = $this->AppUtils->boolTxt($v[$modelClass]['is_separete']);
         $body .= $this->AppGrid->tr($v[$modelClass]);
     }
     echo $this->Html->tag('tbody', $body);

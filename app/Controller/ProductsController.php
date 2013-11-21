@@ -53,6 +53,6 @@ class ProductsController extends AppController {
 	*/
 	public function edit($id=null){
 		//@override
-		parent::edit($id);
+		parent::edit($id);	
 	}
 }

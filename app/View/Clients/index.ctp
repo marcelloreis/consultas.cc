@@ -14,6 +14,14 @@ echo $this->AppGrid->create($modelClass, array('id' => $modelClass, 'tableClass'
 */
 $columns['id'] = $this->AppForm->input("", array('id' => 'check-all', 'type' => 'checkbox', 'template' => 'form-input-clean'));
 $columns['action'] = __('Actions');
+unset($columns['corporate_name']);
+unset($columns['address']);
+unset($columns['complement']);
+unset($columns['number']);
+unset($columns['neighborhood']);
+unset($columns['city_id']);
+unset($columns['tel2']);
+unset($columns['tel3']);
 echo $this->Html->tag('thead', $this->AppGrid->tr($columns));
 
 /**
@@ -26,10 +34,10 @@ if(count($$map)){
         /**
         * Seta as larguras das colunas
         */
-    	$v[$modelClass]['action_width'] = '150';
-    	
-        $v[$modelClass]['action'] = $this->element('Index/Groups/action', array('id' => $v[$modelClass]['id']));
-        $v[$modelClass]['id'] = $this->AppForm->input("{$modelClass}.id.{$k}", array('type' => 'checkbox', 'template' => 'form-input-clean', 'value' => $v[$modelClass]['id'], 'placeholder' => $v[$modelClass][$fieldText]));
+        $v[$modelClass]['action'] = $this->element('Index/action', array('id' => $v[$modelClass]['id']));
+        $v[$modelClass]['id'] = $this->AppForm->input("{$modelClass}.id.{$k}", array('type' => 'checkbox', 'template' => 'form-input-clean', 'value' => $v[$modelClass]['id']));
+        $v[$modelClass]['package_id'] = $v['Package']['name'];
+        $v[$modelClass]['state_id'] = $v['State']['uf'];
         $body .= $this->AppGrid->tr($v[$modelClass]);
     }
     echo $this->Html->tag('tbody', $body);

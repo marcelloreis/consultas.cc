@@ -104,7 +104,7 @@ class AppFormHelper extends AppHelper {
         }
 
         //Insere os options de caso o input seja do tipo select e os options ainda nao estejam setados
-        if ($options['type'] == 'select' && !isset($options['options'])) {
+        if ((isset($options['template']) && $options['template'] == 'form-input-fk') || ($options['type'] == 'select' && !isset($options['options']))) {
             //Insere a label "Selecione" caso nao tenha sido setado nenhuma label
             $options['empty'] =  (!isset($options['empty']))?__('Selecione'):$options['empty'];
             $options['options'] =  $this->optionsSelect($fieldName);
@@ -199,25 +199,6 @@ class AppFormHelper extends AppHelper {
         $class = '';
         $type = isset($options['type'])?$options['type']:null;
 
-        //Verifica se o campo é checkbox de indice
-        if(($fieldName === null && $type == 'checkbox') || preg_match('/[a-zA-Z]+?\.id\.([0-9])+/', $fieldName)){
-            //Verifica se a requisicao é via ajax
-            if($this->params['isAjax']){
-                $class = 'e-checkbox-ajax';
-                // Verifica se o input esta sendo invocando por um indice HABTM
-                if(isset($this->params['named']['fkbox'])){
-                    switch ($this->params['named']['fkbox']) {
-                        case 'habtm':
-                            $class .= '-habtm';
-                            break;
-                        case 'belongsto':
-                            $class .= '-belongsto';
-                            break;
-                    }
-                }
-            }
-        }
-
         //Verifica se o campo é uma chave estrangeira
         if(!preg_match('/[a-z].+?_id/', $fieldName)){
             if(!$type){
@@ -229,14 +210,14 @@ class AppFormHelper extends AppHelper {
             */
             switch ($type) {
                 case 'date':
-                    $class = 'datepicker datepicker-icon';
+                    $class = 'datepick';
                 case 'datetime':
                     //Inicio
                     if (preg_match('/^date_ini|data_inicio|ini|inicio$/si', $fieldName))
-                        $class = 'datepicker datetimepicker-ini-icon';
+                        $class = 'datepick datetimepicker-ini-icon';
                     //Fim
-                    if (preg_match('/^date_end|data_fim|end|fim$/si', $fieldName))
-                        $class = 'datepicker datetimepicker-end-icon';
+                    // if (preg_match('/^date_end|data_fim|end|fim$/si', $fieldName))
+                    //     $class = 'daterangepick';
                 break;
                 
                 case 'integer':

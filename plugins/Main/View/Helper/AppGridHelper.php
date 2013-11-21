@@ -173,9 +173,9 @@ class AppGridHelper extends AppHelper {
                 $field = (strstr($k, '.'))?$k:$this->model . '.' . $k;
                 
                 if($attr['sort'] && !preg_match('/^<.*?>/si', $v)){
-                    $this->tdTemplate[$k] = str_replace('%content%', $this->Paginator->sort($field, $v), $td);
+                    $this->tdTemplate[$k] = str_replace('%content%', $this->Paginator->sort($field, str_replace('_', ' ', $v)), $td);
                 }else{
-                    $this->tdTemplate[$k] = str_replace('%content%', $v, $td);
+                    $this->tdTemplate[$k] = str_replace('%content%', str_replace('_', ' ', $v), $td);
                 }
 
             }
