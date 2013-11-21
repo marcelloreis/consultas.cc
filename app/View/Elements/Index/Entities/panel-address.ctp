@@ -17,7 +17,7 @@ $this->end();
                     <?php echo $this->form->hidden('q', array('value' => $requestHandler));?>
                     <?php echo $this->form->hidden('address', array('value' => '1'));?>
                     <div class="control-group address-fields">
-                        <label class="control-label" style="padding:10px 0 10px 30px; width:auto;"><i class="glyphicon-globe"></i>&nbsp;<?php echo __('Search by address')?></label>
+                        <label class="control-label" style="padding:10px 0 10px 30px; width:auto;"><?php echo __('Explicar sobre a busca por endereço')?></label>
                     </div>
 
                     <div class="span6">

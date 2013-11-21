@@ -6,7 +6,7 @@
                 <?php echo $this->AppForm->create($modelClass, array('defaultSize' => 'input-xlarge', 'classForm' => 'form-horizontal form-bordered'))?>
                     <?php echo $this->form->hidden('q', array('value' => $requestHandler));?>
                     <div class="control-group address-fields">
-                        <label class="control-label" style="padding:10px 0 10px 30px; width:auto;"><i class="glyphicon-vcard"></i>&nbsp;<?php echo __('Search by doc')?></label>
+                        <label class="control-label" style="padding:10px 0 10px 30px; width:auto;"><?php echo __('Explicar como funciona este item')?></label>
                     </div>
 
                     <div class="control-group">

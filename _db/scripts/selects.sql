@@ -11,7 +11,7 @@ select query_desc, count(id) as qt_consultas, avg(time) as tempo_medio from nasz
 SELECT doc, name, type, count(h1) as ocorrencias FROM naszaco_pessoas.entities where type != 2 and gender is null group by h1 order by count(h1) desc, name limit 10000;
 
 #Selects das tabelas de telefone fixo
-SELECT * FROM naszaco_pessoas.entities order by id desc;#1795097
+SELECT * FROM naszaco_pessoas.entities order by id desc;
 SELECT * FROM naszaco_pessoas.associations order by id desc;
 SELECT * FROM naszaco_pessoas.addresses order by id desc;
 SELECT * FROM naszaco_pessoas.zipcodes order by id desc;

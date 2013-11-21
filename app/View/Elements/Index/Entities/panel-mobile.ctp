@@ -6,7 +6,7 @@
                 <?php echo $this->AppForm->create($modelClass, array('defaultSize' => 'input-xlarge', 'classForm' => 'form-horizontal form-column form-bordered'))?>
                     <?php echo $this->form->hidden('q', array('value' => $requestHandler));?>
                     <div class="control-group address-fields">
-                        <label class="control-label" style="padding:10px 0 10px 30px; width:auto;"><i class="icon-phone"></i>&nbsp;<?php echo __('Search by mobile')?></label>
+                        <label class="control-label" style="padding:10px 0 10px 30px; width:auto;"><?php echo __('Explicar sobre a busca por telefone movel')?></label>
                     </div>
 
                     <div class="span4">
