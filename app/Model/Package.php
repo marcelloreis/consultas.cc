@@ -19,4 +19,27 @@ class Package extends AppModel {
 	* @var array
 	*/
 	public $belongsTo = 'Group';
+
+	/**
+	* hasAndBelongsToMany associations
+	*
+	* @var array
+	*/
+	public $hasAndBelongsToMany = array(
+		'Product' => array(
+			'className' => 'Product',
+			'joinTable' => 'packages_products',
+			'foreignKey' => 'package_id',
+			'associationForeignKey' => 'product_id',
+			'unique' => true,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'finderQuery' => '',
+			'deleteQuery' => '',
+			'insertQuery' => ''
+		)
+	);	
 }

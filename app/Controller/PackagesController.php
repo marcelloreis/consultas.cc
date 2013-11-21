@@ -51,8 +51,17 @@ class PackagesController extends AppController {
 	* @param string $id
 	* @return void
 	*/
-	public function edit($id=null){
+	public function edit($id=null){	
 		//@override
 		parent::edit($id);
+
+
+		$products_active = array();
+		if(isset($this->data['Product'])){
+			foreach ($this->data['Product'] as $k => $v) {
+				$products_active[$k] = (int)$v['id'];
+			}
+		}
+		$this->set(compact('products_active'));
 	}
 }

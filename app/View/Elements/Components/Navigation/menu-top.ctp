@@ -56,7 +56,7 @@ $menu = array(
             /**
             * Administrativo/Histórico
             */
-            array('label' => __('Historical'), 'controller' => 'historical'),
+            array('label' => __('Counters'), 'controller' => 'counters'),
             /**
             * Administrativo/Boleto
             */

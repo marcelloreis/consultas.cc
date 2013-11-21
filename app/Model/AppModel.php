@@ -338,7 +338,9 @@ class AppModel extends Model {
 					/**
 					 * Devolve o valor tratado ao $data
 					 */
-					$data[key($data)][$k] = $value;
+					if(isset($data[key($data)][$k])){
+						$data[key($data)][$k] = $value;
+					}
 				}
 
 				/**

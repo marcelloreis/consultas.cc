@@ -17,6 +17,13 @@ define('TP_CNPJ', 2);
 define('TP_AMBIGUO', 3);
 define('TP_INVALID', 4);
 
+define('TP_SEARCH_DOC', 1);
+define('TP_SEARCH_TELEPHONE', 2);
+define('TP_SEARCH_MOBILE', 3);
+define('TP_SEARCH_NAME', 4);
+define('TP_SEARCH_ADDRESS', 5);
+
+
 define('LIMIT_HASH', 5);
 define('LIMIT_SEARCH', 50);
 define('LIMIT_FAMILY', 6);

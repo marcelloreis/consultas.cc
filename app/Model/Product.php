@@ -27,4 +27,27 @@ class Product extends AppModel {
 		)
 	);
 
+	/**
+	* hasAndBelongsToMany associations
+	*
+	* @var array
+	*/
+	public $hasAndBelongsToMany = array(
+		'Package' => array(
+			'className' => 'Package',
+			'joinTable' => 'packages_products',
+			'foreignKey' => 'product_id',
+			'associationForeignKey' => 'package_id',
+			'unique' => true,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'finderQuery' => '',
+			'deleteQuery' => '',
+			'insertQuery' => ''
+		)
+	);	
+
 }

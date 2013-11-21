@@ -65,6 +65,15 @@ class AppController extends Controller {
 		'Main.AppPaginator', 
 		'Main.AppPermissions'
 		);
+	/**
+	* Carrega todos os tipos de relacionamento possiveis
+	*/
+	private $relationship = array(
+		'hasOne',
+		'hasMany',
+		'belongsTo',
+		'hasAndBelongsToMany',
+		);
 
 
 
@@ -611,17 +620,12 @@ class AppController extends Controller {
 		}
 
 		/**
-		* Carrega as listas para selecao dos models relacionados (belongsto)
+		* Carrega as listas para selecao dos models relacionados
 		*/
-		foreach ($this->Model->belongsTo as $k => $v) {
-			$this->set(Inflector::pluralize(Inflector::variable($v['className'])), $this->Model->{$v['className']}->find('list', array('fields' => $v['fields'], 'conditions' => $v['conditions'])));
-		}
-
-		/**
-		* Carrega as listas para selecao dos models relacionados (hasOne)
-		*/
-		foreach ($this->Model->hasOne as $k => $v) {
-			$this->set(Inflector::pluralize(Inflector::variable($v['className'])), $this->Model->{$v['className']}->find('list', array('fields' => $v['fields'], 'conditions' => $v['conditions'])));
+		foreach ($this->relationship as $v) {
+			foreach ($this->Model->{$v} as $v2) {
+				$this->set(Inflector::pluralize(Inflector::variable($v2['className'])), $this->Model->{$v2['className']}->find('list', array('fields' => $v2['fields'], 'conditions' => $v2['conditions'])));
+			}
 		}
 	}
 
@@ -765,95 +769,6 @@ class AppController extends Controller {
 	}
 
 	/**
-	* Monta a paginacao apartir do model passado pelo parametro
-	*/
-	protected function __paginationHabtm($habtmModel, $params=array()){
-		/**
-		* Carrega todos os atibutos da ligacao entre os models
-		*/
-		$habtm = $this->Model->hasAndBelongsToMany[$habtmModel];
-
-		/**
-    	* Verifica se foi passado alguma valor na variavel padrao de busca
-    	*/
-		if(!empty($this->params['named']['search'])){
-			$search = $this->params['named']['search'];
-		}
-
-		/**
-		* Caso a variavel padrao de busca esteja setada, monta as condicoes de busca
-		*
-		* PARA QUE A BUSCA DINAMICA FUNCIONE, É NECESSARIO QUE TODAS AS ASSOCIACOES ESTEJAM DEVIDAMENTE
-		* DECLARADAS EM Model/NomeDoModel.php
-		*/
-		if(!empty($search)){
-			//Guarda as condicoes montadas com os campos de texto padrao dos models
-			$searchMap = array();
-			//Monta as condicoes de busca do campo de texto principal dos models associados
-			foreach ($this->Model->$habtm['className']->belongsTo as $k => $v) {
-				if(method_exists($this->Model->{$habtm['className']}->$k, 'getFieldText')){
-					$searchMap[]["{$k}.{$this->Model->{$habtm['className']}->$k->getFieldText()} LIKE"] = "%{$search}%";
-				}else if(!empty($this->Model->{$habtm['className']}->$k->displayField)){
-					$searchMap[]["{$k}.{$this->Model->{$habtm['className']}->$k->displayField} LIKE"] = "%{$search}%";
-				}
-			}
-
-			//Monta as condicoes de busca do campo de texto principal do modelo/tabela
-			if(method_exists($this->Model->$habtm['className'], 'getFieldText')){
-				$searchMap[]["{$habtm['className']}.{$this->Model->{$habtm['className']}->getFieldText()} LIKE"] = "%{$search}%";
-			}else if(!empty($this->Model->{$habtm['className']}->displayField)){
-				$searchMap[]["{$habtm['className']}.{$this->Model->{$habtm['className']}->displayField} LIKE"] = "%{$search}%";
-			}
-
-			//Verifica se existem mais de uma condicao montada, caso exista, insere a clausula OR
-			if(count($searchMap) > 1){
-				$searchMap = array('OR' => $searchMap);
-			}
-
-			//Carrega o parametro 'conditions' com as condicoes montadas dinamicamente
-			if(isset($params['conditions']) && is_array($params['conditions'])){
-				array_push($params['conditions'], $searchMap);
-			}else{
-				$params['conditions'] = $searchMap;
-			}
-		}
-
-		//Configurações padrao da busca
-		$defaults = array(
-			'recursive' => '-1',
-		    'conditions' => array("{$habtm['with']}.{$habtm['foreignKey']}" => $this->Model->id),
-		    'joins' => array(
-		        array(
-		            'alias' => $habtm['with'],
-		            'table' => $habtm['joinTable'],
-		            'type' => 'INNER',
-		            'conditions' => "{$habtm['with']}.{$habtm['associationForeignKey']} = {$habtm['className']}.id"
-		        )
-		    ),
-		    'limit' => $this->limit,
-		    'order' => array(
-		        "{$habtm['className']}.{$this->Model->$habtm['className']->getFieldText()}" => 'asc'
-		    )
-		);
-		$params = array_merge($defaults, $params);
-
-		$this->paginate = array($habtm['className'] => $params);
-		$paginationData = $this->paginate($habtm['className']);     
-
-	    /**
-	    * Carrega os atributos do model associado
-	    */
-	    $columns['id'] = 'id';
-	    $columns['displayName'] = $this->Model->$habtm['className']->getFieldText();
-		$this->set("columns{$habtm['className']}", $columns);
-
-		/**
-		* Carrega as paginacoes criadas
-		*/
-		$this->set($habtm['className'], $paginationData);
-	}
-
-	/**
 	 * Se o campo "q" for igual a 1, simula o envio do form por get
 	 * redirecionando para http://domain/controller/action/seach:value1/namedN:valueN
 	 */
@@ -881,99 +796,6 @@ class AppController extends Controller {
 
 			$this->redirect($redirect);    		
     	}		
-	}	
-
-	/**
-	* Método unjoin
-	* Este método contem regras de negocios que permitem desassociar registros HasAndBelongsToMany
-	*
-	* @param string $id
-	* @return void
-	*/
-	protected function __unjoin($id){
-		/**
-		 * Verifica se o formulário foi submetido por post
-		 */
-		if ($this->request->is('post') || $this->request->is('put')) {
-			/**
-			* Verifica se todos os parametros foram devidamentes setados
-			*/
-			if(!isset($this->request->data[$this->modelClass]['id'])){
-				$this->Session->setFlash(sprintf("The %s code is not found.", __d('fields', $this->modelClass)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
-				$this->redirect($this->referer());
-			}
-			
-			if(!isset($this->request->data[$this->modelClass]['habtm'])){
-				$this->Session->setFlash('The name of the association was not found.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
-				$this->redirect($this->referer());
-			}
-			
-			if(!is_array($this->request->data[$this->request->data[$this->modelClass]['habtm']]['id'])){
-				$this->Session->setFlash(sprintf("The %s code is not found.", __d('fields', $this->request->data[$this->modelClass]['habtm'])), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
-				$this->redirect($this->referer());
-			}
-
-			/**
-			* Carrega o nome do registro associado
-			*/
-			$habtmModel = $this->request->data[$this->modelClass]['habtm'];
-			/**
-			* Carrega o codigo do registro associado
-			*/
-			$habtm_id = $this->request->data[$this->request->data[$this->modelClass]['habtm']]['id'];
-			/**
-			* Carrega o codigo do model
-			*/
-			$id = $this->request->data[$this->modelClass]['id'];
-
-
-		}else{
-			/**
-			* Verifica se todos os parametros foram devidamentes setados
-			*/
-			if(!isset($id)){
-				$this->Session->setFlash(sprintf("The %s code is not found.", __d('fields', $this->modelClass)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
-				$this->redirect($this->referer());
-			}
-			
-			if(!isset($this->params['named']['habtm'])){
-				$this->Session->setFlash('The name of the association was not found.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
-				$this->redirect($this->referer());
-			}
-			
-			if(!isset($this->params['named']['habtm_id'])){
-				$this->Session->setFlash(sprintf("The %s code is not found.", __($this->params['named']['habtm'])), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
-				$this->redirect($this->referer());
-			}
-
-			/**
-			* Carrega o nome do registro associado
-			*/
-			$habtmModel = $this->params['named']['habtm'];
-			/**
-			* Carrega o codigo do registro associado
-			*/
-			$habtm_id = $this->params['named']['habtm_id'];
-		}
-
-		/**
-		* Verifica se existe uma associacao HABTM informada no model
-		*/
-		if(isset($this->Model->hasAndBelongsToMany[$habtmModel])){
-			$habtm = $this->Model->hasAndBelongsToMany[$habtmModel];
-
-			/**
-			* Exclui a associacao apartir dos IDs passados por parametro
-			*/
-			$return = $this->Model->$habtm['with']->deleteAll(array("{$habtm['with']}.{$habtm['foreignKey']}" => $id, "{$habtm['with']}.{$habtm['associationForeignKey']}" => $habtm_id));
-			if($return){
-				$this->Session->setFlash(sprintf(__("The %s was disassociated %s successfully."), __($this->name), __($habtmModel)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
-			}else{
-				$this->Session->setFlash(sprintf(__("Could not unbind %s and %s."), __($this->modelClass), __($habtmModel)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
-			}
-		}
-
-		$this->redirect($this->referer());
 	}	
 
     /**
