@@ -9,16 +9,16 @@
                         <label class="control-label" style="padding:10px 0 10px 30px; width:auto;"><?php echo __('Explicar sobre a busca por telefone fixo')?></label>
                     </div>
 
-                    <div class="span4">
+                    <div class="span3">
                         <div class="control-group">
-                            <label class="control-label" for="textfield" style="width:20%;"><?php echo __('Type DDD')?></label>
+                            <label class="control-label" for="textfield" style="width:40%;"><?php echo __('Type DDD')?></label>
                             <div class="controls">
                                 <?php $ddd = isset($this->params['named']['ddd']) && !empty($this->params['named']['ddd'])?$this->params['named']['ddd']:''?>
                                 <?php echo $this->AppForm->input('ddd', array('template' => 'form-input-clean', 'class' => 'input-block-level msk-2Digits', 'value' => $ddd, 'placeholder' => __('type ddd')))?>
                             </div>
                         </div>
                     </div>
-                    <div class="span8">
+                    <div class="span9">
                         <div class="control-group">
                             <label class="control-label" for="textfield"><?php echo __('Type Landline')?></label>
                             <div class="controls">

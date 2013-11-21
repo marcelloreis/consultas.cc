@@ -32,11 +32,13 @@ $(document).ready(function(){
     $('.msk-cnpj').mask('99.999.999/9999-99');
     $('.msk-card').mask('9999 9999 9999 9999');
     $('.msk-hour').mask('99:99:99');
-    $('.msk-2Digits').mask('99');
+    $('.msk-2Digits').mask('99',{completed:function(){
+    	$(this).parents('form:eq(0)').find('input[name*=landline]').focus();
+    }});
     $('.msk-4Digits').mask('9999');
     $('.msk-int').keyup(function(){
             $(this).val($(this).val().replace(/[^0-9]/gi, ''));
-    })
+    });
     $('.msk-alpha').keyup(function(){
             $(this).val($(this).val().replace(/[0-9]/gi, ''));
     })
