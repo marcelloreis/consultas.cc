@@ -14,11 +14,18 @@ class Package extends AppModel {
 	public $displayField = 'name';
 
 	/**
-	* hasOne associations
+	* belongsTo associations
 	*
 	* @var array
 	*/
 	public $belongsTo = 'Group';
+
+	/**
+	* hasMany associations
+	*
+	* @var array
+	*/
+	public $hasMany = 'Client';
 
 	/**
 	* hasAndBelongsToMany associations

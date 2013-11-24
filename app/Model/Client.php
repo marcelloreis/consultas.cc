@@ -14,9 +14,16 @@ class Client extends AppModel {
 	public $displayField = 'fancy_name';
 
 	/**
-	* hasOne associations
+	* belongsTo associations
 	*
 	* @var array
 	*/
 	public $belongsTo = array('Package', 'State');
+
+	/**
+	* hasMany associations
+	*
+	* @var array
+	*/
+	public $hasMany = array('User');
 }

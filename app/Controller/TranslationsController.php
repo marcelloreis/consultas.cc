@@ -152,6 +152,6 @@ class TranslationsController extends ProjectController {
 		}
 
 		$this->Session->setFlash(__("All translations were loaded."), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
-		$this->redirect('index');
+		$this->redirect('edit');
 	}
 }

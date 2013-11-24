@@ -92,6 +92,13 @@ class User extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
+		),
+		'Client' => array(
+			'className' => 'Client',
+			'foreignKey' => 'client_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
 		)
 	);
 

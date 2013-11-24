@@ -63,21 +63,23 @@ $(document).ready(function(){
     /**
     * Cidades por demanda
     */
-    $('select[name*=state_id]')
-    .chosen()
-    .change(function(){
-        var form = $(this).parents('form:eq(0)');
-        var state_id = $(this).val();
-        var select_city = form.find('select[name*=city_id]');
-        var box_select_city = select_city.parents('.controls:eq(0)');
+    if($('select[name*=state_id]').size()){
+        $('select[name*=state_id]')
+        .chosen()
+        .change(function(){
+            var form = $(this).parents('form:eq(0)');
+            var state_id = $(this).val();
+            var select_city = form.find('select[name*=city_id]');
+            var box_select_city = select_city.parents('.controls:eq(0)');
 
-        select_city.remove();
-        $.get('/cities/options/' + state_id, function(data){
-            box_select_city.html(data);
-            $('select', box_select_city).chosen();
+            select_city.remove();
+            $.get('/cities/options/' + state_id, function(data){
+                box_select_city.html(data);
+                $('select', box_select_city).chosen();
+            });
+            
         });
-        
-    });
+    }
 
 	/**
 	* Controle de busca por endereco

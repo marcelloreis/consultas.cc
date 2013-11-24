@@ -35,7 +35,7 @@ class AppController extends Controller {
 	* Declaracao dos atributos privados da classe
 	*/
 	private $Model;
-	private $isRedirect = true;
+	protected $isRedirect = true;
 	public $saveType = 'save';
 	public $limit;
 	public $userLogged;

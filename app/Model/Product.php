@@ -22,7 +22,7 @@ class Product extends AppModel {
 		'Aco' => array(
 			'className' => 'Aco',
 			'foreignKey' => 'aco_id',
-			'conditions' => array('Aco.is_product' => true),
+			'conditions' => '',
 			'fields' => array('Aco.id', 'Aco.alias'),
 		)
 	);

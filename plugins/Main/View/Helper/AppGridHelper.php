@@ -171,11 +171,16 @@ class AppGridHelper extends AppHelper {
 
                 //Concatena o nome do model caso nao esteja concatenado
                 $field = (strstr($k, '.'))?$k:$this->model . '.' . $k;
+
+                //Humaniza os nomes dos campos
+                if(!strstr($field, 'action')){
+                    $v = str_replace('_', ' ', $v);
+                }
                 
                 if($attr['sort'] && !preg_match('/^<.*?>/si', $v)){
-                    $this->tdTemplate[$k] = str_replace('%content%', $this->Paginator->sort($field, str_replace('_', ' ', $v)), $td);
+                    $this->tdTemplate[$k] = str_replace('%content%', $this->Paginator->sort($field, $v), $td);
                 }else{
-                    $this->tdTemplate[$k] = str_replace('%content%', str_replace('_', ' ', $v), $td);
+                    $this->tdTemplate[$k] = str_replace('%content%', $v, $td);
                 }
 
             }

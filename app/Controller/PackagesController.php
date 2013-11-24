@@ -55,6 +55,73 @@ class PackagesController extends AppController {
 		//@override
 		parent::edit($id);
 
+		/**
+		 * Verifica se o formulário foi submetido por post
+		 */
+		if(!empty($id)){
+			/**
+			* Carrega todos os clientes e seus respectivos usuarios que pertencem ao pacote editado
+			*/
+			$clients = $this->Package->Client->find('all', array(
+				'conditions' => array('Client.package_id' => $id)
+				));
+
+			/**
+			* Carrega os produtos que pertencem ao pacote do cliente
+			*/
+			$products = $this->Package->PackagesProduct->find('list', array(
+				'fields' => 'product_id',
+				'conditions' => array('PackagesProduct.package_id' => $id)
+				));
+
+			/**
+			* Carrega os ACOs relacionados ao produtos encontrados do pacote
+			*/
+			$acos_allow = $this->Package->Product->find('list', array(
+				'fields' => array('Product.aco_id', 'Product.aco_id'),
+				'conditions' => array('Product.id' => $products)
+				));				
+
+			/**
+			* Monta o action do produto/aco completo
+			*/
+	        $acos = $this->Acl->Aco->find('all', array('order' => 'Aco.lft ASC', 'recursive' => -1));
+	        $parents = array();
+	        $acos_full_path = array();
+	        foreach ($acos as $key => $data) {
+	            $aco =& $acos[$key];
+	            $aco_id = $aco['Aco']['id'];
+
+	            // Generate path
+	            if ($aco['Aco']['parent_id'] && isset($parents[$aco['Aco']['parent_id']])) {
+	                $parents[$aco_id] = $parents[$aco['Aco']['parent_id']] . '/' . $aco['Aco']['alias'];
+	            } else {
+	                $parents[$aco_id] = $aco['Aco']['alias'];
+	            }
+
+        		$acos_full_path[$aco_id] = $parents[$aco_id];
+	        }
+
+	        /**
+	        * Percorre por todos os clientes que pertencem ao pacote
+	        */
+	        foreach ($clients as $k => $v) {
+	        	/**
+	        	* Percorre por todos os usuarios do cliente pertencente ao pacote
+	        	*/
+	        	foreach ($v['User'] as $k2 => $v2) {
+					/**
+					* Concede todas as permissoes sobre os produtos contidos no pacote do cliente
+					*/
+					foreach ($acos_full_path as $k3 => $v3) {
+						$node = array('model' => 'User', 'foreign_key' => $v2['id']);
+						$action = $v3;
+						$perm = in_array($k3, $acos_allow)?'allow':'deny';		
+						$this->Acl->{$perm}($node, $action);
+					}			        
+	        	}
+	        }
+		}
 
 		$products_active = array();
 		if(isset($this->data['Product'])){

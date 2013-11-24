@@ -44,15 +44,15 @@ $menu = array(
             /**
             * Administrativo/Clientes/Contas
             */
-            array('label' => __('Accounts'), 'controller' => 'users', 'account' => true),
-            /**
-            * Administrativo/Pacotes
-            */
-            array('label' => __('Packages'), 'controller' => 'packages'),
+            array('label' => __('Accounts'), 'controller' => 'users', 'action' => 'accounts'),
             /**
             * Administrativo/Produtos
             */
             array('label' => __('Products'), 'controller' => 'products'),
+            /**
+            * Administrativo/Pacotes
+            */
+            array('label' => __('Packages'), 'controller' => 'packages'),
             /**
             * Administrativo/Histórico
             */

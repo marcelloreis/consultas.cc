@@ -28,6 +28,39 @@ class UsersController extends AppController {
 	}
 
     /**
+    * Método index
+    * Este método contem regras de negocios visualizar todos os registros contidos na entidade do controlador
+    *
+    * @override Metodo AppController.index
+    * @param string $period (Periodo das movimentacoes q serao listadas)
+    * @return void
+    */
+    public function index($params=array()){
+        $params = array(
+            'conditions' => array('User.client_id' => null)
+            );
+        //@override
+        parent::index($params);
+    }   
+
+    /**
+    * Método accounts
+    * Este método contem regras de negocios visualizar todos os registros contidos na entidade do controlador
+    *
+    * @override Metodo AppController.accounts
+    * @param string $period (Periodo das movimentacoes q serao listadas)
+    * @return void
+    */
+    public function accounts($params=array()){
+        $params = array(
+            'conditions' => array('User.client_id NOT' => null)
+            );
+        //@override
+        parent::index($params);
+    }   
+
+
+    /**
     * Método edit
     * Este método contem regras de negocios para adicionar e editar registros na base de dados
     *
@@ -37,19 +70,33 @@ class UsersController extends AppController {
     */
     public function edit($id=null){
         /**
+        * Inicializa a variavel $account considerando que o usuario é de sistema e nao de conta de cliente
+        */
+        $isAccount = false;
+
+        /**
          * Verifica se o formulário foi submetido por post
          */
         if ($this->request->is('post') || $this->request->is('put')) {
             /**
-            * Caso o campo password esteja seta, porem vazio, ele sera removido do request->data para q nao seja atualizado
+            * Caso o campo password esteja setado, porem vazio, ele sera removido do request->data para q nao seja atualizado
             */
             if(isset($this->request->data['User']['password']) && empty($this->request->data['User']['password'])){
                 unset($this->request->data['User']['password']);
             }
         }
 
+        /**
+        * Verifica se o usuario é de contas/clientes ou usuario do sistema
+        */
+        if(isset($this->params['named']['client_id'])){
+            $isAccount = true;
+        }
+
         //@override
         parent::edit($id);
+
+        $this->set(compact('isAccount'));
     }    
 
 
