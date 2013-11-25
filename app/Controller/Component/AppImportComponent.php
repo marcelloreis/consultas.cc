@@ -32,7 +32,7 @@ class AppImportComponent extends Component {
 	public $counter;
 
 	public function __construct() {
-	    $this->Log = ClassRegistry::init('Log');
+	    $this->Log = ClassRegistry::init('LogsImport');
 	    $this->City = ClassRegistry::init('City');
 	    $this->Iaddress = ClassRegistry::init('Iaddress');
 	    $this->ModelCounter = ClassRegistry::init('Counter');
@@ -1179,7 +1179,7 @@ class AppImportComponent extends Component {
 	* @return void
 	*/
 	public function __log($log, $type, $uf, $status=true, $table=null, $pk=null, $data=null, $mysql_error=null){	
-		$Log['Log'] = array(
+		$Log['LogsImport'] = array(
 			'log' => $log,
 			'type' => $type,
 			'mysql_error' => $mysql_error,

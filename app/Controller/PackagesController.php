@@ -52,11 +52,40 @@ class PackagesController extends AppController {
 	* @return void
 	*/
 	public function edit($id=null){	
-		//@override
-		parent::edit($id);
 
 		/**
 		 * Verifica se o formulário foi submetido por post
+		 */
+		if ($this->request->is('post') || $this->request->is('put')) {
+			/**
+			* Calcula o valor do pacote de acordo com a soma dos produtos relacionados a ele
+			*/
+			if(isset($this->request->data['Product']['Product']) && count($this->request->data['Product']['Product'])){
+				$map = $this->Package->Product->find('first', array(
+					'recursive' => -1,
+					'fields' => array('sum(Product.price) as pkg_value'),
+					'conditions' => array('Product.id' => $this->request->data['Product']['Product']),
+					));
+				$this->request->data['Package']['value'] = $map[0]['pkg_value'];
+			}
+
+			/**
+			* Calcula o valor das consultas exedidas do pacote
+			*/
+			$this->request->data['Package']['value_per_exceeded'] = ($this->request->data['Package']['value'] / $this->request->data['Package']['postage']);
+
+		}
+
+		//@override
+		parent::edit($id);
+
+		if(isset($this->data) && count($this->data)){
+
+		}
+
+
+		/**
+		 * Atualiza as permissoes de todas as contas/usuarios ligados a este pacote
 		 */
 		if(!empty($id)){
 			/**
@@ -123,6 +152,9 @@ class PackagesController extends AppController {
 	        }
 		}
 
+		/**
+		* Carrega todos os produtos ativos do pacote
+		*/
 		$products_active = array();
 		if(isset($this->data['Product'])){
 			foreach ($this->data['Product'] as $k => $v) {

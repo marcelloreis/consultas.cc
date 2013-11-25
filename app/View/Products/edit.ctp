@@ -8,6 +8,7 @@ $this->end();
 
 $this->append('scrips-on-demand');
 echo $this->Html->script(array('plugins/chosen/chosen.jquery.min'));
+echo $this->Html->script(array('plugins/maskedinput/jquery.maskMoney.min'));
 $this->end();
 ?>
 <div class="box box-bordered">
@@ -17,9 +18,10 @@ $this->end();
             <div style="display:none;">
                 <?php echo $this->Form->input('id')?>
             </div>            
-            <?php echo $this->AppForm->input('aco_id', array('class' => 'chosen-select'))?>
+            <?php echo $this->AppForm->input('aco_id', array('type' => 'select', 'empty' => __('Select'), 'options' => $acoPros, 'class' => 'chosen-select'))?>
             <?php echo $this->AppForm->input('name')?>
             <?php echo $this->AppForm->input('description')?>
+            <?php echo $this->AppForm->input('price')?>
             <?php echo $this->AppForm->btn('Save changes');?>
         <?php echo $this->AppForm->end()?>
     </div>

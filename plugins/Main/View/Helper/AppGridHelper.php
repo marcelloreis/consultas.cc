@@ -131,7 +131,6 @@ class AppGridHelper extends AppHelper {
             }
             foreach ($columns as $k => $v) {
                 //Guarda as chaves dos cabeçalhos da tabela para casar exatamente com os valores que viram na tabela
-                $v = __d('fields', $v);
                 if($attr['tag'] == 'th'){
                     $this->rows[$k] = $v;
                 }else if(!array_key_exists($k, $this->rows)){
@@ -173,8 +172,8 @@ class AppGridHelper extends AppHelper {
                 $field = (strstr($k, '.'))?$k:$this->model . '.' . $k;
 
                 //Humaniza os nomes dos campos
-                if(!strstr($field, 'action')){
-                    $v = str_replace('_', ' ', $v);
+                if(!strstr($field, 'action') && !strstr($field, '.id') && $attr['tag'] == 'th'){
+                    $v = __(str_replace('_', ' ', $v));
                 }
                 
                 if($attr['sort'] && !preg_match('/^<.*?>/si', $v)){

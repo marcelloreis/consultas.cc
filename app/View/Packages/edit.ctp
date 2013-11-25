@@ -4,16 +4,12 @@
 */
 $this->append('css-on-demand');
 echo $this->Html->css(array('plugins/chosen/chosen'));
-echo $this->Html->css(array('plugins/datepicker/datepicker'));
-echo $this->Html->css(array('plugins/icheck/all'));
 echo $this->Html->css(array('plugins/multiselect/multi-select'));
 $this->end();
 
 $this->append('scrips-on-demand');
 echo $this->Html->script(array('plugins/chosen/chosen.jquery.min'));
 echo $this->Html->script(array('plugins/maskedinput/jquery.maskMoney.min'));
-echo $this->Html->script(array('plugins/datepicker/bootstrap-datepicker'));
-echo $this->Html->script(array('plugins/icheck/jquery.icheck.min'));
 echo $this->Html->script(array('plugins/multiselect/jquery.multi-select'));
 $this->end();
 ?>
@@ -29,12 +25,9 @@ $this->end();
             <?php echo $this->AppForm->input('group_id', array('class' => 'chosen-select'))?>
             <?php echo $this->AppForm->input('name')?>
             <?php echo $this->AppForm->input('postage', array('class' => 'msk-int'))?>
-            <?php echo $this->AppForm->input('value')?>
-            <?php echo $this->AppForm->input('value_per_exceeded')?>
+            <?php echo $this->AppForm->input('value', array('disabled' => 'disabled'))?>
+            <?php echo $this->AppForm->input('value_per_exceeded', array('disabled' => 'disabled'))?>
             <?php echo $this->AppForm->input('validity')?>
-            <?php echo $this->AppForm->input('maturity_day')?>
-            <?php echo $this->AppForm->input('limit_exceeded', array('class' => 'icheck-me', 'data-skin' => 'square', 'data-color' => 'blue'))?>
-            <?php echo $this->AppForm->input('repeat_limit_exceeded', array('class' => 'icheck-me', 'data-skin' => 'square', 'data-color' => 'blue'))?>
             <?php echo $this->AppForm->input('Product', array('type' => 'select', 'options' => $products, 'selected' => $products_active, 'multiple' => 'multiple', 'class' => 'multiselect', 'data-selectionheader' => __('Added Products'), 'data-selectableheader' => __('Products Available')))?>
 
             <?php echo $this->AppForm->btn('Save changes');?>

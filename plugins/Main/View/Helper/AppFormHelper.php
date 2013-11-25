@@ -64,7 +64,7 @@ class AppFormHelper extends AppHelper {
 
     public function input($fieldName, $options = array()) {
         //Guarda o label requisistado    
-        $this->inputLabel = isset($options['label']) ? ucfirst($options['label']) : ucfirst($fieldName);
+        $this->inputLabel = isset($options['label']) ? __(ucwords(str_replace('_', ' ', $options['label']))) : __(ucwords(str_replace('_', ' ', $fieldName)));
         //Remove o LABEL padrao do cake
         unset($options['label']);
 

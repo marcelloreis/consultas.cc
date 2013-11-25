@@ -19,11 +19,11 @@ class Product extends AppModel {
 	* @var array
 	*/
 	public $belongsTo = array(
-		'Aco' => array(
-			'className' => 'Aco',
+		'AcoPro' => array(
+			'className' => 'AcoPro',
 			'foreignKey' => 'aco_id',
 			'conditions' => '',
-			'fields' => array('Aco.id', 'Aco.alias'),
+			// 'fields' => array('AcoPro.alias', 'AcoPro.alias'),
 		)
 	);
 
@@ -39,14 +39,6 @@ class Product extends AppModel {
 			'foreignKey' => 'product_id',
 			'associationForeignKey' => 'package_id',
 			'unique' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'finderQuery' => '',
-			'deleteQuery' => '',
-			'insertQuery' => ''
 		)
 	);	
 

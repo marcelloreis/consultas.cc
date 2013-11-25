@@ -58,12 +58,12 @@ class User extends AppModel {
 				'message' => 'O campo Apelido deve ser preenchido corretamente.',
 			),
 		),
-		'password' => array(
-			'notempty' => array(
-				'rule' => array('notempty'),
-				'message' => 'O campo Senha deve ser preenchido corretamente.',
-			),
-		),
+		// 'password' => array(
+		// 	'notempty' => array(
+		// 		'rule' => array('notempty'),
+		// 		'message' => 'O campo Senha deve ser preenchido corretamente.',
+		// 	),
+		// ),
 		'email' => array(
 			'email' => array(
 				'rule' => array('email'),

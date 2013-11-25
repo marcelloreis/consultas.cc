@@ -99,7 +99,12 @@ class UsersController extends AppController {
         $this->set(compact('isAccount'));
     }    
 
-
+    /**
+    * Método login
+    *
+    * Este método é responsavel pelas regras de negocio 
+    * necessarias para realizar o login do usuario
+    */
     public function login() {
         /**
         * Deleta a sessao que guarda o codigo da rede social q o usuario escolheu para usar como login
@@ -131,13 +136,25 @@ class UsersController extends AppController {
         $this->layout = 'login';
         if ($this->request->is('post')) {
             if ($this->Auth->login()) {
-                $this->Session->setFlash("Seja bem vindo ao " . TITLE_APP . ".", FLASH_TEMPLATE_DASHBOARD, array('class' => FLASH_CLASS_SUCCESS, 'title' => "Olá " . $this->Auth->User('name')), FLASH_TEMPLATE_DASHBOARD);
+                $this->Session->setFlash(sprintf(__("Welcome to %s"), TITLE_APP) . ".", FLASH_TEMPLATE_DASHBOARD, array('class' => FLASH_CLASS_SUCCESS, 'title' => "Olá " . $this->Auth->User('name')), FLASH_TEMPLATE_DASHBOARD);
                 parent::__loadPermissionsOnSessions();
                 $this->redirect($this->Auth->redirect());
             } else {
-                $this->Session->setFlash("Seu email ou senha estao incorretos.", FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_LOGIN);
+                $this->Session->setFlash(__("Your email or password is incorrect."), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_LOGIN);
             }
         }
+    }
+
+    /**
+    * Método forgot_pass
+    *
+    * Este método recupera a senha do usuario 
+    */
+    public function forgot_pass(){
+        /**
+        * TODO implementar funcao para 'esqueci a senha'
+        */
+        $this->redirect($this->referer());
     }
 
     /**

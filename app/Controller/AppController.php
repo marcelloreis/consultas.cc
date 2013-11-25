@@ -50,7 +50,7 @@ class AppController extends Controller {
 		'Main.AppUtils',
 		'RequestHandler',
 		'Google.AppGoogle',
-		// 'DebugKit.Toolbar' => array('autoRun' => true),
+		'DebugKit.Toolbar' => array('autoRun' => true),
 		'Facebook.AppFacebook',
 		);
 	/**
@@ -163,11 +163,26 @@ class AppController extends Controller {
 			'Actions' => array('actionPath' => 'controllers')
 		);
     	$this->Auth->userModel = 'User';
-    	$this->Auth->authenticate = array('Form' => array('fields' => array('username' => 'email', 'password' => 'password')));
     	$this->Auth->loginAction = array('controller' => 'users', 'action' => 'login', 'admin' => false, 'plugin' => false);
     	$this->Auth->autoRedirect = true;
     	$this->Auth->logoutRedirect = array('controller' => 'users', 'action' => 'login', 'admin' => false, 'plugin' => false);
     	$this->Auth->loginRedirect = array('controller' => 'users', 'action' => 'dashboard', 'admin' => false, 'plugin' => false);
+
+    	/**
+    	* Condicoes para o usuario logar
+    	*/
+    	$this->Auth->authenticate = array(
+    		'Form' => array(
+    			'fields' => array(
+    				'username' => 'email', 
+    				'password' => 'password'
+    				),
+    			'scope' => array(
+    				'User.status' => 1,
+    				'User.expire >' => date('Y-m-d')
+    				)
+    			)
+    		);
 
 		/**
 		 * Autorizações gerais

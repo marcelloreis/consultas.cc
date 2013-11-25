@@ -4,10 +4,14 @@
 */
 $this->append('css-on-demand');
 echo $this->Html->css(array('plugins/chosen/chosen'));
+echo $this->Html->css(array('plugins/datepicker/datepicker'));
+echo $this->Html->css(array('plugins/icheck/all'));
 $this->end();
 
 $this->append('scrips-on-demand');
 echo $this->Html->script(array('plugins/chosen/chosen.jquery.min'));
+echo $this->Html->script(array('plugins/datepicker/bootstrap-datepicker'));
+echo $this->Html->script(array('plugins/icheck/jquery.icheck.min'));
 $this->end();
 ?>
 <div class="box box-bordered">
@@ -32,6 +36,10 @@ $this->end();
             <?php echo $this->AppForm->input('complement')?>
             <?php echo $this->AppForm->input('number')?>
             <?php echo $this->AppForm->input('neighborhood')?>
+            <?php echo $this->AppForm->input('maturity_day')?>
+            <?php echo $this->AppForm->input('limit_exceeded', array('class' => 'icheck-me', 'data-skin' => 'square', 'data-color' => 'blue'))?>
+            <?php echo $this->AppForm->input('repeat_limit_exceeded', array('class' => 'icheck-me', 'data-skin' => 'square', 'data-color' => 'blue'))?>
+            
             <?php echo $this->AppForm->btn('Save changes');?>
         <?php echo $this->AppForm->end()?>
     </div>

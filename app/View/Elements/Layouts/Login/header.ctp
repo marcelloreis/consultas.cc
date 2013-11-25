@@ -34,6 +34,7 @@
         //Scrips da aplicacao
         echo $this->Html->script(array(
             'jquery.min',
+            'bootstrap.min',
         ));
 
         echo $this->element('Layouts/ie-9');

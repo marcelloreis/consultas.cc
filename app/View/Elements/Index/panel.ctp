@@ -7,7 +7,7 @@
                 <div class="row-fluid" style="margin-left: 0px;">
                     <div class="span9">
                         <div class="control-group">
-                            <label for="textfield" class="control-label"><?php echo __('Search')?></label>
+                            <label class="control-label"><?php echo __('Search')?></label>
                             <div class="controls">
                                 <div class="input-append input-prepend">
                                     <span class="add-on"><i class="icon-search"></i></span>
@@ -20,7 +20,7 @@
                     </div>
                     <div class="span3">
                         <div class="control-group">
-                            <label for="textfield" class="control-label">
+                            <label style="padding:10px;" class="control-label">
                                 <div class="btn-group">
                                     <?php echo $this->Html->link(__('Bulk Actions') . ' <span class="caret"></span>', '#', array('class' => 'btn btn-primary dropdown-toggle', 'data-toggle' => 'dropdown', 'escape' => false));?>
                                     <ul class="dropdown-menu">

@@ -12,11 +12,13 @@ $this->end();
 $this->append('css-on-demand');
 echo $this->Html->css(array('plugins/chosen/chosen'));
 echo $this->Html->css(array('plugins/icheck/all'));
+echo $this->Html->css(array('plugins/datepicker/datepicker'));
 $this->end();
 
 $this->append('scrips-on-demand');
 echo $this->Html->script(array('plugins/chosen/chosen.jquery.min'));
 echo $this->Html->script(array('plugins/icheck/jquery.icheck.min'));
+echo $this->Html->script(array('plugins/datepicker/bootstrap-datepicker'));
 $this->end();
 ?>
 <div class="box box-bordered">
@@ -27,13 +29,16 @@ $this->end();
                 <?php echo $this->Form->input('id')?>
             </div>
             <?php 
-            echo $this->AppForm->input('group_id', array('class' => 'chosen-select'));
             if($isAccount){
                 $selected = (!empty($this->params['named']['client_id']))?(!empty($this->params['named']['client_id'])):'';
                 echo $this->AppForm->input('client_id', array('selected' => $selected, 'class' => 'chosen-select'));
+                echo $this->Form->hidden('group_id', array('value' => CLIENT_GROUP));
+            }else{
+                echo $this->AppForm->input('group_id', array('class' => 'chosen-select'));
             }
             echo $this->AppForm->input('name');
             echo $this->AppForm->input('given_name');
+            echo $this->AppForm->input('expire');
             echo $this->AppForm->input('email');
             echo $this->AppForm->input('password');
             echo $this->AppForm->input('picture');
