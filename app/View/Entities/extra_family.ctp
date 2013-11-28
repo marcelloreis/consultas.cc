@@ -1,4 +1,4 @@
-<div class="row-fluid">
+<div class="row-fluid assoc-extra_family">
     <div class="span12">
         <div class="box box-bordered box-color">
             <div class="box-title">
@@ -21,7 +21,7 @@
                     <blockquote>
                         <h4>
                             <?php echo $this->Html->link(__('Mother'), '#', array('class' => 'btn btn-success'))?>
-                            <?php echo $this->Html->link($family['Family']['mother']['Entity']['name'], array('controller' => 'entities', 'action' => 'people', 'plugin' => false, $family['Family']['mother']['Entity']['id']))?>
+                            <?php echo $this->Html->link($family['Family']['mother']['Entity']['name'], array('controller' => 'entities', 'action' => 'index', 'plugin' => false, $family['Family']['mother']['Entity']['id']))?>
                         </h4>
                         <form style="border: 1px solid #DDDDDD;" class="form-horizontal form-column form-bordered" method="POST" action="#">
                             <div class="span4">
@@ -57,7 +57,7 @@
                     <blockquote>
                         <h4>
                             <?php echo $this->Html->link(__('Spouse'), '#', array('class' => 'btn btn-success'))?>
-                            <?php echo $this->Html->link($family['Family']['spouse']['Entity']['name'], array('controller' => 'entities', 'action' => 'people', 'plugin' => false, $family['Family']['spouse']['Entity']['id']))?>
+                            <?php echo $this->Html->link($family['Family']['spouse']['Entity']['name'], array('controller' => 'entities', 'action' => 'index', 'plugin' => false, $family['Family']['spouse']['Entity']['id']))?>
                         </h4>
                         <form style="border: 1px solid #DDDDDD;" class="form-horizontal form-column form-bordered" method="POST" action="#">
                             <div class="span4">
@@ -95,7 +95,7 @@
                             <?php 
                             $gender_children = isset($v['Entity']['gender']) && $v['Entity']['gender'] == MALE?__('Son'):__('Daughter');
                             echo $this->Html->link($gender_children, '#', array('class' => 'btn btn-success')) . '&nbsp;';
-                            echo $this->Html->link($v['Entity']['name'], array('controller' => 'entities', 'action' => 'people', 'plugin' => false, $v['Entity']['id']));
+                            echo $this->Html->link($v['Entity']['name'], array('controller' => 'entities', 'action' => 'index', 'plugin' => false, $v['Entity']['id']));
                             ?>
                         </h4>
                         <form style="border: 1px solid #DDDDDD;" class="form-horizontal form-column form-bordered" method="POST" action="#">
@@ -140,7 +140,7 @@
                             <?php 
                             $gender_brothers = isset($v['Entity']['gender']) && $v['Entity']['gender'] == MALE?__('Brother'):__('Sister');
                             echo $this->Html->link($gender_brothers, '#', array('class' => 'btn btn-success')) . '&nbsp;';
-                            echo $this->Html->link($v['Entity']['name'], array('controller' => 'entities', 'action' => 'people', 'plugin' => false, $v['Entity']['id']));
+                            echo $this->Html->link($v['Entity']['name'], array('controller' => 'entities', 'action' => 'index', 'plugin' => false, $v['Entity']['id']));
                             ?>
                         </h4>
                         <form style="border: 1px solid #DDDDDD;" class="form-horizontal form-column form-bordered" method="POST" action="#">
@@ -185,7 +185,7 @@
                             <?php 
                             $class_members = isset($v['Entity']['gender']) && $v['Entity']['gender'] == MALE?'info':'pink';
                             echo $this->Html->link(__('Family Member'), '#', array('class' => 'btn btn-warning')) . '&nbsp;';
-                            echo $this->Html->link($v['Entity']['name'], array('controller' => 'entities', 'action' => 'people', 'plugin' => false, $v['Entity']['id']));
+                            echo $this->Html->link($v['Entity']['name'], array('controller' => 'entities', 'action' => 'index', 'plugin' => false, $v['Entity']['id']));
                             ?>
                         </h4>
                         <form style="border: 1px solid #DDDDDD;" class="form-horizontal form-column form-bordered" method="POST" action="#">

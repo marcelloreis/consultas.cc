@@ -1,74 +1,112 @@
-<?php echo $this->assign('sidebar-class-hidden', 'nav-hidden')?>
-<?php echo $this->element('Index/panel')?>
+<?php 
+/**
+* Oculta o sidebar
+*/
+$this->assign('sidebar-class-hidden', 'nav-hidden');
+?>
 
-<table class="table table-hover table-nomargin">
-	<thead>
-		<tr>
-			<th>Rendering engine</th>
-			<th>Browser</th>
-			<th class='hidden-350'>Platform(s)</th>
-			<th class='hidden-1024'>Engine version</th>
-			<th class='hidden-480'>CSS grade</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td>Trident</td>
-			<td>
-				Internet
-				Explorer 4.0
-			</td>
-			<td class='hidden-350'>Win 95+</td>
-			<td class='hidden-1024'>4</td>
-			<td class='hidden-480'><?php echo $this->element('Index/action')?></td>
-		</tr>
-		<tr>
-			<td>Presto</td>
-			<td>Nokia N800</td>
-			<td class='hidden-350'>N800</td>
-			<td class='hidden-1024'>-</td>
-			<td class='hidden-480'><?php echo $this->element('Index/action')?></td>
-		</tr>
-		<tr>
-			<td>Misc</td>
-			<td>NetFront 3.4</td>
-			<td class='hidden-350'>Embedded devices</td>
-			<td class='hidden-1024'>-</td>
-			<td class='hidden-480'><?php echo $this->element('Index/action')?></td>
-		</tr>
-		<tr>
-			<td>Misc</td>
-			<td>Dillo 0.8</td>
-			<td class='hidden-350'>Embedded devices</td>
-			<td class='hidden-1024'>-</td>
-			<td class='hidden-480'><?php echo $this->element('Index/action')?></td>
-		</tr>
-		<tr>
-			<td>Misc</td>
-			<td>Links</td>
-			<td class='hidden-350'>Text only</td>
-			<td class='hidden-1024'>-</td>
-			<td class='hidden-480'><?php echo $this->element('Index/action')?></td>
-		</tr>
-		<tr>
-			<td>Misc</td>
-			<td>Lynx</td>
-			<td class='hidden-350'>Text only</td>
-			<td class='hidden-1024'>-</td>
-			<td class='hidden-480'>X</td>
-		</tr>
-	</tbody>
-</table>
-
-<div class="table-pagination">
-    <a href="#" class='disabled'>First</a>
-    <a href="#" class='disabled'>Previous</a>
-    <span>
-        <a href="#" class='active'>1</a>
-        <a href="#">2</a>
-        <a href="#">3</a>
-    </span>
-    <a href="#">Next</a>
-    <a href="#">Last</a>
-</div>
-							
+<div class="row-fluid">
+					<div class="span12">
+						<div class="box">
+							<div class="box-title">
+								<h3>
+									<i class="icon-reorder"></i>
+									Pricing tables
+								</h3>
+							</div>
+							<div class="box-content">
+								<div class="row-fluid">
+									<div class="pricing-tables">
+										<ul class="pricing span3">
+											<li class="head">
+												<div class="name">Free</div>
+												<div class="price">
+													$0
+													<span>per month</span>
+												</div>
+											</li>
+											<li>50 User</li>
+											<li>1000 Accounts</li>
+											<li>Unlimited Traffic</li>
+											<li>Lorem ipsum dolor.</li>
+											<li>Odio, fugit, nesciunt!</li>
+											<li>Voluptate, ad, iusto!</li>
+											<li>100 GB HDD</li>
+											<li><i class="icon-ok"></i> Free setup</li>
+											<li><i class="icon-ok"></i> 30 Day free trial</li>
+											<li class="button">
+												<a class="btn btn-grey-4" href="#">Sign up</a>
+												<div class="help-text">Free for 30days</div>
+											</li>
+										</ul>
+										<ul class="pricing green span3">
+											<li class="head">
+												<div class="name">Medium</div>
+												<div class="price">
+													$15
+													<span>per month</span>
+												</div>
+											</li>
+											<li>50 User</li>
+											<li>1000 Accounts</li>
+											<li>Unlimited Traffic</li>
+											<li>Lorem ipsum dolor.</li>
+											<li>Odio, fugit, nesciunt!</li>
+											<li>Voluptate, ad, iusto!</li>
+											<li>100 GB HDD</li>
+											<li><i class="icon-ok"></i> Free setup</li>
+											<li><i class="icon-ok"></i> 30 Day free trial</li>
+											<li class="button">
+												<a class="btn btn-green" href="#">Sign up</a>
+											</li>
+										</ul>
+										<ul class="pricing blue highlighted span3">
+											<li class="head">
+												<div class="name">Professional</div>
+												<div class="price">
+													$25
+													<span>per month</span>
+												</div>
+												<div class="info">Most popular plan</div>
+											</li>
+											<li>50 User</li>
+											<li>1000 Accounts</li>
+											<li>Unlimited Traffic</li>
+											<li>Lorem ipsum dolor.</li>
+											<li>Odio, fugit, nesciunt!</li>
+											<li>Voluptate, ad, iusto!</li>
+											<li>100 GB HDD</li>
+											<li><i class="icon-ok"></i> Free setup</li>
+											<li><i class="icon-ok"></i> 30 Day free trial</li>
+											<li class="button">
+												<a class="btn btn-blue" href="#">Sign up</a>
+												<div class="help-text">Best value</div>
+											</li>
+										</ul>
+										<ul class="pricing red span3">
+											<li class="head">
+												<div class="name">Power pack</div>
+												<div class="price">
+													$35
+													<span>per month</span>
+												</div>
+											</li>
+											<li>50 User</li>
+											<li>1000 Accounts</li>
+											<li>Unlimited Traffic</li>
+											<li>Lorem ipsum dolor.</li>
+											<li>Odio, fugit, nesciunt!</li>
+											<li>Voluptate, ad, iusto!</li>
+											<li>100 GB HDD</li>
+											<li><i class="icon-ok"></i> Free setup</li>
+											<li><i class="icon-ok"></i> 30 Day free trial</li>
+											<li class="button">
+												<a class="btn btn-red" href="#">Sign up</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>

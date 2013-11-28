@@ -1,0 +1,1 @@
+<small style="color: #999999;display: block;line-height: 20px;"><?php echo __('Not Found')?></small>

@@ -28,7 +28,8 @@ if(count($$map)){
         */
         $v[$modelClass]['action'] = $this->element('Index/action', array('id' => $v[$modelClass]['id']));
         $v[$modelClass]['id'] = $this->AppForm->input("{$modelClass}.id.{$k}", array('type' => 'checkbox', 'template' => 'form-input-clean', 'value' => $v[$modelClass]['id'], 'placeholder' => $v[$modelClass][$fieldText]));
-        $v[$modelClass]['popular'] = $this->AppUtils->boolTxt($v[$modelClass]['popular']);
+        $v[$modelClass]['client_id'] = $v['Client']['fancy_name'];
+        $v[$modelClass]['package_id'] = $v['Package']['name'];
         $body .= $this->AppGrid->tr($v[$modelClass]);
     }
     echo $this->Html->tag('tbody', $body);

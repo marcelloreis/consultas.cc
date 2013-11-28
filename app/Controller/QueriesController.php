@@ -2,7 +2,7 @@
 /**
  * Static content controller.
  *
- * Este arquivo ira renderizar as visões contidas em views/Counters/
+ * Este arquivo ira renderizar as visões contidas em views/Queries/
  *
  * PHP 5
  *
@@ -19,16 +19,16 @@ App::uses('AppController', 'Controller');
  * Este controlador contem regras de negócio aplicadas ao model Group
  *
  * @package       app.Controller
- * @link http://.framework.nasza.com.br/2.0/controller/Counters.html
+ * @link http://.framework.nasza.com.br/2.0/controller/Queries.html
  */
-class CountersController extends AppController {
+class QueriesController extends AppController {
 
 	/**
 	* Controller name
 	*
 	* @var string
 	*/
-	public $name = 'Counters';
+	public $name = 'Queries';
 
     /**
     * Chamado depois controlador com as regras de negócio, mas antes da visão ser renderizada.

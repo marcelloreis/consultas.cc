@@ -10,7 +10,7 @@
  * @link          http://www.nasza.com.br/ Nasza(tm) Project
  * @package       app.Controller
  */
-App::uses('ProjectController', 'Controller');
+App::uses('AppController', 'Controller');
 
 /**
  * Static content controller
@@ -20,7 +20,7 @@ App::uses('ProjectController', 'Controller');
  * @package       app.Controller
  * @link http://.framework.nasza.com.br/2.0/controller/Locales.html
  */
-class TranslationsController extends ProjectController {
+class TranslationsController extends AppController {
 	/**
 	* Método index
 	* Este método contem regras de negocios visualizar todos os registros contidos na entidade do controlador

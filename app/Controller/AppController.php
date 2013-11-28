@@ -99,6 +99,9 @@ class AppController extends Controller {
 		 * Inicializa o atributo userLogged com os dados do usuario logado
 		 */
 		$this->userLogged = $this->Session->read('Auth.User');
+    	$map = explode(' ', $this->userLogged['name']);
+    	$this->userLogged['given_name'] = empty($this->userLogged['given_name'])?$map[0]:$this->userLogged['given_name'];
+		
 
 		/**
 		 * Inicializa a variavel de ambiente que guardara o tipo da requisicao
@@ -202,8 +205,6 @@ class AppController extends Controller {
     	parent::beforeRender();
 
     	//Carrega a variavel de ambiente userLogged com as informações do usuario logado
-    	$map = explode(' ', $this->userLogged['name']);
-    	$this->userLogged['given_name'] = empty($this->userLogged['given_name'])?$map[0]:$this->userLogged['given_name'];
     	$this->set('userLogged', $this->userLogged);
 		//Carrega o nome do model nas variaveis de ambiente para ser acessado na view
 		$this->set('modelClass', $this->modelClass);

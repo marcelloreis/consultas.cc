@@ -18,8 +18,11 @@ $this->end();
             <div style="display:none;">
                 <?php echo $this->Form->input('id')?>
             </div>            
-            <?php echo $this->AppForm->input('name')?>
-            <?php echo $this->AppForm->input('description')?>
+            <?php echo $this->AppForm->input('client_id', array('class' => 'chosen-select'))?>
+            <?php echo $this->AppForm->input('package_id', array('class' => 'chosen-select'))?>
+            <?php echo $this->AppForm->input('paid')?>
+            <?php echo $this->AppForm->input('consumed', array('class' => 'msk-money'))?>
+            <?php echo $this->AppForm->input('qt_queries')?>
             <?php echo $this->AppForm->btn('Save changes');?>
         <?php echo $this->AppForm->end()?>
     </div>

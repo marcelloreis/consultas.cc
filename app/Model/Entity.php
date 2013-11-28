@@ -72,12 +72,14 @@ class Entity extends AppModelClean {
 	*
 	* @var array
 	*/
-	// public $hasMany = array(
- //        'Association' => array(
- //            'className' => 'Association',
- //            'foreignKey' => 'entity_id'
- //        )
-	// );	
+	public $hasMany = array(
+        'Association' => array(
+            'className' => 'Association',
+            'foreignKey' => 'entity_id',
+            'order' => array('Association.year' => 'desc'),
+            'type' => 'INNER'
+        )
+	);	
 
 	/**
 	* hasAndBelongsToMany associations
@@ -91,14 +93,8 @@ class Entity extends AppModelClean {
 			'foreignKey' => 'entity_id',
 			'associationForeignKey' => 'address_id',
 			'unique' => 'keepExisting',
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'finderQuery' => '',
-			'deleteQuery' => '',
-			'insertQuery' => ''
+			'limit' => 1,
+			'order' => array('Association.year' => 'desc')
 		),
 		'Landline' => array(
 			'className' => 'Landline',
@@ -106,14 +102,8 @@ class Entity extends AppModelClean {
 			'foreignKey' => 'entity_id',
 			'associationForeignKey' => 'landline_id',
 			'unique' => 'keepExisting',
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'finderQuery' => '',
-			'deleteQuery' => '',
-			'insertQuery' => ''
+			'limit' => 1,
+			'order' => array('Association.year' => 'desc')
 		),
 		'Mobile' => array(
 			'className' => 'Mobile',
@@ -121,14 +111,78 @@ class Entity extends AppModelClean {
 			'foreignKey' => 'entity_id',
 			'associationForeignKey' => 'mobile_id',
 			'unique' => 'keepExisting',
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'finderQuery' => '',
-			'deleteQuery' => '',
-			'insertQuery' => ''
+			'limit' => 1,
+			'order' => array('Association.year' => 'desc')
 		)
 	);
+
+	/**
+	* Procura a entidade a partir do hash
+	*/
+	public function _findName($hash){	
+		$this->recursive = 1;
+		$this->limit = LIMIT_SEARCH;
+
+		/**
+		* Procura por entidades com o nome identico ao passado por parametro
+		*/
+		$entities = $this->find('all', array(
+			'conditions' => array(
+				'Entity.h_all' => $hash['h_all'],
+			),
+			'limit' => LIMIT_SEARCH
+		));		
+
+		/**
+		* Caso nao encontre nenhuma entidade com o mesmo nome pesquisado
+		* procura por outras entidades com o mesmo sobre nome
+		*/
+		if(!count($entities)){
+			$entities = $this->find('all', array(
+				'conditions' => array(
+					'Entity.h2' => $hash['h2'],
+					'Entity.h3' => $hash['h3'],
+					'Entity.h4' => $hash['h4'],
+					'Entity.h5' => $hash['h5'],
+					),
+				'limit' => LIMIT_SEARCH
+				));		
+		}
+
+		/**
+		* Caso nao encontre nenhuma entidade com o mesmo sobre nome
+		* procura por outras entidades os ultimos 2 nomes iguais
+		*/
+		if(!count($entities)){
+			$entities = $this->find('all', array(
+				'conditions' => array(
+					'Entity.h_last1_last2' => $hash['h_last1_last2'],
+					),
+				'limit' => LIMIT_SEARCH
+				)
+			);		
+		}
+
+		/**
+		* Caso nao encontre nenhuma entidade com os ultimos 2 nomes iguais
+		* procura por entidades com qualquer semelhança no nome
+		*/			
+		if(!count($entities)){
+			$entities = $this->find('all', array(
+				'conditions' => array(
+					'OR' => array(
+						'Entity.h_all' => $hash['h_all'],
+						'Entity.h_last' => $hash['h_last'],
+						'Entity.h_first_last' => $hash['h_first_last'],
+						'Entity.h_last1_last2' => $hash['h_last1_last2'],
+						'Entity.h_first1_first2' => $hash['h_first1_first2'],
+						)
+					),
+				'limit' => LIMIT_SEARCH
+				)
+			);		
+		}
+
+		return $entities;
+	}
 }

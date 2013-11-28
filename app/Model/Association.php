@@ -18,7 +18,8 @@ App::uses('AppModelClean', 'Model');
  * @property City $City
  */
 class Association extends AppModelClean {
-	public $useTable = 'associations';
+    public $useTable = 'associations';
+	public $order = array('Association.year' => 'desc');
 
 	/**
 	* Recursive

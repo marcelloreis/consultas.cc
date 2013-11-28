@@ -1,25 +1,25 @@
 <?php 
-$this->start('title-view');
-echo $this->element('Components/People/title-view');
-$this->end();
-
-$this->start('sidebar');
-echo $this->element('Components/People/sidebar');
-$this->end();
 /**
-* Adiciona o painel de funcoes da grid
+* Oculta o sidebar
+*/
+$this->assign('sidebar-class-hidden', 'nav-hidden');
+
+/**
+* Painel de pesquisas
 */
 echo $this->element('Index/Entities/panel');
 
-$map = strtolower($modelClass);
+/**
+* Informacoes principais do consultado
+*/
+echo $this->element('Index/Entities/main');
+
+/**
+* Botoes para carregar o restante dos produtos
+*/
+echo $this->element('Index/Entities/extra-info');
 ?>
 
-<div class="row-fluid">
-	<div class="span6">
-		<?php echo $this->element('Index/Entities/map')?>
-	</div>
-	<div class="span6">
-		<?php echo $this->element('Index/Entities/map-entities')?>
-	</div>
-</div>
+
+
 

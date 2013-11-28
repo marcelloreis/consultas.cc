@@ -126,7 +126,7 @@ $(document).ready(function() {
 			"oLanguage":{
 				"sSearch": "<span>Search:</span> ",
 				"sInfo": "Showing <span>_START_</span> to <span>_END_</span> of <span>_TOTAL_</span> entries",
-				"sLengthMenu": "_MENU_ <span>entries per page</span>"
+				"sLengthMenu": "_MENU_ <span>registros por página</span>"
 			},
 			'sDom': "lfrtip",
 			'aoColumnDefs' : [

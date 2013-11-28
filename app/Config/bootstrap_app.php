@@ -12,16 +12,22 @@ define('COPYRIGHT_LINK', 'http://nasza.com.br');
 /**
  * IDs padroes do projeto
  */
+define('PRODUCT_PESSOAS', 1);
+define('PRODUCT_EMPRESAS', 2);
+define('PRODUCT_OBITO', 3);
+define('PRODUCT_BACEN', 4);
+
 define('TP_CPF', 1);
 define('TP_CNPJ', 2);
 define('TP_AMBIGUO', 3);
 define('TP_INVALID', 4);
 
-define('TP_SEARCH_DOC', 1);
-define('TP_SEARCH_TELEPHONE', 2);
-define('TP_SEARCH_MOBILE', 3);
-define('TP_SEARCH_NAME', 4);
-define('TP_SEARCH_ADDRESS', 5);
+define('TP_SEARCH_ID', 1);
+define('TP_SEARCH_DOC', 2);
+define('TP_SEARCH_PHONE', 3);
+define('TP_SEARCH_MOBILE', 4);
+define('TP_SEARCH_NAME', 5);
+define('TP_SEARCH_ADDRESS', 6);
 
 
 define('LIMIT_HASH', 5);

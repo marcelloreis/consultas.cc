@@ -1,16 +1,33 @@
 <?php 
+/**
+* Adiciona os CSSs e Scripts de acordo com as views invocadas
+*/
+$this->append('css-on-demand');
+echo $this->Html->css(array('plugins/chosen/chosen'));
+echo $this->Html->css(array('plugins/datatable/TableTools'));
+$this->end();
+
+$this->append('scrips-on-demand');
+echo $this->Html->script(array('plugins/chosen/chosen.jquery.min'));
+echo $this->Html->script(array('plugins/datatable/jquery.dataTables.min'));
+echo $this->Html->script(array('plugins/datatable/TableTools.min'));
+echo $this->Html->script(array('plugins/datatable/ColReorderWithResize'));
+echo $this->Html->script(array('plugins/datatable/ColVis.min'));
+echo $this->Html->script(array('plugins/datatable/jquery.dataTables.columnFilter'));
+echo $this->Html->script(array('plugins/datatable/jquery.dataTables.grouping'));
+$this->end();
+
 $params = $this->params['named'];
 
 /**
 * Inicia a montagem da grid
 */
-echo $this->AppGrid->create($modelClass, array('id' => 'index-table', 'tableClass' => 'table table-hover table-nomargin'));
+echo $this->AppGrid->create($modelClass, array('id' => 'index-table', 'tableClass' => 'table table-hover table-nomargin dataTable'));
 
 /**
 * Monta o cabeçalho
 */
 unset($columns);
-$columns['id'] = $this->AppForm->input("", array('id' => 'check-all', 'type' => 'checkbox', 'template' => 'form-input-clean'));
 $columns['doc'] = __('Document');
 $columns['name'] = __('Name');
 $columns['mother'] = __('Mother');
@@ -34,7 +51,6 @@ if(count($$map)){
         $v[$modelClass]['age_width'] = '10';
     	
         $v[$modelClass]['action'] = $this->element('Index/Entities/action', array('id' => $v[$modelClass]['id']));
-        $v[$modelClass]['id'] = $this->AppForm->input("{$modelClass}.id.{$k}", array('type' => 'checkbox', 'template' => 'form-input-clean', 'value' => $v[$modelClass]['id'], 'placeholder' => $v[$modelClass][$fieldText]));
 
         $v[$modelClass]['mother'] = !empty($v[$modelClass]['mother'])?$v[$modelClass]['mother']:'<small style="color: #999999;display: block;line-height: 20px;">— ' . __('Not Found') . '</small>';
         $v[$modelClass]['age'] = !empty($v[$modelClass]['age'])?$v[$modelClass]['age']:'<small style="color: #999999;display: block;line-height: 20px;">— ' . __('Not Found') . '</small>';

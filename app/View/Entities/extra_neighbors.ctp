@@ -1,4 +1,4 @@
-<div class="row-fluid">
+<div class="row-fluid assoc-extra_neighbors">
     <div class="span12">
         <div class="box box-bordered box-color">
             <div class="box-title">
@@ -7,7 +7,7 @@
             <div class="box-content">
                 <?php 
                 $hasInfo = 0;
-                foreach ($neighborhood['Neighborhood'] as $k => $v) {
+                foreach ($neighbors['Neighbors'] as $k => $v) {
                     if(count($v)){
                         $hasInfo++;
                     }
@@ -18,7 +18,7 @@
                 ?>
 
                 <!-- Vizinhos -->
-                <?php foreach($neighborhood['Neighborhood'] as $k => $v):?>
+                <?php foreach($neighbors['Neighbors'] as $k => $v):?>
                     <?php foreach($v as $k2 => $v2):?>
                         <blockquote>
                             <h4>

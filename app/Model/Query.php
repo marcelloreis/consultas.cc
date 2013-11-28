@@ -1,22 +1,22 @@
 <?php
 App::uses('AppModel', 'Model');
 /**
- * Counter Model
+ * Query Model
  *
  * @property User $User
  */
-class Counter extends AppModel {
+class Query extends AppModel {
 	/**
 	* Display field
 	*
 	* @var string
 	*/
-	public $displayField = 'name';
+	public $displayField = 'conditions';
 
 	/**
 	* belongsTo associations
 	*
 	* @var array
 	*/
-	public $belongsTo = array('User', 'Product', 'Package', 'Invoice');
+	public $belongsTo = array('User', 'Billing', 'Price');
 }

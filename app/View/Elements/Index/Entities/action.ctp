@@ -1,2 +1,2 @@
 <?php 
-echo $this->Html->link('<i class="icon-search"></i>', array("controller" => $this->params['controller'], "action" => "people", $id), array('title' => __('View Record'), 'class' => 'btn', 'rel' => 'tooltip', 'data-original-title' => __('View Record'), 'escape' => false)) . '&nbsp;';
+echo $this->Html->link('<i class="icon-search"></i>', array("controller" => $this->params['controller'], "action" => "index", $id, '#' => 'entity-main'), array('title' => 'Visualizar Registros', 'class' => 'btn', 'rel' => 'tooltip', 'data-original-title' => 'Visualizar Registros', 'escape' => false)) . '&nbsp;';

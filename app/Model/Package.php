@@ -14,18 +14,11 @@ class Package extends AppModel {
 	public $displayField = 'name';
 
 	/**
-	* belongsTo associations
-	*
-	* @var array
-	*/
-	public $belongsTo = 'Group';
-
-	/**
 	* hasMany associations
 	*
 	* @var array
 	*/
-	public $hasMany = 'Client';
+	public $hasMany = 'Price';
 
 	/**
 	* hasAndBelongsToMany associations
@@ -35,18 +28,11 @@ class Package extends AppModel {
 	public $hasAndBelongsToMany = array(
 		'Product' => array(
 			'className' => 'Product',
-			'joinTable' => 'packages_products',
+			'joinTable' => 'prices',
 			'foreignKey' => 'package_id',
 			'associationForeignKey' => 'product_id',
+			'order' => array('created'),
 			'unique' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'finderQuery' => '',
-			'deleteQuery' => '',
-			'insertQuery' => ''
 		)
 	);	
 }

@@ -1,9 +1,9 @@
 <?php
 App::uses('AppModelClean', 'Model');
 /**
- * Landline Model
+ * Mobile Model
  *
- * Esta classe é responsável ​​pela gestão de quase tudo o que acontece a respeito do(a) Landline, 
+ * Esta classe é responsável ​​pela gestão de quase tudo o que acontece a respeito do(a) Mobile, 
  * é responsável também pela validação dos seus dados.
  *
  * PHP 5
@@ -12,12 +12,12 @@ App::uses('AppModelClean', 'Model');
  * @link          http://www.nasza.com.br/ Nasza(tm) Project
  * @package       app.Model
  *
- * Landline Model
+ * Mobile Model
  *
  * @property Address $Address
- * @property Landline $Landline
+ * @property Mobile $Mobile
  */
-class Landline extends AppModelClean {
+class Mobile extends AppModelClean {
 
 	/**
 	* Display field
@@ -32,7 +32,7 @@ class Landline extends AppModelClean {
 	* @var string
 	*/
 	public $virtualFields = array(
-    	'tel_txt' => "concat('(', ifnull(Landline.ddd, 0), ') ', left(Landline.tel, 4) , '-' , right(Landline.tel, 4))",
+    	'tel_txt' => "concat('(', ifnull(Mobile.ddd, 0), ') ', left(Mobile.tel ,5) , '-' , right(Mobile.tel, 4))",
 	);
 
 	/**
@@ -50,7 +50,7 @@ class Landline extends AppModelClean {
 	public $hasMany = array(
         'Association' => array(
             'className' => 'Association',
-            'foreignKey' => 'landline_id',
+            'foreignKey' => 'mobile_id',
             'order' => array('Association.year' => 'desc'),
             'type' => 'INNER'
         )
@@ -65,30 +65,30 @@ class Landline extends AppModelClean {
 		'Entity' => array(
 			'className' => 'Entity',
 			'joinTable' => 'associations',
-			'foreignKey' => 'landline_id',
+			'foreignKey' => 'mobile_id',
 			'associationForeignKey' => 'entity_id',
 			'unique' => 'keepExisting',
 		),
 		'Address' => array(
 			'className' => 'Address',
 			'joinTable' => 'associations',
-			'foreignKey' => 'landline_id',
+			'foreignKey' => 'mobile_id',
 			'associationForeignKey' => 'address_id',
 			'unique' => 'keepExisting',
-		),
+		)
 	);
 
 	/**
 	* Procura os telefones a partir do DDD e Telefone passados por parametro
 	*/
-	public function _findLandline($ddd, $tel){
+	public function _findMobile($ddd, $tel){
 		$this->recursive = 1;
 
 		$phones = $this->find('all', array(
 				'conditions' => array(
 					'OR' => array(
-						'Landline.tel' => $tel,
-						'Landline.tel_full' => $tel,
+						'Mobile.tel' => $tel,
+						'Mobile.tel_full' => $tel,
 						)
 					),
 				'limit' => LIMIT_SEARCH

@@ -14,20 +14,6 @@ class Product extends AppModel {
 	public $displayField = 'name';
 
 	/**
-	* belongsTo associations
-	*
-	* @var array
-	*/
-	public $belongsTo = array(
-		'AcoPro' => array(
-			'className' => 'AcoPro',
-			'foreignKey' => 'aco_id',
-			'conditions' => '',
-			// 'fields' => array('AcoPro.alias', 'AcoPro.alias'),
-		)
-	);
-
-	/**
 	* hasAndBelongsToMany associations
 	*
 	* @var array
@@ -35,7 +21,7 @@ class Product extends AppModel {
 	public $hasAndBelongsToMany = array(
 		'Package' => array(
 			'className' => 'Package',
-			'joinTable' => 'packages_products',
+			'joinTable' => 'prices',
 			'foreignKey' => 'product_id',
 			'associationForeignKey' => 'package_id',
 			'unique' => true,

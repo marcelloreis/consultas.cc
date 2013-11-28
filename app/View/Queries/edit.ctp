@@ -11,6 +11,9 @@ $this->append('scrips-on-demand');
 echo $this->Html->script(array('plugins/chosen/chosen.jquery.min'));
 echo $this->Html->script(array('plugins/icheck/jquery.icheck.min'));
 $this->end();
+
+debug($this->viewVars);
+
 ?>
 <div class="box box-bordered">
     <?php echo $this->element('Edit/panel')?>
@@ -20,12 +23,11 @@ $this->end();
                 <?php echo $this->Form->input('id')?>
             </div>            
             <?php echo $this->AppForm->input('user_id', array('class' => 'chosen-select'))?>
-            <?php echo $this->AppForm->input('product_id', array('class' => 'chosen-select'))?>
-            <?php echo $this->AppForm->input('package_id', array('class' => 'chosen-select'))?>
-            <?php echo $this->AppForm->input('invoice_id', array('class' => 'chosen-select'))?>
+            <?php echo $this->AppForm->input('billing_id', array('class' => 'chosen-select'))?>
+            <?php echo $this->AppForm->input('price_id', array('class' => 'chosen-select'))?>
             <?php echo $this->AppForm->input('tp_search', array('type' => 'select', 'options' => $tp_search, 'class' => 'chosen-select'))?>
             <?php echo $this->AppForm->input('found', array('class' => 'icheck-me', 'data-skin' => 'square', 'data-color' => 'blue'))?>
-            <?php echo $this->AppForm->input('value_searched')?>
+            <?php echo $this->AppForm->input('conditions')?>
             <?php echo $this->AppForm->btn('Save changes');?>
         <?php echo $this->AppForm->end()?>
     </div>

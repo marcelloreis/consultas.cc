@@ -384,14 +384,14 @@ class AppImportComponent extends Component {
 		* foi digitada.
 		*/
 		if(preg_match('/0{8}|1{8}|2{8}|3{8}|4{8}|5{8}|6{8}|7{8}|8{8}|9{8}/si', $zipcode)){
-			$zipcode = null;
+			$zipcode = -1;
 		}
 
 		/**
 		* Verifica se o CEP é inconsistente
 		*/
 		if(!preg_match('/^[0-9]{8}$/si', $zipcode)){
-			$zipcode = null;
+			$zipcode = -1;
 		}
 
 		/**
@@ -437,9 +437,9 @@ class AppImportComponent extends Component {
 	*/
 	public function getCityId($city, $state_id, $zipcode_id=null){
 		/**
-		* Inicializa a variavel $city_id com ZERO
+		* Inicializa a variavel $city_id com -1
 		*/
-		$city_id = null;
+		$city_id = -1;
 
 		/**
 		* Carrega todos os estados do pais em uma array com o sigla => cod
@@ -481,7 +481,7 @@ class AppImportComponent extends Component {
 				}
 			}
 
-			if(!$city_id){
+			if(!$city_id && $city_id > 0){
 				/**
 				* Busca pela cidade atravez do nome completo e do estado
 				*/
@@ -499,7 +499,7 @@ class AppImportComponent extends Component {
 				/**
 				* Busca pela cidade atravez de partes do nome e do estado
 				*/
-				if(!$city_id){
+				if(!$city_id && $city_id > 0){
 					$hasCity = $this->City->find('first', array(
 						'recursive' => '-1',
 						'conditions' => array(

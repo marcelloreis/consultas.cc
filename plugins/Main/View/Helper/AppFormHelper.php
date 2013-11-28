@@ -112,7 +112,7 @@ class AppFormHelper extends AppHelper {
 
         //Insere a o nome do campo em placeholder caso nao tenha sido setado nenhum valor
         if ($options['type'] != 'checkbox' && !isset($options['placeholder'])) {
-            $options['placeholder'] = __d('fields', $this->inputLabel);
+            $options['placeholder'] = __($this->inputLabel);
         }
 
         //Insere o atributo 'disabled' caso o formulario seja somente para visualizacao
@@ -123,7 +123,7 @@ class AppFormHelper extends AppHelper {
         //Carrega os valores padroes do input
         $defaults = array(
             'sizeClass' => $this->defaultSize,
-            'label' => __d('fields', $this->inputLabel),
+            'label' => __($this->inputLabel),
             'input' => $this->Form->input($fieldName, $options),
             );
         $attr = array_merge($defaults, $options);
@@ -162,7 +162,7 @@ class AppFormHelper extends AppHelper {
             $defaults = array(
                 'class' => 'btn',
                 'side' => 'right',
-                'value' => __d('fields', $value)
+                'value' => __($value)
                 );
 
             $attr = array_merge($defaults, $options);
@@ -237,7 +237,7 @@ class AppFormHelper extends AppHelper {
                 if (preg_match('/^tel.*?ne[0-9]?|tel|fone|phone$/si', $fieldName))
                     $class = 'msk-phone';
                 //Dinheiro, moeda
-                if (preg_match('/^money|moeda|balance|value$/si', $fieldName))
+                if (preg_match('/^money|moeda|balance|value|price$/si', $fieldName))
                     $class = 'msk-money';
                 //CEP
                 if (preg_match('/^zipcode|cep|CEP|ZIPCODE$/si', $fieldName))

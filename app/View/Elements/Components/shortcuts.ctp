@@ -1,26 +1,20 @@
-<!-- <div class="pull-right">
-		<ul class="minitiles">
-			<li class='grey'>
-				<a href="#"><i class="icon-cogs"></i></a>
-			</li>
-			<li class='lightgrey'>
-				<a href="#"><i class="icon-globe"></i></a>
-			</li>
-		</ul>
-		<ul class="stats">
-			<li class='satgreen'>
-				<i class="icon-money"></i>
-				<div class="details">
-					<span class="big">$324,12</span>
-					<span>Balance</span>
-				</div>
-			</li>
-			<li class='lightred'>
-				<i class="icon-calendar"></i>
-				<div class="details">
-					<span class="big">February 22, 2013</span>
-					<span>Wednesday, 13:56</span>
-				</div>
-			</li>
-		</ul>
-	</div> -->
+<?php if(isset($billing)):?>
+	<div class="pull-right">
+			<ul class="stats">
+				<li class='satgreen'>
+					<i class="icon-money"></i>
+					<div class="details">
+						<span class="big">R$<?php echo $this->AppUtils->num2br($billing['balance'])?></span>
+						<span>Saldo</span>
+					</div>
+				</li>
+				<li class='lightred'>
+					<i class="icon-calendar"></i>
+					<div class="details">
+						<span class="big"><?php echo $billing['validity_txt']?></span>
+						<span>Validade</span>
+					</div>
+				</li>
+			</ul>
+		</div>
+<?php endif?>

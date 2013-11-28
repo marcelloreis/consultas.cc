@@ -1,4 +1,7 @@
 $(document).ready(function(){
+    /**
+    * Graficos de importacao
+    */
 	if($("#flot-audience").length > 0){
         $("#flot-audience").bind("plothover", function (event, pos, item) {
             if (item) {
@@ -82,26 +85,31 @@ $(document).ready(function(){
     }
 
 	/**
-	* Controle de busca por endereco
-	*/
-	$('.zipcode-field').keyup(function(){
-		$zipcode = $(this);
-		if($zipcode.val() != ''){
-			$('.address-fields').css('opacity', '0.4');
-			$('.address-fields').fadeOut('middle');
-			$(':input', '.address-fields').attr('disabled', 'disabled');
-		}else{
-			$('.address-fields').css('opacity', '1');
-			$('.address-fields').fadeIn('middle');
-			$(':input', '.address-fields').removeAttr('disabled');
-		}
-		console.log($zipcode.val());
-	});
-
-	/**
 	* Carrega os checkbox mestres
 	*/
 	$('#check-all').checkAll('.index-table input:checkbox');
+
+    /**
+    * Carrega as informacoes extras da entidade encontrada
+    */
+    $('.load-assoc').click(function(){
+        var li = $(this).parents('li:eq(0)');
+        var row_fluid = li.parents('.row-fluid:eq(0)');
+        var data = $(':hidden', li).serialize();
+        var class_target = $(this).attr('class-box');
+        var url = $(this).attr('rel');
+
+        $.ajax({
+            url: url,
+            data: data,
+            success: function(data){
+                $('.' + class_target).remove();
+                row_fluid.after(data);
+            }
+        });        
+
+        return false;
+    });
 });
 
 var Nz = {

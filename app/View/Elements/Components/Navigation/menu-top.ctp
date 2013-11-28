@@ -9,7 +9,7 @@ $menu = array(
     * Produtos
     */
     array(
-        'label' => '<span>' . __('Consultation Registration') . '</span>', 'controller' => 'entities', 'action' => 'people'
+        'label' => '<span>' . __('Consultation Registration') . '</span>', 'controller' => 'entities'
         ),
     /**
     * Seguranca
@@ -56,11 +56,11 @@ $menu = array(
             /**
             * Administrativo/Histórico
             */
-            array('label' => __('Counters'), 'controller' => 'counters'),
+            array('label' => __('Billings'), 'controller' => 'billings'),
             /**
             * Administrativo/Boleto
             */
-            array('label' => __('Invoices'), 'controller' => 'invoices'),
+            array('label' => __('Queries'), 'controller' => 'queries'),
             )
         ),
     /**

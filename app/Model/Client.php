@@ -25,5 +25,5 @@ class Client extends AppModel {
 	*
 	* @var array
 	*/
-	public $hasMany = array('User');
+	public $hasMany = array('User', 'Billing');
 }

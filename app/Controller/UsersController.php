@@ -24,7 +24,7 @@ App::uses('AppController', 'Controller');
 class UsersController extends AppController {
 
 	public function dashboard(){
-        $this->redirect(array('controller' => 'entities', 'action' => 'people'));
+        // $this->redirect(array('controller' => 'entities'));
 	}
 
     /**
@@ -136,12 +136,57 @@ class UsersController extends AppController {
         $this->layout = 'login';
         if ($this->request->is('post')) {
             if ($this->Auth->login()) {
+                /**
+                * Carrega todos os precos dos produtos de acordo com os seus pacotes
+                */
+                $this->loadPrices();
                 $this->Session->setFlash(sprintf(__("Welcome to %s"), TITLE_APP) . ".", FLASH_TEMPLATE_DASHBOARD, array('class' => FLASH_CLASS_SUCCESS, 'title' => "Olá " . $this->Auth->User('name')), FLASH_TEMPLATE_DASHBOARD);
                 parent::__loadPermissionsOnSessions();
                 $this->redirect($this->Auth->redirect());
             } else {
                 $this->Session->setFlash(__("Your email or password is incorrect."), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_LOGIN);
             }
+        }
+    }
+
+    /**
+    * Método loadPrices
+    *
+    * Este método carrega todos os precos dos produtos de acordo com os seus pacotes
+    */
+    private function loadPrices(){
+        /**
+        * Carrega todos os pacotes cadastrados
+        */
+        $packages = $this->User->Client->Billing->Package->find('all', array('recursive' => -1));
+        /**
+        * Percorre por todos os pacotes encontrados
+        */
+        foreach ($packages as $k => $v) {
+            /**
+            * Carrega todos os precos encontrados com o pacote
+            */
+            $prices = $this->User->Client->Billing->Package->Price->find('all', array(
+                'recursive' => -1,
+                'conditions' => array(
+                    'Price.package_id' => $v['Package']['id'],
+                    )
+                ));    
+
+            /**
+            * Percorre por todos os preços encontrados
+            */
+            foreach ($prices as $k2 => $v2) {
+                /**
+                * Salva na session os precos encontrados por cada pacote
+                */
+                $this->Session->write("Billing.prices_val.{$v['Package']['id']}.{$v2['Price']['product_id']}", $v2['Price']['price']);
+                /**
+                * Salva na session os ids dos precos encontrados por cada pacote
+                */
+                $this->Session->write("Billing.prices_id.{$v['Package']['id']}.{$v2['Price']['product_id']}", $v2['Price']['id']);
+            }
+
         }
     }
 
@@ -219,8 +264,6 @@ class UsersController extends AppController {
         } else {
             $this->Session->setFlash("Não foi possível logar no sistema com suas credenciais, tente mais tarde.", FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_LOGIN);
         }        
-
-        debug($login);die;
     }    
 
     /**
@@ -230,6 +273,7 @@ class UsersController extends AppController {
         $this->Session->setFlash("Sessão Encerrada.", FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_LOGIN);
         $this->Session->delete('Auth');
         $this->Session->delete('User');
+        $this->Session->delete('Billing');
         $this->redirect($this->Auth->logout());
     }
 }

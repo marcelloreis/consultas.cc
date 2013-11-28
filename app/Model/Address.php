@@ -38,19 +38,31 @@ class Address extends AppModelClean {
 	*
 	* @var array
 	*/
-	public $belongsTo = array('State', 'City', 'Zipcode');	
+	public $belongsTo = array(
+		'State' => array(
+			'type' => 'INNER'
+			), 
+		'City' => array(
+			'type' => 'INNER'
+			), 
+		'Zipcode' => array(
+			'type' => 'INNER'
+			),
+		);	
 
 	/**
 	* hasMany associations
 	*
 	* @var array
 	*/
-	// public $hasMany = array(
- //        'Association' => array(
- //            'className' => 'Association',
- //            'foreignKey' => 'address_id'
- //        )
-	// );	
+	public $hasMany = array(
+        'Association' => array(
+            'className' => 'Association',
+            'foreignKey' => 'address_id',
+            'order' => array('Association.year' => 'desc'),
+            'type' => 'INNER'
+        )
+	);	
 
 	/**
 	* hasAndBelongsToMany associations
@@ -61,18 +73,55 @@ class Address extends AppModelClean {
 		'Entity' => array(
 			'className' => 'Entity',
 			'joinTable' => 'associations',
-			'foreignKey' => 'entity_id',
-			'associationForeignKey' => 'address_id',
+			'foreignKey' => 'address_id',
+			'associationForeignKey' => 'entity_id',
 			'unique' => 'keepExisting',
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'finderQuery' => '',
-			'deleteQuery' => '',
-			'insertQuery' => ''
 		)
 	);
 
+	/**
+	* Procura os enderecos a partir das informacoes passadas por parametro
+	*/
+	public function _findAddress($cond){
+		$this->recursive = 1;
+
+    	/**
+    	* Inicializa a variavel que guardara as condicoes da busca
+    	*/
+    	$params = array('limit' => LIMIT_SEARCH);
+
+    	/**
+    	* Verifica se o CEP foi informado
+    	*/
+    	if(!empty($cond['zipcode'])){
+    		$params['conditions']['Zipcode.code'] = preg_replace('/[^0-9]/', '', $cond['zipcode']);
+    		/**
+    		* Verifica se os numeros iniciais e finais foram informados
+    		*/
+    		if(!empty($cond['number_ini'])){
+    			$cond['number_end'] = !empty($cond['number_end'])?$cond['number_end']:LIMIT_SEARCH;
+    			$params['conditions']['Address.number BETWEEN ? AND ?'] = array($cond['number_ini'], $cond['number_end']);
+    			$params['limit'] = $cond['number_end'];
+    			$params['order'] = 'Address.number';
+    		}
+    	}else if(!empty($cond['street'])){
+			$params['conditions']['Address.h_all'] = $cond['street'];
+			/**
+			* Verifica se o Estado foi informado
+			*/
+			if(!empty($cond['state_id'])){
+				$params['conditions']['Address.state_id'] = $cond['state_id'];
+			}
+			/**
+			* Verifica se a Cidade foi informada
+			*/
+			if(!empty($cond['city_id'])){
+				$params['conditions']['Address.city_id'] = $cond['city_id'];
+			}
+    	}
+
+		$addresses = $this->find('all', $params);
+
+		return $addresses;
+	}
 }

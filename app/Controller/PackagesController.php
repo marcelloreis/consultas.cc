@@ -52,104 +52,26 @@ class PackagesController extends AppController {
 	* @return void
 	*/
 	public function edit($id=null){	
+		$this->isRedirect = false;
 
-		/**
-		 * Verifica se o formulário foi submetido por post
-		 */
-		if ($this->request->is('post') || $this->request->is('put')) {
-			/**
-			* Calcula o valor do pacote de acordo com a soma dos produtos relacionados a ele
-			*/
-			if(isset($this->request->data['Product']['Product']) && count($this->request->data['Product']['Product'])){
-				$map = $this->Package->Product->find('first', array(
-					'recursive' => -1,
-					'fields' => array('sum(Product.price) as pkg_value'),
-					'conditions' => array('Product.id' => $this->request->data['Product']['Product']),
-					));
-				$this->request->data['Package']['value'] = $map[0]['pkg_value'];
+		$prices = array();
+		if(isset($this->request->data['Price'])){
+			foreach ($this->request->data['Price'] as $k => $v) {
+				$prices[$v['product_id']] = $v;
 			}
-
-			/**
-			* Calcula o valor das consultas exedidas do pacote
-			*/
-			$this->request->data['Package']['value_per_exceeded'] = ($this->request->data['Package']['value'] / $this->request->data['Package']['postage']);
-
 		}
 
 		//@override
 		parent::edit($id);
 
-		if(isset($this->data) && count($this->data)){
-
-		}
-
-
-		/**
-		 * Atualiza as permissoes de todas as contas/usuarios ligados a este pacote
-		 */
-		if(!empty($id)){
-			/**
-			* Carrega todos os clientes e seus respectivos usuarios que pertencem ao pacote editado
-			*/
-			$clients = $this->Package->Client->find('all', array(
-				'conditions' => array('Client.package_id' => $id)
-				));
-
-			/**
-			* Carrega os produtos que pertencem ao pacote do cliente
-			*/
-			$products = $this->Package->PackagesProduct->find('list', array(
-				'fields' => 'product_id',
-				'conditions' => array('PackagesProduct.package_id' => $id)
-				));
-
-			/**
-			* Carrega os ACOs relacionados ao produtos encontrados do pacote
-			*/
-			$acos_allow = $this->Package->Product->find('list', array(
-				'fields' => array('Product.aco_id', 'Product.aco_id'),
-				'conditions' => array('Product.id' => $products)
-				));				
-
-			/**
-			* Monta o action do produto/aco completo
-			*/
-	        $acos = $this->Acl->Aco->find('all', array('order' => 'Aco.lft ASC', 'recursive' => -1));
-	        $parents = array();
-	        $acos_full_path = array();
-	        foreach ($acos as $key => $data) {
-	            $aco =& $acos[$key];
-	            $aco_id = $aco['Aco']['id'];
-
-	            // Generate path
-	            if ($aco['Aco']['parent_id'] && isset($parents[$aco['Aco']['parent_id']])) {
-	                $parents[$aco_id] = $parents[$aco['Aco']['parent_id']] . '/' . $aco['Aco']['alias'];
-	            } else {
-	                $parents[$aco_id] = $aco['Aco']['alias'];
-	            }
-
-        		$acos_full_path[$aco_id] = $parents[$aco_id];
-	        }
-
-	        /**
-	        * Percorre por todos os clientes que pertencem ao pacote
-	        */
-	        foreach ($clients as $k => $v) {
-	        	/**
-	        	* Percorre por todos os usuarios do cliente pertencente ao pacote
-	        	*/
-	        	foreach ($v['User'] as $k2 => $v2) {
-					/**
-					* Concede todas as permissoes sobre os produtos contidos no pacote do cliente
-					*/
-					foreach ($acos_full_path as $k3 => $v3) {
-						$node = array('model' => 'User', 'foreign_key' => $v2['id']);
-						$action = $v3;
-						$perm = in_array($k3, $acos_allow)?'allow':'deny';		
-						$this->Acl->{$perm}($node, $action);
-					}			        
-	        	}
-	        }
+		if(count($prices)){
+			$this->Package->Price->deleteAll(array("Price.package_id" => $this->Package->id, 'Price.product_id' => array_keys($prices)));
+			foreach ($prices as $k => $v) {
+				$prices[$k]['package_id'] = $this->Package->id;
+			}
+			$this->Package->Price->saveMany($prices);
+			$this->Session->setFlash(__(FLASH_SAVE_SUCCESS), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
+			$this->redirect(array('action' => 'edit', $this->Package->id));
 		}
 
 		/**
@@ -163,4 +85,18 @@ class PackagesController extends AppController {
 		}
 		$this->set(compact('products_active'));
 	}
+
+	public function pricing(){
+		$packages = $this->Package->find('all', array(
+			'recursive' => -1,
+			'order' => 'Package.price'
+			));
+
+		$products = $this->Package->Product->find('all', array(
+			'recursive' => -1
+			));
+
+		$this->set(compact('packages', 'products'));
+	}
+
 }
