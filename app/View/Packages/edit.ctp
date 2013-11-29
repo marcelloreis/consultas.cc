@@ -23,6 +23,7 @@ $this->end();
             <?php echo $this->AppForm->input('price')?>
             <?php echo $this->AppForm->input('color')?>
             <?php echo $this->AppForm->input('validity_days')?>
+            <?php echo $this->AppForm->input('btn_payment')?>
             <?php echo $this->AppForm->input('popular', array('class' => 'icheck-me', 'data-skin' => 'square', 'data-color' => 'blue'))?>
 
             <div class="control-group">

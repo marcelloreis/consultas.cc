@@ -42,6 +42,14 @@ $menu = array(
             */
             array('label' => __('Clients'), 'controller' => 'clients'),
             /**
+            * Administrativo/Prospect
+            */
+            array('label' => __('Prospects'), 'controller' => 'clients', 'action' => 'prospects'),
+            /**
+            * Administrativo/Prospect
+            */
+            array('label' => 'Contratos', 'controller' => 'contracts'),
+            /**
             * Administrativo/Clientes/Contas
             */
             array('label' => __('Accounts'), 'controller' => 'users', 'action' => 'accounts'),

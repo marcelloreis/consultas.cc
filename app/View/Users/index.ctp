@@ -57,6 +57,7 @@ if(count($$map)){
         $v[$modelClass]['id'] = $this->AppForm->input("{$modelClass}.id.{$k}", array('type' => 'checkbox', 'template' => 'form-input-clean', 'value' => $v[$modelClass]['id'], 'placeholder' => $v[$modelClass][$fieldText]));
         $v[$modelClass]['group_id'] = $v['Group']['name'];
         $v[$modelClass]['status'] = $this->AppUtils->boolTxt($v[$modelClass]['status'], 'Ativo', 'Inativo');
+        $v[$modelClass]['infinite'] = $this->AppUtils->boolTxt($v[$modelClass]['infinite']);
         $avatar = isset($v[$modelClass]['picture']) && !empty($v[$modelClass]['picture'])?$v[$modelClass]['picture']:'avatar.jpg';
         $v[$modelClass]['picture'] = $this->Html->image($avatar, array('id' => "avatar-{$v[$modelClass]['id']}", 'width' => 50, 'height' => 50));
 

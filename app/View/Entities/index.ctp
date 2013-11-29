@@ -17,7 +17,7 @@ echo $this->element('Index/Entities/main');
 /**
 * Botoes para carregar o restante dos produtos
 */
-echo $this->element('Index/Entities/extra-info');
+echo $this->element('Index/Entities/extras');
 ?>
 
 

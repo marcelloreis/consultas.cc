@@ -24,7 +24,7 @@ App::uses('AppController', 'Controller');
 class UsersController extends AppController {
 
 	public function dashboard(){
-        // $this->redirect(array('controller' => 'entities'));
+        $this->redirect(array('controller' => 'packages', 'action' => 'pricing'));
 	}
 
     /**
@@ -140,11 +140,47 @@ class UsersController extends AppController {
                 * Carrega todos os precos dos produtos de acordo com os seus pacotes
                 */
                 $this->loadPrices();
+                /**
+                * Carrega todos os dados do cliente logado
+                */
+                $this->loadClient();
+
                 $this->Session->setFlash(sprintf(__("Welcome to %s"), TITLE_APP) . ".", FLASH_TEMPLATE_DASHBOARD, array('class' => FLASH_CLASS_SUCCESS, 'title' => "Olá " . $this->Auth->User('name')), FLASH_TEMPLATE_DASHBOARD);
                 parent::__loadPermissionsOnSessions();
                 $this->redirect($this->Auth->redirect());
             } else {
                 $this->Session->setFlash(__("Your email or password is incorrect."), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_LOGIN);
+            }
+        }
+    }
+
+    /**
+    * Método loadClient
+    *
+    * Este método carrega todos os dados do cliente logado
+    */
+    private function loadClient(){
+        /**
+        * Carrega os dados do usuario logado
+        */
+        $user = $this->Auth->user();
+
+        if(!empty($user['client_id'])){
+            /**
+            * Carrega os dados do cliente logado
+            */
+            $client = $packages = $this->User->Client->find('first', array(
+                'recursive' => -1,
+                'conditions' => array(
+                    'Client.id' => $user['client_id']
+                    )
+                ));
+
+            /**
+            * Percorre por todos os dados retornado salvando na session
+            */
+            foreach ($client['Client'] as $k => $v) {
+                $this->Session->write("Client.{$k}", $v);
             }
         }
     }

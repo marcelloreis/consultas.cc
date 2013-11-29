@@ -57,6 +57,39 @@ class AppBillingsController extends AppController {
 		$this->price_id = $this->Session->read("Billing.prices_id.{$this->billing['Billing']['package_id']}.{$this->product_id}");
 
 		/**
+		* Chama a funcao security que é responsavel por todas as verificacoes
+		*/
+		if(!$this->isInfinite()){
+			$this->security();
+		}
+	}
+
+    /**
+	* Método isInfinite
+	* Regras de autorização configurados para verificar se o usuário tem permissoes Master, 
+	* ou seja, caso o suario tenha acesso master, nao sera necessario a verificacao de segurança
+	*
+	* @return void
+	*/
+	private function isInfinite(){
+		$return = false;
+		if($this->userLogged['infinite']){
+			$return = true;
+		}
+
+		return $return;
+	}
+
+    /**
+	* Método security
+	* Regras de autorização configurados para verificar se o usuário esta autorizado para realizar as consultas no sistema. 
+	* Cada regra será verificada na sequência, se o usuario logado atender a todas, 
+	* então ele nao sera redirecionado e a consulta ira presseguir normalmente
+	*
+	* @return void
+	*/
+	private function security(){
+		/**
 		* Verifica se o usuario tem saldo para efetuar a pesquisa
 		*/
 		if($this->AppUtils->num2db($this->price) > $this->billing['Billing']['balance']){
@@ -64,8 +97,20 @@ class AppBillingsController extends AppController {
 			$this->redirect(array('controller' => 'packages', 'action' => 'pricing'));
 		}
 
+		/**
+		* Verifica se o saldo do usuario esta dentro da validade
+		*/
 		if($this->billing['Billing']['validity_orig'] < date('Y-m-d')){
 			$this->Session->setFlash("{$this->userLogged['given_name']}, " . __('Seu saldo expirou.'), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+			$this->redirect(array('controller' => 'packages', 'action' => 'pricing'));
+		}
+
+		/**
+		* Verifica se o cliente ja esta ativo (se o contrato ja foi gerado)
+		*/
+		$contract_id = $this->Session->read('Client.contract_id');
+		if(empty($contract_id)){
+			$this->Session->setFlash("{$this->userLogged['given_name']}, " . __('Seu contrato ainda não foi gerado, procure o setor administrativo e regularize sua situação.'), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
 			$this->redirect(array('controller' => 'packages', 'action' => 'pricing'));
 		}
 	}
@@ -112,7 +157,9 @@ class AppBillingsController extends AppController {
 			/**
 			* Efetua a cobraça
 			*/
-			$this->charge();
+			if(!$this->isInfinite()){
+				$this->charge();
+			}
 		}
 	}	
     

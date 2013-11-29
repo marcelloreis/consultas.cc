@@ -140,7 +140,6 @@ class EntitiesController extends AppBillingsController {
 			}else{
 				$this->entity = $this->entity[0];
 			}
-
 		}
 	}	
 
@@ -254,7 +253,14 @@ class EntitiesController extends AppBillingsController {
 	public function extra_mobile(){
 		if(!empty($this->params->query['data']['Assoc']['id'])){
 			$this->Entity->Mobile->recursive = 1;
-			$mobiles = $this->Entity->Mobile->findAllByid($this->params->query['data']['Assoc']['id']);
+			$map = $this->Entity->Mobile->findAllByid($this->params->query['data']['Assoc']['id']);
+			/**
+			* Ordena os resultados por data de atualizacao
+			*/
+			foreach ($map as $k => $v) {
+				$mobiles["{$v['Association'][0]['year']}-{$v['Mobile']['tel_full']}"] = $v;
+			}
+			krsort($mobiles, SORT_NUMERIC);
 
 			$this->set(compact('mobiles'));	
 			$this->render($this->action, 'ajax');
@@ -268,7 +274,14 @@ class EntitiesController extends AppBillingsController {
 	public function extra_landline(){
 		if(!empty($this->params->query['data']['Assoc']['id'])){
 			$this->Entity->Landline->recursive = 1;
-			$landlines = $this->Entity->Landline->findAllByid($this->params->query['data']['Assoc']['id']);
+			$map = $this->Entity->Landline->findAllByid($this->params->query['data']['Assoc']['id']);
+			/**
+			* Ordena os resultados por data de atualizacao
+			*/
+			foreach ($map as $k => $v) {
+				$landlines["{$v['Association'][0]['year']}-{$v['Landline']['tel_full']}"] = $v;
+			}
+			krsort($landlines, SORT_NUMERIC);
 
 			$this->set(compact('landlines'));	
 			$this->render($this->action, 'ajax');

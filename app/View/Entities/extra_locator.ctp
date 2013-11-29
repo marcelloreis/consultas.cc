@@ -13,7 +13,7 @@
                         <div class="control-group"></div>
 
                         <div class="control-group">
-                            <label class="control-label">Atualizado em: <?php echo $v['Association'][0]['year']?></label>
+                            <label style="width:100%" class="control-label">Atualizado em <?php echo $this->element('Index/Entities/tag-year', array('year' => $v['Association'][0]['year']))?></label>
                         </div>
 
                         <div class="control-group">

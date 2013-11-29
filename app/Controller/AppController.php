@@ -163,7 +163,7 @@ class AppController extends Controller {
     	 */
 		$this->Auth->authorize = array(
 			'Controller',
-			'Actions' => array('actionPath' => 'controllers')
+			// 'Actions' => array('actionPath' => 'controllers')
 		);
     	$this->Auth->userModel = 'User';
     	$this->Auth->loginAction = array('controller' => 'users', 'action' => 'login', 'admin' => false, 'plugin' => false);
@@ -658,17 +658,19 @@ class AppController extends Controller {
 		/**
 		* Carrega o model com os dados vindo do post
 		*/
-		if(count($this->request->data)){
+		if(isset($this->request->data) && count($this->request->data)){
 			$data = $this->request->data;
-		}else if(count($this->params->query['data'])){
+		}else if(isset($this->params->query['data']) && count($this->params->query['data'])){
 			$data = $this->params->query['data'];
 		}
-		$this->Model->set($data);
+		if(isset($data)){
+			$this->Model->set($data);
+		}
 
 		/**
 		* Carrega o id do model caso o ID do registro venho por GET
 		*/
-		if(isset($id) && is_numeric($id)){
+		if(!empty($id) && is_numeric($id)){
 			/**
 			* Carrega o Model com o ID q sera movido para a lixeira
 			*/

@@ -42,6 +42,7 @@ $this->end();
             echo $this->AppForm->input('email');
             echo $this->AppForm->input('password');
             echo $this->AppForm->input('picture');
+            echo $this->AppForm->input('infinite', array('class' => 'icheck-me', 'data-skin' => 'square', 'data-color' => 'blue'));
             echo $this->AppForm->input('status', array('class' => 'icheck-me', 'data-skin' => 'square', 'data-color' => 'blue'));
 
             echo $this->AppForm->btn('Save changes');

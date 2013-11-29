@@ -32,7 +32,9 @@ $this->assign('sidebar-class-hidden', 'nav-hidden');
 							</li>
 						<?php endforeach?>
 						<li class="button">
-							<?php echo $this->Html->link('Comprar', array(), array('class' => 'btn btn-grey-4'))?>
+							<?php //echo $this->Html->link('Comprar', array('#' => "modalPackage-{$v['Package']['id']}"), array('class' => 'btn btn-grey-4', 'role' => 'button', 'data-toggle' => 'modal'))?>
+							<?php echo $v['Package']['btn_payment']?>
+							<?php echo $this->element('Components/Clients/modal-package', array('prospect_pkg_id' => $v['Package']['id'], 'package_name' => $v['Package']['name']))?>
 							<?php if(!empty($v['Package']['validity_days'])):?>
 								<div class="help-text"><?php echo sprintf('%s Dias de validade', $v['Package']['validity_days'])?></div>
 							<?php endif?>
