@@ -5,15 +5,13 @@ echo $this->Html->css(array(
             ));
 $this->end();
 
-$this->append('scrips-on-demand');
 echo $this->Html->script(array(
     'plugins/sparklines/jquery.sparklines.min',
     'plugins/easy-pie-chart/jquery.easy-pie-chart.min',
     'plugins/flot/jquery.flot.min',
     'plugins/flot/jquery.flot.resize.min',
     'https://www.google.com/jsapi',
-            ));
-$this->end();
+            ), array('defer' => true));
 
 echo $this->element('Index/Imports/charts-gauge');
 // echo $this->element('Index/Imports/real-time');

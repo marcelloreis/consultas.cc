@@ -8,7 +8,7 @@
 <div class="control-group">
     <label class="control-label"><?php echo __('Mother')?></label>
     <div class="controls">
-        <?php echo !empty($entity['Entity']['mother'])?$this->Html->link($entity['Entity']['mother'], array('name' => $entity['Entity']['mother']), array('escape' => false)):$this->element('Components/Entities/notfound');?>
+        <?php echo !empty($entity['Entity']['mother'])?$this->Html->link($entity['Entity']['mother'], array('action' => 'name', $entity['Entity']['mother'], '#' => 'entity-main'), array('escape' => false)):$this->element('Components/Entities/notfound');?>
     </div>
 </div>
 
@@ -131,7 +131,9 @@
     <div class="control-group">
         <label class="control-label"><?php echo __('Zipcode')?></label>
         <div class="controls">
-            <?php echo !empty($entity['Address'][key($entity['Address'])]['zipcode'])?$this->AppUtils->zipcode($entity['Address'][key($entity['Address'])]['zipcode']):$this->element('Components/Entities/notfound');?>
+            <?php echo !empty($entity['Address'][key($entity['Address'])]['zipcode'])
+            ?$this->Html->link($this->AppUtils->zipcode($entity['Address'][key($entity['Address'])]['zipcode']), array('action' => 'address', 'zipcode' => $this->AppUtils->zipcode($entity['Address'][key($entity['Address'])]['zipcode'])))
+            :$this->element('Components/Entities/notfound');?>
         </div>
     </div>
     <div class="control-group">

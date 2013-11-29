@@ -7,15 +7,16 @@ echo $this->Html->css(array('plugins/chosen/chosen'));
 echo $this->Html->css(array('plugins/datatable/TableTools'));
 $this->end();
 
-$this->append('scrips-on-demand');
-echo $this->Html->script(array('plugins/chosen/chosen.jquery.min'));
-echo $this->Html->script(array('plugins/datatable/jquery.dataTables.min'));
-echo $this->Html->script(array('plugins/datatable/TableTools.min'));
-echo $this->Html->script(array('plugins/datatable/ColReorderWithResize'));
-echo $this->Html->script(array('plugins/datatable/ColVis.min'));
-echo $this->Html->script(array('plugins/datatable/jquery.dataTables.columnFilter'));
-echo $this->Html->script(array('plugins/datatable/jquery.dataTables.grouping'));
-$this->end();
+echo $this->Html->script(array(
+    'plugins/chosen/chosen.jquery.min', 
+    'plugins/datatable/jquery.dataTables.min',
+    'plugins/datatable/TableTools.min',
+    'plugins/datatable/ColReorderWithResize',
+    'plugins/datatable/ColVis.min',
+    'plugins/datatable/jquery.dataTables.columnFilter',
+    'plugins/datatable/jquery.dataTables.grouping'
+    ),
+    array('defer' => true));
 
 $params = $this->params['named'];
 

@@ -7,10 +7,8 @@ echo $this->Html->css(array('plugins/chosen/chosen'));
 echo $this->Html->css(array('plugins/icheck/all'));
 $this->end();
 
-$this->append('scrips-on-demand');
-echo $this->Html->script(array('plugins/chosen/chosen.jquery.min'));
-echo $this->Html->script(array('plugins/icheck/jquery.icheck.min'));
-$this->end();
+echo $this->Html->script(array('plugins/chosen/chosen.jquery.min'), array('defer' => true));
+echo $this->Html->script(array('plugins/icheck/jquery.icheck.min'), array('defer' => true));
 
 debug($this->viewVars);
 

@@ -24,16 +24,19 @@
         echo $this->Html->meta(array('name' => 'robots', 'content' => 'index,follow'));
         echo $this->Html->meta(array('name' => 'content-language', 'content' => 'pt-br'));
 
-        //Styles da aplicacao
+        /**
+        * Styles da aplicacao
+        */
         echo $this->Html->css(array(
             'all.min.css',
         ));
 
-        //Scrips da aplicacao
+        /**
+        * Scrips da aplicacao
+        */
         echo $this->Html->script(array(
-            'jquery.min',
-            'bootstrap.min',
-        ));
+            'all.min',
+        ), array('defer' => true));
 
         echo $this->element('Layouts/ie-9');
         ?>

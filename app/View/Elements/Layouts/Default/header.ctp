@@ -42,26 +42,21 @@
         */
         echo $this->Html->script(array(
             'all.min',
-        ));
-
-        /**
-        * Scripts adicionados on demand
-        */
-        echo $this->fetch('scrips-on-demand');
+        ), array('defer' => true));
 
         /**
         * Scripts extras do FW
         */
         echo $this->Html->script(array(
             '_main'
-        ));
+        ), array('defer' => true));
 
         /**
         * Scripts dos plugins
         */
         echo $this->Html->script(array(
             '/Main/js/main'
-        ));
+        ), array('defer' => true));
 
 
         echo $this->element('Layouts/ie-9');
