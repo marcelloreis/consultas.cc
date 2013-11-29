@@ -27,8 +27,6 @@
         //Styles da aplicacao
         echo $this->Html->css(array(
             'all.min.css',
-            'style.css',
-            'themes.css',
         ));
 
         //Scrips da aplicacao
