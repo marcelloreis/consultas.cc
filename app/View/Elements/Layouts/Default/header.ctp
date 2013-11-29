@@ -29,8 +29,6 @@
         */
         echo $this->Html->css(array(
             'all.min',
-            'style',
-            'themes',
         ));
 
         /**
