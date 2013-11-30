@@ -104,20 +104,6 @@ class Address extends AppModelClean {
     			$params['limit'] = $cond['number_end'];
     			$params['order'] = 'Address.number';
     		}
-    	}else if(!empty($cond['street'])){
-			$params['conditions']['Address.h_all'] = $cond['street'];
-			/**
-			* Verifica se o Estado foi informado
-			*/
-			if(!empty($cond['state_id'])){
-				$params['conditions']['Address.state_id'] = $cond['state_id'];
-			}
-			/**
-			* Verifica se a Cidade foi informada
-			*/
-			if(!empty($cond['city_id'])){
-				$params['conditions']['Address.city_id'] = $cond['city_id'];
-			}
     	}
 
 		$addresses = $this->find('all', $params);

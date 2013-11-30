@@ -231,13 +231,14 @@ class EntitiesController extends AppBillingsController {
     	* Carrega os parametros de busca
     	*/
     	$params = $this->params['named'];
-		/**
-		* Gera o hash do nome da rua
-		*/
-		if(!empty($params['street'])){
-			$hash = $this->AppImport->getHash($params['street']);
-			$params['street'] = $hash['h_all'];
-		}
+
+    	/**
+    	* Cancela a consulta caso o CEP seja generico
+    	*/
+    	if(preg_match('/[0-9]{5}000/si', preg_replace('/[^0-9]/si', '', $params['zipcode']))){
+    		$this->Session->setFlash("{$this->userLogged['given_name']}, " . "o CEP [{$params['zipcode']}] é genérico, portanto não é possível concluir a busca.", FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
+    		$this->redirect($this->referer());
+    	}
 
     	$this->address = $this->Entity->Address->_findAddress($params);
 		$this->address2entity();
@@ -572,41 +573,46 @@ class EntitiesController extends AppBillingsController {
 				* Procura por vizinhos da mesma rua do endereço encontrado da entidade
 				*/
 				if($limit_neighbors > 0){
-					$cond = array(
-							'Address.id !=' => $v['Address']['id'],
-							'Association.entity_id !=' => $entity_id,
-							'Address.id NOT' => $neighbors_found['same_address'],
-							'Address.id NOT' => $neighbors_found['same_floor'],
-							'Address.zipcode_id' => $v['Address']['zipcode_id'],
-							);
+					/**
+					* Verifica se o CEP nao é generico
+					*/
+					if(preg_match('/[0-9]{5}000/si', preg_replace('/[^0-9]/si', '', $v['Address']['zipcode']))){
+						$cond = array(
+								'Address.id !=' => $v['Address']['id'],
+								'Association.entity_id !=' => $entity_id,
+								'Address.id NOT' => $neighbors_found['same_address'],
+								'Address.id NOT' => $neighbors_found['same_floor'],
+								'Address.zipcode_id' => $v['Address']['zipcode_id'],
+								);
 
-					if(!empty($v['Address']['number']) && is_numeric($v['Address']['number'])){
-						$number_ini = $v['Address']['number'] - (LIMIT_NEIGHBORS*2);
-						$number_ini = ($number_ini < 0)?1:$number_ini;
-						$number_end = $v['Address']['number'] + (LIMIT_NEIGHBORS*2);
-						$cond['Address.number BETWEEN ? AND ?'] = array($number_ini, $number_end);
-					}
-					
-					$neighbor = $this->Entity->Address->find('all', array(
-						'fields' => '*',
-                        'joins' => array(
-							array(
-								'table' => 'associations',
-								'alias' => 'Association',
-								'type' => 'INNER',
-								'conditions' => array(
-								'Association.address_id = Address.id',
+						if(!empty($v['Address']['number']) && is_numeric($v['Address']['number'])){
+							$number_ini = $v['Address']['number'] - (LIMIT_NEIGHBORS*2);
+							$number_ini = ($number_ini < 0)?1:$number_ini;
+							$number_end = $v['Address']['number'] + (LIMIT_NEIGHBORS*2);
+							$cond['Address.number BETWEEN ? AND ?'] = array($number_ini, $number_end);
+						}
+						
+						$neighbor = $this->Entity->Address->find('all', array(
+							'fields' => '*',
+	                        'joins' => array(
+								array(
+									'table' => 'associations',
+									'alias' => 'Association',
+									'type' => 'INNER',
+									'conditions' => array(
+									'Association.address_id = Address.id',
+									)
 								)
-							)
-                        ),
-						'conditions' => $cond,
-						'group' => 'Association.entity_id',
-						'limit' => $limit_neighbors
-						));
+	                        ),
+							'conditions' => $cond,
+							'group' => 'Association.entity_id',
+							'limit' => $limit_neighbors
+							));
 
-					foreach ($neighbor as $v2) {
-						$neighbors_found['same_street'][$v2['Association']['entity_id']] = $v2['Association']['entity_id'];
-						$limit_neighbors--;
+						foreach ($neighbor as $v2) {
+							$neighbors_found['same_street'][$v2['Association']['entity_id']] = $v2['Association']['entity_id'];
+							$limit_neighbors--;
+						}
 					}
 				}
 

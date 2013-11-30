@@ -24,7 +24,7 @@ App::uses('AppController', 'Controller');
 class UsersController extends AppController {
 
 	public function dashboard(){
-        $this->redirect(array('controller' => 'packages', 'action' => 'pricing'));
+        $this->redirect(array('controller' => 'entities'));
 	}
 
     /**

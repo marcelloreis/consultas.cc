@@ -6,7 +6,7 @@ foreach ($family['Family'] as $k => $v) {
     }
 }
 if(!$hasInfo){
-    echo $this->element('Components/flash-message', array('message' => __('No Family Found')));
+    echo $this->element('Components/flash-message', array('message' => 'Nenhum possível parente encontrado.'));
 }
 ?>
 <!-- Mae -->
@@ -14,7 +14,7 @@ if(!$hasInfo){
     <blockquote>
         <h4>
             <?php echo $this->Html->link(__('Mother'), '#', array('class' => 'btn btn-success'))?>
-            <?php echo $this->Html->link($family['Family']['mother']['Entity']['name'], array('controller' => 'entities', 'action' => 'index', 'plugin' => false, $family['Family']['mother']['Entity']['id']))?>
+            <?php echo $this->Html->link($family['Family']['mother']['Entity']['name'], array('controller' => 'entities', 'action' => 'index', 'plugin' => false, $family['Family']['mother']['Entity']['id'], '#' => 'entity-main'))?>
         </h4>
         <form style="border: 1px solid #DDDDDD;" class="form-horizontal form-column form-bordered" method="POST" action="#">
             <div class="span4">

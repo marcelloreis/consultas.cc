@@ -57,7 +57,8 @@ class AppBillingsController extends AppController {
 		$this->price_id = $this->Session->read("Billing.prices_id.{$this->billing['Billing']['package_id']}.{$this->product_id}");
 
 		/**
-		* Chama a funcao security que é responsavel por todas as verificacoes
+		* Caso o usuario nao tenho acesso ilimitado as consultas, 
+		* a funcao security é chamada para verificar se o usuario logado tem autorizacao para efetuar as consultas
 		*/
 		if(!$this->isInfinite()){
 			$this->security();
@@ -93,7 +94,7 @@ class AppBillingsController extends AppController {
 		* Verifica se o usuario ja efetuou a compra dos creditos
 		*/
 		if(is_null($this->billing['Billing']['id'])){
-			$this->Session->setFlash("{$this->userLogged['given_name']}, " . __('ainda nao constam creditos em sua conta para realizar este tipo de consulta.'), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+			$this->Session->setFlash("{$this->userLogged['given_name']}, " . 'ainda não constam créditos em sua conta para realizar este tipo de consulta.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
 			$this->redirect(array('controller' => 'packages', 'action' => 'pricing'));
 		}
 
@@ -101,7 +102,7 @@ class AppBillingsController extends AppController {
 		* Verifica se o usuario tem saldo para efetuar a pesquisa
 		*/
 		if($this->AppUtils->num2db($this->price) > $this->billing['Billing']['balance']){
-			$this->Session->setFlash("{$this->userLogged['given_name']}, " . __('seu saldo é insuficiênte para realizar esta consulta.'), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+			$this->Session->setFlash("{$this->userLogged['given_name']}, " . 'seu saldo é insuficiênte para realizar esta consulta.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
 			$this->redirect(array('controller' => 'packages', 'action' => 'pricing'));
 		}
 
@@ -109,7 +110,7 @@ class AppBillingsController extends AppController {
 		* Verifica se o saldo do usuario esta dentro da validade
 		*/
 		if($this->billing['Billing']['validity_orig'] < date('Y-m-d')){
-			$this->Session->setFlash("{$this->userLogged['given_name']}, " . __('seu saldo expirou.'), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+			$this->Session->setFlash("{$this->userLogged['given_name']}, " . 'seu saldo expirou.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
 			$this->redirect(array('controller' => 'packages', 'action' => 'pricing'));
 		}
 
@@ -118,9 +119,43 @@ class AppBillingsController extends AppController {
 		*/
 		$contract_id = $this->Session->read('Client.contract_id');
 		if(empty($contract_id)){
-			$this->Session->setFlash("{$this->userLogged['given_name']}, " . __('Seu contrato ainda não foi gerado, procure o setor administrativo e regularize sua situação.'), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+			$this->Session->setFlash("{$this->userLogged['given_name']}, " . 'Seu contrato ainda não foi gerado, procure o setor administrativo e regularize sua situação.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
 			$this->redirect(array('controller' => 'packages', 'action' => 'pricing'));
 		}
+	}
+
+    /**
+	* Método changeRules
+	* Regras de autorização para a bilhetagem da consulta.
+	* Este metodo contem as verificacoes para liberar ou nao as conbraças por consultas
+	*
+	* @return void
+	*/
+	private function changeRules(){
+		$enabled = true;
+
+		/**
+		* Desabilita a bilhetagem caso a pagina carregada seja a de localizacao no mapa
+		*/
+		if($this->view == 'map'){
+			$enabled = false;
+		}
+
+		/**
+		* Desabilita a bilhetagem quando o usuario estiver somente atualizando a pagina já bilhetada
+		*/
+		if($this->params->here == $this->Session->read('Billing.changedPage')){
+			$enabled = false;
+		}
+
+		/**
+		* Desabilita a bilhetagem quando a consulta realizada nao trouxer registros
+		*/
+		if(!count($this->entity)){
+			$enabled = false;
+		}
+
+		return $enabled;
 	}
 
     /**
@@ -180,14 +215,13 @@ class AppBillingsController extends AppController {
 	*/
     private function charge(){
     	/**
-    	* Verifica se o usuario nao esta somente atualizando a pagina já bilhetada
-    	* e se a pagina nao é o mapa de localizacao de entidades
+    	* Verifica se a consulta realizada pode ser bilhetada
     	*/
-    	if($this->view != 'map' && $this->Session->read('Location.referer') != $this->params->here){
+    	if($this->changeRules()){
     		/**
-    		* Registra a pagina acessada na session para a verificacao acima
+    		* Recarrega o cache de paginas cobradas
     		*/
-    		$this->Session->write('Location.referer', $this->params->here);
+    		$this->Session->write('Billing.changedPage', $this->params->here);
 
 			/**
 			* Carrega o modulo de registro de consultas

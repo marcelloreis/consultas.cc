@@ -82,7 +82,7 @@ foreach ($entity['Association'] as $k => $v) {
 				</li>
 				<?php endforeach?>
 				<li>
-					<?php echo $this->Html->link('<i class="icon-group"></i> Família', array('#' => "tab-extra_family"), array('rel' => "/entities/extra_family/{$entity['Entity']['id']}", 'data-toggle' => 'tab', 'class-box' => "tab-extra_family", 'class' => 'load-assoc', 'escape' => false))?>
+					<?php echo $this->Html->link('<i class="icon-group"></i> Possíveis Parentes', array('#' => "tab-extra_family"), array('rel' => "/entities/extra_family/{$entity['Entity']['id']}", 'data-toggle' => 'tab', 'class-box' => "tab-extra_family", 'class' => 'load-assoc', 'escape' => false))?>
 				</li>
 				<li>
 					<?php echo $this->Html->link('<i class="icon-home"></i> Vizinhos', array('#' => "tab-extra_neighbors"), array('rel' => "/entities/extra_neighbors/{$entity['Entity']['id']}", 'data-toggle' => 'tab', 'class-box' => "tab-extra_neighbors", 'class' => 'load-assoc', 'escape' => false))?>
