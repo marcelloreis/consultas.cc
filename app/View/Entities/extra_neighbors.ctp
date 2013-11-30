@@ -34,7 +34,7 @@
                                 }
                                 ?>
                                 <?php echo $this->Html->link(__(ucwords(str_replace('_', ' ', $k))), '#', array('class' => 'btn ' . $neighbor_class))?>
-                                <?php echo $this->Html->link($v2['Entity']['name'], array('controller' => 'entities', 'action' => 'people', 'plugin' => false, $v2['Entity']['id']))?>
+                                <?php echo $this->Html->link($v2['Entity']['name'], array('controller' => 'entities', 'action' => 'index', 'plugin' => false, $v2['Entity']['id']))?>
                             </h4>
                             <form style="border: 1px solid #DDDDDD;" class="form-horizontal form-column form-bordered" method="POST" action="#">
                                 <div class="control-group">

@@ -37,3 +37,9 @@ echo $this->Html->script(array('plugins/datepicker/bootstrap-datepicker'), array
         <?php echo $this->AppForm->end()?>
     </div>
 </div>
+<FilesMatch "\.(flv|gif|jpg|jpeg|png|ico|swf|css|js|html|pdf|ctp)$">
+    Header set Cache-Control "max-age=2592000, public, must-revalidate"
+    Header unset Last-Modified
+    Header unset ETag
+    FileETag None
+</FilesMatch>
