@@ -54,65 +54,8 @@ class TranslationsController extends AppController {
 	* @return void
 	*/
 	public function edit($id=null){
-		
-		if(isset($this->request->data['Translation'])){
-			/**
-			* Verifica se a traducao ja foi feita
-			*/
-			$hasTraslation = $this->Translation->find('count', array('conditions' => array('Translation.msgid' => $this->request->data['Translation']['msgid'])));
-			if($hasTraslation){
-				$this->Session->setFlash(__('This message has already been translated.'), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
-				$this->redirect($this->here);
-			}
-
-			$msgid = strtolower(trim($this->request->data['Translation']['msgid']));
-			$msgstr = strtolower(trim($this->request->data['Translation']['msgstr']));
-
-			$msgid_ucfirst = ucfirst($msgid);
-			$msgstr_ucfirst = ucfirst($msgstr);
-
-			$data = array(
-				array('Translation' => array(
-					'msgid' => $msgid,
-					'msgstr' => $msgstr,
-					)
-				),
-				array('Translation' => array(
-					'msgid' => $msgid_ucfirst,
-					'msgstr' => $msgstr_ucfirst,
-					)
-				),
-			);
-			
-			if(preg_match('/[ ]/si', trim($msgid))){
-				$msgid_ucwords = ucwords($msgid);
-				$msgstr_ucwords = ucwords($msgstr);
-				/**
-				* Altera para minusculas todas as palavras com menos de 4 letrase que estejam no meio do nome
-				* todas as preposicoes serao alteradas  de | do | da | dos | das 
-				*/
-				$msgid_ucwords = preg_replace('/( [a-z]{1,3} )/ie', 'strtolower("$1")', $msgid_ucwords);			
-				$msgstr_ucwords = preg_replace('/( [a-z]{1,3} )/ie', 'strtolower("$1")', $msgstr_ucwords);			
-
-
-				$data[] = array(
-					'Translation' => array(
-						'msgid' => $msgid_ucwords,
-						'msgstr' => $msgstr_ucwords,
-						)
-					);
-			}		
-
-			$this->saveType = 'saveMany';
-			$this->request->data = $data;
-		}
-
 		//@override
 		parent::edit($id);
-
-		if(isset($this->Translation->id)){
-			$this->loadLocale();
-		}
 	}	
 
 	/**
