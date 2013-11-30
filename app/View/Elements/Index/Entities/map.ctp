@@ -17,7 +17,6 @@ $this->end();
 		*/
 		$link_params = array('id' => strtolower($v), 'escape' => false);
 
-		$url = '#';
 		$link_params['class'] = 'map-tooltip'; 
 		$link_params['title'] = "{$states[$k]}"; 
 		$badge = '';
@@ -29,11 +28,10 @@ $this->end();
 			// $link_params['data-html'] = 'true'; 
 			// $link_params['data-content'] = $this->element('Index/Entities/map-popover-content', array('map_found' => $map_found[$k]));
 			$link_params['class'] = 'map-tooltip ativo'; 
-			$url = $map_found[$k]['url'];
 			$badge = '<span style="z-index:100;position: relative;top:-40px;left:25px" class="badge badge-info">' . $map_found[$k]['qt'] . '</span>';
 		}
 		?>
-		<li estado="<?php echo strtolower($v)?>" id="c<?php echo strtolower($v)?>"><?php echo $this->Html->link($this->Html->image('null.gif', array('alt' => 'SC')) . $badge, $url, $link_params)?></li>
+		<li estado="<?php echo strtolower($v)?>" id="c<?php echo strtolower($v)?>"><?php echo $this->Html->link($this->Html->image('null.gif', array('alt' => 'SC')) . $badge, 'javascript:void(0);', $link_params)?></li>
 		<?php
 	}
 	?>

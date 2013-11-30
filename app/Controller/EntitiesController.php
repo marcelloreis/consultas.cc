@@ -660,8 +660,6 @@ class EntitiesController extends AppBillingsController {
 		if(is_array($this->entity) && count($this->entity)){
 			foreach ($this->entity as $k => $v) {
 				$address = $this->Entity->Address->findById($v['Association'][key($v['Association'])]['address_id']);
-				$url['state_id'] = $address['Address']['state_id'];
-				$map[$address['Address']['state_id']]['url'] = $url;
 				if(!isset($map[$address['Address']['state_id']]['qt'])){
 					$map[$address['Address']['state_id']]['qt'] = 1;
 				}else{
