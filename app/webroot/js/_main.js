@@ -93,22 +93,20 @@ $(document).ready(function(){
     * Carrega as informacoes extras da entidade encontrada
     */
     $('.load-assoc').click(function(){
-        var li = $(this).parents('li:eq(0)');
-        var row_fluid = li.parents('.row-fluid:eq(0)');
-        var data = $(':hidden', li).serialize();
         var class_target = $(this).attr('class-box');
-        var url = $(this).attr('rel');
+        if(!$('#' + class_target).find('a').size()){
+            var li = $(this).parents('li:eq(0)');
+            var data = $(':hidden', li).serialize();
+            var url = $(this).attr('rel');
 
-        $.ajax({
-            url: url,
-            data: data,
-            success: function(data){
-                $('.' + class_target).remove();
-                row_fluid.after(data);
-            }
-        });        
-
-        return false;
+            $.ajax({
+                url: url,
+                data: data,
+                success: function(data){
+                    $('#' + class_target).html(data);
+                }
+            });        
+        }
     });
 });
 
