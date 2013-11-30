@@ -42,7 +42,7 @@
                             <div class="control-group">
                                 <label class="control-label"><?php echo __('Zipcode')?></label>
                                 <div class="controls">
-                                    <?php echo !empty($v['Address']['zipcode'])?$this->AppUtils->zipcode($v['Address']['zipcode']):$this->element('Components/Entities/notfound');?>
+                                    <?php echo !empty($v['Address']['zipcode'])?$this->Html->link($this->AppUtils->zipcode($v['Address']['zipcode']), array('action' => 'address', 'zipcode' => $v['Address']['zipcode'])):$this->element('Components/Entities/notfound');?>
                                 </div>
                             </div>
                             <div class="control-group">
