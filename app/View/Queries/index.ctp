@@ -21,19 +21,19 @@ echo $this->Html->tag('thead', $this->AppGrid->tr($columns));
 */
 $map = strtolower($modelClass);
 if(count($$map)){
+// debug($$map);die;    
     $body = '';
     foreach($$map as $k => $v){
         /**
         * Seta as larguras das colunas
         */
         $v[$modelClass]['action'] = $this->element('Index/action', array('id' => $v[$modelClass]['id']));
-        $v[$modelClass]['id'] = $this->AppForm->input("{$modelClass}.id.{$k}", array('type' => 'checkbox', 'template' => 'form-input-clean', 'value' => $v[$modelClass]['id'], 'placeholder' => $v[$modelClass][$fieldText]));
+        $v[$modelClass]['id'] = $this->AppForm->input("{$modelClass}.id.{$k}", array('type' => 'checkbox', 'template' => 'form-input-clean', 'value' => $v[$modelClass]['id']));
         $v[$modelClass]['user_id'] = $v['User']['name'];
-        $v[$modelClass]['product_id'] = $v['Product']['name'];
-        $v[$modelClass]['package_id'] = $v['Package']['name'];
-        $v[$modelClass]['invoice_id'] = $v['Invoice']['id'];
+        $v[$modelClass]['billing_id'] = $v['Billing']['paid'];
+        $v[$modelClass]['price_id'] = ($v['Price']['price'])?$v['Price']['price']:'Free';
         $v[$modelClass]['tp_search'] = $tp_search[$v[$modelClass]['tp_search']];
-        $v[$modelClass]['found'] = $this->AppUtils->boolTxt($v[$modelClass]['found']);
+        $v[$modelClass]['query'] = urldecode($v[$modelClass]['query']);
         $body .= $this->AppGrid->tr($v[$modelClass]);
     }
     echo $this->Html->tag('tbody', $body);

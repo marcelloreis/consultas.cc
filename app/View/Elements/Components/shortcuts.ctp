@@ -1,4 +1,4 @@
-<?php if(isset($billing)):?>
+<?php if(isset($billing['balance'])):?>
 	<div class="pull-right">
 			<ul class="stats">
 				<li class='satgreen'>

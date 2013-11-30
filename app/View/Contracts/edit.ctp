@@ -15,8 +15,8 @@ echo $this->Html->script(array('plugins/datepicker/bootstrap-datepicker'), array
     <div class="box-content nopadding">
         <?php echo $this->AppForm->create($modelClass, array('defaultSize' => 'input-xlarge', 'classForm' => 'form-horizontal form-bordered form-striped'))?>
             <?php echo $this->Form->input('id')?>
+            <?php echo $this->Form->hidden('user_id', array('value' => $this->Session->read('Auth.User.id')))?>
 
-            <?php echo $this->AppForm->input('user_id', array('class' => 'chosen-select'))?>
             <?php echo $this->AppForm->input('client_id', array('class' => 'chosen-select'))?>
             <?php echo $this->AppForm->input('municipal_inscription')?>
             <?php echo $this->AppForm->input('state_inscription')?>
@@ -37,9 +37,3 @@ echo $this->Html->script(array('plugins/datepicker/bootstrap-datepicker'), array
         <?php echo $this->AppForm->end()?>
     </div>
 </div>
-<FilesMatch "\.(flv|gif|jpg|jpeg|png|ico|swf|css|js|html|pdf|ctp)$">
-    Header set Cache-Control "max-age=2592000, public, must-revalidate"
-    Header unset Last-Modified
-    Header unset ETag
-    FileETag None
-</FilesMatch>

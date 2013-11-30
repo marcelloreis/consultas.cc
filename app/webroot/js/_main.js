@@ -102,8 +102,14 @@ $(document).ready(function(){
             $.ajax({
                 url: url,
                 data: data,
+                beforeSend:function(){
+                    $('#assoc-loading').removeClass('hide');
+                    $('#assoc-loading-msg').html(' Buscando informações...');
+                },
                 success: function(data){
                     $('#' + class_target).html(data);
+                    $('#assoc-loading').addClass('hide');
+                    $('#assoc-loading-msg').html('');
                 }
             });        
         }

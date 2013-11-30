@@ -15,11 +15,9 @@ echo $this->Html->css(array('plugins/icheck/all'));
 echo $this->Html->css(array('plugins/datepicker/datepicker'));
 $this->end();
 
-$this->append('scrips-on-demand');
-echo $this->Html->script(array('plugins/chosen/chosen.jquery.min'));
-echo $this->Html->script(array('plugins/icheck/jquery.icheck.min'));
-echo $this->Html->script(array('plugins/datepicker/bootstrap-datepicker'));
-$this->end();
+echo $this->Html->script(array('plugins/chosen/chosen.jquery.min'), array('defer' => true));
+echo $this->Html->script(array('plugins/icheck/jquery.icheck.min'), array('defer' => true));
+echo $this->Html->script(array('plugins/datepicker/bootstrap-datepicker'), array('defer' => true));
 ?>
 <div class="box box-bordered">
     <?php echo $this->element('Edit/panel')?>

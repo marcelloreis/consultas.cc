@@ -78,7 +78,7 @@ foreach ($entity['Association'] as $k => $v) {
 					<?php foreach($v['id'] as $k2 => $v2):?>
 						<?php echo $this->Form->hidden("Assoc.id.{$v2}", array('value' => $v2))?>
 					<?php endforeach?>
-					<?php echo $this->Html->link('<i class="' . $v['icon'] . '"></i> ' . __(Inflector::pluralize(ucfirst(str_replace('extra_', '', $k)))), array('#' => "tab-{$k}"), array('rel' => "/entities/{$k}", 'data-toggle' => 'tab', 'class-box' => "tab-{$k}", 'class' => 'load-assoc', 'escape' => false))?>
+					<?php echo $this->Html->link('<i class="' . $v['icon'] . '"></i> ' . __(Inflector::pluralize(ucfirst(str_replace('extra_', '', $k)))) . ' (' . count($v['id']) . ')', array('#' => "tab-{$k}"), array('rel' => "/entities/{$k}", 'data-toggle' => 'tab', 'class-box' => "tab-{$k}", 'class' => 'load-assoc', 'escape' => false))?>
 				</li>
 				<?php endforeach?>
 				<li>
@@ -89,6 +89,10 @@ foreach ($entity['Association'] as $k => $v) {
 				</li>
 			</ul>
 			<div class="tab-content padding tab-content-inline tab-content-bottom">
+				<div id="tab-info">
+					<h4><span id="assoc-loading" class="hide"><?php echo $this->Html->image('extras-load.gif')?></span><span id="assoc-loading-msg"> Clique nas abas acima para mais informações</span></h4>
+				</div>
+
 				<?php foreach($extras as $k => $v):?>
 				<div class="tab-pane" id="<?php echo "tab-{$k}"?>"></div>
 				<?php endforeach?>

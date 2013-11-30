@@ -14,6 +14,7 @@ echo $this->AppGrid->create($modelClass, array('id' => $modelClass, 'tableClass'
 */
 $columns['id'] = $this->AppForm->input("", array('id' => 'check-all', 'type' => 'checkbox', 'template' => 'form-input-clean'));
 $columns['action'] = __('Actions');
+unset($columns['validity_orig']);
 echo $this->Html->tag('thead', $this->AppGrid->tr($columns));
 
 /**
@@ -30,6 +31,7 @@ if(count($$map)){
         $v[$modelClass]['id'] = $this->AppForm->input("{$modelClass}.id.{$k}", array('type' => 'checkbox', 'template' => 'form-input-clean', 'value' => $v[$modelClass]['id'], 'placeholder' => $v[$modelClass][$fieldText]));
         $v[$modelClass]['client_id'] = $v['Client']['fancy_name'];
         $v[$modelClass]['package_id'] = $v['Package']['name'];
+        $v[$modelClass]['balance'] = $this->AppUtils->num2br($v[$modelClass]['balance']);
         $body .= $this->AppGrid->tr($v[$modelClass]);
     }
     echo $this->Html->tag('tbody', $body);

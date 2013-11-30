@@ -90,10 +90,18 @@ class AppBillingsController extends AppController {
 	*/
 	private function security(){
 		/**
+		* Verifica se o usuario ja efetuou a compra dos creditos
+		*/
+		if(is_null($this->billing['Billing']['id'])){
+			$this->Session->setFlash("{$this->userLogged['given_name']}, " . __('ainda nao constam creditos em sua conta para realizar este tipo de consulta.'), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+			$this->redirect(array('controller' => 'packages', 'action' => 'pricing'));
+		}
+
+		/**
 		* Verifica se o usuario tem saldo para efetuar a pesquisa
 		*/
 		if($this->AppUtils->num2db($this->price) > $this->billing['Billing']['balance']){
-			$this->Session->setFlash("{$this->userLogged['given_name']}, " . __('Seu saldo é insuficiênte para realizar esta consulta.'), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+			$this->Session->setFlash("{$this->userLogged['given_name']}, " . __('seu saldo é insuficiênte para realizar esta consulta.'), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
 			$this->redirect(array('controller' => 'packages', 'action' => 'pricing'));
 		}
 
@@ -101,7 +109,7 @@ class AppBillingsController extends AppController {
 		* Verifica se o saldo do usuario esta dentro da validade
 		*/
 		if($this->billing['Billing']['validity_orig'] < date('Y-m-d')){
-			$this->Session->setFlash("{$this->userLogged['given_name']}, " . __('Seu saldo expirou.'), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+			$this->Session->setFlash("{$this->userLogged['given_name']}, " . __('seu saldo expirou.'), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
 			$this->redirect(array('controller' => 'packages', 'action' => 'pricing'));
 		}
 

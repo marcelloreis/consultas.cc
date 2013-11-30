@@ -225,14 +225,12 @@ class AppModel extends Model {
 		if(!strstr($type, 'default_')){
 			if ($this->hasField(ACTION_TRASH)) {
 				if (!isset($params['conditions']["{$this->alias}." . ACTION_TRASH])) {
-					// $params['conditions']['AND']['OR'][]["{$this->alias}." . ACTION_TRASH] = array(null, '0');
 					$params['conditions']["{$this->alias}." . ACTION_TRASH] = null;
 				}
 			}
 
 			if ($this->hasField(ACTION_DELETE)) {
 				if (!isset($params['conditions']["{$this->alias}." . ACTION_DELETE])) {
-					// $params['conditions']['AND']['OR'][]["{$this->alias}." . ACTION_DELETE] = array(null, '0');
 					$params['conditions']["{$this->alias}." . ACTION_DELETE] = null;
 				}
 			}
@@ -269,7 +267,7 @@ class AppModel extends Model {
 					/**
 					 * Carrega a variavel $value com o valor preenchido no campo do formulário frontend
 					 */
-					$value = isset($data[key($data)][$k])?$data[key($data)][$k]:null;
+					$value = $value_orig = isset($data[key($data)][$k])?$data[key($data)][$k]:null;
 
 					/**
 					 * Verifica se o campo nao esta vazio
@@ -333,6 +331,13 @@ class AppModel extends Model {
 								//code...
 								break;
 						}
+					}
+
+					/**
+					* Caso o valor tenho sido alterado, cria um campo preservando o valor original 
+					*/
+					if(isset($data[key($data)][$k]) && $data[key($data)][$k] != $value){
+						$data[key($data)]["{$k}_db"] = $value_orig;
 					}
 
 					/**

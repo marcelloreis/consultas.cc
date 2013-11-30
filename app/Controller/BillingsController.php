@@ -55,5 +55,31 @@ class BillingsController extends AppController {
 
 		//@override
 		parent::edit($id);
+
+		/**
+		* Atualiza o prazo de validade dos creditos comprados com base na validade do pacote comprado
+		*/
+		if(!empty($this->request->data['Billing']['package_id'])){
+			/**
+			* Carrega o prazo de validade do pacote selecionado
+			*/
+			$this->Billing->Package->recursive = -1;
+			$package = $this->Billing->Package->findById($this->request->data['Billing']['package_id']);
+			$validity_days = $package['Package']['validity_days'];
+
+			/**
+			* Carrega a validade dos creditos de acordo com a validade do pacote adiquirido
+			*/
+			$day = substr($this->request->data['Billing']['created_db'], 8, 2);
+			$month = substr($this->request->data['Billing']['created_db'], 5, 2);
+			$year = substr($this->request->data['Billing']['created_db'], 0, 4);
+
+			$validity = date('Y-m-d', mktime(0, 0, 0, $month, ($day + $validity_days), $year));
+
+			/**
+			* Salva a validade dos creditos
+			*/
+			$this->Billing->saveField('validity', $validity);
+		}
 	}
 }

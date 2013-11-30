@@ -11,7 +11,7 @@ class Query extends AppModel {
 	*
 	* @var string
 	*/
-	public $displayField = 'conditions';
+	public $displayField = 'query';
 
 	/**
 	* belongsTo associations

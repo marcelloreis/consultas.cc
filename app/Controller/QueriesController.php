@@ -44,11 +44,12 @@ class QueriesController extends AppController {
 		* Carega os tipos de consultas
 		*/
 		$tp_search = array(
-			TP_SEARCH_DOC => __('Document'),
-			TP_SEARCH_TELEPHONE => __('Telephone'),
-			TP_SEARCH_MOBILE => __('Mobile'),
-			TP_SEARCH_NAME => __('Name'),
-			TP_SEARCH_ADDRESS => __('Address'),
+			TP_SEARCH_ID => 'ID',
+			TP_SEARCH_DOC => 'Documento',
+			TP_SEARCH_PHONE => 'Telefone',
+			TP_SEARCH_MOBILE => 'Tel. Móvel',
+			TP_SEARCH_NAME => 'Nome',
+			TP_SEARCH_ADDRESS => 'Endereço',
 		);
 		$this->set(compact('tp_search'));
 	}	
@@ -62,6 +63,7 @@ class QueriesController extends AppController {
 	* @return void
 	*/
 	public function index($params=array()){
+		unset($this->Query->Billing->virtualFields['balance']);
 		//@override
 		parent::index($params);
 	}	
