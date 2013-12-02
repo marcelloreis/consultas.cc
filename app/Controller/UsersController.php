@@ -182,6 +182,26 @@ class UsersController extends AppController {
             foreach ($client['Client'] as $k => $v) {
                 $this->Session->write("Client.{$k}", $v);
             }
+
+            /**
+            * Carrega os dados da ultima bilhetagem do cliente
+            */
+            $billing = $this->User->Client->Billing->find('first', array(
+                'fields' => array(
+                    'Billing.id',
+                    'Billing.package_id',
+                    'Billing.validity_orig',
+                    ),
+                'conditions' => array(
+                    'Billing.client_id' => $user['client_id']
+                    ),
+                'group' => 'Billing.package_id',
+                'order' => array('Billing.created' => 'desc')
+                ));  
+            $this->Session->write("Client.billing_id", $billing['Billing']['id']);          
+            $this->Session->write("Client.package_id", $billing['Billing']['package_id']);          
+            $this->Session->write("Client.validity_orig", $billing['Billing']['validity_orig']);          
+
         }
     }
 
@@ -222,7 +242,6 @@ class UsersController extends AppController {
                 */
                 $this->Session->write("Billing.prices_id.{$v['Package']['id']}.{$v2['Price']['product_id']}", $v2['Price']['id']);
             }
-
         }
     }
 

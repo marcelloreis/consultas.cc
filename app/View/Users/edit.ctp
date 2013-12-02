@@ -43,7 +43,7 @@ echo $this->Html->script(array('plugins/datepicker/bootstrap-datepicker'), array
             echo $this->AppForm->input('infinite', array('class' => 'icheck-me', 'data-skin' => 'square', 'data-color' => 'blue'));
             echo $this->AppForm->input('status', array('class' => 'icheck-me', 'data-skin' => 'square', 'data-color' => 'blue'));
 
-            echo $this->AppForm->btn('Save changes');
+            echo $this->AppForm->btn('Salvar Alterações');
             ?>
 
 

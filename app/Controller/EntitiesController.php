@@ -25,9 +25,58 @@ class EntitiesController extends AppBillingsController {
 	*/
 	public function beforeFilter() {
     	/**
-    	* Carrega a informacao do produto que esta sendo consumido
+    	* Carrega as informacoes do produto que esta sendo consumido
     	*/
-    	$this->product_id = PRODUCT_PESSOAS;
+		/**
+		* Carrega o tipo da consulta
+		*/
+		switch ($this->action) {
+			case 'index':
+				$this->tp_search = TP_SEARCH_ID;
+				$this->product_id = PRODUCT_PESSOAS;
+				break;
+			case 'doc':
+				$this->tp_search = TP_SEARCH_DOC;
+				$this->product_id = PRODUCT_PESSOAS;
+				break;
+			case 'name':
+				$this->tp_search = TP_SEARCH_NAME;
+				$this->product_id = PRODUCT_PESSOAS;
+				break;
+			case 'landline':
+				$this->tp_search = TP_SEARCH_PHONE;
+				$this->product_id = PRODUCT_PESSOAS;
+				break;
+			case 'mobile':
+				$this->tp_search = TP_SEARCH_MOBILE;
+				$this->product_id = PRODUCT_PESSOAS;
+				break;
+			case 'address':
+				$this->tp_search = TP_SEARCH_ADDRESS;
+				$this->product_id = PRODUCT_PESSOAS;
+				break;
+			case 'extra_mobile':
+				$this->tp_search = TP_SEARCH_EXTRA_MOBILE;
+				$this->product_id = PRODUCT_EXTRA_TELEFONE_MOVEL;
+				break;
+			case 'extra_landline':
+				$this->tp_search = TP_SEARCH_EXTRA_LANDLINE;
+				$this->product_id = PRODUCT_EXTRA_TELEFONE_FIXO;
+				break;
+			case 'extra_locator':
+				$this->tp_search = TP_SEARCH_EXTRA_LOCATOR;
+				$this->product_id = PRODUCT_LOCALIZADOR;
+				break;
+			case 'extra_family':
+				$this->tp_search = TP_SEARCH_EXTRA_FAMILY;
+				$this->product_id = PRODUCT_POSSIVEIS_PARENTES;
+				break;
+			case 'extra_neighbors':
+				$this->tp_search = TP_SEARCH_EXTRA_NEIGHBORS;
+				$this->product_id = PRODUCT_VIZINHOS;
+				break;
+		}    	
+    	
 
 		//@override
 		parent::beforeFilter();
@@ -255,15 +304,14 @@ class EntitiesController extends AppBillingsController {
 		if(!empty($this->params->query['data']['Assoc']['id'])){
 			$this->Entity->Mobile->recursive = 1;
 			$map = $this->Entity->Mobile->findAllByid($this->params->query['data']['Assoc']['id']);
+
 			/**
 			* Ordena os resultados por data de atualizacao
 			*/
 			foreach ($map as $k => $v) {
-				$mobiles["{$v['Association'][0]['year']}-{$v['Mobile']['tel_full']}"] = $v;
+				$this->entity["{$v['Association'][0]['year']}-{$v['Mobile']['tel_full']}"] = $v;
 			}
-			krsort($mobiles, SORT_NUMERIC);
-
-			$this->set(compact('mobiles'));	
+			krsort($this->entity, SORT_NUMERIC);
 			$this->render($this->action, 'ajax');
 		}
 	}
@@ -276,15 +324,15 @@ class EntitiesController extends AppBillingsController {
 		if(!empty($this->params->query['data']['Assoc']['id'])){
 			$this->Entity->Landline->recursive = 1;
 			$map = $this->Entity->Landline->findAllByid($this->params->query['data']['Assoc']['id']);
+
 			/**
 			* Ordena os resultados por data de atualizacao
 			*/
 			foreach ($map as $k => $v) {
-				$landlines["{$v['Association'][0]['year']}-{$v['Landline']['tel_full']}"] = $v;
+				$this->entity["{$v['Association'][0]['year']}-{$v['Landline']['tel_full']}"] = $v;
 			}
-			krsort($landlines, SORT_NUMERIC);
+			krsort($this->entity, SORT_NUMERIC);
 
-			$this->set(compact('landlines'));	
 			$this->render($this->action, 'ajax');
 		}
 	}
@@ -296,9 +344,8 @@ class EntitiesController extends AppBillingsController {
 	public function extra_locator(){
 		if(!empty($this->params->query['data']['Assoc']['id'])){
 			$this->Entity->Address->recursive = 1;
-			$locator = $this->Entity->Address->findAllByid($this->params->query['data']['Assoc']['id']);
+			$this->entity = $this->Entity->Address->findAllByid($this->params->query['data']['Assoc']['id']);
 
-			$this->set(compact('locator'));	
 			$this->render($this->action, 'ajax');
 		}
 	}
@@ -312,7 +359,7 @@ class EntitiesController extends AppBillingsController {
 	public function extra_family($id){
 		$entity = $this->Entity->findById($id);
 
-		$family = array('Family' => array('mother' => array(), 'children' => array(), 'spouse' => array(), 'brothers' => array(), 'members' => array()));
+		$this->entity = array('Family' => array('mother' => array(), 'children' => array(), 'spouse' => array(), 'brothers' => array(), 'members' => array()));
 		$members_found = array();
 		$brothers = array();
 
@@ -324,7 +371,7 @@ class EntitiesController extends AppBillingsController {
 			* Busca pela mae da entidade
 			*/
 			if($entity['Entity']['h_mother'] > 0){
-				$family['Family']['mother'] = $this->Entity->find('first', array(
+				$this->entity['Family']['mother'] = $this->Entity->find('first', array(
 					'fields' => '*',
 					'conditions' => array(
 						'Entity.id NOT' => $entity['Entity']['id'],
@@ -334,18 +381,18 @@ class EntitiesController extends AppBillingsController {
 					'limit' => 1
 				));
 
-				if(isset($family['Family']['mother']['Entity']['id'])){
+				if(isset($this->entity['Family']['mother']['Entity']['id'])){
 					/**
 					* Carrega os ids dos parentes encontrados
 					*/
-					$members_found[] = $family['Family']['mother']['Entity']['id'];
+					$members_found[] = $this->entity['Family']['mother']['Entity']['id'];
 				}
 
 				/**
 				* Remove a mae da entidade encontrada cado a mae tenha idade registrada e essa idade seja menos do que a da entidade
 				*/
-				if(isset($family['Family']['mother']['Entity']['age']) && $family['Family']['mother']['Entity']['age'] < $entity['Entity']['age']){
-					$family['Family']['mother'] = array();
+				if(isset($this->entity['Family']['mother']['Entity']['age']) && $this->entity['Family']['mother']['Entity']['age'] < $entity['Entity']['age']){
+					$this->entity['Family']['mother'] = array();
 				}
 			}
 
@@ -365,7 +412,7 @@ class EntitiesController extends AppBillingsController {
 					));
 
 				foreach ($brothers as $k => $v) {
-					$family['Family']['children'][] = $v;
+					$this->entity['Family']['children'][] = $v;
 					/**
 					* Carrega os ids dos parentes encontrados
 					*/
@@ -391,7 +438,7 @@ class EntitiesController extends AppBillingsController {
 					));
 
 				foreach ($brothers as $k => $v) {
-					$family['Family']['brothers'][] = $v;
+					$this->entity['Family']['brothers'][] = $v;
 					/**
 					* Carrega os ids dos parentes encontrados
 					*/
@@ -425,20 +472,20 @@ class EntitiesController extends AppBillingsController {
 						/**
 						* Caso o nome da entidade encontrada seja igual ao nome da mae da entidade pesquisada, é um forte indicio de que seja a sua mae
 						*/
-						if(!count($family['Family']['mother']) && $v['Entity']['h_all'] == $entity['Entity']['h_mother']){
-							$family['Family']['mother'] = $v;
+						if(!count($this->entity['Family']['mother']) && $v['Entity']['h_all'] == $entity['Entity']['h_mother']){
+							$this->entity['Family']['mother'] = $v;
 
 						/**
 						* Caso o nome da mae da entidade encontrada seja igual ao nome da entidade pesquisada, é um forte indicio de que seja seu irmao
 						*/
 						}else if($v['Entity']['h_mother'] == $entity['Entity']['h_all']){
-							$family['Family']['children'][] = $v;
+							$this->entity['Family']['children'][] = $v;
 
 						/**
 						* Em todo caso, se a entidade encontrada tenha os mesmos sobre nome da entidade pesquisada, é um forte indicio de que seja da familia
 						*/
 						}else{
-							$family['Family']['members'][] = $v;
+							$this->entity['Family']['members'][] = $v;
 						}
 					}
 
@@ -471,24 +518,23 @@ class EntitiesController extends AppBillingsController {
 					/**
 					* Caso o nome da entidade encontrada seja igual ao nome da mae da entidade pesquisada, é um forte indicio de que seja a sua mae
 					*/
-					if(!count($family['Family']['mother']) && $v['Entity']['h_all'] == $entity['Entity']['h_mother'] && $family['Family']['mother']['Entity']['age'] < $entity['Entity']['age']){
-						$family['Family']['mother'] = $v;
+					if(!count($this->entity['Family']['mother']) && $v['Entity']['h_all'] == $entity['Entity']['h_mother'] && $this->entity['Family']['mother']['Entity']['age'] < $entity['Entity']['age']){
+						$this->entity['Family']['mother'] = $v;
 						/**
 						* Caso o nome da mae da entidade encontrada seja igual ao nome da entidade pesquisada, é um forte indicio de que seja seu irmao
 						*/
 					}else if($v['Entity']['h_mother'] == $entity['Entity']['h_all']){
-						$family['Family']['children'][] = $v;
+						$this->entity['Family']['children'][] = $v;
 						/**
 						* Em todo caso, se a entidade encontrada tenha os mesmos sobre nome da entidade pesquisada, é um forte indicio de que seja da familia
 						*/
 					}else{
-						$family['Family']['members'][] = $v;
+						$this->entity['Family']['members'][] = $v;
 					}
 				}
 			}
 		}
 
-		$this->set(compact('family'));	
 		$this->render($this->action, 'ajax');
 	}
 
@@ -509,8 +555,8 @@ class EntitiesController extends AppBillingsController {
 			));
 
 
-		$neighbors = array('Neighbors' => array());
-		$neighbors_found = array('same_address' => array(), 'same_floor' => array(), 'same_street' => array());
+		$this->entity = array('Neighbors' => array());
+		$neighbors_found = array('mesmo_endereco' => array(), 'mesmo_andar' => array(), 'mesma_rua' => array());
 		$limit_neighbors = LIMIT_NEIGHBORS;
 
 		/**
@@ -531,7 +577,7 @@ class EntitiesController extends AppBillingsController {
 					'limit' => LIMIT_NEIGHBORS
 					));
 				foreach ($neighbor as $v2) {
-					$neighbors_found['same_address'][$v2['Association']['entity_id']] = $v2['Association']['entity_id'];
+					$neighbors_found['mesmo_endereco'][$v2['Association']['entity_id']] = $v2['Association']['entity_id'];
 					$limit_neighbors--;
 				}
 
@@ -555,7 +601,7 @@ class EntitiesController extends AppBillingsController {
 						'conditions' => array(
 							'Association.entity_id !=' => $entity_id,
 							'Address.id !=' => $v['Address']['id'],
-							'Address.id NOT' => $neighbors_found['same_address'],
+							'Address.id NOT' => $neighbors_found['mesmo_endereco'],
 							'Address.zipcode_id' => $v['Address']['zipcode_id'],
 							'Address.number' => $v['Address']['number'],
 							"Address.complement REGEXP '{$regexp}'",
@@ -564,7 +610,7 @@ class EntitiesController extends AppBillingsController {
 						'limit' => $limit_neighbors
 						));
 					foreach ($neighbor as $v2) {
-						$neighbors_found['same_floor'][$v2['Association']['entity_id']] = $v2['Association']['entity_id'];
+						$neighbors_found['mesmo_andar'][$v2['Association']['entity_id']] = $v2['Association']['entity_id'];
 						$limit_neighbors--;
 					}
 				}
@@ -580,8 +626,8 @@ class EntitiesController extends AppBillingsController {
 						$cond = array(
 								'Address.id !=' => $v['Address']['id'],
 								'Association.entity_id !=' => $entity_id,
-								'Address.id NOT' => $neighbors_found['same_address'],
-								'Address.id NOT' => $neighbors_found['same_floor'],
+								'Address.id NOT' => $neighbors_found['mesmo_endereco'],
+								'Address.id NOT' => $neighbors_found['mesmo_andar'],
 								'Address.zipcode_id' => $v['Address']['zipcode_id'],
 								);
 
@@ -610,7 +656,7 @@ class EntitiesController extends AppBillingsController {
 							));
 
 						foreach ($neighbor as $v2) {
-							$neighbors_found['same_street'][$v2['Association']['entity_id']] = $v2['Association']['entity_id'];
+							$neighbors_found['mesma_rua'][$v2['Association']['entity_id']] = $v2['Association']['entity_id'];
 							$limit_neighbors--;
 						}
 					}
@@ -624,11 +670,10 @@ class EntitiesController extends AppBillingsController {
 		*/
 		foreach ($neighbors_found as $k => $v) {
 			foreach ($v as $k2 => $v2) {
-				$neighbors['Neighbors'][$k][] = $this->Entity->findById($v2);
+				$this->entity['Neighbors'][$k][] = $this->Entity->findById($v2);
 			}
 		}
 
-		$this->set(compact('neighbors'));	
 		$this->render($this->action, 'ajax');
 	}
 

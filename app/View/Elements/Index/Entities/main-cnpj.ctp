@@ -1,5 +1,5 @@
 <div class="control-group">
-    <label class="control-label"><?php echo __('Name')?></label>
+    <label class="control-label">Nome</label>
     <div class="controls">
         <?php echo $entity['Entity']['name']?>
     </div>
@@ -7,7 +7,7 @@
 
 <div class="span4">    
     <div class="control-group">
-        <label class="control-label"><?php echo __('CNPJ')?></label>
+        <label class="control-label">CNPJ</label>
         <div class="controls">
             <?php echo $this->AppUtils->cnpj($entity['Entity']['doc'])?>
         </div>
@@ -15,7 +15,7 @@
 </div>
 <div class="span4">
     <div class="control-group">
-        <label class="control-label"><?php echo __('Person')?></label>
+        <label class="control-label">Pessoa</label>
         <div class="controls">
             <?php 
             switch ($entity['Entity']['type']) {
@@ -35,7 +35,7 @@
 </div>
 <div class="span4">
     <div class="control-group">
-        <label class="control-label"><?php echo __('Updated')?></label>
+        <label class="control-label">Atualizado</label>
         <div class="controls">
             <?php echo $this->AppUtils->dt2br($entity['Entity']['modified'], true)?>
         </div>

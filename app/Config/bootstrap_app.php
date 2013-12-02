@@ -32,6 +32,11 @@ define('PRODUCT_PESSOAS', 1);
 define('PRODUCT_EMPRESAS', 2);
 define('PRODUCT_OBITO', 3);
 define('PRODUCT_BACEN', 4);
+define('PRODUCT_EXTRA_TELEFONE_MOVEL', 5);
+define('PRODUCT_EXTRA_TELEFONE_FIXO', 6);
+define('PRODUCT_LOCALIZADOR', 7);
+define('PRODUCT_POSSIVEIS_PARENTES', 8);
+define('PRODUCT_VIZINHOS', 9);
 
 define('TP_CPF', 1);
 define('TP_CNPJ', 2);
@@ -44,6 +49,11 @@ define('TP_SEARCH_PHONE', 3);
 define('TP_SEARCH_MOBILE', 4);
 define('TP_SEARCH_NAME', 5);
 define('TP_SEARCH_ADDRESS', 6);
+define('TP_SEARCH_EXTRA_MOBILE', 7);
+define('TP_SEARCH_EXTRA_LANDLINE', 8);
+define('TP_SEARCH_EXTRA_LOCATOR', 9);
+define('TP_SEARCH_EXTRA_FAMILY', 10);
+define('TP_SEARCH_EXTRA_NEIGHBORS', 11);
 
 
 define('LIMIT_HASH', 5);

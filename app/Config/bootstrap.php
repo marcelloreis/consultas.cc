@@ -116,9 +116,9 @@ define('FLASH_CLASS_ALERT', 'alert');
 /**
 * Mensagens padroes
 */
-define('FLASH_SAVE_SUCCESS', 'Form saved successfully.');
-define('FLASH_SAVE_ERROR', 'Could not save the form.');
-define('FLASH_SAVE_ALERT', 'Form saved, but with flaws.');
+define('FLASH_SAVE_SUCCESS', 'Formulário salvo com sucesso.');
+define('FLASH_SAVE_ERROR', 'Não foi possível salvar os dados do formulário.');
+define('FLASH_SAVE_ALERT', 'Formar salvo, mas com falhas.');
 
 /**
 * Importa o bootstrap do projeto

@@ -36,13 +36,13 @@ if($requestHandler == 'ajax'){
 
 
 <div class="table-pagination">
-    <?php echo $this->Paginator->first(__('First'))?>
+    <?php echo $this->Paginator->first('Primeio')?>
     <?php if($this->Paginator->hasPrev()):?>
-        <?php echo $this->Paginator->prev(__('Prev'))?>
+        <?php echo $this->Paginator->prev('Anterior')?>
     <?php endif?>
     <?php echo $this->Paginator->numbers(array('separator' => false, 'modulus' => 3, 'currentClass' => 'active', 'currentTag' => 'a'))?>
     <?php if($this->Paginator->hasNext()):?>
-        <?php echo $this->Paginator->next(__('Next'))?>
+        <?php echo $this->Paginator->next('Próximo')?>
     <?php endif?>
-    <?php echo $this->Paginator->last(__('Last'))?>
+    <?php echo $this->Paginator->last('Último')?>
 </div>

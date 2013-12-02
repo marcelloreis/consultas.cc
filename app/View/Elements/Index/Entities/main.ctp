@@ -5,14 +5,14 @@
                 <div class="box-title">
                     <h3>
                         <i class="glyphicon-vcard"></i>
-                        <?php echo __('Document Data')?>
+                        Dados do documento
                     </h3>
                 </div>
                 <div class="box-content nopadding">
                     <form class="form-horizontal form-column form-bordered" method="POST" action="#">
                         <?php 
                         if(!count($entity)){
-                            echo $this->element('Components/Entities/flash-message', array('message' => __('Nenhum registro foi encontrado.')));
+                            echo $this->element('Components/Entities/flash-message', array('message' => 'Nenhum registro foi encontrado.'));
                         }else{
                             switch ($entity['Entity']['type']) {
                                 case TP_CPF:

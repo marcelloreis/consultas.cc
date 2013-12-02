@@ -20,11 +20,11 @@ echo $this->AppGrid->create($modelClass, array('id' => $modelClass, 'tableClass'
 * Monta o cabeçalho
 */
 $columns['id'] = $this->AppForm->input("", array('id' => 'check-all', 'type' => 'checkbox', 'template' => 'form-input-clean'));
-$columns['action'] = __('Actions');
-$columns['contact_name'] = __('Contact');
-$columns['fancy_name'] = __('Name');
-$columns['tel1'] = __('Telephone');
-$columns['state_id'] = __('UF');
+$columns['action'] = 'Ações';
+$columns['contact_name'] = 'Contrato';
+$columns['fancy_name'] = 'Nome';
+$columns['tel1'] = 'Telefone';
+$columns['state_id'] = 'UF';
 unset($columns['cnpj']);
 unset($columns['corporate_name']);
 unset($columns['zipcode']);

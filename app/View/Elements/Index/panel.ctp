@@ -7,13 +7,13 @@
                 <div class="row-fluid" style="margin-left: 0px;">
                     <div class="span9">
                         <div class="control-group">
-                            <label class="control-label"><?php echo __('Search')?></label>
+                            <label class="control-label">Buscar</label>
                             <div class="controls">
                                 <div class="input-append input-prepend">
                                     <span class="add-on"><i class="icon-search"></i></span>
                                     <?php $value = isset($this->params['named']['search'])?$this->params['named']['search']:'';?>
-                                    <?php echo $this->AppForm->input('search', array('label' => __('What are you looking for') . ", {$userLogged['given_name']}?", 'value' => $value, 'template' => 'form-input-clean', 'class' => 'input-xxlarge'));?>
-                                    <button class="btn" type="button"><?php echo __('Search')?></button>&nbsp;
+                                    <?php echo $this->AppForm->input('search', array('label' => 'o que está procurando' . ", {$userLogged['given_name']}?", 'value' => $value, 'template' => 'form-input-clean', 'class' => 'input-xxlarge'));?>
+                                    <button class="btn" type="button">Buscar</button>&nbsp;
                                 </div>
                             </div>
                         </div>
@@ -22,18 +22,18 @@
                         <div class="control-group">
                             <label style="padding:10px;" class="control-label">
                                 <div class="btn-group">
-                                    <?php echo $this->Html->link(__('Bulk Actions') . ' <span class="caret"></span>', '#', array('class' => 'btn btn-primary dropdown-toggle', 'data-toggle' => 'dropdown', 'escape' => false));?>
+                                    <?php echo $this->Html->link('Ações em Massa' . ' <span class="caret"></span>', '#', array('class' => 'btn btn-primary dropdown-toggle', 'data-toggle' => 'dropdown', 'escape' => false));?>
                                     <ul class="dropdown-menu">
                                         <?php if(!empty($this->params['named']['trashed']) && $this->params['named']['trashed'] ==  1):?>
                                             <li>
-                                                <?php echo $this->Html->link(__('Delete'), '#', array('class' => 'bulkAction', 'data-id' => $modelClass, 'data-url' => "/{$this->params['controller']}/delete"), __('Are you sure you want to delete all %s'))?>
+                                                <?php echo $this->Html->link('Deletar', '#', array('class' => 'bulkAction', 'data-id' => $modelClass, 'data-url' => "/{$this->params['controller']}/delete"), sprintf('Tem certeza de que deseja excluir todos os %s', __($modelClass)))?>
                                             </li>
                                             <li>
-                                                <?php echo $this->Html->link(__('Restore'), '#', array('class' => 'bulkAction', 'data-id' => $modelClass, 'data-url' => "/{$this->params['controller']}/restore"), __('Are you sure you want to restore this record from the trash?'))?>
+                                                <?php echo $this->Html->link('Restaurar', '#', array('class' => 'bulkAction', 'data-id' => $modelClass, 'data-url' => "/{$this->params['controller']}/restore"), 'Tem certeza de que deseja restaurar este registro do lixo?')?>
                                             </li>
                                         <?php elseif($this->AppPermissions->check("{$this->name}.trash")):?>   
                                             <li>
-                                                <?php echo $this->Html->link(__('Move to trash'), '#', array('class' => 'bulkAction', 'data-id' => $modelClass, 'data-url' => "/{$this->params['controller']}/trash"), __('Are you sure you want to move this record to the trash?'))?>
+                                                <?php echo $this->Html->link('Mover para Lixeira', '#', array('class' => 'bulkAction', 'data-id' => $modelClass, 'data-url' => "/{$this->params['controller']}/trash"), 'Tem certeza de que deseja mover esse registro para o lixo?')?>
                                             </li>
                                         <?php endif;?>
                                     </ul>

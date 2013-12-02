@@ -29,11 +29,11 @@ echo $this->AppGrid->create($modelClass, array('id' => 'index-table', 'tableClas
 * Monta o cabeçalho
 */
 unset($columns);
-$columns['doc'] = __('Document');
-$columns['name'] = __('Name');
-$columns['mother'] = __('Mother');
-$columns['age'] = __('Age');
-$columns['action'] = __('Actions');
+$columns['doc'] = 'Documento';
+$columns['name'] = 'Nome';
+$columns['mother'] = 'Mãe';
+$columns['age'] = 'Idade';
+$columns['action'] = 'Ações';
 
 
 echo $this->Html->tag('thead', $this->AppGrid->tr($columns, array('sort' => false)));
@@ -53,8 +53,8 @@ if(count($$map)){
     	
         $v[$modelClass]['action'] = $this->element('Index/Entities/action', array('id' => $v[$modelClass]['id']));
 
-        $v[$modelClass]['mother'] = !empty($v[$modelClass]['mother'])?$v[$modelClass]['mother']:'<small style="color: #999999;display: block;line-height: 20px;">— ' . __('Not Found') . '</small>';
-        $v[$modelClass]['age'] = !empty($v[$modelClass]['age'])?$v[$modelClass]['age']:'<small style="color: #999999;display: block;line-height: 20px;">— ' . __('Not Found') . '</small>';
+        $v[$modelClass]['mother'] = !empty($v[$modelClass]['mother'])?$v[$modelClass]['mother']:$this->element('Components/Entities/notfound');
+        $v[$modelClass]['age'] = !empty($v[$modelClass]['age'])?$v[$modelClass]['age']:$this->element('Components/Entities/notfound');
         $v[$modelClass]['doc'] = $this->AppUtils->cpf($v[$modelClass]['doc']);
         $body .= $this->AppGrid->tr($v[$modelClass]);
     }

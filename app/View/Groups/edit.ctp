@@ -6,7 +6,7 @@
                 <?php echo $this->Form->input('id')?>
             </div>
             <?php echo $this->AppForm->input('name')?>
-            <?php echo $this->AppForm->btn('Save changes');?>
+            <?php echo $this->AppForm->btn('Salvar Alterações');?>
         <?php echo $this->AppForm->end()?>
     </div>
 </div>

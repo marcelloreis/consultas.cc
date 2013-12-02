@@ -69,7 +69,7 @@ class ContractsController extends AppController {
 	            $data['Client']['contract_id'] = $this->Contract->id;
 	            $this->Contract->Client->save($data);				
 
-				$this->Session->setFlash(__(FLASH_SAVE_SUCCESS), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
+				$this->Session->setFlash(FLASH_SAVE_SUCCESS, FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
 				$this->redirect(array('action' => 'edit', $this->Contract->id));
 			}
 		}	

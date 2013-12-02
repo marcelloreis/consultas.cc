@@ -18,9 +18,9 @@ echo $this->AppGrid->create($modelClass, array('id' => 'index-table', 'tableClas
 * Monta o cabeçalho
 */
 $columns['id'] = $this->AppForm->input("", array('id' => 'check-all', 'type' => 'checkbox', 'template' => 'form-input-clean'));
-$columns['action'] = __('Actions');
-$columns['msgid'] = __('Message');
-$columns['msgstr'] = __('Translation');
+$columns['action'] = 'Ações';
+$columns['msgid'] = 'Mensagem';
+$columns['msgstr'] = 'Tradução';
 unset($columns['translation_id']);
 echo $this->Html->tag('thead', $this->AppGrid->tr($columns));
 

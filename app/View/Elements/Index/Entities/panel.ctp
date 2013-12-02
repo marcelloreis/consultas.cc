@@ -1,4 +1,4 @@
-<div class="row-fluid">
+<div id="entity-search" class="row-fluid">
     <div class="span12">
         <div class="box box-bordered box-color">
             <div class="box-title">

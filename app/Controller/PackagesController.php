@@ -64,26 +64,43 @@ class PackagesController extends AppController {
 		//@override
 		parent::edit($id);
 
+		/**
+		* Salva os preços dos produtos relacionados ao pacote
+		*/
 		if(count($prices)){
 			$this->Package->Price->deleteAll(array("Price.package_id" => $this->Package->id, 'Price.product_id' => array_keys($prices)));
 			foreach ($prices as $k => $v) {
 				$prices[$k]['package_id'] = $this->Package->id;
 			}
 			$this->Package->Price->saveMany($prices);
-			$this->Session->setFlash(__(FLASH_SAVE_SUCCESS), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
+			$this->Session->setFlash(FLASH_SAVE_SUCCESS, FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
 			$this->redirect(array('action' => 'edit', $this->Package->id));
 		}
 
 		/**
-		* Carrega todos os produtos ativos do pacote
+		* Carrega todos os pacotes e seus valores
 		*/
-		$products_active = array();
 		if(isset($this->data['Product'])){
-			foreach ($this->data['Product'] as $k => $v) {
-				$products_active[$k] = (int)$v['id'];
-			}
-		}
-		$this->set(compact('products_active'));
+            foreach ($this->data['Product'] as $k => $v) {
+                $map[$v['id']] = array(
+                    'name' => $v['name'],
+                    'price' => $v['Price']['price'],
+                    );
+            }
+
+            foreach ($this->viewVars['products'] as $k => $v) {
+                if(!isset($map[$k])){
+                    $map[$k] = array(
+                        'name' => $v,
+                        'price' => null,
+                        );
+                }
+            }
+
+            $products = $map;
+
+            $this->set(compact('products'));			
+		}		
 	}
 
 	public function pricing(){

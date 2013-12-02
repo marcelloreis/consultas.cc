@@ -9,13 +9,13 @@
 		<a href="#" class='dropdown-toggle' data-toggle="dropdown"><?php echo $userLogged['given_name'];?><?php echo $this->Html->image($avatar, array('width' => 27, 'heigth' => 27))?></a>
 		<ul class="dropdown-menu pull-right">
 			<li>
-				<?php echo $this->Html->link(__('Edit profile'), array('controller' => 'users', 'action' => 'edit', $userLogged['id'], 'plugin' => false))?>
+				<?php echo $this->Html->link('Editar Perfil', array('controller' => 'users', 'action' => 'edit', $userLogged['id'], 'plugin' => false))?>
 			</li>
 			<!-- <li>
 				<a href="#">Account settings</a>
 			</li> -->
 			<li>
-				<?php echo $this->Html->link(__('Sign out'), array('controller' => 'users', 'action' => 'logout', 'plugin' => false))?>
+				<?php echo $this->Html->link('Sair', array('controller' => 'users', 'action' => 'logout', 'plugin' => false))?>
 			</li>
 		</ul>
 	</div>

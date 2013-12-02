@@ -9,7 +9,7 @@ array_push($breadcrumbs, $this->params['controller']);
 <div class="breadcrumbs">
 	<ul>
 		<li>
-			<?php echo $this->Html->link(__('Home'), array('controller' => 'users', 'action' => 'dashboard'))?>
+			<?php echo $this->Html->link('Início', array('controller' => 'users', 'action' => 'dashboard'))?>
 			<i class="icon-angle-right"></i>
 		</li>
 		<?php foreach($breadcrumbs as $k => $v):?>

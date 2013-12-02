@@ -26,7 +26,7 @@
                     <a href="docs.html">Ajuda</a>
                 </li>
                 <li>
-                	<?php echo $this->Html->link(__('Logout'), array('controller' => 'users', 'action' => 'logout', 'plugin' => false))?>
+                	<?php echo $this->Html->link('Sair', array('controller' => 'users', 'action' => 'logout', 'plugin' => false))?>
                 </li>
             </ul>
         </li>

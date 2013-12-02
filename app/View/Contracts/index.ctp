@@ -14,7 +14,7 @@ echo $this->AppGrid->create($modelClass, array('id' => $modelClass, 'tableClass'
 */
 $columns = array();
 $columns['id'] = $this->AppForm->input("", array('id' => 'check-all', 'type' => 'checkbox', 'template' => 'form-input-clean'));
-$columns['action'] = __('Actions');
+$columns['action'] = 'Ações';
 $columns['responsible_partner'] = 'Sócio Resp.';
 $columns['contract_ini'] = 'Início';
 $columns['validity'] = 'Validade';

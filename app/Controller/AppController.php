@@ -281,7 +281,7 @@ class AppController extends Controller {
 		 * Verifica se o usuário esta logado, caso nao esteja sera redirecionado a pagina de login com a mensagen sessao expirada
 		 */
 		if(!$this->Auth->loggedIn()){
-			$this->Session->setFlash("{$user['given_name']}, " . __('Your session has expired. Make a new login!'), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
+			$this->Session->setFlash("{$user['given_name']}, sua sessão expirou. Faça um novo login!", FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
 			$this->redirect(array('controller' => 'users', 'action' => 'login'));
 		}
 
@@ -294,7 +294,7 @@ class AppController extends Controller {
 	    	 * Verifica se o usuário tem permissão para acessar o action INDEX
 	    	 */
 			case 'index':
-		    	$this->redirectOnPermissionDeny('index', "{$user['given_name']}, " . __('you do not have permission to view') . ' ' . __(Inflector::pluralize($this->modelClass)) . ".", array('controller' => 'users', 'action' => 'dashboard'));
+		    	$this->redirectOnPermissionDeny('index', "{$user['given_name']}, você não tem permissão para visualizar " . __(Inflector::pluralize($this->modelClass)) . ".", array('controller' => 'users', 'action' => 'dashboard'));
 				break;
 			
 	    	/**
@@ -310,13 +310,13 @@ class AppController extends Controller {
 				}
 
 
-		    	$this->redirectOnPermissionDeny('edit', "{$user['given_name']}, " . __('you do not have permission to edit') . ' ' . __(Inflector::pluralize($this->modelClass)) . ".");
+		    	$this->redirectOnPermissionDeny('edit', "{$user['given_name']}, você não tem permissão para editar " . __(Inflector::pluralize($this->modelClass)) . ".");
 
 		    	/**
 		    	 * Verifica se o usuário tem permissão para visualizar o registro.
 		    	 * se ele não tiver permissao para visualizar, entao não tem permissao para editar
 		    	 */
-		    	$this->redirectOnPermissionDeny('view', "{$user['given_name']}, " . __('you are not allowed to view the content of') . ' ' . __(Inflector::pluralize($this->modelClass)) . ".");
+		    	$this->redirectOnPermissionDeny('view', "{$user['given_name']}, você não tem permissão para visualizar os dados de " . __(Inflector::pluralize($this->modelClass)) . ".");
 
 		    	/**
 		    	 * Quando nao houver a chave primaria entao indica que a acao sera de adicionar o registro
@@ -324,32 +324,32 @@ class AppController extends Controller {
 		    	 * se nao tiver ele sera redirecionado para o indice do controlador atual
 		    	 */
 		    	if(!count($this->params['pass'])){
-		    		$this->redirectOnPermissionDeny('add', "{$user['given_name']}, " . __('you are not allowed to add') . ' ' . __(Inflector::pluralize($this->modelClass)) . ".");
+		    		$this->redirectOnPermissionDeny('add', "{$user['given_name']}, você não tem permissão para adicionar " . __(Inflector::pluralize($this->modelClass)) . ".");
 		    	}
 				break;
 	    	/**
 	    	 * Verifica se o usuário tem permissão para acessar o action ADD
 	    	 */
 			case 'add':
-		    		$this->redirectOnPermissionDeny('add', "{$user['given_name']}, " . __('you are not allowed to add') . ' ' . __(Inflector::pluralize($this->modelClass)) . ".");
+		    		$this->redirectOnPermissionDeny('add', "{$user['given_name']}, você não tem permissão para adicionar " . __(Inflector::pluralize($this->modelClass)) . ".");
 				break;
 	    	/**
 	    	 * Verifica se o usuário tem permissão para acessar o action VIEW
 	    	 */
 			case 'view':
-		    	$this->redirectOnPermissionDeny('view', "{$user['given_name']}, " . __('you do not have permission to view') . ' ' . __(Inflector::pluralize($this->modelClass)) . ".");
+		    	$this->redirectOnPermissionDeny('view', "{$user['given_name']}, você não tem permissão para visualizar " . __(Inflector::pluralize($this->modelClass)) . ".");
 				break;
 	    	/**
 	    	 * Verifica se o usuário tem permissão para acessar o action TRASH
 	    	 */
 			case 'trash':
-		    	$this->redirectOnPermissionDeny('trash', "{$user['given_name']}, " . __('you are not allowed to trash') . ' ' . __(Inflector::pluralize($this->modelClass)) . ".");
+		    	$this->redirectOnPermissionDeny('trash', "{$user['given_name']}, você não tem permissão para mover " . __(Inflector::pluralize($this->modelClass)) . " para lixeira.");
 				break;
 	    	/**
 	    	 * Verifica se o usuário tem permissão para acessar o action DELETE
 	    	 */
 			case 'delete':
-		    	$this->redirectOnPermissionDeny('delete', "{$user['given_name']}, " . __('you are not allowed to delete') . ' ' . __(Inflector::pluralize($this->modelClass)) . ".");
+		    	$this->redirectOnPermissionDeny('delete', "{$user['given_name']}, você não tem permissão para excluír " . __(Inflector::pluralize($this->modelClass)) . ".");
 				break;
 			
 		}
@@ -363,7 +363,7 @@ class AppController extends Controller {
 			(isset($this->params['named'][ACTION_TRASH]) && !empty($this->params['named'][ACTION_TRASH])) ||
 			(isset($this->params->query['data'][$this->modelClass][ACTION_TRASH]) && !empty($this->params->query['data'][$this->modelClass][ACTION_TRASH]))
 			){
-				$this->redirectOnPermissionDeny('trash', "{$user['given_name']}, " . __('you are not allowed to view trashed records') . ' ' . __(Inflector::pluralize($this->modelClass)) . ".");
+				$this->redirectOnPermissionDeny('trash', "{$user['given_name']}, você não tem permissão para visualizar " . __(Inflector::pluralize($this->modelClass)) . " na lixeira.");
 			}
 
 		/**
@@ -375,7 +375,7 @@ class AppController extends Controller {
 			(isset($this->params->query['data'][$this->modelClass][ACTION_DELETE]) && !empty($this->params->query['data'][$this->modelClass][ACTION_DELETE]))
 			){
 				if(ADMIN_USER != $this->Auth->User('id')){
-					$this->Session->setFlash(__('you are not allowed to view deleted records'), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
+					$this->Session->setFlash('você não tem permissão para visualizar registros excluídos.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
 					$this->redirect($this->referer());
 				}
 			}
@@ -403,7 +403,7 @@ class AppController extends Controller {
 
 		/**
 		* Verifica se o index foi chamado apartir de uma grid de adicao de relacionamento de dados
-		* Caso seja, sera excluido da consulta todos os registros que ja estao relacionado ao
+		* Caso seja, sera excluído da consulta todos os registros que ja estao relacionado ao
 		* id do model passado por parametro
 		*/
 		if(isset($this->params['named']['habtmModel']) && isset($this->params['named']['habtmId'])){
@@ -552,7 +552,7 @@ class AppController extends Controller {
 	public function view($id=null){
 		$this->Model->id = $id;
 		if (!$this->Model->exists()) {
-			$this->Session->setFlash(sprintf(__("It was not possible to view the %s, or it does not exist in the database."), __($this->modelClass)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
+			$this->Session->setFlash(sprintf('Não foi possível visualizar o %s, ou ele não existe no banco de dados.', __($this->modelClass)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
 			$this->redirect(array('action' => 'index'));
 		}	
 
@@ -586,7 +586,7 @@ class AppController extends Controller {
 			$this->Model->id = $id;
 
 			if (!$this->Model->exists()) {
-				$this->Session->setFlash(sprintf(__("It was not possible to edit the %s [%s], or it does not exist in the database."), __($this->modelClass), $this->Model->id), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
+				$this->Session->setFlash(sprintf('Não foi possível visualizar o %s [%s], ou ele não existe no banco de dados.', __($this->modelClass), $this->Model->id), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
 				$this->redirect(array('action' => 'index'));
 			}
 		}
@@ -609,7 +609,7 @@ class AppController extends Controller {
 			 */
 			if($this->Model->{$this->saveType}($this->request->data)){
 				if($this->isRedirect){
-					$this->Session->setFlash(__(FLASH_SAVE_SUCCESS), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
+					$this->Session->setFlash(FLASH_SAVE_SUCCESS, FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
 					$this->redirect(array('action' => 'edit', $this->Model->id));
 				}
 			}else{
@@ -624,7 +624,7 @@ class AppController extends Controller {
 						$msgs[$k] = $v[0];
 					}
 				}
-				$this->Session->setFlash(__(FLASH_SAVE_ERROR), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR, 'multiple' => $msgs), FLASH_SESSION_FORM);
+				$this->Session->setFlash(FLASH_SAVE_ERROR, FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR, 'multiple' => $msgs), FLASH_SESSION_FORM);
 			}
 		} 
 
@@ -680,7 +680,7 @@ class AppController extends Controller {
 			* Verifica se o ID passado existe na base de dados
 			*/
 			if ($value && !$this->Model->exists()) {
-				$this->Session->setFlash(sprintf(__("The %s does not exist in the database."), __($this->modelClass)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+				$this->Session->setFlash(sprintf('O %s não existe na base de dados.', __($this->modelClass)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
 				$this->redirect($this->referer());
 			}
 		}
@@ -706,9 +706,9 @@ class AppController extends Controller {
 		* Move os registros para a lixeira
 		*/
 		if ($this->__remove($id, ACTION_TRASH)) {
-			$this->Session->setFlash(sprintf(__("%s moved to the trash."), __($this->name)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
+			$this->Session->setFlash(sprintf('%s movidos para lixeira.', __($this->name)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
 		}else{
-			$this->Session->setFlash(sprintf(__("Unable to move the %s to the trash."), __($this->name)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
+			$this->Session->setFlash(sprintf('Não foi possível mover o %s para a lixeira.', __($this->name)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
 		}
 
 		$this->redirect($this->referer());
@@ -728,9 +728,9 @@ class AppController extends Controller {
 		* Move os registros permanentemente
 		*/
 		if ($this->__remove($id, ACTION_DELETE)) {
-			$this->Session->setFlash(sprintf(__("%s deleted."), __($this->name)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
+			$this->Session->setFlash(sprintf('%s excluído.', __($this->name)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
 		}else{
-			$this->Session->setFlash(sprintf(__("Unable delete the %s."), __($this->name)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
+			$this->Session->setFlash(sprintf('Não foi possível excluír o %s.', __($this->name)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
 		}
 		$this->redirect($this->referer());
 	}	
@@ -749,18 +749,18 @@ class AppController extends Controller {
 		* Restaura os registros deletados
 		*/
 		if ($this->__remove($id, ACTION_DELETE, true, false)) {
-			$this->Session->setFlash(sprintf(__("%s restored."), __($this->name)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
+			$this->Session->setFlash(sprintf('%s restaurado.', __($this->name)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
 		}else{
-			$this->Session->setFlash(sprintf(__("Unable restore the %s."), __($this->name)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
+			$this->Session->setFlash(sprintf('Não foi possível restaurar o %s.', __($this->name)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
 		}
 
 		/**
 		* Restaura os registros movidos para a lixeira
 		*/
 		if ($this->__remove($id, ACTION_TRASH, true, false)) {
-			$this->Session->setFlash(sprintf(__("%s restaured to the trash."), __($this->name)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
+			$this->Session->setFlash(sprintf('%s restaurado da lixeira.', __($this->name)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
 		}else{
-			$this->Session->setFlash(sprintf(__("Unable restore the %s to the trash."), __($this->name)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
+			$this->Session->setFlash(sprintf('Não foi possível restaurar o %s da lixeira.', __($this->name)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
 		}
 
 

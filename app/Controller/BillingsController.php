@@ -39,6 +39,10 @@ class BillingsController extends AppController {
 	* @return void
 	*/
 	public function index($params=array()){
+		$params = array(
+			'group' => 'Billing.client_id'
+			);
+		
 		//@override
 		parent::index($params);
 	}	

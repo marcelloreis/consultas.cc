@@ -94,7 +94,7 @@ class TranslationsController extends AppController {
 			file_put_contents($dir_locale, $msg, FILE_APPEND | LOCK_EX);
 		}
 
-		$this->Session->setFlash(__("All translations were loaded."), FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
-		$this->redirect('edit');
+		$this->Session->setFlash('Todas as mensagens foram traduzidas.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
+		$this->redirect($this->referer());
 	}
 }

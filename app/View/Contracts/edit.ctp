@@ -33,7 +33,7 @@ echo $this->Html->script(array('plugins/datepicker/bootstrap-datepicker'), array
             <?php echo $this->AppForm->input('contract_ini')?>
             <?php echo $this->AppForm->input('validity', array('label' => 'Validade (meses)', 'type' => 'text', 'class' => 'msk-int'))?>
             
-            <?php echo $this->AppForm->btn('Save changes');?>
+            <?php echo $this->AppForm->btn('Salvar Alterações');?>
         <?php echo $this->AppForm->end()?>
     </div>
 </div>

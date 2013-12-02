@@ -20,7 +20,7 @@ echo $this->AppGrid->create($modelClass, array('id' => $modelClass, 'tableClass'
 * Monta o cabeçalho
 */
 $columns['id'] = $this->AppForm->input("", array('id' => 'check-all', 'type' => 'checkbox', 'template' => 'form-input-clean'));
-$columns['action'] = __('Actions');
+$columns['action'] = 'Ações';
 
 if($this->action == 'index') {
     unset($columns['client_id']);

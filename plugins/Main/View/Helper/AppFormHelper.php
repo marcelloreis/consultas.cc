@@ -64,7 +64,7 @@ class AppFormHelper extends AppHelper {
 
     public function input($fieldName, $options = array()) {
         //Guarda o label requisistado    
-        $this->inputLabel = isset($options['label']) ? __(ucwords(str_replace('_', ' ', $options['label']))) : __(ucwords(str_replace('_', ' ', $fieldName)));
+        $this->inputLabel = isset($options['label']) ? __(ucfirst(str_replace('_', ' ', $options['label']))) : __(ucfirst(str_replace('_', ' ', $fieldName)));
         //Remove o LABEL padrao do cake
         unset($options['label']);
 
@@ -84,7 +84,7 @@ class AppFormHelper extends AppHelper {
         if(isset($this->validate[$fieldName])){
             $message = isset($this->validate[$fieldName]['notempty']['message'])
                 ?$this->validate[$fieldName]['notempty']['message']
-                :__('This field must be filled in correctly.');
+                :'Este campo deve ser preenchido corretamente.';
 
             $options['x-moz-errormessage'] = $message;
             $options['title'] = $message;
@@ -106,7 +106,7 @@ class AppFormHelper extends AppHelper {
         //Insere os options de caso o input seja do tipo select e os options ainda nao estejam setados
         if ((isset($options['template']) && $options['template'] == 'form-input-fk') || ($options['type'] == 'select' && !isset($options['options']))) {
             //Insere a label "Selecione" caso nao tenha sido setado nenhuma label
-            $options['empty'] =  (!isset($options['empty']))?__('Selecione'):$options['empty'];
+            $options['empty'] =  (!isset($options['empty']))?'Selecione':$options['empty'];
             $options['options'] =  $this->optionsSelect($fieldName);
         }
 
@@ -148,7 +148,7 @@ class AppFormHelper extends AppHelper {
     }
 
     public function btn($value=false, $options=array()) {
-        $value = !$value?__('Save'):__($value);
+        $value = !$value?'Salvar':$value;
         /**
          * Libera o acesso ao botao somente se o usuario tiver acesso a ação/função
          */
@@ -318,15 +318,15 @@ class AppFormHelper extends AppHelper {
         $options = null;
         //Chaves SIM|NAO
         if (preg_match('/in_out.*|has_.*|is_.*|check.*|published.*|trashed.*|deleted.*/si', $fieldName)){
-            $options = array('1' => __('Yes'), '0' => __('No'));
+            $options = array('1' => 'Sim', '0' => 'Não');
         }
         //Status
         if (preg_match('/status.*|active.*/si', $fieldName)){
-            $options = array('1' => __('Active'), '0' => __('Inactive'));
+            $options = array('1' => 'Ativo', '0' => 'Inativo');
         }
         //Sexo
         if (preg_match('/sexo.*|sex.*/si', $fieldName)){
-            $options = array('1' => __('Female'), '0' => __('Male'));
+            $options = array('1' => 'Feminino', '0' => 'Masculino');
         }
 
         return $options;

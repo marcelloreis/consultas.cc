@@ -1,6 +1,6 @@
                 <!-- Telefone 1 -->
                 <form style="border: 1px solid #DDDDDD;" class="form-horizontal form-column form-bordered" method="POST" action="#">
-                    <?php foreach($locator as $k => $v):?>
+                    <?php foreach($entity as $k => $v):?>
 
                         <!-- Divisoria -->
                         <div class="control-group"></div>
@@ -18,19 +18,19 @@
 
                         <div class="span6">
                             <div class="control-group">
-                                <label class="control-label"><?php echo __('Number')?></label>
+                                <label class="control-label">Número</label>
                                 <div class="controls">
                                     <?php echo !empty($v['Address']['number'])?$v['Address']['number']:$this->element('Components/Entities/notfound');?>
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label"><?php echo __('Complement')?></label>
+                                <label class="control-label">Complemento</label>
                                 <div class="controls">
                                     <?php echo !empty($v['Address']['complement'])?$v['Address']['complement']:$this->element('Components/Entities/notfound');?>
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label"><?php echo __('Neighborhood')?></label>
+                                <label class="control-label">Bairro</label>
                                 <div class="controls">
                                     <?php echo !empty($v['Address']['neighborhood'])?$v['Address']['neighborhood']:$this->element('Components/Entities/notfound');?>
                                 </div>
@@ -40,19 +40,19 @@
                         <div class="span6">
 
                             <div class="control-group">
-                                <label class="control-label"><?php echo __('Zipcode')?></label>
+                                <label class="control-label">CEP</label>
                                 <div class="controls">
                                     <?php echo !empty($v['Address']['zipcode'])?$this->Html->link($this->AppUtils->zipcode($v['Address']['zipcode']), array('action' => 'address', 'zipcode' => $v['Address']['zipcode'])):$this->element('Components/Entities/notfound');?>
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label"><?php echo __('State')?></label>
+                                <label class="control-label">Estado</label>
                                 <div class="controls">
                                     <?php echo !empty($v['Address']['state'])?$v['Address']['state']:$this->element('Components/Entities/notfound');?>
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label"><?php echo __('City')?></label>
+                                <label class="control-label">Cidade</label>
                                 <div class="controls">
                                     <?php echo !empty($v['Address']['city'])?$v['Address']['city']:$this->element('Components/Entities/notfound');?>
                                 </div>

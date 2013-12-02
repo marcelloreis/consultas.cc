@@ -35,14 +35,13 @@ class Billing extends AppModel {
 	* Esta funcao retorno o saldo atual do cliente/contas logado
 	*/
 	public function balance($client_id){
-		$billing = $this->find('first', array(
-			'recursive' => -1,
-			'conditions' => array(
-				'Billing.client_id' => $client_id
-				),
-			'order' => array('Billing.created' => 'desc')
-			));
+		$this->recursive = -1;
 
-		return $billing;
+		/**
+		* Carrega o saldo atual do cliente
+		*/
+		$billing = $this->findByClientId($client_id);
+
+		return (!empty($billing['Billing']['balance']))?$billing['Billing']['balance']:0;
 	}
 }

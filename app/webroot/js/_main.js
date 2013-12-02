@@ -94,6 +94,11 @@ $(document).ready(function(){
     */
     $('.load-assoc').click(function(){
         var class_target = $(this).attr('class-box');
+
+        $('html, body').animate({
+            scrollTop: $('#entity-extras').offset().top
+        }, 600);                            
+        
         if(!$('#' + class_target).find('a').size()){
             var li = $(this).parents('li:eq(0)');
             var data = $(':hidden', li).serialize();
@@ -110,6 +115,8 @@ $(document).ready(function(){
                     $('#' + class_target).html(data);
                     $('#assoc-loading').addClass('hide');
                     $('#assoc-loading-msg').html('');
+
+
                 }
             });        
         }

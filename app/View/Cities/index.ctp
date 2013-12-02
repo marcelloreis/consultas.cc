@@ -6,7 +6,7 @@
     <?php echo $this->AppGrid->create($modelClass, array('tableClass' => 'basic-table', 'id' => 'basic-table'))?>
     <thead>
         <?php $columns['id'] = '<input type="checkbox" name="" class="e-checkbox-trigger"/>'?>
-        <?php $columns['action'] = __('Actions')?>
+        <?php $columns['action'] = 'Ações'?>
         <?php $columns['state_id'] = 'UF'?>
         <?php unset($columns['ddd'])?>
         <?php echo $this->AppGrid->tr($columns)?>

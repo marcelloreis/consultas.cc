@@ -1,62 +1,62 @@
 <?php 
 $hasInfo = 0;
-foreach ($neighbors['Neighbors'] as $k => $v) {
+foreach ($entity['Neighbors'] as $k => $v) {
     if(count($v)){
         $hasInfo++;
     }
 }
 if(!$hasInfo){
-    echo $this->element('Components/flash-message', array('message' => __('No Neighbors Found')));
+    echo $this->element('Components/flash-message', array('message' => 'Nenhum Vizinho Encontrado.'));
 }
 ?>
 
 <!-- Vizinhos -->
-<?php foreach($neighbors['Neighbors'] as $k => $v):?>
+<?php foreach($entity['Neighbors'] as $k => $v):?>
     <?php foreach($v as $k2 => $v2):?>
         <blockquote>
             <h4>
                 <?php 
                 switch ($k) {
-                    case 'same_address':
+                    case 'mesmo_endereco':
                         $neighbor_class = 'btn-success';
                         break;
-                    case 'same_floor':
-                    case 'same_street':
+                    case 'mesmo_andar':
+                    case 'mesma_rua':
                         $neighbor_class = 'btn-warning';
                         break;
                 }
                 ?>
-                <?php echo $this->Html->link(__(ucwords(str_replace('_', ' ', $k))), '#', array('class' => 'btn ' . $neighbor_class))?>
+                <?php echo $this->Html->link(ucwords(str_replace('_', ' ', $k)), '#', array('class' => 'btn ' . $neighbor_class))?>
                 <?php echo $this->Html->link($v2['Entity']['name'], array('controller' => 'entities', 'action' => 'index', 'plugin' => false, $v2['Entity']['id'], '#' => 'entity-main'))?>
             </h4>
             <form style="border: 1px solid #DDDDDD;" class="form-horizontal form-column form-bordered" method="POST" action="#">
                 <div class="control-group">
-                    <label class="control-label"><?php echo __('Mother')?></label>
+                    <label class="control-label">Mãe</label>
                     <div class="controls">
-                        <?php echo !empty($v2['Entity']['mother'])?$v2['Entity']['mother']:'<small>' . __('Not Found') . '</small>';?>
+                        <?php echo !empty($v2['Entity']['mother'])?$v2['Entity']['mother']:'<small>Não Encontrado</small>';?>
                     </div>
                 </div>
                 <div class="span4">
                     <div class="control-group">
-                        <label class="control-label"><?php echo __('CPF')?></label>
+                        <label class="control-label">CPF</label>
                         <div class="controls">
-                            <?php echo !empty($v2['Entity']['doc'])?$this->AppUtils->cpf($v2['Entity']['doc']):'<small>' . __('Not Found') . '</small>';?>
+                            <?php echo !empty($v2['Entity']['doc'])?$this->AppUtils->cpf($v2['Entity']['doc']):'<small>Não Encontrado</small>';?>
                         </div>
                     </div>
                 </div>
                 <div class="span4">
                     <div class="control-group">
-                        <label class="control-label"><?php echo __('Age')?></label>
+                        <label class="control-label">Idade</label>
                         <div class="controls">
-                            <?php echo !empty($v2['Entity']['age'])?$v2['Entity']['age']:'<small>' . __('Not Found') . '</small>';?>
+                            <?php echo !empty($v2['Entity']['age'])?$v2['Entity']['age']:'<small>Não Encontrado</small>';?>
                         </div>
                     </div>
                 </div>
                 <div class="span4">
                     <div class="control-group">
-                        <label class="control-label"><?php echo __('Updated')?></label>
+                        <label class="control-label">Atualizado</label>
                         <div class="controls">
-                            <?php echo !empty($v2['Entity']['modified'])?$this->AppUtils->dt2br($v2['Entity']['modified'], true):'<small>' . __('Not Found') . '</small>';?>
+                            <?php echo !empty($v2['Entity']['modified'])?$this->AppUtils->dt2br($v2['Entity']['modified'], true):'<small>Não Encontrado</small>';?>
                         </div>
                     </div>
                 </div>

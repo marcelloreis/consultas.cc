@@ -31,7 +31,7 @@ echo $this->Html->script(array('plugins/icheck/jquery.icheck.min'), array('defer
             <?php echo $this->AppForm->input('competence')?>
             <?php echo $this->AppForm->input('is_paid', array('class' => 'icheck-me', 'data-skin' => 'square', 'data-color' => 'blue'))?>
             <?php echo $this->AppForm->input('is_separete', array('class' => 'icheck-me', 'data-skin' => 'square', 'data-color' => 'blue'))?>
-            <?php echo $this->AppForm->btn('Save changes');?>
+            <?php echo $this->AppForm->btn('Salvar Alterações');?>
         <?php echo $this->AppForm->end()?>
     </div>
 </div>

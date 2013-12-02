@@ -43,7 +43,7 @@ echo $this->Html->script(array('plugins/chosen/chosen.jquery.min'), array('defer
             <?php echo $this->AppForm->input('number')?>
             <?php echo $this->AppForm->input('neighborhood')?>
             
-            <?php echo $this->AppForm->btn('Save changes');?>
+            <?php echo $this->AppForm->btn('Salvar Alterações');?>
         <?php echo $this->AppForm->end()?>
     </div>
 </div>

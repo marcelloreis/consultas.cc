@@ -2,7 +2,7 @@
     <?php echo $this->AppGrid->create($modelClass, array('tableClass' => 'basic-table', 'id' => 'basic-table'))?>
     <thead>
         <?php $columns['id'] = $this->AppForm->input(null, array('class' => 'e-checkbox-trigger', 'type' => 'checkbox', 'template' => 'form-input-clean', 'name' => null, 'value' => null))?>
-        <?php $columns['action'] = __('Actions')?>
+        <?php $columns['action'] = 'Ações'?>
         <?php echo $this->AppGrid->tr($columns)?>
     </thead>
 

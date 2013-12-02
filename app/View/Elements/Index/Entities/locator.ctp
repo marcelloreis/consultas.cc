@@ -5,7 +5,7 @@
     <div class="span12">
         <div class="box box-bordered box-color">
             <div class="box-title">
-                <h3><i class="glyphicon-globe"></i> <?php echo __('Locator')?></h3>
+                <h3><i class="glyphicon-globe"></i> Localizador</h3>
             </div>
             <div class="box-content">
                 <!-- Telefone 1 -->
@@ -27,55 +27,55 @@
                                     $yearClass = 'btn-red';
                                     break;
                             }
-                            echo sprintf(__('%s updated in %s'), __('Address'), $this->Html->link($v['Address']['year'], '#', array('class' => 'btn ' . $yearClass)));
+                            echo sprintf('%s atualizado em %s', 'Endereço', $this->Html->link($v['Address']['year'], '#', array('class' => 'btn ' . $yearClass)));
                             ?>
                         </h4>
                         <form style="border: 1px solid #DDDDDD;" class="form-horizontal form-column form-bordered" method="POST" action="#">
                             <div class="control-group">
-                                <label class="control-label"><?php echo !empty($v['Address']['type_address'])?$v['Address']['type_address']:'<small>' . __('Not Foud') . '</small>';?></label>
+                                <label class="control-label"><?php echo !empty($v['Address']['type_address'])?$v['Address']['type_address']:'<small>Não Encontrado</small>';?></label>
                                 <div class="controls">
-                                    <?php echo !empty($v['Address']['street'])?$v['Address']['street']:'<small>' . __('Not Found') . '</small>';?>
+                                    <?php echo !empty($v['Address']['street'])?$v['Address']['street']:'<small>Não Encontrado</small>';?>
                                 </div>
                             </div>
 
                             <div class="span6">
                                 <div class="control-group">
-                                    <label class="control-label"><?php echo __('Number')?></label>
+                                    <label class="control-label">Número</label>
                                     <div class="controls">
-                                        <?php echo !empty($v['Address']['number'])?$v['Address']['number']:'<small>' . __('Not Found') . '</small>';?>
+                                        <?php echo !empty($v['Address']['number'])?$v['Address']['number']:'<small>Não Encontrado</small>';?>
                                     </div>
                                 </div>
                                 <div class="control-group">
-                                    <label class="control-label"><?php echo __('Complement')?></label>
+                                    <label class="control-label">Complemento</label>
                                     <div class="controls">
-                                        <?php echo !empty($v['Address']['complement'])?$v['Address']['complement']:'<small>' . __('Not Found') . '</small>';?>
+                                        <?php echo !empty($v['Address']['complement'])?$v['Address']['complement']:'<small>Não Encontrado</small>';?>
                                     </div>
                                 </div>
                                 <div class="control-group">
-                                    <label class="control-label"><?php echo __('Neighborhood')?></label>
+                                    <label class="control-label">Beirro</label>
                                     <div class="controls">
-                                        <?php echo !empty($v['Address']['neighborhood'])?$v['Address']['neighborhood']:'<small>' . __('Not Found') . '</small>';?>
+                                        <?php echo !empty($v['Address']['neighborhood'])?$v['Address']['neighborhood']:'<small>Não Encontrado</small>';?>
                                     </div>
                                 </div>
                             </div>
                             
                             <div class="span6">
                                 <div class="control-group">
-                                    <label class="control-label"><?php echo __('Zipcode')?></label>
+                                    <label class="control-label">CEP</label>
                                     <div class="controls">
-                                        <?php echo !empty($v['Address']['zipcode'])?$v['Address']['zipcode']:'<small>' . __('Not Found') . '</small>';?>
+                                        <?php echo !empty($v['Address']['zipcode'])?$v['Address']['zipcode']:'<small>Não Encontrado</small>';?>
                                     </div>
                                 </div>
                                 <div class="control-group">
-                                    <label class="control-label"><?php echo __('State')?></label>
+                                    <label class="control-label">Estado</label>
                                     <div class="controls">
-                                        <?php echo !empty($v['Address']['state'])?$v['Address']['state']:'<small>' . __('Not Found') . '</small>';?>
+                                        <?php echo !empty($v['Address']['state'])?$v['Address']['state']:'<small>Não Encontrado</small>';?>
                                     </div>
                                 </div>
                                 <div class="control-group">
-                                    <label class="control-label"><?php echo __('City')?></label>
+                                    <label class="control-label">Cidade</label>
                                     <div class="controls">
-                                        <?php echo !empty($v['Address']['city'])?$v['Address']['city']:'<small>' . __('Not Found') . '</small>';?>
+                                        <?php echo !empty($v['Address']['city'])?$v['Address']['city']:'<small>Não Encontrado</small>';?>
                                     </div>
                                 </div>
                             </div>

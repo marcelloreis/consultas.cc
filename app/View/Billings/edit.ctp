@@ -21,7 +21,7 @@ echo $this->Html->script(array('plugins/maskedinput/jquery.maskMoney.min'), arra
             <?php echo $this->AppForm->input('paid')?>
             <?php echo $this->AppForm->input('consumed', array('class' => 'msk-money'))?>
             <?php echo $this->AppForm->input('qt_queries')?>
-            <?php echo $this->AppForm->btn('Save changes');?>
+            <?php echo $this->AppForm->btn('Salvar Alterações');?>
         <?php echo $this->AppForm->end()?>
     </div>
 </div>

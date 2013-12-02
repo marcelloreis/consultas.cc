@@ -22,10 +22,13 @@ class AppBillingsController extends AppController {
 	protected $address;
 
 	protected $product_id;
+	protected $package_id;
+	protected $billing_id;
+	protected $validity_orig;
+	protected $balance;
 	protected $price_id;
 	protected $price;
 	protected $tp_search;
-	private $billing;
 
 	/**
 	* Método beforeFilter
@@ -43,27 +46,49 @@ class AppBillingsController extends AppController {
 		* Carrega o saldo atual do cliente
 		*/
 		$this->loadModel('Billing');
-		$this->billing = $this->Billing->balance($this->Session->read('Auth.User.Client.id'));
-		$this->set('billing', $this->billing['Billing']);
+		$this->balance = $this->Billing->balance($this->Session->read('Auth.User.Client.id'));
+		$this->set('balance', $this->balance);
+
+        /**
+        * Carrega os dados da ultima bilhetagem do cliente
+        */
+        $this->billing_id = $this->Session->read('Client.billing_id');
+        $this->package_id = $this->Session->read('Client.package_id');
+        $this->validity_orig = $this->Session->read('Client.validity_orig');
+		$this->set('validity_orig', $this->validity_orig);
 
 		/**
 		* Carrega o preço do produto consumido
 		*/
-		$this->price = $this->Session->read("Billing.prices_val.{$this->billing['Billing']['package_id']}.{$this->product_id}");
+		$this->price = $this->Session->read("Billing.prices_val.{$this->package_id}.{$this->product_id}");
 
 		/**
 		* Carrega o id do preço do produto consumido
 		*/
-		$this->price_id = $this->Session->read("Billing.prices_id.{$this->billing['Billing']['package_id']}.{$this->product_id}");
+		$this->price_id = $this->Session->read("Billing.prices_id.{$this->package_id}.{$this->product_id}");
 
 		/**
-		* Caso o usuario nao tenho acesso ilimitado as consultas, 
-		* a funcao security é chamada para verificar se o usuario logado tem autorizacao para efetuar as consultas
+		* Verificar se o usuario logado tem autorizacao para efetuar as consultas
 		*/
-		if(!$this->isInfinite()){
-			$this->security();
-		}
+		$this->security();
 	}
+
+    /**
+	* Método beforeRender
+    * Chamado depois controlador com as regras de negócio, mas antes da visão ser renderizada.
+	*
+	* @override Metodo AppController.beforeRender
+	* @return void
+	*/
+	public function beforeRender(){
+		//@override
+		parent::beforeRender();
+
+		/**
+		* Efetua a cobraça
+		*/
+		$this->charge();
+	}		
 
     /**
 	* Método isInfinite
@@ -91,37 +116,43 @@ class AppBillingsController extends AppController {
 	*/
 	private function security(){
 		/**
-		* Verifica se o usuario ja efetuou a compra dos creditos
+		* Caso o usuario nao tenho acesso ilimitado as consultas, 
+		* verificar se o usuario logado tem autorizacao para efetuar as consultas
 		*/
-		if(is_null($this->billing['Billing']['id'])){
-			$this->Session->setFlash("{$this->userLogged['given_name']}, " . 'ainda não constam créditos em sua conta para realizar este tipo de consulta.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
-			$this->redirect(array('controller' => 'packages', 'action' => 'pricing'));
-		}
+		if(!$this->isInfinite()){
+			/**
+			* Verifica se o usuario ja efetuou a compra dos creditos
+			*/
+			if(is_null($this->billing_id)){
+				$this->Session->setFlash("{$this->userLogged['given_name']}, " . 'ainda não constam créditos em sua conta para realizar este tipo de consulta.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+				$this->redirect(array('controller' => 'packages', 'action' => 'pricing'));
+			}
 
-		/**
-		* Verifica se o usuario tem saldo para efetuar a pesquisa
-		*/
-		if($this->AppUtils->num2db($this->price) > $this->billing['Billing']['balance']){
-			$this->Session->setFlash("{$this->userLogged['given_name']}, " . 'seu saldo é insuficiênte para realizar esta consulta.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
-			$this->redirect(array('controller' => 'packages', 'action' => 'pricing'));
-		}
+			/**
+			* Verifica se o usuario tem saldo para efetuar a pesquisa
+			*/
+			if($this->AppUtils->num2db($this->price) > $this->balance){
+				$this->Session->setFlash("{$this->userLogged['given_name']}, " . 'seu saldo é insuficiênte para realizar consultas.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+				$this->redirect(array('controller' => 'packages', 'action' => 'pricing'));
+			}
 
-		/**
-		* Verifica se o saldo do usuario esta dentro da validade
-		*/
-		if($this->billing['Billing']['validity_orig'] < date('Y-m-d')){
-			$this->Session->setFlash("{$this->userLogged['given_name']}, " . 'seu saldo expirou.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
-			$this->redirect(array('controller' => 'packages', 'action' => 'pricing'));
-		}
+			/**
+			* Verifica se o saldo do usuario esta dentro da validade
+			*/
+			if($this->validity_orig < date('Y-m-d')){
+				$this->Session->setFlash("{$this->userLogged['given_name']}, " . 'seu saldo expirou.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+				$this->redirect(array('controller' => 'packages', 'action' => 'pricing'));
+			}
 
-		/**
-		* Verifica se o cliente ja esta ativo (se o contrato ja foi gerado)
-		*/
-		$contract_id = $this->Session->read('Client.contract_id');
-		if(empty($contract_id)){
-			$this->Session->setFlash("{$this->userLogged['given_name']}, " . 'Seu contrato ainda não foi gerado, procure o setor administrativo e regularize sua situação.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
-			$this->redirect(array('controller' => 'packages', 'action' => 'pricing'));
-		}
+			/**
+			* Verifica se o cliente ja esta ativo (se o contrato ja foi gerado)
+			*/
+			$contract_id = $this->Session->read('Client.contract_id');
+			if(empty($contract_id)){
+				$this->Session->setFlash("{$this->userLogged['given_name']}, " . 'Seu contrato ainda não foi gerado, procure o setor administrativo e regularize sua situação.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+				$this->redirect(array('controller' => 'packages', 'action' => 'pricing'));
+			}
+		}		
 	}
 
     /**
@@ -151,61 +182,20 @@ class AppBillingsController extends AppController {
 		/**
 		* Desabilita a bilhetagem quando a consulta realizada nao trouxer registros
 		*/
-		if(!count($this->entity)){
+		if(is_null($this->entity) || !count($this->entity)){
+			$enabled = false;
+		}
+
+		/**
+		* Desabilita a bilhetagem quando o usuario tiver acesso a consultas ilimitadas
+		*/
+		if($this->isInfinite()){
 			$enabled = false;
 		}
 
 		return $enabled;
 	}
 
-    /**
-	* Método beforeRender
-    * Chamado depois controlador com as regras de negócio, mas antes da visão ser renderizada.
-	*
-	* @override Metodo AppController.beforeRender
-	* @return void
-	*/
-	public function beforeRender(){
-		//@override
-		parent::beforeRender();
-
-		/**
-		* Executa a cobrança caso a busca tenha retornado dados
-		*/
-		if(!is_null($this->entity)){
-			/**
-			* Carrega o tipo da consulta
-			*/
-			switch ($this->action) {
-				case 'index':
-					$this->tp_search = TP_SEARCH_ID;
-					break;
-				case 'doc':
-					$this->tp_search = TP_SEARCH_DOC;
-					break;
-				case 'name':
-					$this->tp_search = TP_SEARCH_NAME;
-					break;
-				case 'landline':
-					$this->tp_search = TP_SEARCH_PHONE;
-					break;
-				case 'mobile':
-					$this->tp_search = TP_SEARCH_MOBILE;
-					break;
-				case 'address':
-					$this->tp_search = TP_SEARCH_ADDRESS;
-					break;
-			}
-
-			/**
-			* Efetua a cobraça
-			*/
-			if(!$this->isInfinite()){
-				$this->charge();
-			}
-		}
-	}	
-    
 	/**
 	* Método charge
 	* Esta função é responsavel pela bilhetagem das consultas, ou seja, a cada consulta realizada a 
@@ -221,7 +211,9 @@ class AppBillingsController extends AppController {
     		/**
     		* Recarrega o cache de paginas cobradas
     		*/
-    		$this->Session->write('Billing.changedPage', $this->params->here);
+    		if(!$this->RequestHandler->isAjax()){
+    			$this->Session->write('Billing.changedPage', $this->params->here);
+    		}
 
 			/**
 			* Carrega o modulo de registro de consultas
@@ -234,7 +226,7 @@ class AppBillingsController extends AppController {
 			$data = array(
 				'Query' => array(
 					'user_id' => $this->Session->read('Auth.User.id'),
-					'billing_id' => $this->billing['Billing']['id'],
+					'billing_id' => $this->billing_id,
 					'price_id' => $this->price_id,
 					'tp_search' => $this->tp_search,
 					'query' => $this->here,
@@ -250,15 +242,19 @@ class AppBillingsController extends AppController {
 			* Debita a consulta no saldo do cliente
 			*/
 			$this->Billing->updateAll(
-				array("Billing.consumed" => "(ifnull(Billing.consumed, 0) + " . $this->AppUtils->num2db($this->price) . ")"),
-				array('Billing.id' => $this->billing['Billing']['id'])
+				array(
+					"Billing.consumed" => "(ifnull(Billing.consumed, 0) + " . $this->AppUtils->num2db($this->price) . ")",
+					"Billing.qt_queries" => "(ifnull(Billing.qt_queries, 0) + 1)",
+					"Billing.modified" => "NOW()",
+					),
+				array('Billing.id' => $this->billing_id)
 				);
 
 			/**
 			* Recarrega o saldo do cliente subtraindo o saldo atual com o valor da consulta realizada
 			*/
-			$this->billing['Billing']['balance'] = ($this->billing['Billing']['balance'] - $this->AppUtils->num2db($this->price));
-			$this->set('billing', $this->billing['Billing']);
+			$this->balance = ($this->balance - $this->AppUtils->num2db($this->price));
+			$this->set('balance', $this->balance);
 		}
 	}
 }
