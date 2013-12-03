@@ -1,6 +1,5 @@
 <?php 
-echo $this->Html->link('<i class="icon-search"></i>', array("controller" => $this->params['controller'], "action" => "view", $id, 'client_id' => $client_id), array('title' => 'Vizualizar Registro', 'class' => 'btn', 'rel' => 'tooltip', 'data-original-title' => 'Vizualizar Registro', 'escape' => false)) . '&nbsp;';
-echo $this->Html->link('<i class="icon-edit"></i>', array("controller" => $this->params['controller'], "action" => "edit", $id, 'client_id' => $client_id), array('title' => 'Editar Registro', 'class' => 'btn', 'rel' => 'tooltip', 'data-original-title' => 'Editar Registro', 'escape' => false)) . '&nbsp;';
+echo $this->Html->link('<i class="icon-edit"></i>', array("controller" => $this->params['controller'], "action" => "edit_account", $id), array('title' => 'Editar Registro', 'class' => 'btn', 'rel' => 'tooltip', 'data-original-title' => 'Editar Registro', 'escape' => false)) . '&nbsp;';
 
 if(isset($this->params['named']['trashed']) && $this->AppPermissions->check("{$this->name}.trash")){
 	echo $this->Html->link('<i class="icon-inbox"></i>', array("controller" => $this->params['controller'], "action" => "restore", $id), array('title' => 'Restaurar', 'class' => 'btn', 'rel' => 'tooltip', 'data-original-title' => 'Restaurar', 'escape' => false), 'Tem certeza de que deseja restaurar este registro do lixo?') . '&nbsp;';

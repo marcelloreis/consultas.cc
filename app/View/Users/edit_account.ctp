@@ -1,5 +1,12 @@
 <?php 
 /**
+* Insere o sidebar especifico de usuarios
+*/
+$this->start('sidebar');
+echo $this->element('Components/Users/sidebar-accounts');
+$this->end();
+
+/**
 * Adiciona os CSSs e Scripts de acordo com as views invocadas
 */
 $this->append('css-on-demand');
@@ -18,7 +25,8 @@ echo $this->Html->script(array('plugins/datepicker/bootstrap-datepicker'), array
         <?php echo $this->AppForm->create($modelClass, array('defaultSize' => 'input-xxlarge', 'classForm' => 'form-horizontal form-bordered form-striped'))?>
             <?php echo $this->Form->input('id')?>
             <?php 
-            echo $this->AppForm->input('group_id', array('class' => 'chosen-select'));
+            echo $this->AppForm->input('client_id', array('class' => 'chosen-select'));
+            echo $this->Form->hidden('group_id', array('value' => CLIENT_GROUP));
             echo $this->AppForm->input('name');
             echo $this->AppForm->input('given_name');
             echo $this->AppForm->input('expire');
@@ -30,8 +38,6 @@ echo $this->Html->script(array('plugins/datepicker/bootstrap-datepicker'), array
 
             echo $this->AppForm->btn('Salvar Alterações');
             ?>
-
-
         <?php echo $this->AppForm->end()?>
     </div>
 </div>

@@ -115,8 +115,6 @@ $(document).ready(function(){
                     $('#' + class_target).html(data);
                     $('#assoc-loading').addClass('hide');
                     $('#assoc-loading-msg').html('');
-
-
                 }
             });        
         }

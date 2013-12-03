@@ -57,6 +57,8 @@ class UsersController extends AppController {
             );
         //@override
         parent::index($params);
+
+        $this->view = $this->action;
     }   
 
 
@@ -70,11 +72,6 @@ class UsersController extends AppController {
     */
     public function edit($id=null){
         /**
-        * Inicializa a variavel $account considerando que o usuario é de sistema e nao de conta de cliente
-        */
-        $isAccount = false;
-
-        /**
          * Verifica se o formulário foi submetido por post
          */
         if ($this->request->is('post') || $this->request->is('put')) {
@@ -86,18 +83,23 @@ class UsersController extends AppController {
             }
         }
 
-        /**
-        * Verifica se o usuario é de contas/clientes ou usuario do sistema
-        */
-        if(isset($this->params['named']['client_id'])){
-            $isAccount = true;
-        }
-
         //@override
         parent::edit($id);
-
-        $this->set(compact('isAccount'));
     }    
+
+    /**
+    * Método editAccount
+    * Este método contem regras de negocios para adicionar e editar registros na base de dados
+    *
+    * @override Metodo Users.edit
+    * @param string $id
+    * @return void
+    */
+    public function edit_account($id=null){
+        $this->edit($id);
+
+        $this->view = 'edit_account';
+    }
 
     /**
     * Método login
@@ -145,11 +147,11 @@ class UsersController extends AppController {
                 */
                 $this->loadClient();
 
-                $this->Session->setFlash(sprintf(__("Welcome to %s"), TITLE_APP) . ".", FLASH_TEMPLATE_DASHBOARD, array('class' => FLASH_CLASS_SUCCESS, 'title' => "Olá " . $this->Auth->User('name')), FLASH_TEMPLATE_DASHBOARD);
+                $this->Session->setFlash(sprintf(__("Bem vindo ao %s"), TITLE_APP) . ".", FLASH_TEMPLATE_DASHBOARD, array('class' => FLASH_CLASS_SUCCESS, 'title' => "Olá " . $this->Auth->User('name')), FLASH_TEMPLATE_DASHBOARD);
                 parent::__loadPermissionsOnSessions();
                 $this->redirect($this->Auth->redirect());
             } else {
-                $this->Session->setFlash(__("Your email or password is incorrect."), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_LOGIN);
+                $this->Session->setFlash(__("Seu email ou senha estão incorretos."), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_LOGIN);
             }
         }
     }
