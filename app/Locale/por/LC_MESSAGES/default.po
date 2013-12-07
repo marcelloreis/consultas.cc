@@ -202,7 +202,7 @@ msgid "User id"
 msgstr "Usuário"
 
 msgid "Users"
-msgstr "Usuário"
+msgstr "Usuários"
 
 msgid "Validity"
 msgstr "Validade"

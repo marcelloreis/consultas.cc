@@ -135,7 +135,7 @@ class AppFormHelper extends AppHelper {
 
         //Carrega o ID do input
         preg_match('/id=[\"\'](.*?)[\"\']/si', $this->input, $map);
-        $id = $map[1];
+        $id = !empty($map[1])?$map[1]:null;
 
         if (isset($id)) {
             $this->inputId = $map[1];
