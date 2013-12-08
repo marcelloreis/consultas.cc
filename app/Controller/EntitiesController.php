@@ -111,7 +111,7 @@ class EntitiesController extends AppBillingsController {
 		/**
 		* Carrega todos as cidades cadastrados
 		*/
-		$cities = array();
+		// $cities = array();
 
 		/**
 		* Carrega as informacoes da entidade
@@ -183,6 +183,7 @@ class EntitiesController extends AppBillingsController {
 			* Procura por outras entidades com o nome identico ao passado por parametro
 			*/
 			$this->entity = $this->Entity->_findName($hash);
+
 			if(count($this->entity) > 1){
 				$this->set('map_found', $this->map_found());
 				$this->view = 'map';
@@ -291,13 +292,13 @@ class EntitiesController extends AppBillingsController {
 
     	$this->address = $this->Entity->Address->_findAddress($params);
 		$this->address2entity();
+  	
 		$this->set('map_found', $this->map_found());
 		$this->view = 'map';
 	}
 
-
 	/**
-	* Método mobile
+	* Método extra_mobile
 	* Este método busca os telefones moveis a partir das chaves associativas passadas pelo request
 	*/
 	public function extra_mobile(){
@@ -317,13 +318,13 @@ class EntitiesController extends AppBillingsController {
 	}
 
 	/**
-	* Método landline
+	* Método extra_landline
 	* Este método busca os telefones moveis a partir das chaves associativas passadas pelo request
 	*/
 	public function extra_landline(){
 		if(!empty($this->params->query['data']['Assoc']['id'])){
 			$this->Entity->Landline->recursive = 1;
-			$map = $this->Entity->Landline->findAllByid($this->params->query['data']['Assoc']['id']);
+			$map = $this->Entity->Landline->findAllById($this->params->query['data']['Assoc']['id']);
 
 			/**
 			* Ordena os resultados por data de atualizacao
@@ -338,25 +339,40 @@ class EntitiesController extends AppBillingsController {
 	}
 
 	/**
-	* Método locator
+	* Método extra_locator
 	* Este método busca os telefones moveis a partir das chaves associativas passadas pelo request
 	*/
 	public function extra_locator(){
 		if(!empty($this->params->query['data']['Assoc']['id'])){
 			$this->Entity->Address->recursive = 1;
-			$this->entity = $this->Entity->Address->findAllByid($this->params->query['data']['Assoc']['id']);
+			$map = $this->Entity->Address->findAllById($this->params->query['data']['Assoc']['id']);
+
+			/**
+			* Agrupa e ordena os resultados por data de atualizacao
+			*/
+			foreach ($map as $k => $v) {
+				$this->entity["{$v['Association'][0]['year']}-{$v['Address']['id']}"] = $v;
+			}
+			if(is_array($this->entity)){
+				krsort($this->entity, SORT_NUMERIC);
+			}
 
 			$this->render($this->action, 'ajax');
 		}
 	}
 
 	/**
-	* Método family
+	* Método extra_family
 	* Este método corresponde ao produto 'Familia' e retorna todos os possiveis familiares da entidade consultada
 	*
 	* @return array
 	*/
 	public function extra_family($id){
+		$this->Entity->recursive = 1;
+
+		/**
+		* Carrega os dados da entidade encontrada
+		*/
 		$entity = $this->Entity->findById($id);
 
 		$this->entity = array('Family' => array('mother' => array(), 'children' => array(), 'spouse' => array(), 'brothers' => array(), 'members' => array()));
@@ -371,21 +387,56 @@ class EntitiesController extends AppBillingsController {
 			* Busca pela mae da entidade
 			*/
 			if($entity['Entity']['h_mother'] > 0){
-				$this->entity['Family']['mother'] = $this->Entity->find('first', array(
+				$mothers = $this->Entity->find('all', array(
 					'fields' => '*',
 					'conditions' => array(
 						'Entity.id NOT' => $entity['Entity']['id'],
 						'Entity.type !=' => TP_CNPJ,
 						'Entity.h_all' => $entity['Entity']['h_mother'],
-						),
-					'limit' => 1
+						)
 				));
 
-				if(isset($this->entity['Family']['mother']['Entity']['id'])){
+
+				if(count($mothers)){
 					/**
-					* Carrega os ids dos parentes encontrados
+					* Remove todas as maes encontradas que tenham menos de 15 de diferença da entidade encontrada
 					*/
-					$members_found[] = $this->entity['Family']['mother']['Entity']['id'];
+					foreach ($mothers as $k => $v) {
+						if(isset($v['Entity']['age']) && $v['Entity']['age'] <= ($entity['Entity']['age'] + 15)){
+							unset($mothers[$k]);
+						}
+					}
+
+					/**
+					* Da preferencia para as maes que residem no mesmo estado da entidade encontrada
+					*/
+					foreach ($mothers as $k => $v) {
+						//Verifica se a entidade econtrada e a mae da entidade tem endereços
+						if(!empty($v['Address'][0]['state_id']) && !empty($entity['Address'][0]['state_id'])){
+							//Caso ambos tenham endereços, verifica se sao iguais
+							if($v['Address'][0]['state_id'] == $entity['Address'][0]['state_id']){
+								/**
+								* Carrega os ids dos parentes encontrados
+								*/
+								$this->entity['Family']['mother'][] = $v;
+								$members_found[] = $v['Entity']['id'];
+							}
+						}
+					}
+
+					/**
+					* Se com o filtro por estado nao sejam encontrados nenhuma mae, 
+					* retorna todas as maes encontradas independetes do seus respectivos estados
+					*/
+					if(!count($this->entity['Family']['mother'])){
+						foreach ($mothers as $k => $v) {
+							/**
+							* Carrega os ids dos parentes encontrados
+							*/
+							$this->entity['Family']['mother'][] = $v;
+							$members_found[] = $v['Entity']['id'];
+						}
+					}
 				}
 
 				/**
@@ -400,7 +451,7 @@ class EntitiesController extends AppBillingsController {
 			* Busca pelos filhos da entidade, caso seja mulher
 			*/
 			if($entity['Entity']['gender'] == FEMALE){
-				$brothers = $this->Entity->find('all', array(
+				$children = $this->Entity->find('all', array(
 					'fields' => '*',
 					'conditions' => array(
 						'Entity.id NOT' => $entity['Entity']['id'],
@@ -411,7 +462,17 @@ class EntitiesController extends AppBillingsController {
 					'limit' => LIMIT_FAMILY
 					));
 
-				foreach ($brothers as $k => $v) {
+				/**
+				* Remove todos os filhos encontradas que tenham mais de 15 de diferença da entidade encontrada
+				*/
+				foreach ($children as $k => $v) {
+					if(isset($v['Entity']['age']) && $v['Entity']['age'] >= ($entity['Entity']['age'] + 15)){
+						unset($mothers[$k]);
+					}
+				}
+				
+
+				foreach ($children as $k => $v) {
 					$this->entity['Family']['children'][] = $v;
 					/**
 					* Carrega os ids dos parentes encontrados
@@ -447,7 +508,54 @@ class EntitiesController extends AppBillingsController {
  			}				
 
 			/**
-			* Caso nao encontre a quantidade suficiente de supostos irmaos, busca em entidades com o mesmo sobrenome 
+			* Caso nao encontre a quantidade suficiente de supostos irmaos, busca entidades com os 2 ultimos sobre nomes iguais
+			*/
+			if(count($members_found) < LIMIT_FAMILY){
+				$limit_family = LIMIT_FAMILY - count($members_found);
+
+				$brothers = $this->Entity->find('all', array(
+					'fields' => '*',
+					'conditions' => array(
+						'Entity.h_all NOT' => $entity['Entity']['h_all'],
+						'Entity.id NOT' => $entity['Entity']['id'],
+						'Entity.id NOT' => $members_found,
+						'Entity.type !=' => TP_CNPJ,
+						'Entity.h_last1_last2' => $entity['Entity']['h_last1_last2'],
+						),
+					'limit' => $limit_family
+					));
+
+				foreach ($brothers as $k => $v) {
+					if(!in_array($v['Entity']['id'], $members_found)){
+						/**
+						* Caso o nome da entidade encontrada seja igual ao nome da mae da entidade pesquisada, é um forte indicio de que seja a sua mae
+						*/
+						if(!count($this->entity['Family']['mother']) && $v['Entity']['h_all'] == $entity['Entity']['h_mother']){
+							$this->entity['Family']['mother'] = $v;
+
+						/**
+						* Caso o nome da mae da entidade encontrada seja igual ao nome da entidade pesquisada, é um forte indicio de que seja seu irmao
+						*/
+						}else if($v['Entity']['h_mother'] == $entity['Entity']['h_all']){
+							$this->entity['Family']['children'][] = $v;
+
+						/**
+						* Em todo caso, se a entidade encontrada tenha os mesmos sobre nome da entidade pesquisada, é um forte indicio de que seja da familia
+						*/
+						}else{
+							$this->entity['Family']['members'][] = $v;
+						}
+					}
+
+					/**
+					* Carrega os ids dos parentes encontrados
+					*/
+					$members_found[] = $v['Entity']['id'];
+				}
+			}
+
+			/**
+			* Caso nao encontre a quantidade suficiente de supostos irmaos, busca entidades com todos os sobrenome iguais
 			*/
 			if(count($members_found) < LIMIT_FAMILY){
 				$limit_family = LIMIT_FAMILY - count($members_found);
@@ -539,7 +647,7 @@ class EntitiesController extends AppBillingsController {
 	}
 
 	/**
-	* Método neighborhood
+	* Método extra_neighbors
 	* Este método corresponde ao produto 'Vizinhos' e retorna todos os vizinhos da entidade consultada
 	*
 	* @return array
@@ -548,12 +656,11 @@ class EntitiesController extends AppBillingsController {
 		$entity_id = $id;
 		$address = $this->Entity->Association->find('all', array(
 			'recursive' => 0,
-			'fields' => 'Address.*',
 			'conditions' => array(
 				'Association.entity_id' => $entity_id
-				)
+				),
+			'order' => array('Association.year' => 'desc'),
 			));
-
 
 		$this->entity = array('Neighbors' => array());
 		$neighbors_found = array('mesmo_endereco' => array(), 'mesmo_andar' => array(), 'mesma_rua' => array());
@@ -584,34 +691,83 @@ class EntitiesController extends AppBillingsController {
 				/**
 				* Procura por vizinhos que estejam no mesmo andar do endereço encontrado da entidade
 				*/
-				$regexp = $this->regexpApto($v);
-				if($regexp && $limit_neighbors > 0){
-					$neighbor = $this->Entity->Address->find('all', array(
-						'fields' => '*',
-                        'joins' => array(
-                            array(
-                                'table' => 'associations',
-		                         'alias' => 'Association',
-		                         'type' => 'INNER',
-		                         'conditions' => array(
-		                         'Association.address_id = Address.id',
-		                         )
-                            )
-                        ),
-						'conditions' => array(
-							'Association.entity_id !=' => $entity_id,
-							'Address.id !=' => $v['Address']['id'],
-							'Address.id NOT' => $neighbors_found['mesmo_endereco'],
-							'Address.zipcode_id' => $v['Address']['zipcode_id'],
-							'Address.number' => $v['Address']['number'],
-							"Address.complement REGEXP '{$regexp}'",
-							),
-						'group' => 'Association.entity_id',
-						'limit' => $limit_neighbors
-						));
-					foreach ($neighbor as $v2) {
-						$neighbors_found['mesmo_andar'][$v2['Association']['entity_id']] = $v2['Association']['entity_id'];
-						$limit_neighbors--;
+				if($v['Address']['zipcode_id']){
+					$regexp = $this->regexpApto($v);
+					if($regexp && $limit_neighbors > 0){
+						$neighbor = $this->Entity->Address->find('all', array(
+							'fields' => '*',
+	                        'joins' => array(
+	                            array(
+	                                'table' => 'associations',
+			                         'alias' => 'Association',
+			                         'type' => 'INNER',
+			                         'conditions' => array(
+			                         'Association.address_id = Address.id',
+			                         )
+	                            )
+	                        ),
+							'conditions' => array(
+								'Association.entity_id !=' => $entity_id,
+								'Address.id !=' => $v['Address']['id'],
+								'Address.id NOT' => $neighbors_found['mesmo_endereco'],
+								'Address.zipcode_id' => $v['Address']['zipcode_id'],
+								'Address.number' => $v['Address']['number'],
+								"Address.complement REGEXP '{$regexp}'",
+								),
+							'group' => 'Association.entity_id',
+							'limit' => $limit_neighbors
+							));
+						foreach ($neighbor as $v2) {
+							$neighbors_found['mesmo_andar'][$v2['Association']['entity_id']] = $v2['Association']['entity_id'];
+							$limit_neighbors--;
+						}
+					}
+				}
+
+				/**
+				* Procura por vizinhos de parede da entidade encontrada
+				*/
+				if($limit_neighbors > 0){
+					/**
+					* Verifica se o CEP nao é generico
+					*/
+					if($v['Address']['zipcode_id'] && !preg_match('/[0-9]{5}000/si', preg_replace('/[^0-9]/si', '', $v['Address']['zipcode']))){
+						$cond = array(
+								'Address.id !=' => $v['Address']['id'],
+								'Association.entity_id !=' => $entity_id,
+								'Address.id NOT' => $neighbors_found['mesmo_endereco'],
+								'Address.id NOT' => $neighbors_found['mesmo_andar'],
+								'Address.zipcode_id' => $v['Address']['zipcode_id'],
+								);
+
+						if(!empty($v['Address']['number']) && is_numeric($v['Address']['number'])){
+							$number_ini = $v['Address']['number'] - 3;
+							$number_ini = ($number_ini < 0)?1:$number_ini;
+							$number_end = $v['Address']['number'] + 3;
+							$cond['Address.number BETWEEN ? AND ?'] = array($number_ini, $number_end);
+						}
+						
+						$neighbor = $this->Entity->Address->find('all', array(
+							'fields' => '*',
+	                        'joins' => array(
+								array(
+									'table' => 'associations',
+									'alias' => 'Association',
+									'type' => 'INNER',
+									'conditions' => array(
+									'Association.address_id = Address.id',
+									)
+								)
+	                        ),
+							'conditions' => $cond,
+							'group' => 'Association.entity_id',
+							'limit' => $limit_neighbors
+							));
+
+						foreach ($neighbor as $v2) {
+							$neighbors_found['mesma_rua'][$v2['Association']['entity_id']] = $v2['Association']['entity_id'];
+							$limit_neighbors--;
+						}
 					}
 				}
 
@@ -622,7 +778,7 @@ class EntitiesController extends AppBillingsController {
 					/**
 					* Verifica se o CEP nao é generico
 					*/
-					if(preg_match('/[0-9]{5}000/si', preg_replace('/[^0-9]/si', '', $v['Address']['zipcode']))){
+					if($v['Address']['zipcode_id'] && !preg_match('/[0-9]{5}000/si', preg_replace('/[^0-9]/si', '', $v['Address']['zipcode']))){
 						$cond = array(
 								'Address.id !=' => $v['Address']['id'],
 								'Association.entity_id !=' => $entity_id,
@@ -688,9 +844,10 @@ class EntitiesController extends AppBillingsController {
 		$regexp = false;
 
 		if(!empty($address['Address']['complement'])){
-			preg_match('/(apartamento|apto|apt|ap|sl|lj).?([0-9]{1,})*/si', $address['Address']['complement'], $vet);
+			preg_match('/(apartamento|apto|apt|ap|sl|lj) ?([0-9]{1,})*/si', $address['Address']['complement'], $vet);
+
 			if(isset($vet[2])){
-				$regexp = '(apartamento|apto|apt|ap|sl|lj).?' . substr($vet[2], 0, -1) . '[0-9]';
+				$regexp = '(apartamento|apto|apt|ap|sl|lj) ?' . substr($vet[2], 0, -1) . '[0-9]';
 			}
 		}
 
@@ -710,7 +867,7 @@ class EntitiesController extends AppBillingsController {
 
 		if(is_array($this->entity) && count($this->entity)){
 			foreach ($this->entity as $k => $v) {
-				$address = $this->Entity->Address->findById($v['Association'][key($v['Association'])]['address_id']);
+				$address = (!empty($v['Association'][key($v['Association'])]['address_id']))?$this->Entity->Address->findById($v['Association'][key($v['Association'])]['address_id']):null;
 				if(!isset($map[$address['Address']['state_id']]['qt'])){
 					$map[$address['Address']['state_id']]['qt'] = 1;
 				}else{

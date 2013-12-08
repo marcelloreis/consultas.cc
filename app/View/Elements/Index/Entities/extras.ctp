@@ -4,63 +4,26 @@
 * Inicializa o array com as informacoes extras da entidade
 */
 $extras = array(
-	'extra_mobile' => array(
+	'mobile' => array(
 		'icon' => 'icon-mobile-phone',
 		'id' => array(),
-		'ini' => 0,
-		'end' => 0,
 		), 
-	'extra_landline' => array(
+	'landline' => array(
 		'icon' => 'icon-phone',
 		'id' => array(),
-		'ini' => 0,
-		'end' => 0,
 		), 
-	'extra_locator' => array(
+	'address' => array(
 		'icon' => 'icon-globe',
 		'id' => array(),
-		'ini' => 0,
-		'end' => 0,
 		), 
 	);
 foreach ($entity['Association'] as $k => $v) {
-	/**
-	* Carrega as informacoes extras de telefone movel
-	*/
-	if(!empty($v['mobile_id'])){
-		$extras['extra_mobile']['id'][$v['mobile_id']] = $v['mobile_id'];
-
-		if(empty($extras['extra_mobile']['ini']) || $extras['extra_mobile']['ini'] > $v['year']){
-			$extras['extra_mobile']['ini'] = $v['year'];
-		}
-		if(empty($extras['extra_mobile']['end']) || $extras['extra_mobile']['end'] < $v['year']){
-			$extras['extra_mobile']['end'] = $v['year'];
-		}
-	}
-
-	/**
-	* Carrega as informacoes extras de telefone fixo
-	*/
-	if(!empty($v['landline_id'])){
-		$extras['extra_landline']['id'][$v['landline_id']] = $v['landline_id'];
-		if(empty($extras['extra_landline']['ini']) || $extras['extra_landline']['ini'] > $v['year']){
-			$extras['extra_landline']['ini'] = $v['year'];
-		}
-		if(empty($extras['extra_landline']['end']) || $extras['extra_landline']['end'] < $v['year']){
-			$extras['extra_landline']['end'] = $v['year'];
-		}
-	}
-
-	/**
-	* Carrega as informacoes extras do endereco
-	*/
-	if(!empty($v['address_id'])){
-		$extras['extra_locator']['id'][$v['address_id']] = $v['address_id'];
-		if(empty($extras['extra_locator']['ini']) || $extras['extra_locator']['ini'] > $v['year']){
-			$extras['extra_locator']['ini'] = $v['year'];
-		}
-		if(empty($extras['extra_locator']['end']) || $extras['extra_locator']['end'] < $v['year']){
-			$extras['extra_locator']['end'] = $v['year'];
+	foreach ($extras as $k2 => $v2) {
+		/**
+		* Carrega as informacoes extras de telefone movel
+		*/
+		if(!empty($v["{$k2}_id"])){
+			$extras[$k2]['id'][$v["{$k2}_id"]] = $v["{$k2}_id"];
 		}
 	}
 }
@@ -74,11 +37,12 @@ foreach ($entity['Association'] as $k => $v) {
 		<div class="box-content nopadding">
 			<ul class="tabs tabs-inline tabs-top">
 				<?php foreach($extras as $k => $v):?>
+				<?php $k = str_replace('address', 'locator', $k)?>
 				<li>
 					<?php foreach($v['id'] as $k2 => $v2):?>
 						<?php echo $this->Form->hidden("Assoc.id.{$v2}", array('value' => $v2))?>
 					<?php endforeach?>
-					<?php echo $this->Html->link('<i class="' . $v['icon'] . '"></i> ' . __(ucfirst(str_replace('extra_', '', $k))) . ' (' . count($v['id']) . ')', array('#' => "tab-{$k}"), array('rel' => "/entities/{$k}", 'data-toggle' => 'tab', 'class-box' => "tab-{$k}", 'class' => 'load-assoc', 'escape' => false))?>
+					<?php echo $this->Html->link('<i class="' . $v['icon'] . '"></i> ' . __(ucfirst($k)) . ' (' . count($v['id']) . ')', array('#' => "tab-{$k}"), array('rel' => "/entities/extra_{$k}", 'data-toggle' => 'tab', 'class-box' => "tab-{$k}", 'class' => 'load-assoc', 'escape' => false))?>
 				</li>
 				<?php endforeach?>
 				<li>
@@ -94,7 +58,8 @@ foreach ($entity['Association'] as $k => $v) {
 				</div>
 
 				<?php foreach($extras as $k => $v):?>
-				<div class="tab-pane" id="<?php echo "tab-{$k}"?>"></div>
+					<?php $k = str_replace('address', 'locator', $k)?>
+					<div class="tab-pane" id="<?php echo "tab-{$k}"?>"></div>
 				<?php endforeach?>
 				<div class="tab-pane" id="tab-extra_family"></div>
 				<div class="tab-pane" id="tab-extra_neighbors"></div>

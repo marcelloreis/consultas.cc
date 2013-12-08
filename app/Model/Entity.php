@@ -28,7 +28,7 @@ class Entity extends AppModelClean {
 	/**
 	* Behavior
 	*/
-	public $actsAs = array('Containable');
+	// public $actsAs = array('Containable');
 
 	/**
 	* Virtual fields
@@ -45,7 +45,7 @@ class Entity extends AppModelClean {
 	*
 	* @var integer
 	*/
-	public $recursive = -1;
+	// public $recursive = -1;
 
 	/**
 	* Validation rules
@@ -93,7 +93,6 @@ class Entity extends AppModelClean {
 			'foreignKey' => 'entity_id',
 			'associationForeignKey' => 'address_id',
 			'unique' => 'keepExisting',
-			'limit' => 1,
 			'order' => array('Association.year' => 'desc')
 		),
 		'Landline' => array(
@@ -102,7 +101,6 @@ class Entity extends AppModelClean {
 			'foreignKey' => 'entity_id',
 			'associationForeignKey' => 'landline_id',
 			'unique' => 'keepExisting',
-			'limit' => 1,
 			'order' => array('Association.year' => 'desc')
 		),
 		'Mobile' => array(
@@ -111,7 +109,6 @@ class Entity extends AppModelClean {
 			'foreignKey' => 'entity_id',
 			'associationForeignKey' => 'mobile_id',
 			'unique' => 'keepExisting',
-			'limit' => 1,
 			'order' => array('Association.year' => 'desc')
 		)
 	);

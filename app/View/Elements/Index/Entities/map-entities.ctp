@@ -1,5 +1,13 @@
 <?php 
 /**
+* Alterando o titulo padrao da view
+*/
+$this->start('title-view');
+echo $this->element('Components/Entities/title-view');
+$this->end();
+
+
+/**
 * Adiciona os CSSs e Scripts de acordo com as views invocadas
 */
 $this->append('css-on-demand');
@@ -29,9 +37,10 @@ echo $this->AppGrid->create($modelClass, array('id' => 'index-table', 'tableClas
 * Monta o cabeçalho
 */
 unset($columns);
+$columns['uf'] = 'UF';
+$columns['city'] = 'Cidade';
 $columns['doc'] = 'Documento';
 $columns['name'] = 'Nome';
-$columns['mother'] = 'Mãe';
 $columns['age'] = 'Idade';
 $columns['action'] = 'Ações';
 
@@ -50,12 +59,19 @@ if(count($$map)){
         */
         $v[$modelClass]['doc_width'] = '50';
         $v[$modelClass]['age_width'] = '10';
+        $v[$modelClass]['uf_width'] = '45';
     	
         $v[$modelClass]['action'] = $this->element('Index/Entities/action', array('id' => $v[$modelClass]['id']));
 
-        $v[$modelClass]['mother'] = !empty($v[$modelClass]['mother'])?$v[$modelClass]['mother']:$this->element('Components/Entities/notfound');
+        if(!empty($v['Address'][0])){
+            $v['Address']['state'] = $v['Address'][0]['state'];
+            $v['Address']['city'] = $v['Address'][0]['city'];
+        }
+
+        $v[$modelClass]['uf'] = !empty($v['Address']['state'])?$this->Html->image('flags/mini/' . strtolower($v['Address']['state']) . '.gif', array('class' => 'img-polaroid', 'style' => 'margin-right:5px;')) . $v['Address']['state']:$this->element('Components/Entities/notfound');
+        $v[$modelClass]['city'] = !empty($v['Address']['city'])?$v['Address']['city']:$this->element('Components/Entities/notfound');
         $v[$modelClass]['age'] = !empty($v[$modelClass]['age'])?$v[$modelClass]['age']:$this->element('Components/Entities/notfound');
-        $v[$modelClass]['doc'] = $this->AppUtils->cpf($v[$modelClass]['doc']);
+        $v[$modelClass]['doc'] = ($v[$modelClass]['type'] == TP_CNPJ)?$this->AppUtils->cnpj($v[$modelClass]['doc']):$this->AppUtils->cpf($v[$modelClass]['doc']);
         $body .= $this->AppGrid->tr($v[$modelClass]);
     }
     echo $this->Html->tag('tbody', $body);

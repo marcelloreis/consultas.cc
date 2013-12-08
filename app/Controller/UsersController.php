@@ -197,7 +197,6 @@ class UsersController extends AppController {
                 'conditions' => array(
                     'Billing.client_id' => $user['client_id']
                     ),
-                'group' => 'Billing.package_id',
                 'order' => array('Billing.created' => 'desc')
                 ));  
             $this->Session->write("Client.billing_id", $billing['Billing']['id']);          

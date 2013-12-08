@@ -13,5 +13,5 @@ switch ($yearDiff) {
         break;
 }
 
-echo $this->Html->link($year, '#', array('class' => 'btn ' . $yearClass))
+echo $this->Html->link($year, 'javascript:void(0)', array('class' => 'btn ' . $yearClass))
 ?>
