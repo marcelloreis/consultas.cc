@@ -58,6 +58,7 @@ class AppController extends Controller {
 	*/
 	public $helpers = array(
 		'Js' => array('Jquery'), 
+		'Cache',
 		'Session',
 		'Main.AppGrid', 
 		'Main.AppForm', 
@@ -75,8 +76,10 @@ class AppController extends Controller {
 		'hasAndBelongsToMany',
 		);
 
-
-
+	/**
+	* Mantem o cache das views por 1 ano
+	*/
+	public $cacheAction = "1 year";
 
 	/**
 	* Método beforeFilter
