@@ -75,7 +75,6 @@ class AppController extends Controller {
 		'belongsTo',
 		'hasAndBelongsToMany',
 		);
-
 	/**
 	* Mantem o cache das views por 1 ano
 	*/
@@ -571,6 +570,11 @@ class AppController extends Controller {
 	* @return void
 	*/
 	public function edit($id=null){
+		/**
+		* Desabilita o cache da bilhetagem
+		*/
+		$this->cacheAction = 0;
+		
 		/**
 		* Controle de encapsulamento.
 		* Independente do action, sempre q a funcao "edit" for invocada

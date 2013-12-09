@@ -24,6 +24,7 @@ class AppBillingsController extends AppController {
 	protected $product_id;
 	protected $package_id;
 	protected $billing_id;
+	protected $cache_id;
 	protected $validity_orig;
 	protected $balance;
 	protected $price_id;
@@ -204,6 +205,11 @@ class AppBillingsController extends AppController {
 	* @return void
 	*/
     private function charge(){
+		/**
+		* Desabilita o cache da bilhetagem
+		*/
+		$this->cacheAction = 0;
+
     	/**
     	* Verifica se a consulta realizada pode ser bilhetada
     	*/

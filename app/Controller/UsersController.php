@@ -109,6 +109,11 @@ class UsersController extends AppController {
     */
     public function login() {
         /**
+        * Desabilita o cache do login
+        */
+        $this->cacheAction = 0;
+
+        /**
         * Deleta a sessao que guarda o codigo da rede social q o usuario escolheu para usar como login
         */
         $this->Session->delete('User.Social.api');

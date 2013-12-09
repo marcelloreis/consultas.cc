@@ -24,7 +24,7 @@ $pos = array(
 </style>
 <ul id="map">
 	<?php 
-// debug($map_found);die;
+// debug($entity['map']);die;
 	foreach($uf as $k => $v){
 		/**
 		* Parametros padrao para todos os links
@@ -34,10 +34,10 @@ $pos = array(
 		$link_params['class'] = 'map-tooltip'; 
 		$link_params['title'] = "{$states[$k]}"; 
 		$badge = '';
-		if(array_key_exists($k, $map_found)){
+		if(array_key_exists($k, $entity['map'])){
 			$link_params['data-toggle'] = 'tooltip'; 
 			$link_params['class'] = 'map-tooltip ativo'; 
-			$badge = '<span style="z-index:100;position: relative;top:' . $pos[$k]['top'] . 'px;left:' . $pos[$k]['left'] . 'px" class="badge badge-info">' . $map_found[$k]['qt'] . '</span>';
+			$badge = '<span style="z-index:100;position: relative;top:' . $pos[$k]['top'] . 'px;left:' . $pos[$k]['left'] . 'px" class="badge badge-info">' . $entity['map'][$k]['qt'] . '</span>';
 		}
 		?>
 		<li estado="<?php echo strtolower($v)?>" id="c<?php echo strtolower($v)?>"><?php echo $this->Html->link($this->Html->image('null.gif', array('alt' => $link_params['title'])) . $badge, 'javascript:void(0);', $link_params)?></li>

@@ -13,4 +13,3 @@ $this->assign('sidebar-class-hidden', 'nav-hidden');
 		<?php echo $this->element('Index/Entities/map-entities')?>
 	</div>
 </div>
-

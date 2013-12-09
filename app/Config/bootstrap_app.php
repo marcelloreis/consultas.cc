@@ -119,3 +119,24 @@ define('TUNING_IMPORT_ALL_DATA', 13);
 define('TUNING_FILE_LOAD', 14);
 //Serializa o array
 define('TUNING_SERIALIZE', 15);
+
+
+/**
+* Configuracao do cache das entidades
+*/
+Cache::config('entities', array(
+    'engine' => 'File',
+    'duration' => '+999 days',
+    'probability' => 100,
+    'path' => CACHE . 'entities' . DS,
+));
+
+/**
+* Configuracao do cache dos componentes do sistema
+*/
+Cache::config('components', array(
+    'engine' => 'File',
+    'duration' => '+999 days',
+    'probability' => 100,
+    'path' => CACHE . 'components' . DS,
+));

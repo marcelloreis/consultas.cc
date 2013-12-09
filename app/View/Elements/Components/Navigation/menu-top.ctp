@@ -10,7 +10,7 @@ $menu = array(
     */
     array(
         'label' => '<span>Consultar</span>', 
-        'url' => array('controller' => 'entities', '#' => 'entity-search')
+        'url' => array('controller' => 'entities', 'action' => 'index', '#' => 'entity-search')
         ),
     /**
     * Seguranca
