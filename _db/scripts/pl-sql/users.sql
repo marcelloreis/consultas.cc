@@ -1,11 +1,11 @@
 #Criando um usuario
-CREATE USER 'nome_do_usuario'@'localhost' IDENTIFIED BY 'senha';
-GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP ON nome_do_banco_da_aplicacao.* TO 'nome_do_usuario'@'localhost';
+CREATE USER 'sexshoplove_me'@'localhost' IDENTIFIED BY '53x5h0p*m3**p455';
+GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP ON sexshoplove_me.* TO 'sexshoplove_me'@'localhost';
 
-CREATE USER 'nome_do_usuario'@'%' IDENTIFIED BY 'senha';
-GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP ON nome_do_banco_da_aplicacao.* TO 'nome_do_usuario'@'%';
+CREATE USER 'sexshoplove_me'@'%' IDENTIFIED BY '53x5h0p*m3**p455';
+GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP ON sexshoplove_me.* TO 'sexshoplove_me'@'%';
 
 #Deletando um usuario
-drop user 'nome_do_usuario'@localhost;
-drop user 'nome_do_usuario'@'%';
+drop user 'sexshoplove_me'@localhost;
+drop user 'sexshoplove_me'@'%';
 flush privileges;

@@ -18,6 +18,6 @@ $qt_found = count($$map);
 <div class="box-title">
 	<h3>
 		<i class="icon-table"></i>
-		<strong><?php echo $qt_found?></strong> Resultados encontrado para <code><?php echo $params?></code>
+		<strong><?php echo $qt_found?></strong> Resultados encontrado para <code style="white-space:normal;"><?php echo $params?></code>
 	</h3>
 </div>
