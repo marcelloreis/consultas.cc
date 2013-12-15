@@ -78,7 +78,7 @@ class AppController extends Controller {
 	/**
 	* Mantem o cache das views por 1 ano
 	*/
-	public $cacheAction = "1 year";
+	// public $cacheAction = "1 year";
 
 	/**
 	* Método beforeFilter
