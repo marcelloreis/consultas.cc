@@ -67,8 +67,9 @@ CakeLog::config('error', array(
 CakePlugin::load('Main', array('bootstrap' => true));
 CakePlugin::load('Google', array('bootstrap' => true));
 CakePlugin::load('Facebook', array('bootstrap' => true));
-CakePlugin::load('DebugKit');
 CakePlugin::load('Dompdf', array('bootstrap' => true));
+CakePlugin::load('Upload');
+CakePlugin::load('DebugKit');
 
 /**
  * PAGINATION

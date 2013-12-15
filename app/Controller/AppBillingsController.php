@@ -92,15 +92,15 @@ class AppBillingsController extends AppController {
 	}		
 
     /**
-	* Método isInfinite
-	* Regras de autorização configurados para verificar se o usuário tem permissoes Master, 
+	* Método isUnlimited
+	* Regras de autorização configurados para verificar se o usuário tem acesso a consultas ilimitadas, 
 	* ou seja, caso o suario tenha acesso master, nao sera necessario a verificacao de segurança
 	*
 	* @return void
 	*/
-	private function isInfinite(){
+	private function isUnlimited(){
 		$return = false;
-		if($this->userLogged['infinite']){
+		if($this->userLogged['unlimited']){
 			$return = true;
 		}
 
@@ -120,7 +120,7 @@ class AppBillingsController extends AppController {
 		* Caso o usuario nao tenho acesso ilimitado as consultas, 
 		* verificar se o usuario logado tem autorizacao para efetuar as consultas
 		*/
-		if(!$this->isInfinite()){
+		if(!$this->isUnlimited()){
 			/**
 			* Verifica se o usuario ja efetuou a compra dos creditos
 			*/
@@ -183,14 +183,14 @@ class AppBillingsController extends AppController {
 		/**
 		* Desabilita a bilhetagem quando a consulta realizada nao trouxer registros
 		*/
-		if(is_null($this->entity) || !count($this->entity)){
+		if(empty($this->entity['Entity'])){
 			$enabled = false;
 		}
 
 		/**
 		* Desabilita a bilhetagem quando o usuario tiver acesso a consultas ilimitadas
 		*/
-		if($this->isInfinite()){
+		if($this->isUnlimited()){
 			$enabled = false;
 		}
 

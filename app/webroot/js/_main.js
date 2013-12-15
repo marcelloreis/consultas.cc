@@ -123,6 +123,15 @@ $(document).ready(function(){
             scrollTop: $('#entity-extras').offset().top
         }, 600);                            
     });
+
+    /**
+    * Selecao da cor padrao do usuario
+    */
+    $('.chosen-color > li > span').click(function(){
+        $('.chosen-color > li > span').removeClass('img-circle');
+        $('#UserTheme').val('theme-' + $(this).attr('class'));
+        $(this).addClass('img-circle');
+    });
 });
 
 var Nz = {

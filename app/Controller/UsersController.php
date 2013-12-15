@@ -70,7 +70,7 @@ class UsersController extends AppController {
     * @param string $id
     * @return void
     */
-    public function edit($id=null){
+    public function edit($id=null){        
         /**
          * Verifica se o formulário foi submetido por post
          */

@@ -19,26 +19,51 @@ App::uses('AppModel', 'Model');
  */
 class User extends AppModel {
 
-/**
- * Display field
- *
- * @var string
- */
+	/**
+	 * Display field
+	 *
+	 * @var string
+	 */
 	public $displayField = 'name';
 
+	/**
+	* Virtual fields
+	*
+	* @var string
+	*/
+	public $virtualFields = array(
+    	'avatar_27' => "concat('/files/user/picture/', User.picture_dir, '/27x27_', User.picture)",
+    	'avatar_158' => "concat('/files/user/picture/', User.picture_dir, '/158x158_', User.picture)",
+	);
 
-/**
- * Behaviors
- *
- * @var string
- */
-    public $actsAs = array('Acl' => array('type' => 'requester'));
+	/**
+	 * Behaviors
+	 *
+	 * @var string
+	 */
+    public $actsAs = array(
+    	'Acl' => array(
+    		'type' => 'requester'
+    		),
+        'Upload.Upload' => array(
+            'picture' => array(
+                'fields' => array(
+                    'dir' => 'picture_dir'
+                ), 
+                'thumbsizes' => array( 
+	                '27x27' => '27x27', 
+	                '158x158' => '158x158', 
+                ), 
+                'thumbnailMethod'	=> 'php',
+            )
+        )
+	);
 
-/**
- * Validation rules
- *
- * @var array
- */
+	/**
+	 * Validation rules
+	 *
+	 * @var array
+	 */
 	public $validate = array(
 		'group_id' => array(
 			'numeric' => array(

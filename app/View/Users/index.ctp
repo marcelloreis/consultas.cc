@@ -20,6 +20,10 @@ unset($columns['password']);
 unset($columns['google_token']);
 unset($columns['google_calendar_key']);
 unset($columns['given_name']);
+unset($columns['theme']);
+unset($columns['picture_dir']);
+unset($columns['avatar_27']);
+unset($columns['avatar_158']);
 echo $this->Html->tag('thead', $this->AppGrid->tr($columns));
 
 /**
@@ -39,9 +43,9 @@ if(count($$map)){
         $v[$modelClass]['id'] = $this->AppForm->input("{$modelClass}.id.{$k}", array('type' => 'checkbox', 'template' => 'form-input-clean', 'value' => $v[$modelClass]['id'], 'placeholder' => $v[$modelClass][$fieldText]));
         $v[$modelClass]['group_id'] = $v['Group']['name'];
         $v[$modelClass]['status'] = $this->AppUtils->boolTxt($v[$modelClass]['status'], 'Ativo', 'Inativo');
-        $v[$modelClass]['infinite'] = $this->AppUtils->boolTxt($v[$modelClass]['infinite']);
-        $avatar = isset($v[$modelClass]['picture']) && !empty($v[$modelClass]['picture'])?$v[$modelClass]['picture']:'avatar.jpg';
-        $v[$modelClass]['picture'] = $this->Html->image($avatar, array('id' => "avatar-{$v[$modelClass]['id']}", 'width' => 50, 'height' => 50));
+        $v[$modelClass]['unlimited'] = $this->AppUtils->boolTxt($v[$modelClass]['unlimited']);
+        $avatar = isset($v[$modelClass]['avatar_27']) && !empty($v[$modelClass]['avatar_27'])?$v[$modelClass]['avatar_27']:'avatar-27x27.png';
+        $v[$modelClass]['picture'] = $this->Html->image($avatar, array('id' => "avatar-{$v[$modelClass]['id']}", 'class' => 'img-polaroid'));
 
         $body .= $this->AppGrid->tr($v[$modelClass]);
     }

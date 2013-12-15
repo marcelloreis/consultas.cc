@@ -78,6 +78,9 @@ msgstr "Documento"
 msgid "Edit"
 msgstr "Editar"
 
+msgid "Edit_account"
+msgstr "Atualizar Informações"
+
 msgid "Entities"
 msgstr "Consultas"
 
@@ -129,6 +132,9 @@ msgstr "Pacotes"
 msgid "Paid"
 msgstr "Pago"
 
+msgid "Partners"
+msgstr "Colaboradores"
+
 msgid "Picture"
 msgstr "Foto"
 
@@ -140,6 +146,9 @@ msgstr "Preço"
 
 msgid "Products"
 msgstr "Produtos"
+
+msgid "Projects"
+msgstr "Projetos"
 
 msgid "Qt queries"
 msgstr "Qt consultas"
@@ -180,6 +189,9 @@ msgstr "RG do sócio responsável 2"
 msgid "Responsible partner2"
 msgstr "Sócio responsável 2"
 
+msgid "Skills"
+msgstr "Habilidades"
+
 msgid "State id"
 msgstr "Estado"
 
@@ -197,6 +209,9 @@ msgstr "Tipo da consulta"
 
 msgid "Translations"
 msgstr "Traduções"
+
+msgid "Unlimited"
+msgstr "Ilimitado"
 
 msgid "User id"
 msgstr "Usuário"

@@ -12,7 +12,7 @@
         <!-- <div class="remember">
           <input type="checkbox" name="remember" class='icheck-me' data-skin="square" data-color="blue" id="remember"> <label for="remember">Remember me</label>
         </div> -->
-        <?php echo $this->AppForm->btn('Logar', array('template' => 'Users/form-input-btn'))?>
+        <?php echo $this->AppForm->btn('Logar', array('template' => 'Users/form-input-btn-login'))?>
       </div>
     </form>
     <?php echo $this->AppForm->end(); ?>

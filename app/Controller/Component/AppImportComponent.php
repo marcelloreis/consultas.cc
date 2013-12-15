@@ -739,7 +739,7 @@ class AppImportComponent extends Component {
 		$street = preg_replace('/^trv\.?|trevo /si', '', $street);
 		$street = preg_replace('/^vl\.?|vila /si', '', $street);
 		$street = preg_replace('/^vd\.?|viaduto /si', '', $street);
-		$street = preg_replace('/comtipo r /si', '', $street);
+		$street = preg_replace('/comtipo/si', '', $street);
 		$street = preg_replace('/cento e um/si', '101', $street);
 
 		/**
