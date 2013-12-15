@@ -1,3 +1,14 @@
+<?php 
+/**
+* Adiciona os CSSs e Scripts de acordo com as views invocadas
+*/
+$this->append('css-on-demand');
+echo $this->Html->css(array('plugins/chosen/chosen'));
+$this->end();
+
+echo $this->Html->script(array('plugins/chosen/chosen.jquery.min'), array('defer' => true));
+echo $this->Html->script(array('plugins/maskedinput/jquery.maskMoney.min'), array('defer' => true));
+?>
 <div class="row-fluid">
     <div class="box box-bordered">
         <div style="border-top: 2px solid #E5E5E5;" class="box-content nopadding">
@@ -41,7 +52,26 @@
                             </label>
                         </div>
                     </div>
-                </div>
+                </div>                
+
+                <?php if(!empty($filters)):?>
+                    <div class="control-group"></div>
+                    <div class="row-fluid" style="margin-left: 0px;">
+                        <div class="span12">
+                            <div class="control-group">
+                                <label class="control-label">Filtros</label>
+                                <div class="controls">
+                                    <?php foreach($filters as $k => $v):?>
+                                        <div class="span3">
+                                            <?php $selected = !empty($this->params['named'][$k])?$this->params['named'][$k]:'';?>
+                                            <?php echo $this->AppForm->input($k, array('empty' => 'Todos os ' . __(ucfirst(str_replace('_', ' ', $k))) . '(s)', 'options' => $v, 'selected' => $selected, 'template' => 'form-input-clean', 'type' => 'select', 'class' => 'chosen-select filter-index'))?>
+                                        </div>
+                                    <?php endforeach?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif?>
             <?php echo $this->AppForm->end(); ?>
         </div>
     </div>

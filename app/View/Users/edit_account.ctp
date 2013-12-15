@@ -36,6 +36,7 @@ echo $this->Html->script(array('plugins/fileupload/bootstrap-fileupload.min'), a
                 <div class="tab-pane active" id="profile">
 
                     <?php echo $this->Form->input('id');?>
+                    <?php echo $this->Form->hidden('status', array('value' => true));?>
                         <div class="row-fluid">
                             <div class="span2">
                                 <?php echo $this->AppForm->input('picture', array('type' => 'file', 'template' => 'Users/form-input-picture'));?>

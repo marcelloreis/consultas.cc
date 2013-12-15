@@ -30,6 +30,38 @@ class QueriesController extends AppController {
 	*/
 	public $name = 'Queries';
 
+	private $tp_search;
+
+	/**
+	* Método beforeFilter
+	* Esta função é executada antes de todas ações do controlador. 
+	* E no caso da framework, esta sendo usado para checar uma sessão ativa e inspecionar permissões.
+	*
+	* @override Metodo AppController.beforeFilter
+	* @return void
+	*/
+	public function beforeFilter() {
+		//@override
+		parent::beforeFilter();
+
+		/**
+		* Carega os tipos de consultas
+		*/
+		$this->tp_search = array(
+			TP_SEARCH_ID => 'ID',
+			TP_SEARCH_DOC => 'Documento',
+			TP_SEARCH_NAME => 'Nome',
+			TP_SEARCH_PHONE => 'Telefone',
+			TP_SEARCH_MOBILE => 'Tel. Móvel',
+			TP_SEARCH_ADDRESS => 'Endereço',
+			TP_SEARCH_EXTRA_MOBILE => 'Extra - Tel. Móvel',
+			TP_SEARCH_EXTRA_LANDLINE => 'Extra - Telefone',
+			TP_SEARCH_EXTRA_LOCATOR => 'Extra - Localizador',
+			TP_SEARCH_EXTRA_FAMILY => 'Extra - Família',
+			TP_SEARCH_EXTRA_NEIGHBORS => 'Extra - Vizinhos',
+		);
+	}
+
     /**
     * Chamado depois controlador com as regras de negócio, mas antes da visão ser renderizada.
 	*
@@ -40,18 +72,10 @@ class QueriesController extends AppController {
 		//@override
     	parent::beforeRender();
 
-		/**
-		* Carega os tipos de consultas
-		*/
-		$tp_search = array(
-			TP_SEARCH_ID => 'ID',
-			TP_SEARCH_DOC => 'Documento',
-			TP_SEARCH_PHONE => 'Telefone',
-			TP_SEARCH_MOBILE => 'Tel. Móvel',
-			TP_SEARCH_NAME => 'Nome',
-			TP_SEARCH_ADDRESS => 'Endereço',
-		);
-		$this->set(compact('tp_search'));
+    	/**
+    	* Carrega os tipos de buscas para a view
+    	*/
+		$this->set('tp_search', $this->tp_search);
 	}	
 
 	/**
@@ -64,6 +88,15 @@ class QueriesController extends AppController {
 	*/
 	public function index($params=array()){
 		unset($this->Query->Billing->virtualFields['balance']);
+
+		/**
+		* Carrega os filtros do painel de buscas
+		*/
+		$this->filters = array(
+			'user_id' => $this->Query->User->find('list', array('id', 'name')),
+			'tp_search' => $this->tp_search,
+			);
+
 		//@override
 		parent::index($params);
 	}	

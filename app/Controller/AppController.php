@@ -36,6 +36,7 @@ class AppController extends Controller {
 	*/
 	private $Model;
 	protected $isRedirect = true;
+	protected $filters;
 	public $saveType = 'save';
 	public $limit;
 	public $userLogged;
@@ -184,7 +185,7 @@ class AppController extends Controller {
     				),
     			'scope' => array(
     				'User.status' => 1,
-    				'User.expire >' => date('Y-m-d')
+    				// 'User.expire >' => date('Y-m-d')
     				)
     			)
     		);
@@ -215,6 +216,12 @@ class AppController extends Controller {
 		*/
 		$this->set('belongsTo', $this->Model->belongsTo);
 		$this->set('hasAndBelongsToMany', $this->Model->hasAndBelongsToMany);
+		/**
+		* Carrega os filtros de buscas do index, caso exista
+		*/
+		if(!empty($this->filters)){
+			$this->set('filters', $this->filters);
+		}
 
 		/**
 		* Verifica se existe uma tabela relacionada ao model
@@ -404,20 +411,6 @@ class AppController extends Controller {
 		$this->view = 'index';
 
 		/**
-		* Verifica se o index foi chamado apartir de uma grid de adicao de relacionamento de dados
-		* Caso seja, sera excluído da consulta todos os registros que ja estao relacionado ao
-		* id do model passado por parametro
-		*/
-		if(isset($this->params['named']['habtmModel']) && isset($this->params['named']['habtmId'])){
-			//Carrega todos os atributos do relacionamento
-			$habtm = $this->Model->hasAndBelongsToMany[$this->params['named']['habtmModel']];
-			//Carrega todos os registros que ja estao relacionado entre os dois models
-			$habtmList = $this->Model->$habtm['with']->find('list', array('fields' => array('id', $habtm['foreignKey']), 'conditions' => array($habtm['associationForeignKey'] => $this->params['named']['habtmId'])));
-			//Retira da consulta os registros relacionados encontrados
-			$params['conditions']["{$this->modelClass}.{$this->Model->primaryKey} NOT"] = $habtmList;
-		}
-
-		/**
 		* Verifica se existe uma tabela relacionada ao model
 		*/
 		if($this->Model->useTable){
@@ -436,6 +429,23 @@ class AppController extends Controller {
 				$search = $this->params->query['data'][$this->modelClass]['search'];
 			}
 
+			//Guarda as condicoes montadas com os campos de texto padrao dos models
+			$searchMap = array();
+
+			/**
+			* Verifica se algum filtro foi carregado
+			*/
+			if(!empty($this->params['named'])){
+				foreach ($this->params['named'] as $k => $v) {
+					//Verifica se o parametro é uma chave estrangeira
+					if(array_key_exists($k, $this->filters) && !empty($v)){
+						$searchMap[]["{$this->modelClass}.$k"] = $v;
+					}
+				}
+
+				$params['conditions'] = $searchMap;
+			}
+
 			/**
 			* Caso a variavel padrao de busca 'search' esteja setada, monta as condicoes de busca
 			*
@@ -443,8 +453,6 @@ class AppController extends Controller {
 			* DECLARADAS EM Model/NomeDoModel.php
 			*/
 			if(!empty($search)){
-				//Guarda as condicoes montadas com os campos de texto padrao dos models
-				$searchMap = array();
 				//Monta as condicoes de busca do campo de texto principal dos models associados
 				foreach ($this->Model->belongsTo as $k => $v) {
 					if(method_exists($this->Model->$k, 'getFieldText')){
@@ -509,7 +517,7 @@ class AppController extends Controller {
 	    	$this->set(Inflector::variable($this->modelClass), $map);
 
 			/**
-			* Conta quantos registros NAO foram enviados para a lixeiro e nem deletados
+			* Conta quantos registros NAO foram enviados para a lixeira e nem deletados
 			*/
 			// unset($params['conditions']["{$this->modelClass}." . ACTION_TRASH]);
 			// unset($params['conditions']["{$this->modelClass}." . ACTION_DELETE]);
@@ -804,13 +812,12 @@ class AppController extends Controller {
 				'controller' => $this->params['controller'],
 				'action' => $this->params['action']
 				);
-
-			foreach ($this->data[$this->modelClass] as $k => $v) {
+			foreach ($this->request->data[$this->modelClass] as $k => $v) {
 				$redirect[$k] = $v;
 			}
 
 	        foreach ($this->params['named'] as $k => $v) {
-	        	if(!preg_match('/(page|search)/si', $k)){
+	        	if(!preg_match('/(page|search)/si', $k) && !array_key_exists($k, $redirect)){
 	            	$redirect[$k] = $v;
 	        	}
 	        }

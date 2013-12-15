@@ -84,6 +84,18 @@ $(document).ready(function(){
         });
     }
 
+    /**
+    * Filtros do painel do index
+    */
+    if($('select.filter-index').size()){
+        $('select.filter-index')
+        .change(function(){
+            var form = $(this).parents('form:eq(0)');
+            form.submit();
+        });
+    }
+
+
 	/**
 	* Carrega os checkbox mestres
 	*/

@@ -42,6 +42,14 @@ class BillingsController extends AppController {
 		$params = array(
 			'group' => 'Billing.client_id'
 			);
+
+		/**
+		* Carrega os filtros do painel de buscas
+		*/
+		$this->filters = array(
+			'client_id' => $this->Billing->Client->find('list', array('id', 'name')),
+			'package_id' => $this->Billing->Package->find('list', array('id', 'name')),
+			);
 		
 		//@override
 		parent::index($params);

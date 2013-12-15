@@ -1,4 +1,9 @@
-<!-- Telefone 1 -->
+<?php 
+if(empty($entity)){
+    echo $this->element('Components/flash-message', array('message' => 'Nenhum Tel. Móvel Encontrado.'));
+}
+?>  <!-- Telefone 1 -->
+<?php if(!empty($entity)):?>
 <form style="border: 1px solid #DDDDDD;" class="form-horizontal form-column form-bordered" method="POST" action="#">
     <?php foreach($entity as $k => $v):?>
         <div class="control-group">
@@ -9,3 +14,4 @@
         </div>
     <?php endforeach?>
 </form>
+<?php endif?>
