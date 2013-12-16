@@ -97,7 +97,7 @@ class UsersController extends AppController {
     }    
 
     /**
-    * Método editAccount
+    * Método edit_account
     * Este método contem regras de negocios para adicionar e editar registros na base de dados
     *
     * @override Metodo Users.edit
@@ -105,9 +105,23 @@ class UsersController extends AppController {
     * @return void
     */
     public function edit_account($id=null){
+        $this->isRedirect = false;
         $this->edit($id);
+        $this->render('edit_account');
+    }
 
-        $this->view = 'edit_account';
+    /**
+    * Método edit_profile
+    * Este método contem regras de negocios para adicionar e editar registros na base de dados
+    *
+    * @override Metodo Users.edit
+    * @param string $id
+    * @return void
+    */
+    public function edit_profile($id=null){
+        $this->isRedirect = false;
+        $this->edit($id);
+        $this->render('edit_profile');
     }
 
     /**

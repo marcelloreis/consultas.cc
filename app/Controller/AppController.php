@@ -435,7 +435,7 @@ class AppController extends Controller {
 			/**
 			* Verifica se algum filtro foi carregado
 			*/
-			if(!empty($this->params['named'])){
+			if(is_array($this->filters) && !empty($this->params['named'])){
 				foreach ($this->params['named'] as $k => $v) {
 					//Verifica se o parametro é uma chave estrangeira
 					if(array_key_exists($k, $this->filters) && !empty($v)){
@@ -623,8 +623,8 @@ class AppController extends Controller {
 			 * Caso contrário, um novo registro será criado.
 			 */
 			if($this->Model->{$this->saveType}($this->request->data)){
+				$this->Session->setFlash(FLASH_SAVE_SUCCESS, FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
 				if($this->isRedirect){
-					$this->Session->setFlash(FLASH_SAVE_SUCCESS, FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
 					$this->redirect(array('action' => 'edit', $this->Model->id));
 				}
 			}else{

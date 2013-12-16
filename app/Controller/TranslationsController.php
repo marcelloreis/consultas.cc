@@ -30,16 +30,16 @@ class TranslationsController extends AppController {
 	* @return void
 	*/
 	public function index($params=array()){
-		if(!empty($this->params['named']['search'])){
-			$params = array(
-				'combine' => false,
-				'conditions' => array(
-					'OR' => array(
-						'Translation.msgid LIKE' => "%{$this->params['named']['search']}%",
-						'Translation.msgstr LIKE' => "%{$this->params['named']['search']}%",
-						)
-				));
-		}
+		// if(!empty($this->params['named']['search'])){
+		// 	$params = array(
+		// 		'combine' => false,
+		// 		'conditions' => array(
+		// 			'OR' => array(
+		// 				'Translation.msgid LIKE' => "%{$this->params['named']['search']}%",
+		// 				'Translation.msgstr LIKE' => "%{$this->params['named']['search']}%",
+		// 				)
+		// 		));
+		// }
 
 		//@override
 		parent::index($params);

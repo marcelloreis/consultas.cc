@@ -120,6 +120,9 @@ msgstr "Nome"
 msgid "Neighborhood"
 msgstr "Bairro"
 
+msgid "No"
+msgstr "Não"
+
 msgid "Number"
 msgstr "Número"
 

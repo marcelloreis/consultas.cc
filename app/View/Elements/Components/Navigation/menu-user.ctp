@@ -13,8 +13,7 @@
 		<ul class="dropdown-menu pull-right">
 			<li>
 				<?php 
-				$action = !empty($userLogged['client_id'])?'edit_account':'edit';
-				echo $this->Html->link('Editar Perfil', array('controller' => 'users', 'action' => $action, $userLogged['id'], 'plugin' => false));
+				echo $this->Html->link('Editar Perfil', array('controller' => 'users', 'action' => 'edit_profile', $userLogged['id'], 'plugin' => false));
 				?>
 			</li>
 			<!-- <li>
