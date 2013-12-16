@@ -97,6 +97,11 @@ class QueriesController extends AppController {
 			'tp_search' => $this->tp_search,
 			);
 
+		/**
+		* Inverte a ordenaçao da lista de consultas
+		*/
+		$params['order'] = array('Query.id' => 'desc');
+
 		//@override
 		parent::index($params);
 	}	
