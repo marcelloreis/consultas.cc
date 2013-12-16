@@ -33,7 +33,7 @@ if(count($$map)){
         $v[$modelClass]['billing_id'] = $v['Billing']['paid'];
         $v[$modelClass]['price_id'] = ($v['Price']['price'])?$v['Price']['price']:'Free';
         $v[$modelClass]['tp_search'] = $tp_search[$v[$modelClass]['tp_search']];
-        $v[$modelClass]['query'] = urldecode($v[$modelClass]['query']);
+        $v[$modelClass]['query'] = $this->Html->link(urldecode($v[$modelClass]['query']), "{$v[$modelClass]['query']}#entity-main", array('target' => '_blank'));
         $body .= $this->AppGrid->tr($v[$modelClass]);
     }
     echo $this->Html->tag('tbody', $body);

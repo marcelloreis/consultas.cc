@@ -55,6 +55,15 @@ class UsersController extends AppController {
         $params = array(
             'conditions' => array('User.client_id NOT' => null)
             );
+
+        /**
+        * Carrega os filtros do painel de buscas
+        */
+        $this->filters = array(
+            'client_id' => $this->User->Client->find('list', array('id', 'name')),
+            'group_id' => $this->User->Group->find('list', array('id', 'name')),
+            );
+
         //@override
         parent::index($params);
 
