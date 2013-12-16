@@ -52,7 +52,7 @@ if(!$hasInfo){
     <blockquote>
         <h4>
             <?php echo $this->Html->link('Cônjuge', '#', array('class' => 'btn btn-success'))?>
-            <?php echo $this->Html->link($entity['Family']['spouse']['Entity']['name'], array('controller' => 'entities', 'action' => 'index', 'plugin' => false, $entity['Family']['spouse']['Entity']['id']))?>
+            <?php echo $this->Html->link($entity['Family']['spouse']['Entity']['name'], array('controller' => 'entities', 'action' => 'index', '#' => 'entity-main', 'plugin' => false, $entity['Family']['spouse']['Entity']['id']))?>
         </h4>
         <form style="border: 1px solid #DDDDDD;" class="form-horizontal form-column form-bordered" method="POST" action="#">
             <div class="span4">
@@ -90,7 +90,7 @@ if(!$hasInfo){
             <?php 
             $gender_children = isset($v['Entity']['gender']) && $v['Entity']['gender'] == MALE?'Filho':'Filha';
             echo $this->Html->link($gender_children, '#', array('class' => 'btn btn-success')) . '&nbsp;';
-            echo $this->Html->link($v['Entity']['name'], array('controller' => 'entities', 'action' => 'index', 'plugin' => false, $v['Entity']['id']));
+            echo $this->Html->link($v['Entity']['name'], array('controller' => 'entities', 'action' => 'index', '#' => 'entity-main', 'plugin' => false, $v['Entity']['id']));
             ?>
         </h4>
         <form style="border: 1px solid #DDDDDD;" class="form-horizontal form-column form-bordered" method="POST" action="#">
@@ -135,7 +135,7 @@ if(!$hasInfo){
             <?php 
             $gender_brothers = isset($v['Entity']['gender']) && $v['Entity']['gender'] == MALE?'Irmão':'Irmã';
             echo $this->Html->link($gender_brothers, '#', array('class' => 'btn btn-success')) . '&nbsp;';
-            echo $this->Html->link($v['Entity']['name'], array('controller' => 'entities', 'action' => 'index', 'plugin' => false, $v['Entity']['id']));
+            echo $this->Html->link($v['Entity']['name'], array('controller' => 'entities', 'action' => 'index', '#' => 'entity-main', 'plugin' => false, $v['Entity']['id']));
             ?>
         </h4>
         <form style="border: 1px solid #DDDDDD;" class="form-horizontal form-column form-bordered" method="POST" action="#">
@@ -180,7 +180,7 @@ if(!$hasInfo){
             <?php 
             $class_members = isset($v['Entity']['gender']) && $v['Entity']['gender'] == MALE?'info':'pink';
             echo $this->Html->link('Membro da Família', '#', array('class' => 'btn btn-warning')) . '&nbsp;';
-            echo $this->Html->link($v['Entity']['name'], array('controller' => 'entities', 'action' => 'index', 'plugin' => false, $v['Entity']['id']));
+            echo $this->Html->link($v['Entity']['name'], array('controller' => 'entities', 'action' => 'index', '#' => 'entity-main', 'plugin' => false, $v['Entity']['id']));
             ?>
         </h4>
         <form style="border: 1px solid #DDDDDD;" class="form-horizontal form-column form-bordered" method="POST" action="#">
