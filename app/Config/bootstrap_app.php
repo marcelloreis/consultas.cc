@@ -7,6 +7,7 @@ define('TITLE_APP', 'consultas.cc');
 define('VERSION_APP', '1.0');
 define('COPYRIGHT', 'NASZA - Produtora Full Service');
 define('COPYRIGHT_LINK', 'http://nasza.com.br');
+define('PROJECT_LINK', 'http://consultas.cc');
 
 define('COMPANY_CORPORATE_NAME', 'NASZA - Produtora Full Service LTDA');
 define('COMPANY_FANCY_NAME', 'NASZA - Produtora Full Service');

@@ -6,7 +6,7 @@
 	</ul>
 	<div class="dropdown">
     	<?php 
-    	$avatar = is_file(dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/webroot' . $userLogged['avatar_27'])?$userLogged['avatar_27']:'avatar-27x27.png';
+    	$avatar = is_file(PATH_WEBROOT . $userLogged['avatar_27'])?$userLogged['avatar_27']:'avatar-27x27.png';
     	?>
 
 		<a href="#" class='dropdown-toggle' data-toggle="dropdown"><?php echo $userLogged['given_name'];?><?php echo $this->Html->image($avatar, array('width' => 27, 'heigth' => 27))?></a>

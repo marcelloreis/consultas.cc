@@ -1,7 +1,7 @@
 <div class="fileupload fileupload-new" data-provides="fileupload">
     <div class="fileupload-new thumbnail" style="max-width: 200px; max-height: 150px;">
     	<?php 
-    	$avatar = !empty($this->data['User']['avatar_158']) && is_file(dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/webroot' . $this->data['User']['avatar_158'])?$this->data['User']['avatar_158']:'avatar-158x158.png';
+    	$avatar = !empty($this->data['User']['avatar_158']) && is_file(PATH_WEBROOT . $this->data['User']['avatar_158'])?$this->data['User']['avatar_158']:'avatar-158x158.png';
     	echo $this->Html->image($avatar, array('class' => 'img-polaroid'));
     	?>
     </div>

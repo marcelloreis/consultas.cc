@@ -12,6 +12,7 @@
  */
 
 App::uses('AppController', 'Controller');
+App::uses('CakeEmail', 'Network/Email');
 
 /**
  * Static content controller
@@ -131,11 +132,6 @@ class UsersController extends AppController {
     * necessarias para realizar o login do usuario
     */
     public function login() {
-        /**
-        * Desabilita o cache do login
-        */
-        $this->cacheAction = 0;
-
         /**
         * Deleta a sessao que guarda o codigo da rede social q o usuario escolheu para usar como login
         */
@@ -277,14 +273,124 @@ class UsersController extends AppController {
     /**
     * Método forgot_pass
     *
-    * Este método recupera a senha do usuario 
+    * Este método inicia o processo de recueracao da senha do usuario
     */
     public function forgot_pass(){
-        /**
-        * TODO implementar funcao para 'esqueci a senha'
-        */
-        $this->redirect($this->referer());
+    	$this->layout = 'login';
+        $this->Session->setFlash("Por favor, preencha o campo abaixo e enviaremos um link para seu e-mail para informar uma nova senha:", FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_LOGIN);
+
+		/**
+		 * Verifica se o formulário foi submetido por post
+		 */
+		if ($this->request->is('post') || $this->request->is('put')) {
+			/**
+			* Verifica se o campo de email foi informado
+			*/
+			if(!empty($this->request->data['User']['email'])){
+                $this->User->recursive = -1;
+
+				/**
+				* Verifica se o email informado existe na base de dados
+				*/
+				$hasEmail = $this->User->find('first', array(
+					'conditions' => array(
+						'User.email' => $this->request->data['User']['email']
+						)
+					));
+
+				if(empty($hasEmail['User'])){
+					$this->Session->setFlash("O e-mail informado não existe em nossa base de dados, informe o seu e-mail cadastrado por favor.", FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_LOGIN);
+				}else{
+                    $hasEmail['User']['change_pass_token'] = md5(uniqid());
+                    /**
+                    * Registra o token da requisicao
+                    */
+                    $this->User->updateAll(
+                        array(
+                            'User.change_pass_token' => "'{$hasEmail['User']['change_pass_token']}'",
+                            'User.change_pass_expire' => "'" . date('Y-m-d H:i:s', mktime(date('H'), (date('i') + 10), date('s'), date('m'), date('d'), date('Y'))) . "'",
+                            ),
+                        array(
+                            'User.id' => $hasEmail['User']['id']
+                            )
+                        );
+
+					$email = new CakeEmail('apps');
+					$email->template($this->action);
+					$email->emailFormat('html');
+					$email->viewVars(array('user' => $hasEmail));
+
+					$email->sender(array('noreply@consultas.cc' => 'Consultas CC'));
+					$email->from(array('noreply@consultas.cc' => 'Consultas CC'));
+					$email->to($hasEmail['User']['email']);
+					$email->subject("Lembrete da senha nova de {$hasEmail['User']['given_name']}");
+					$email->send();
+					
+                    $this->Session->setFlash("Em instantes, você receberá um e-mail com instruções sobre como recuperar sua senha.", FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_LOGIN);
+                }
+            }
+        }        
     }
+
+    /**
+    * Método change_pass
+    *
+    * Este método recupera a senha do usuario
+    */
+    public function change_pass(){
+        $this->layout = 'login';
+        $validToken = false;
+        $this->User->recursive = -1;
+
+
+        /**
+         * Verifica se o formulário foi submetido por post
+         */
+        if ($this->request->is('post') || $this->request->is('put')) {
+            if(!empty($this->request->data['User'])){
+                /**
+                * Verifica se as senhas conferem
+                */
+                if($this->request->data['User']['password'] != $this->request->data['User']['password_confirm']){
+                    $this->Session->setFlash("A senha informada difere da senha de confirmação.", FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_LOGIN);
+                    $this->redirect($this->referer());
+                }else{
+                    $this->User->updateAll(
+                        array(
+                            'User.password' => "'" . AuthComponent::password($this->request->data['User']['password']) . "'",
+                            ),
+                        array(
+                            'User.change_pass_token' => $this->request->data['User']['change_pass_token']
+                            )
+                        );
+                    $this->Session->setFlash("Sua senha foi alterada com sucesso.", FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_LOGIN);
+                    $this->redirect(array('action' => 'login'));
+                }
+            }
+        }else{
+            if(!empty($this->params['named']['change_pass_token'])){
+
+                /**
+                * Verifica se o token é valido e se ainda nao expirou
+                */
+                $validToken = $this->User->find('count', 
+                    array(
+                        'conditions' => array(
+                            'User.change_pass_token' => $this->params['named']['change_pass_token'],
+                            'User.change_pass_expire >' => date('Y-m-d H:i:s')
+                            )
+                    ));
+
+                if($validToken){
+                    // $this->Session->setFlash("Por favor, preencha os campos abaixo para alterar sua senha de acesso a " . TITLE_APP . " (todos os campos são obrigatórios):", FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_LOGIN);
+                }
+            }
+        }
+
+
+
+        $this->set(compact('validToken'));
+    }    
 
     /**
     * Método saveCredentials

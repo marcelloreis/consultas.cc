@@ -43,7 +43,7 @@ Cache::config('default', array('engine' => 'File'));
  */
 Configure::write('Dispatcher.filters', array(
 	'AssetDispatcher',
-	'CacheDispatcher'
+	// 'CacheDispatcher'
 ));
 
 /**
@@ -79,7 +79,7 @@ define('LIMIT', 20);
 /**
  * Diretorios 
  */
-define('PATH_MIDIAS', dirname(dirname(__FILE__)) . DS . 'webroot' . DS . 'upload');
+define('PATH_WEBROOT', dirname(dirname(__FILE__)) . DS . 'webroot');
 
 /**
  * IDs padroes do sistema 

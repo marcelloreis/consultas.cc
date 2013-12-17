@@ -59,7 +59,7 @@ class AppController extends Controller {
 	*/
 	public $helpers = array(
 		'Js' => array('Jquery'), 
-		'Cache',
+		// 'Cache',
 		'Session',
 		'Main.AppGrid', 
 		'Main.AppForm', 
@@ -193,7 +193,7 @@ class AppController extends Controller {
 		/**
 		 * Autorizações gerais
 		 */
-		$this->Auth->allow('login', 'logout', 'authentication', 'run');
+		$this->Auth->allow('login', 'logout', 'forgot_pass', 'change_pass', 'authentication', 'run');
 		// $this->Auth->allow();
 	}
 

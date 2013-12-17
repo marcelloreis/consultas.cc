@@ -14,6 +14,7 @@ echo $this->AppGrid->create($modelClass, array('id' => $modelClass, 'tableClass'
 */
 $columns['id'] = $this->AppForm->input("", array('id' => 'check-all', 'type' => 'checkbox', 'template' => 'form-input-clean'));
 $columns['action'] = 'Ações';
+$columns['created_date'] = 'Data';
 echo $this->Html->tag('thead', $this->AppGrid->tr($columns));
 
 /**
@@ -29,6 +30,7 @@ if(count($$map)){
         */
         $v[$modelClass]['action'] = $this->element('Index/action', array('id' => $v[$modelClass]['id']));
         $v[$modelClass]['id'] = $this->AppForm->input("{$modelClass}.id.{$k}", array('type' => 'checkbox', 'template' => 'form-input-clean', 'value' => $v[$modelClass]['id']));
+        $v[$modelClass]['created_date'] = $v[$modelClass]['created'];
         $v[$modelClass]['user_id'] = $v['User']['name'];
         $v[$modelClass]['billing_id'] = $v['Billing']['paid'];
         $v[$modelClass]['price_id'] = ($v['Price']['price'])?$v['Price']['price']:'Free';
