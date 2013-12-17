@@ -382,7 +382,7 @@ class UsersController extends AppController {
                     ));
 
                 if($validToken){
-                    // $this->Session->setFlash("Por favor, preencha os campos abaixo para alterar sua senha de acesso a " . TITLE_APP . " (todos os campos são obrigatórios):", FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_LOGIN);
+                    $this->Session->setFlash("Por favor, preencha os campos abaixo para alterar sua senha de acesso a " . TITLE_APP . " (todos os campos são obrigatórios):", FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_LOGIN);
                 }
             }
         }
