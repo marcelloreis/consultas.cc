@@ -63,6 +63,7 @@ class NattFixoPessoa extends AppModelClean {
                         'NattFixoTelefone.DATA_ATUALIZACAO'
                         ),
                     'conditions' => array('CPF_CNPJ' => $v['NattFixoPessoa']['CPF_CNPJ']),
+                    'group' => array('NattFixoTelefone.TELEFONE'),
                     'order' => array('DATA_ATUALIZACAO' => 'DESC'),
                     'limit' => 10
                     ));
@@ -78,7 +79,7 @@ class NattFixoPessoa extends AppModelClean {
                                 'NattFixoEndereco.UF',
                                 'NattFixoEndereco.CEP'
                                 ),
-                            'conditions' => array('COD_END' => $v2['NattFixoTelefone']['COD_END'])
+                            'conditions' => array('COD_END' => $v2['NattFixoTelefone']['COD_END']),
                             ));
                         $map[$k]['telefone'][$k2] = $v2['NattFixoTelefone'];
                         if(isset($endereco['NattFixoEndereco'])){

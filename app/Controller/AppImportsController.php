@@ -8,7 +8,7 @@ App::uses('AppController', 'Controller');
  * @package       app.Controller
  * @link http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
-class ImportsController extends AppController {
+class AppImportsController extends AppController {
 	public $uses = array(
 		"Import", 
 		"Ientity",

@@ -1,43 +1,43 @@
 #Reinicia a importacao
-update naszaco_pessoas._counter set success = null, fails = null, extracted = null, start_time = null;
-update naszaco_pessoas._timing set time = null;
+update _counter set success = null, fails = null, extracted = null, start_time = null;
+update _timing set time = null;
 
 
 #Reseta todas as tabelas e deixa pronto para iniciar a importacao
-truncate table naszaco_pessoas._logs;
-truncate table naszaco_pessoas.entities;
-truncate table naszaco_pessoas.associations;
-truncate table naszaco_pessoas.addresses;
-truncate table naszaco_pessoas.zipcodes;
-truncate table naszaco_pessoas.landlines;
-truncate table naszaco_pessoas.mobiles;
+truncate table _logs;
+truncate table entities;
+truncate table associations;
+truncate table addresses;
+truncate table zipcodes;
+truncate table landlines;
+truncate table mobiles;
 
-truncate table naszaco_pessoas.i_entities;
-truncate table naszaco_pessoas.i_associations;
-truncate table naszaco_pessoas.i_addresses;
-truncate table naszaco_pessoas.i_zipcodes;
-truncate table naszaco_pessoas.i_landlines;
-truncate table naszaco_pessoas.i_mobiles;
+truncate table i_entities;
+truncate table i_associations;
+truncate table i_addresses;
+truncate table i_zipcodes;
+truncate table i_landlines;
+truncate table i_mobiles;
 
 #Repara as tabelas
-repair table naszaco_pessoas._logs;
-repair table naszaco_pessoas.entities;
-repair table naszaco_pessoas.associations;
-repair table naszaco_pessoas.addresses;
-repair table naszaco_pessoas.zipcodes;
-repair table naszaco_pessoas.landlines;
-repair table naszaco_pessoas.mobiles;
+repair table _logs;
+repair table entities;
+repair table associations;
+repair table addresses;
+repair table zipcodes;
+repair table landlines;
+repair table mobiles;
 
-repair table naszaco_pessoas.i_entities;
-repair table naszaco_pessoas.i_associations;
-repair table naszaco_pessoas.i_addresses;
-repair table naszaco_pessoas.i_zipcodes;
-repair table naszaco_pessoas.i_landlines;
-repair table naszaco_pessoas.i_mobiles;
+repair table i_entities;
+repair table i_associations;
+repair table i_addresses;
+repair table i_zipcodes;
+repair table i_landlines;
+repair table i_mobiles;
 
 #Migracao dos dados importados
-INSERT INTO naszaco_pessoas.entities SELECT * FROM naszaco_pessoas.i_entities;
-INSERT INTO naszaco_pessoas.landlines SELECT * FROM naszaco_pessoas.i_landlines;
-INSERT INTO naszaco_pessoas.zipcodes SELECT * FROM naszaco_pessoas.i_zipcodes;
-INSERT INTO naszaco_pessoas.addresses SELECT * FROM naszaco_pessoas.i_addresses;
-INSERT INTO naszaco_pessoas.associations SELECT * FROM naszaco_pessoas.i_associations;
+INSERT INTO entities SELECT * FROM i_entities;
+INSERT INTO landlines SELECT * FROM i_landlines;
+INSERT INTO zipcodes SELECT * FROM i_zipcodes;
+INSERT INTO addresses SELECT * FROM i_addresses;
+INSERT INTO associations SELECT * FROM i_associations;

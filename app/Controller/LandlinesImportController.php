@@ -11,7 +11,7 @@
  * @package       app.Controller
  */
 
-App::uses('ImportsController', 'Controller');
+App::uses('AppImportsController', 'Controller');
 
 /**
  * Import content controller
@@ -21,7 +21,7 @@ App::uses('ImportsController', 'Controller');
  * @package       app.Controller
  * @link http://.framework.nasza.com.br/2.0/controller/LandlinesImport.html
  */
-class LandlinesImportController extends ImportsController {
+class LandlinesImportController extends AppImportsController {
 	/**
 	* Atributos da classe
 	*/
@@ -265,7 +265,7 @@ class LandlinesImportController extends ImportsController {
 									/**
 									* Gera o hash do complemento da rua
 									*/
-									$hash_complement = $this->AppImport->getHash($this->AppImport->getComplement($v2['COMPLEMENTO']), null, false);
+									$hash_complement = $this->AppImport->getHash($this->AppImport->getComplement($v2['COMPLEMENTO'], $v2['endereco']['NOME_RUA']), null, false);
 
 									/**
 									* Carrega um array com todos os estados
@@ -284,7 +284,7 @@ class LandlinesImportController extends ImportsController {
 											'street' => $street,
 											'number' => $number,
 											'neighborhood' => $this->AppImport->getNeighborhood($v2['endereco']['BAIRRO']),
-											'complement' => $this->AppImport->getComplement($v2['COMPLEMENTO']),
+											'complement' => $this->AppImport->getComplement($v2['COMPLEMENTO'], $v2['endereco']['NOME_RUA']),
 											'h1' => $hash['h1'],
 											'h2' => $hash['h2'],
 											'h3' => $hash['h3'],

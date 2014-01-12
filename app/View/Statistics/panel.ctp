@@ -10,8 +10,9 @@ echo $this->Html->script(array(
     'plugins/easy-pie-chart/jquery.easy-pie-chart.min',
     'plugins/flot/jquery.flot.min',
     'plugins/flot/jquery.flot.resize.min',
-    'https://www.google.com/jsapi',
             ), array('defer' => true));
+
+echo $this->Html->script('https://www.google.com/jsapi');
 
 echo $this->element('Index/Imports/charts-gauge');
 // echo $this->element('Index/Imports/real-time');
@@ -195,9 +196,9 @@ echo $this->element('Index/Imports/charts-gauge');
 
 	<div class="row-fluid">
 		<?php 
-		unset($imports['counters']['associations']);
+		unset($imports['statistics']['associations']);
 		?>
-		<?php foreach($imports['counters'] as $k => $v):?>
+		<?php foreach($imports['statistics'] as $k => $v):?>
 			<div class="span3">
 				<div class="box box-color box-bordered">
 					<div class="box-title">

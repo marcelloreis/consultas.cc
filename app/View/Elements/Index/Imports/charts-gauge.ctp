@@ -13,7 +13,7 @@
       function chartMinuts() {
         var data = google.visualization.arrayToDataTable([
           ['Label', 'Value']
-<?php foreach($imports['counters'] as $k => $v):?>
+<?php foreach($imports['statistics'] as $k => $v):?>
           ,['<?php echo $k?>', <?php echo $v['process_per_min']?>]
 <?php endforeach?>
         ]);
@@ -33,7 +33,7 @@
       function chartHours() {
         var data = google.visualization.arrayToDataTable([
           ['Label', 'Value']
-<?php foreach($imports['counters'] as $k => $v):?>
+<?php foreach($imports['statistics'] as $k => $v):?>
           ,['<?php echo $k?>', <?php echo $v['process_per_hour']?>]
 <?php endforeach?>
         ]);
@@ -53,7 +53,7 @@
       function chartDays() {
         var data = google.visualization.arrayToDataTable([
           ['Label', 'Value']
-<?php foreach($imports['counters'] as $k => $v):?>
+<?php foreach($imports['statistics'] as $k => $v):?>
           ,['<?php echo $k?>', <?php echo $v['process_per_day']?>]
 <?php endforeach?>
         ]);
