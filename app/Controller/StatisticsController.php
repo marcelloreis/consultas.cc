@@ -57,7 +57,7 @@ class StatisticsController extends AppController {
 		/**
 		* Carrega os numeros dos contadores da importacao
 		*/
-		foreach ($this->statistic->findAllByActive(true) as $k => $v) {
+		foreach ($this->Statistic->findAllByActive(true) as $k => $v) {
 			$this->statistics[$v['Statistic']['table']] = $v['Statistic'];
 		}		
 	}	
@@ -94,7 +94,7 @@ class StatisticsController extends AppController {
 	*
 	* @return void
 	*/
-	public function index($uf){
+	public function panel($uf){
 		if(!empty($uf) && (!empty($this->statistics['entities']['success']) || !empty($this->statistics['entities']['fails']))){
 			/**
 			* Carrega a quantidade de registros a serem importados
@@ -140,7 +140,7 @@ class StatisticsController extends AppController {
 			/**
 			* Carrega as tableas que estao sendo alimentadas
 			*/
-			$imports['Statistics'] = $this->statistics;
+			$imports['statistics'] = $this->statistics;
 
 		}
 

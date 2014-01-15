@@ -259,7 +259,7 @@ class LandlinesImportController extends AppImportsController {
 									/**
 									* Gera o hash do complemento da rua
 									*/
-									$hash_complement = $this->AppImport->getHash($this->AppImport->getComplement($v2['COMPLEMENTO']), null, false);
+									$hash_complement = $this->AppImport->getHash($this->AppImport->getComplement($v2['COMPLEMENTO'], $v2['endereco']['NOME_RUA']), null, false);
 
 									/**
 									* Carrega um array com todos os estados
@@ -278,7 +278,7 @@ class LandlinesImportController extends AppImportsController {
 											'street' => $street,
 											'number' => $number,
 											'neighborhood' => $this->AppImport->getNeighborhood($v2['endereco']['BAIRRO']),
-											'complement' => $this->AppImport->getComplement($v2['COMPLEMENTO']),
+											'complement' => $this->AppImport->getComplement($v2['COMPLEMENTO'], $v2['endereco']['NOME_RUA']),
 											'h1' => $hash['h1'],
 											'h2' => $hash['h2'],
 											'h3' => $hash['h3'],

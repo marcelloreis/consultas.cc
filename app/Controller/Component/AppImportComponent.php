@@ -481,7 +481,7 @@ class AppImportComponent extends Component {
 				}
 			}
 
-			if(!$city_id && $city_id > 0){
+			if($city_id <= 0){
 				/**
 				* Busca pela cidade atravez do nome completo e do estado
 				*/
@@ -499,7 +499,7 @@ class AppImportComponent extends Component {
 				/**
 				* Busca pela cidade atravez de partes do nome e do estado
 				*/
-				if(!$city_id && $city_id > 0){
+				if($city_id <= 0){
 					$hasCity = $this->City->find('first', array(
 						'recursive' => '-1',
 						'conditions' => array(
@@ -571,10 +571,25 @@ class AppImportComponent extends Component {
 		* Caso o numero nao tenha sido carregado ainda, tenta carrega-lo a partir do nome da rua
 		*/
 		if(!$complement && $street){
-			if(preg_match('/(ap ?.*)/si', $street, $vet)){
+			if(preg_match('/(bl ?.*)/si', $street, $vet)){
+				$complement = $vet[1];
+			}
+			if(preg_match('/(bl. ?.*)/si', $street, $vet)){
+				$complement = $vet[1];
+			}
+			if(preg_match('/(bloco ?.*)/si', $street, $vet)){
+				$complement = $vet[1];
+			}
+			if(preg_match('/(cs ?.*)/si', $street, $vet)){
+				$complement = $vet[1];
+			}
+			if(preg_match('/(cs. ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
 			}
 			if(preg_match('/(ed ?.*)/si', $street, $vet)){
+				$complement = $vet[1];
+			}
+			if(preg_match('/(edificio ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
 			}
 			if(preg_match('/(edf ?.*)/si', $street, $vet)){
@@ -583,7 +598,46 @@ class AppImportComponent extends Component {
 			if(preg_match('/(q ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
 			}
+			if(preg_match('/(qu ?.*)/si', $street, $vet)){
+				$complement = $vet[1];
+			}
+			if(preg_match('/(quadra ?.*)/si', $street, $vet)){
+				$complement = $vet[1];
+			}
 			if(preg_match('/(qd ?.*)/si', $street, $vet)){
+				$complement = $vet[1];
+			}
+			if(preg_match('/(lote ?.*)/si', $street, $vet)){
+				$complement = $vet[1];
+			}
+			if(preg_match('/(trav. ?.*)/si', $street, $vet)){
+				$complement = $vet[1];
+			}
+			if(preg_match('/(trav ?.*)/si', $street, $vet)){
+				$complement = $vet[1];
+			}
+			if(preg_match('/(travessia ?.*)/si', $street, $vet)){
+				$complement = $vet[1];
+			}
+			if(preg_match('/(casa ?.*)/si', $street, $vet)){
+				$complement = $vet[1];
+			}
+			if(preg_match('/(andar ?.*)/si', $street, $vet)){
+				$complement = $vet[1];
+			}
+			if(preg_match('/(cx ?.*)/si', $street, $vet)){
+				$complement = $vet[1];
+			}
+			if(preg_match('/(sn)/si', $street, $vet)){
+				$complement = $vet[1];
+			}
+			if(preg_match('/(ap ?[0-9]*)/si', $street, $vet)){
+				$complement = $vet[1];
+			}
+			if(preg_match('/(apartamento ?[0-9]*)/si', $street, $vet)){
+				$complement = $vet[1];
+			}
+			if(preg_match('/(apto ?[0-9]*)/si', $street, $vet)){
 				$complement = $vet[1];
 			}
 		}		
@@ -719,6 +773,7 @@ class AppImportComponent extends Component {
 		/**
 		* Remove qualquer combinacao de logradouro que encontrar no endereço
 		*/
+		$street = preg_replace('/    .*/si', '', $street);
 		$street = preg_replace('/^bairro /si', '', $street);
 		$street = preg_replace('/^al\.?|alameda /si', '', $street);
 		$street = preg_replace('/^av\.?|avenida /si', '', $street);
@@ -786,7 +841,7 @@ class AppImportComponent extends Component {
 		* Caso o numero nao tenha sido carregado ainda, tenta carrega-lo a partir do nome da rua
 		*/
 		if(!$street_number && $street){
-			if(preg_match('/.*? (n [0-9]*)/si', $street, $vet)){
+			if(preg_match('/([0-9]{5})/si', $street, $vet)){
 				$street_number = $vet[1];
 			}
 		}
@@ -799,7 +854,7 @@ class AppImportComponent extends Component {
 		/**
 		* Seta o numero como null caso nao tenho nenhuma infomracao
 		*/
-		if(is_null($street_number) || empty($street_number) || trim($street_number) == ''){
+		if(is_null($street_number) || $street_number === 0 || empty($street_number) || trim($street_number) == ''){
 			$street_number = null;
 		}
 

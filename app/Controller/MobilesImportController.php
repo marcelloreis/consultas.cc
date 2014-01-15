@@ -11,7 +11,7 @@
  * @package       app.Controller
  */
 
-App::uses('ImportsController', 'Controller');
+App::uses('AppImportsController', 'Controller');
 
 /**
  * Import content controller
@@ -21,7 +21,7 @@ App::uses('ImportsController', 'Controller');
  * @package       app.Controller
  * @link http://.framework.nasza.com.br/2.0/controller/LandlinesImport.html
  */
-class MobilesImportController extends ImportsController {
+class MobilesImportController extends AppImportsController {
 	/**
 	* Método run
 	* Este método importa os telefones Fixos no modelo da base de dados do Natt para o Sistema

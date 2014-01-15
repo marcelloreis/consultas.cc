@@ -1,26 +1,26 @@
 #Tabelas auxiliares
-SELECT * FROM naszaco_pessoas._counter;
-SELECT * FROM naszaco_pessoas._settings;
-SELECT * FROM naszaco_pessoas._logs order by `table` desc limit 10000;
-SELECT * FROM naszaco_pessoas._timing;
+SELECT * FROM _counter;
+SELECT * FROM _settings;
+SELECT * FROM _logs order by `table` desc limit 10000;
+SELECT * FROM _timing;
 
 #Tempo medio das queries
-select query_desc, count(id) as qt_consultas, avg(time) as tempo_medio from naszaco_pessoas._timing group by query_id order by avg(time) desc;
+select query_desc, count(id) as qt_consultas, avg(time) as tempo_medio from _timing group by query_id order by avg(time) desc;
 
 #Nomes repetidos sem definicao de sexo
-SELECT doc, name, type, count(h1) as ocorrencias FROM naszaco_pessoas.entities where type != 2 and gender is null group by h1 order by count(h1) desc, name limit 10000;
+SELECT doc, name, type, count(h1) as ocorrencias FROM entities where type != 2 and gender is null group by h1 order by count(h1) desc, name limit 10000;
 
 #Selects das tabelas de telefone fixo
-SELECT * FROM naszaco_pessoas.entities order by id desc;
-SELECT * FROM naszaco_pessoas.associations order by id desc;
-SELECT * FROM naszaco_pessoas.addresses order by id desc;
-SELECT * FROM naszaco_pessoas.zipcodes order by id desc;
-SELECT * FROM naszaco_pessoas.landlines order by id desc;
-SELECT * FROM naszaco_pessoas.mobiles order by id desc;
+SELECT * FROM entities order by id desc;
+SELECT * FROM associations order by id desc;
+SELECT * FROM addresses order by id desc;
+SELECT * FROM zipcodes order by id desc;
+SELECT * FROM landlines order by id desc;
+SELECT * FROM mobiles order by id desc;
 
-SELECT * FROM naszaco_pessoas.i_entities order by id desc;
-SELECT * FROM naszaco_pessoas.i_associations order by id desc;
-SELECT * FROM naszaco_pessoas.i_addresses order by id;
-SELECT * FROM naszaco_pessoas.i_zipcodes order by id;
-SELECT * FROM naszaco_pessoas.i_landlines order by id;
-SELECT * FROM naszaco_pessoas.i_mobiles order by id;
+SELECT * FROM i_entities order by id desc;
+SELECT * FROM i_associations order by id desc;
+SELECT * FROM i_addresses order by id;
+SELECT * FROM i_zipcodes order by id;
+SELECT * FROM i_landlines order by id;
+SELECT * FROM i_mobiles order by id;
