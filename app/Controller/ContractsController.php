@@ -91,6 +91,7 @@ class ContractsController extends AppController {
 	* @return void
 	*/
 	public function view($id=null){
+		$this->layout = 'contract';
 		$this->buildContract($id);
 	}
 

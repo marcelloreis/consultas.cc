@@ -37,7 +37,7 @@ echo $this->Html->script(array('plugins/chosen/chosen.jquery.min'), array('defer
             <?php echo $this->AppForm->input('tel1', array('class' => 'msk-phone-ddd'))?>
             <?php echo $this->AppForm->input('tel2', array('class' => 'msk-phone-ddd'))?>
             <?php echo $this->AppForm->input('tel3', array('class' => 'msk-phone-ddd'))?>
-            <?php echo $this->AppForm->input('zipcode')?>
+            <?php echo $this->AppForm->input('zipcode', array('class' => 'msk-zipcode'))?>
             <?php echo $this->AppForm->input('street')?>
             <?php echo $this->AppForm->input('complement')?>
             <?php echo $this->AppForm->input('number')?>

@@ -320,8 +320,8 @@ class UsersController extends AppController {
 					$email->emailFormat('html');
 					$email->viewVars(array('user' => $hasEmail));
 
-					$email->sender(array('noreply@consultas.cc' => 'Consultas CC'));
-					$email->from(array('noreply@consultas.cc' => 'Consultas CC'));
+					$email->sender(array('noreply@consultas.cc' => TITLE_APP));
+					$email->from(array('noreply@consultas.cc' => TITLE_APP));
 					$email->to($hasEmail['User']['email']);
 					$email->subject("Lembrete da senha nova de {$hasEmail['User']['given_name']}");
 					$email->send();

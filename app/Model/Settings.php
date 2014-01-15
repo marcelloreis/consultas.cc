@@ -34,8 +34,7 @@ class Settings extends AppModelClean {
 			$content .= "===================================================================\n";
 
 			echo $content;		
+			die;
 		}
-
-		return $isActive;
 	}
 }

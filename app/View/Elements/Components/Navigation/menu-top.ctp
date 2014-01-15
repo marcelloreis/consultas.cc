@@ -12,6 +12,33 @@ $menu = array(
         'label' => '<span>Consultar</span>', 
         'url' => array('controller' => 'entities', 'action' => 'index', '#' => 'entity-search')
         ),
+    array(
+        'label' => '<span>SMS</span>',
+        'params' => array('class' => 'dropdown-toggle', 'data-toggle' => 'dropdown'),
+        'icon_right' => '<span class="caret"></span>',
+        'children' => array(
+            /**
+            * Campanhas
+            */
+            array('label' => 'Endereços', 'controller' => 'sms_campaigns'),
+            /**
+            * Endereços
+            */
+            array('label' => 'Endereços', 'controller' => 'sms_addresses'),
+            /**
+            * Modelos
+            */
+            array('label' => 'Campanhas', 'controller' => 'sms_models'),
+            /**
+            * Agenda
+            */
+            array('label' => 'Agenda', 'controller' => 'sms_calendar'),
+            /**
+            * Relatorios
+            */
+            array('label' => 'Agenda', 'controller' => 'sms_reports'),
+        ),
+    ),
     /**
     * Seguranca
     */

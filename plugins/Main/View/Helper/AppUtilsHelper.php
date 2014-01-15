@@ -340,17 +340,21 @@ class AppUtilsHelper extends AppHelper {
 	* @return string $mask
 	*/
 	private function format($doc, $mask){
-		// Elimina possivel mascara
-		$doc = preg_replace('[^0-9]', '', $doc);
+		$mask = '';
+		
+		if(!empty($doc)){
+			// Elimina possivel mascara
+			$doc = preg_replace('[^0-9]', '', $doc);
 
-		/**
-		* Aplica a mascara ao numero
-		*/
-		$index = -1;
-		for ($i=0; $i < strlen($mask); $i++){
-			if ($mask[$i]=='#'){
-				$mask[$i] = $doc[++$index];
-			} 
+			/**
+			* Aplica a mascara ao numero
+			*/
+			$index = -1;
+			for ($i=0; $i < strlen($mask); $i++){
+				if ($mask[$i]=='#'){
+					$mask[$i] = $doc[++$index];
+				} 
+			}
 		}
 
 		return $mask;

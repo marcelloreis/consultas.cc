@@ -32,9 +32,7 @@ class MobilesImportController extends ImportsController {
 		/**
 		* Verifica se a chave do modulo de importacao esta ativa
 		*/
-		if(!$this->Settings->active($this->name)){
-			die;
-		}
+		$this->Settings->active($this->name);
 		
 		/**
 		* Desabilita o contador landline e habilita o mobile
@@ -82,10 +80,7 @@ class MobilesImportController extends ImportsController {
 				/**
 				* Verifica se a chave do modulo de importacao esta ativa
 				*/
-				if(!$this->Settings->active($this->name)){
-					die;
-				}
-
+				$this->Settings->active($this->name);
 
 				/**
 				* Carrega o proximo registro das tabelas de pessoa, telefone e endereco q ainda nao foram importado
@@ -145,9 +140,7 @@ class MobilesImportController extends ImportsController {
 						// 	/**
 						// 	* Verifica se a chave do modulo de importacao esta ativa
 						// 	*/
-						// 	if(!$this->Settings->active($this->name)){
-						// 		die;
-						// 	}
+						// 	$this->Settings->active($this->name);
 							
 						// 	$this->AppImport->__counter('entities');
 						// 	continue;
@@ -339,12 +332,7 @@ class MobilesImportController extends ImportsController {
 					/**
 					* Verifica se a chave do modulo de importacao esta ativa
 					*/
-					$this->AppImport->timing_ini(TUNING_ON_OF);
-					if(!$this->Settings->active($this->name)){
-						$this->AppImport->__log("Importacao Pausada.", IMPORT_PAUSED, $this->uf);
-						die;
-					}
-					$this->AppImport->timing_end();
+					$this->Settings->active($this->name);
 				}
 			}
 

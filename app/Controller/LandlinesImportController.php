@@ -11,7 +11,7 @@
  * @package       app.Controller
  */
 
-App::uses('ImportsController', 'Controller');
+App::uses('AppImportsController', 'Controller');
 
 /**
  * Import content controller
@@ -21,7 +21,7 @@ App::uses('ImportsController', 'Controller');
  * @package       app.Controller
  * @link http://.framework.nasza.com.br/2.0/controller/LandlinesImport.html
  */
-class LandlinesImportController extends ImportsController {
+class LandlinesImportController extends AppImportsController {
 	/**
 	* Atributos da classe
 	*/
@@ -39,9 +39,8 @@ class LandlinesImportController extends ImportsController {
 		/**
 		* Verifica se a chave do modulo de importacao esta ativa
 		*/
-		if(!$this->Settings->active($this->name)){
-			die;
-		}
+		$this->Settings->active($this->name);
+
 		/**
 		* Desabilita o contador mobile e habilita o landline
 		*/
@@ -98,10 +97,7 @@ class LandlinesImportController extends ImportsController {
 				/**
 				* Verifica se a chave do modulo de importacao esta ativa
 				*/
-				if(!$this->Settings->active($this->name)){
-					die;
-				}
-
+				$this->Settings->active($this->name);
 
 				/**
 				* Carrega o proximo registro das tabelas de pessoa, telefone e endereco q ainda nao foram importado
@@ -161,9 +157,7 @@ class LandlinesImportController extends ImportsController {
 						// 	/**
 						// 	* Verifica se a chave do modulo de importacao esta ativa
 						// 	*/
-						// 	if(!$this->Settings->active($this->name)){
-						// 		die;
-						// 	}
+						// $this->Settings->active($this->name);
 							
 						// 	$this->AppImport->__counter('entities');
 						// 	continue;
@@ -355,12 +349,7 @@ class LandlinesImportController extends ImportsController {
 					/**
 					* Verifica se a chave do modulo de importacao esta ativa
 					*/
-					$this->AppImport->timing_ini(TUNING_ON_OF);
-					if(!$this->Settings->active($this->name)){
-						$this->AppImport->__log("Importacao Pausada.", IMPORT_PAUSED, $this->uf);
-						die;
-					}
-					$this->AppImport->timing_end();					
+					$this->Settings->active($this->name);
 				}
 			}
 
