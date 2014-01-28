@@ -44,6 +44,8 @@ class NattFixoPessoa extends AppModelClean {
                 'NattFixoPessoa.DT_NASCIMENTO',
                 ),
             'conditions' => array(
+                // 'CPF_CNPJ' => '10153108770',
+                // 'CPF_CNPJ' => '09685634734',
                 'CPF_CNPJ !=' => '00000000000000000000',
                 ),
             'limit' => "0,{$row_count}"
@@ -52,7 +54,7 @@ class NattFixoPessoa extends AppModelClean {
         if(count($pessoa)){
             foreach ($pessoa as $k => $v) {
                 $map[$k]['pessoa'] = $v['NattFixoPessoa'];
-                $telefone = $this->NattFixoTelefone->find('all', array(
+                $map_telefone = $this->NattFixoTelefone->find('all', array(
                     'fields' => array(
                         'NattFixoTelefone.TELEFONE',
                         'NattFixoTelefone.CPF_CNPJ',
@@ -63,10 +65,18 @@ class NattFixoPessoa extends AppModelClean {
                         'NattFixoTelefone.DATA_ATUALIZACAO'
                         ),
                     'conditions' => array('CPF_CNPJ' => $v['NattFixoPessoa']['CPF_CNPJ']),
-                    'group' => array('NattFixoTelefone.TELEFONE'),
                     'order' => array('DATA_ATUALIZACAO' => 'DESC'),
                     'limit' => 10
                     ));
+
+                /**
+                * Agrupa os telefones iguais ordenando a atualizacao do mais novo para mais antigo
+                */
+                krsort($map_telefone);
+                $telefone = array();
+                foreach ($map_telefone as $k3 => $v3) {
+                    $telefone[$v3['NattFixoTelefone']['TELEFONE']] = $v3;
+                }
 
                 if(count($telefone)){
                     foreach ($telefone as $k2 => $v2) {
@@ -96,7 +106,6 @@ class NattFixoPessoa extends AppModelClean {
                 $this->offset($v['NattFixoPessoa']['CPF_CNPJ']);
             }
         }
-
         return $map;        
     }
 

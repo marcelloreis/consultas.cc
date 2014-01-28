@@ -39,9 +39,10 @@ class LandlinesImportController extends AppImportsController {
 		/**
 		* Verifica se a chave do modulo de importacao esta ativa
 		*/
-		if(!$this->Settings->active($this->name)){
-			die;
-		}
+		// if(!$this->Settings->active($this->name)){
+		// 	die;
+		// }
+
 		/**
 		* Desabilita o contador mobile e habilita o landline
 		*/
@@ -69,16 +70,20 @@ class LandlinesImportController extends AppImportsController {
 			$this->NattFixoEndereco->useTable = $this->endereco_uf;
 
 			/**
-			* Calcula o limite de importacao por reload
-			*/
-			$this->limit_per_reload = ($this->Ientity->find('count') + LIMIT_TABLE_IMPORTS);
-
-			/**
 			* Calcula o total de registros que sera importado de cada tabela
 			*/
 			$this->qt_reg = $this->NattFixoPessoa->find('count', array('conditions' => array('CPF_CNPJ !=' => '00000000000000000000')));
 			$start_time = time();
 			$this->Counter->updateAll(array('Counter.extracted' => $this->qt_reg, 'Counter.start_time' => $start_time), array('table' => 'entities', 'active' => '1'));
+
+            /**
+            * Inicializa a transacao das tabelas
+            */
+            $this->db['entity'] = $this->Ientity->getDataSource();
+            $this->db['landline'] = $this->Ilandline->getDataSource();
+            $this->db['address'] = $this->Ilandline->getDataSource();
+            $this->db['zipcode'] = $this->Ilandline->getDataSource();
+            $this->db['entityLandlineAddress'] = $this->Iassociation->getDataSource();
 
 			/**
 			* Inicia o processo de importacao
@@ -87,21 +92,11 @@ class LandlinesImportController extends AppImportsController {
 			for ($i=0; $i < $this->qt_reg; $i+=LIMIT_BUILD_SOURCE) { 
 
 				/**
-				* Recarrega a importacao
-				*/
-				@$tot_reload = $this->AppImport->counter['entities']['success'] + $this->AppImport->counter['entities']['fails'];
-				if(!empty($tot_reload) && $tot_reload >= $this->limit_per_reload){
-					$path = dirname(dirname(dirname(__FILE__)));
-					shell_exec("setsid sh {$path}/_db/settings/landlines_reload.sh {$this->uf} > /dev/null 2>/dev/null &");
-				}
-
-				/**
 				* Verifica se a chave do modulo de importacao esta ativa
 				*/
-				if(!$this->Settings->active($this->name)){
-					die;
-				}
-
+				// if(!$this->Settings->active($this->name)){
+				// 	die;
+				// }
 
 				/**
 				* Carrega o proximo registro das tabelas de pessoa, telefone e endereco q ainda nao foram importado
@@ -109,6 +104,15 @@ class LandlinesImportController extends AppImportsController {
 				$this->AppImport->timing_ini(TUNING_LOAD_NEXT_REGISTER);
 				$entities = $this->NattFixoPessoa->next(LIMIT_BUILD_SOURCE);
 				$this->AppImport->timing_end();
+
+                /**
+                * Inicialiaza a transacao
+                */
+                $this->db['entity']->begin();
+                $this->db['landline']->begin();
+                $this->db['address']->begin();
+                $this->db['zipcode']->begin();
+                $this->db['entityLandlineAddress']->begin();
 
 				foreach ($entities as $k => $v) {	
 					if(isset($v['pessoa'])){
@@ -330,7 +334,7 @@ class LandlinesImportController extends AppImportsController {
 								$this->AppImport->timing_end();
 								
 								$this->AppImport->timing_ini(TUNING_IMPORT_ALL_DATA);
-								$this->importAssociation($data);
+                                $this->importAssociation($data);
 								$this->AppImport->timing_end();
 
 								/**
@@ -351,17 +355,26 @@ class LandlinesImportController extends AppImportsController {
 					}else{
 						$this->AppImport->fail('entities');
 					}
-
-					/**
-					* Verifica se a chave do modulo de importacao esta ativa
-					*/
-					$this->AppImport->timing_ini(TUNING_ON_OF);
-					if(!$this->Settings->active($this->name)){
-						$this->AppImport->__log("Importacao Pausada.", IMPORT_PAUSED, $this->uf);
-						die;
-					}
-					$this->AppImport->timing_end();					
 				}
+
+                /**
+                * Registra todas as transacoes
+                */
+                $this->AppImport->timing_ini(COMMIT_TRANSACTIONS);
+                $this->db['entity']->commit();
+                $this->db['landline']->commit();
+                $this->db['address']->commit();
+                $this->db['zipcode']->commit();
+                $this->db['entityLandlineAddress']->commit();
+                $this->AppImport->timing_end();
+
+				/**
+				* Verifica se a chave do modulo de importacao esta ativa
+				*/
+				if(!$this->Settings->active($this->name)){
+					die;
+				}
+
 			}
 
 			/**
