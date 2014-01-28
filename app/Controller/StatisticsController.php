@@ -70,7 +70,7 @@ class StatisticsController extends AppController {
 	*/
 	public function reload($controller, $uf){
 		$path = dirname(dirname(dirname(__FILE__)));
-		shell_exec("setsid sh {$path}/_db/settings/{$controller}_reload.sh {$uf} > /dev/null 2>/dev/null &");
+		shell_exec("setsid sh {$path}/_db/settings/{$controller}_reload-innodb.sh {$uf} > /dev/null 2>/dev/null &");
 
 		$this->redirect($this->referer());
 	}
@@ -110,7 +110,7 @@ class StatisticsController extends AppController {
 			/**
 			* Calcula o progresso da importacao
 			*/
-			$imports['progress'] = floor(($imports['records_processed'] / LIMIT_TABLE_IMPORTS) * 100);
+			$imports['progress'] = floor(($imports['records_processed'] / $imports['records_to_process']) * 100);
 
 			/**
 			* Calcula o tempo percorrido da importacao

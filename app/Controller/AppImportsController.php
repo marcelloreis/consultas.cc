@@ -83,7 +83,7 @@ class AppImportsController extends AppController {
 			/**
 			* Verifica se a entidade que sera importada já existe na base de dados
 			*/
-			$hasEntity = $this->Ientity->findImport('first', array(
+			$hasEntity = $this->Ientity->find('first', array(
 				'conditions' => array(
 					'doc' => $entity['Ientity']['doc'],
 					)
@@ -131,7 +131,7 @@ class AppImportsController extends AppController {
 			/**
 			* Verifica se o telefone que sera importado já existe na base de dados
 			*/
-			$hasLandline = $this->Ilandline->findImport('first', array(
+			$hasLandline = $this->Ilandline->find('first', array(
 				'conditions' => array(
 					'tel_full' => $landline['Ilandline']['tel_full'],
 					)
@@ -174,7 +174,7 @@ class AppImportsController extends AppController {
 			/**
 			* Verifica se o telefone que sera importado já existe na base de dados
 			*/
-			$hasMobile = $this->Imobile->findImport('first', array(
+			$hasMobile = $this->Imobile->find('first', array(
 				'conditions' => array(
 					'tel_full' => $mobile['Imobile']['tel_full'],
 					)
@@ -217,7 +217,7 @@ class AppImportsController extends AppController {
 			/**
 			* Verifica se o telefone que sera importado já existe na base de dados
 			*/
-			$hasZipcode = $this->Izipcode->findImport('first', array(
+			$hasZipcode = $this->Izipcode->find('first', array(
 				'conditions' => array(
 					'code' => $zipcode['Izipcode']['code'],
 					)
@@ -253,7 +253,7 @@ class AppImportsController extends AppController {
 		/**
 		* Verifica se o telefone que sera importado já existe na base de dados
 		*/
-		$hasAddress = $this->Iaddress->findImport('first', array(
+		$hasAddress = $this->Iaddress->find('first', array(
 			'conditions' => array(
 				'zipcode_id' => $address['Iaddress']['zipcode_id'],
 				'number' => $address['Iaddress']['number'],
@@ -304,7 +304,7 @@ class AppImportsController extends AppController {
 			/**
 			* Verifica se a junção já existe
 			*/
-			$hasAssociation = $this->Iassociation->findImport('first', array(
+			$hasAssociation = $this->Iassociation->find('first', array(
 				'conditions' => array(
 					'entity_id' => $association['Iassociation']['entity_id'],
 					'landline_id' => $association['Iassociation']['landline_id'],

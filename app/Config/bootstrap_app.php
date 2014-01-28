@@ -122,6 +122,8 @@ define('TUNING_IMPORT_ALL_DATA', 13);
 define('TUNING_FILE_LOAD', 14);
 //Serializa o array
 define('TUNING_SERIALIZE', 15);
+//Commita as transacoes executadas
+define('COMMIT_TRANSACTIONS', 16);
 
 /**
 * Configuracao do cache das entidades

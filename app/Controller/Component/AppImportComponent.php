@@ -38,14 +38,22 @@ class AppImportComponent extends Component {
 	    $this->ModelCounter = ClassRegistry::init('Counter');
 	    $this->Timing = ClassRegistry::init('Timing');
 	    
-	    /**
-	    * Desabilita as verificacoes de chave unica
-	    */
-	    $map = $this->Log->query('SET unique_checks = 0');
-	    /**
-	    * Habilita o cache das consultas
-	    */
-	    $map = $this->Log->query('SET query_cache_type = 1');
+       /**
+        * Desabilita as verificacoes de chave estrangeira
+        */
+        $map = $this->Log->query('SET foreign_key_checks = 0');
+        /**
+        * Desabilita as verificacoes de chave unica
+        */
+        $map = $this->Log->query('SET unique_checks = 0');
+        /**
+        * Desabilita o autocommit
+        */
+        $map = $this->Log->query('SET autocommit = 0');
+        /**
+        * Habilita o cache das consultas
+        */
+        $map = $this->Log->query('SET query_cache_type = 1');
 
 	    /**
 	    * Carrega o array de nomes femininos e masculinas para comparacao e deducao de sexo
@@ -1234,18 +1242,18 @@ class AppImportComponent extends Component {
 	* @return void
 	*/
 	public function __log($log, $type, $uf, $status=true, $table=null, $pk=null, $data=null, $mysql_error=null){	
-		$Log['LogsImport'] = array(
-			'log' => $log,
-			'type' => $type,
-			'mysql_error' => $mysql_error,
-			'uf' => $uf,
-			'table' => $table,
-			'pk' => $pk,
-			'data' => $data,
-			'status' => $status,
-			);
-		$this->Log->create();
-		$this->Log->save($Log);
+		// $Log['LogsImport'] = array(
+		// 	'log' => $log,
+		// 	'type' => $type,
+		// 	'mysql_error' => $mysql_error,
+		// 	'uf' => $uf,
+		// 	'table' => $table,
+		// 	'pk' => $pk,
+		// 	'data' => $data,
+		// 	'status' => $status,
+		// 	);
+		// $this->Log->create();
+		// $this->Log->save($Log);
 	}
 
 	/**
@@ -1466,7 +1474,6 @@ class AppImportComponent extends Component {
 		$this->timing_avg[$this->time_id] = array_slice($this->timing_avg[$this->time_id], 0, LIMIT_BUILD_SOURCE);
 
 		$avg = array_sum($this->timing_avg[$this->time_id])/count($this->timing_avg[$this->time_id]);
-
 		$this->Timing->updateAll(array('Timing.time' => $avg), array('Timing.id' => $this->time_id));
 	}
 
