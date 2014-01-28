@@ -185,20 +185,28 @@ class UsersController extends AppController {
     *
     * Este método carrega todos os dados do cliente logado
     */
-    private function loadClient(){
+    public function loadClient($client_id=null){
+        /**
+        * Inicializa a variavel que retornara os dados do cliente
+        */
+        $client = array();
+
         /**
         * Carrega os dados do usuario logado
         */
-        $user = $this->Auth->user();
+        if(!$client_id){
+            $user = $this->Auth->user();
+            $client_id = $user['client_id'];
+        }
 
-        if(!empty($user['client_id'])){
+        if(!empty($client_id)){
             /**
             * Carrega os dados do cliente logado
             */
             $client = $packages = $this->User->Client->find('first', array(
                 'recursive' => -1,
                 'conditions' => array(
-                    'Client.id' => $user['client_id']
+                    'Client.id' => $client_id
                     )
                 ));
 
@@ -206,7 +214,9 @@ class UsersController extends AppController {
             * Percorre por todos os dados retornado salvando na session
             */
             foreach ($client['Client'] as $k => $v) {
-                $this->Session->write("Client.{$k}", $v);
+                if(method_exists($this->Session, 'write')){
+                    $this->Session->write("Client.{$k}", $v);
+                }
             }
 
             /**
@@ -219,15 +229,21 @@ class UsersController extends AppController {
                     'Billing.validity_orig',
                     ),
                 'conditions' => array(
-                    'Billing.client_id' => $user['client_id']
+                    'Billing.client_id' => $client_id
                     ),
                 'order' => array('Billing.created' => 'desc')
                 ));  
-            $this->Session->write("Client.billing_id", $billing['Billing']['id']);          
-            $this->Session->write("Client.package_id", $billing['Billing']['package_id']);          
-            $this->Session->write("Client.validity_orig", $billing['Billing']['validity_orig']);          
-
+            if(method_exists($this->Session, 'write')){
+                $this->Session->write("Client.billing_id", $billing['Billing']['id']);          
+                $this->Session->write("Client.package_id", $billing['Billing']['package_id']);          
+                $this->Session->write("Client.validity_orig", $billing['Billing']['validity_orig']);          
+            }
+            $client['Client']['billing_id'] = $billing['Billing']['id'];
+            $client['Client']['package_id'] = $billing['Billing']['package_id'];
+            $client['Client']['validity_orig'] = $billing['Billing']['validity_orig'];
         }
+
+        return $client;
     }
 
     /**
@@ -235,11 +251,17 @@ class UsersController extends AppController {
     *
     * Este método carrega todos os precos dos produtos de acordo com os seus pacotes
     */
-    private function loadPrices(){
+    public function loadPrices(){
+        /**
+        * Inicializa a variavel de retorno da bilhetagem
+        */
+        $billings = array();
+
         /**
         * Carrega todos os pacotes cadastrados
         */
         $packages = $this->User->Client->Billing->Package->find('all', array('recursive' => -1));
+
         /**
         * Percorre por todos os pacotes encontrados
         */
@@ -259,15 +281,19 @@ class UsersController extends AppController {
             */
             foreach ($prices as $k2 => $v2) {
                 /**
-                * Salva na session os precos encontrados por cada pacote
+                * Salva na session os id's e os precos encontrados por cada pacote
                 */
-                $this->Session->write("Billing.prices_val.{$v['Package']['id']}.{$v2['Price']['product_id']}", $v2['Price']['price']);
-                /**
-                * Salva na session os ids dos precos encontrados por cada pacote
-                */
-                $this->Session->write("Billing.prices_id.{$v['Package']['id']}.{$v2['Price']['product_id']}", $v2['Price']['id']);
+                if(method_exists($this->Session, 'write')){
+                    $this->Session->write("Billing.prices_val.{$v['Package']['id']}.{$v2['Price']['product_id']}", $v2['Price']['price']);
+                    $this->Session->write("Billing.prices_id.{$v['Package']['id']}.{$v2['Price']['product_id']}", $v2['Price']['id']);
+                }
+                
+                $billings['prices_val'][$v['Package']['id']][$v2['Price']['product_id']] = $v2['Price']['price'];
+                $billings['prices_id'][$v['Package']['id']][$v2['Price']['product_id']] = $v2['Price']['id'];
             }
         }
+
+        return $billings;
     }
 
     /**

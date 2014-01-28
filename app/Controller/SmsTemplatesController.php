@@ -2,7 +2,7 @@
 /**
  * Static content controller.
  *
- * Este arquivo ira renderizar as visões contidas em views/SmsModels/
+ * Este arquivo ira renderizar as visões contidas em views/SmsTemplates/
  *
  * PHP 5
  *
@@ -19,16 +19,16 @@ App::uses('AppController', 'Controller');
  * Este controlador contem regras de negócio aplicadas ao model Country
  *
  * @package       app.Controller
- * @link http://.framework.nasza.com.br/2.0/controller/SmsModels.html
+ * @link http://.framework.nasza.com.br/2.0/controller/SmsTemplates.html
  */
-class SmsModelsController extends AppController {
+class SmsTemplatesController extends AppController {
 
 	/**
 	* Controller name
 	*
 	* @var string
 	*/
-	public $name = 'SmsModels';
+	public $name = 'SmsTemplates';
 
 	/**
 	* Método index
@@ -39,6 +39,11 @@ class SmsModelsController extends AppController {
 	* @return void
 	*/
 	public function index($params=array()){
+		/**
+		* Carrega os modelos apenas do usuario logado
+		*/
+		$params['conditions']['SmsTemplate.user_id'] = $this->Session->read('Auth.User.id');
+
 		//@override
 		parent::index($params);
 	}	

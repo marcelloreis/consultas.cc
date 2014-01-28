@@ -69,7 +69,7 @@ class AppFormHelper extends AppHelper {
         unset($options['label']);
 
         //Verifica se o campo é uma chave estrangeira
-        if(preg_match('/[a-z].+?_id/', $fieldName) && !isset($options['type'])){
+        if(preg_match('/[a-z].+?_id/', $fieldName) && !isset($options['type']) && !isset($options['template'])){
             $options['template'] = 'form-input-fk';
         }
 
@@ -305,7 +305,7 @@ class AppFormHelper extends AppHelper {
                 
                 default:
                     //Status
-                    if (preg_match('/^sexo.*|sex.*|in_out.*|has_.*|is_.*|check.*|published.*|trashed.*|deleted.*|status.*|active.*$/si', $fieldName)){
+                    if (preg_match('/^gender.*sexo.*|sex.*|in_out.*|has_.*|is_.*|check.*|published.*|trashed.*|deleted.*|status.*|active.*$/si', $fieldName)){
                         $typeInput = 'select';
                     }
                 break;
@@ -325,8 +325,8 @@ class AppFormHelper extends AppHelper {
             $options = array('1' => 'Ativo', '0' => 'Inativo');
         }
         //Sexo
-        if (preg_match('/sexo.*|sex.*/si', $fieldName)){
-            $options = array('1' => 'Feminino', '0' => 'Masculino');
+        if (preg_match('/gender|sexo.*|sex.*/si', $fieldName)){
+            $options = array(FEMALE => 'Feminino', MALE => 'Masculino');
         }
 
         return $options;

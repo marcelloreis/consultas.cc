@@ -38,7 +38,7 @@ class AppUtilsHelper extends AppHelper {
 	* atraves do parametro $trueTxt e $falseTxt
 	*/
 	public function boolTxt($bool, $trueTxt="Yes", $falseTxt="No"){
-		$txt = (isset($bool) && $bool == true)?__($trueTxt):__($falseTxt);
+		$txt = (isset($bool) && $bool == true)?$trueTxt:$falseTxt;
 		$color = (isset($bool) && $bool == true)?'green':'red';
 		$txt = "<font color=\"{$color}\">{$txt}</font>";
 
@@ -183,7 +183,7 @@ class AppUtilsHelper extends AppHelper {
         	$controller = isset($attr['url']['controller'])?$attr['url']['controller']:$attr['controller'];
         	$action = isset($attr['url']['action'])?$attr['url']['action']:$attr['action'];
 
-			if(isset($v['children']) || $this->AppPermissions->check(ucfirst(strtolower($controller)) . '.' . $action)){
+			if(isset($v['children']) || $this->AppPermissions->check(Inflector::camelize($controller) . '.' . $action)){
 				
 				//Monta a URL do menu
 				$url = ($attr['url'])?$attr['url']:array('controller' => Inflector::variable($controller), 'action' => $action, 'plugin' => $attr['plugin']);

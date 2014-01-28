@@ -96,6 +96,9 @@ define('ADMIN_USER', 1);
 //Lixeira
 define('ACTION_TRASH', 'trashed');
 define('ACTION_DELETE', 'deleted');
+//IDs padroes
+define('FEMALE', 1);
+define('MALE', 2);
 
 /**
 * Templates das mensagens

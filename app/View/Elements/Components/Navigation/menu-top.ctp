@@ -20,15 +20,15 @@ $menu = array(
             /**
             * Campanhas
             */
-            array('label' => 'Endereços', 'controller' => 'sms_campaigns'),
-            /**
-            * Endereços
-            */
-            array('label' => 'Endereços', 'controller' => 'sms_addresses'),
+            array('label' => 'Campanhas', 'controller' => 'sms_campaigns'),
             /**
             * Modelos
             */
-            array('label' => 'Campanhas', 'controller' => 'sms_models'),
+            array('label' => 'Modelos', 'controller' => 'sms_templates'),
+            /**
+            * Grupos
+            */
+            array('label' => 'Grupos', 'controller' => 'sms_groups'),
             /**
             * Agenda
             */
@@ -36,7 +36,7 @@ $menu = array(
             /**
             * Relatorios
             */
-            array('label' => 'Agenda', 'controller' => 'sms_reports'),
+            array('label' => 'Relatórios', 'controller' => 'sms_reports'),
         ),
     ),
     /**
@@ -132,7 +132,7 @@ $menu = array(
 * Libera somente o menu de consultas para os usuarios que nao forem do grupo admin
 */
 if($userLogged['group_id'] != ADMIN_GROUP){
-    $menu = array_slice($menu, 0, 1);
+    $menu = array_slice($menu, 0, 2);
 }
 
 echo $this->AppUtils->buildMenu($menu, array('classActive' => 'page-active'));

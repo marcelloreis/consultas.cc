@@ -508,7 +508,7 @@ class AppController extends Controller {
 			$defaults = array(
 							'limit' => $this->limit
 				);
-
+			
 			$params = array_merge($defaults, $params);
 	    	$this->paginate = array($this->modelClass => $params);
 

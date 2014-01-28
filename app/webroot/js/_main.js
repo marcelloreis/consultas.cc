@@ -46,7 +46,18 @@ $(document).ready(function(){
     });
     $('.msk-alpha').keyup(function(){
             $(this).val($(this).val().replace(/[0-9]/gi, ''));
+    });
+    $('.msk-max')
+    .keyup(function(e) {
+        Nz.msk_max(e, this);
     })
+    .focus(function(e){
+        Nz.msk_max(e, this);
+    })
+    .blur(function(e){
+        Nz.msk_max(e, this);
+    })
+    ;    
 
 	$('.map-tooltip').tooltip('hide');
 	
@@ -62,6 +73,28 @@ $(document).ready(function(){
 			location.href = url + '/?' + data;
 		}
 	});
+
+    /**
+    * Templates Salvos
+    */
+    if($('select[name*=sms_template_id]').size()){
+        $('select[name*=sms_template_id]')
+        .chosen()
+        .change(function(){
+            $('textarea[name*=template]').val($(this).val());
+        });
+    }
+
+    /**
+    * Grupos de sms salvos
+    */
+    if($('select[name*=sms_group_id]').size()){
+        $('select[name*=sms_group_id]')
+        .chosen()
+        .change(function(){
+            $('textarea[name*=contact_list]').val($(this).val());
+        });
+    }
 
     /**
     * Cidades por demanda
@@ -147,5 +180,19 @@ $(document).ready(function(){
 });
 
 var Nz = {
+    msk_max:function(e, elem){
+        var tval = $(elem).val();
+        var tlength = tval.length;
+        var set = $(elem).attr('maxlenth');
+        var remain = parseInt(set - tlength);
 
+        if(typeof($(elem).attr('class-label')) != 'undefined'){
+            var label = $('.' + $(elem).attr('class-label'));
+            label.text(remain);
+        }
+
+        if (remain <= 0 && e.which !== 0) {
+            $(elem).val((tval).substring(0, set))
+        }
+    }
 }

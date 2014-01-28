@@ -40,7 +40,8 @@ class BillingsController extends AppController {
 	*/
 	public function index($params=array()){
 		$params = array(
-			'group' => 'Billing.client_id'
+			'group' => 'Billing.client_id',
+			'order' => array('Billing.created' => 'desc'),
 			);
 
 		/**

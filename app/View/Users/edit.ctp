@@ -44,7 +44,7 @@ echo $this->Html->script(array('plugins/fileupload/bootstrap-fileupload.min'), a
                                 echo $this->AppForm->input('email', array('template' => 'Users/form-input'));
                                 echo $this->AppForm->input('password', array('template' => 'Users/form-input'));
                                 echo $this->AppForm->input('unlimited', array('class' => 'icheck-me', 'data-skin' => 'square', 'data-color' => 'blue', 'template' => 'Users/form-input'));
-                                echo $this->AppForm->input('status', array('class' => 'icheck-me', 'data-skin' => 'square', 'data-color' => 'blue', 'template' => 'Users/form-input'));
+                                echo $this->AppForm->input('status', array('label' => 'Ativo', 'class' => 'icheck-me', 'data-skin' => 'square', 'data-color' => 'blue', 'template' => 'Users/form-input'));
 
                                 echo $this->AppForm->btn('Salvar Alterações', array('template' => 'Users/form-input-btn'));
                                 ?>

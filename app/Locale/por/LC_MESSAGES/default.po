@@ -195,6 +195,15 @@ msgstr "Sócio responsável 2"
 msgid "Skills"
 msgstr "Habilidades"
 
+msgid "SmsCampaigns"
+msgstr "Campanhas SMS"
+
+msgid "SmsGroups"
+msgstr "Listas de Contato para SMS"
+
+msgid "SmsTemplates"
+msgstr "Modelos de SMS"
+
 msgid "State id"
 msgstr "Estado"
 
@@ -206,6 +215,9 @@ msgstr "Estados"
 
 msgid "Street"
 msgstr "Rua"
+
+msgid "Title"
+msgstr "Titulo"
 
 msgid "Tp search"
 msgstr "Tipo da consulta"

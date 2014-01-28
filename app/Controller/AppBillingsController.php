@@ -21,10 +21,12 @@ class AppBillingsController extends AppController {
 	protected $phone;
 	protected $address;
 
+	protected $user_id;
 	protected $product_id;
 	protected $package_id;
 	protected $billing_id;
 	protected $cache_id;
+	protected $query;
 	protected $validity_orig;
 	protected $balance;
 	protected $price_id;
@@ -53,8 +55,10 @@ class AppBillingsController extends AppController {
         /**
         * Carrega os dados da ultima bilhetagem do cliente
         */
+        $this->user_id = $this->Session->read('Auth.User.id');
         $this->billing_id = $this->Session->read('Client.billing_id');
         $this->package_id = $this->Session->read('Client.package_id');
+        $this->query = $this->here;
         $this->validity_orig = $this->Session->read('Client.validity_orig');
 		$this->set('validity_orig', $this->validity_orig);
 
@@ -71,7 +75,9 @@ class AppBillingsController extends AppController {
 		/**
 		* Verificar se o usuario logado tem autorizacao para efetuar as consultas
 		*/
-		$this->security();
+		if($this->security()){
+			$this->redirect(array('controller' => 'packages', 'action' => 'pricing'));
+		}
 	}
 
     /**
@@ -111,11 +117,13 @@ class AppBillingsController extends AppController {
 	* Método security
 	* Regras de autorização configurados para verificar se o usuário esta autorizado para realizar as consultas no sistema. 
 	* Cada regra será verificada na sequência, se o usuario logado atender a todas, 
-	* então ele nao sera redirecionado e a consulta ira presseguir normalmente
+	* então retorna false e o sistema ira presseguir normalmente
 	*
 	* @return void
 	*/
-	private function security(){
+	protected function security(){
+		$return = false;
+
 		/**
 		* Caso o usuario nao tenho acesso ilimitado as consultas, 
 		* verificar se o usuario logado tem autorizacao para efetuar as consultas
@@ -126,7 +134,7 @@ class AppBillingsController extends AppController {
 			*/
 			if(is_null($this->billing_id)){
 				$this->Session->setFlash("{$this->userLogged['given_name']}, " . 'ainda não constam créditos em sua conta para realizar este tipo de consulta.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
-				$this->redirect(array('controller' => 'packages', 'action' => 'pricing'));
+				$return = true;
 			}
 
 			/**
@@ -134,7 +142,7 @@ class AppBillingsController extends AppController {
 			*/
 			if($this->AppUtils->num2db($this->price) > $this->balance){
 				$this->Session->setFlash("{$this->userLogged['given_name']}, " . 'seu saldo é insuficiênte para realizar consultas.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
-				$this->redirect(array('controller' => 'packages', 'action' => 'pricing'));
+				$return = true;
 			}
 
 			/**
@@ -142,7 +150,7 @@ class AppBillingsController extends AppController {
 			*/
 			if($this->validity_orig < date('Y-m-d')){
 				$this->Session->setFlash("{$this->userLogged['given_name']}, " . 'seu saldo expirou.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
-				$this->redirect(array('controller' => 'packages', 'action' => 'pricing'));
+				$return = true;
 			}
 
 			/**
@@ -151,9 +159,11 @@ class AppBillingsController extends AppController {
 			$contract_id = $this->Session->read('Client.contract_id');
 			if(empty($contract_id)){
 				$this->Session->setFlash("{$this->userLogged['given_name']}, " . 'Seu contrato ainda não foi gerado, procure o setor administrativo e regularize sua situação.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
-				$this->redirect(array('controller' => 'packages', 'action' => 'pricing'));
+				$return = true;
 			}
-		}		
+		}
+
+		return $return;		
 	}
 
     /**
@@ -176,7 +186,7 @@ class AppBillingsController extends AppController {
 		/**
 		* Desabilita a bilhetagem quando o usuario estiver somente atualizando a pagina já bilhetada
 		*/
-		if($this->params->here == $this->Session->read('Billing.changedPage')){
+		if($this->query == $this->Session->read('Billing.changedPage')){
 			$enabled = false;
 		}
 
@@ -204,7 +214,7 @@ class AppBillingsController extends AppController {
 	*
 	* @return void
 	*/
-    private function charge(){
+    protected function charge(){
 		/**
 		* Desabilita o cache da bilhetagem
 		*/
@@ -218,7 +228,7 @@ class AppBillingsController extends AppController {
     		* Recarrega o cache de paginas cobradas
     		*/
     		if(!$this->RequestHandler->isAjax()){
-    			$this->Session->write('Billing.changedPage', $this->params->here);
+    			$this->Session->write('Billing.changedPage', $this->query);
     		}
 
 			/**
@@ -231,17 +241,18 @@ class AppBillingsController extends AppController {
 			*/
 			$data = array(
 				'Query' => array(
-					'user_id' => $this->Session->read('Auth.User.id'),
+					'user_id' => $this->user_id,
 					'billing_id' => $this->billing_id,
 					'price_id' => $this->price_id,
 					'tp_search' => $this->tp_search,
-					'query' => $this->here,
+					'query' => $this->query,
 					)
 				);
 
 			/**
 			* Salva os dados da consulta
 			*/
+			$this->Query->create();
 			$this->Query->save($data);
 
 			/**

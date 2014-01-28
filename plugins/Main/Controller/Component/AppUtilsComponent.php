@@ -36,6 +36,19 @@ class AppUtilsComponent extends Component {
 		parent::startup($controller);
 	}
 
+	/**
+	 * Altera as chaves do array para o padrao de variaveis de template
+	 */
+	public function key2var($array){
+		$values = array();
+		foreach ($array as $k => $v) {
+			if (!is_array($v)) {
+				$values["%{$k}%"] = $v;
+			}
+		}
+
+		return $values;
+	}
 	
 	/**
 	* Método xml2array

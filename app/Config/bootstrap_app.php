@@ -41,6 +41,7 @@ define('PRODUCT_EXTRA_TELEFONE_FIXO', 6);
 define('PRODUCT_LOCALIZADOR', 7);
 define('PRODUCT_POSSIVEIS_PARENTES', 8);
 define('PRODUCT_VIZINHOS', 9);
+define('PRODUCT_SMS', 10);
 
 define('TP_CPF', 1);
 define('TP_CNPJ', 2);
@@ -58,6 +59,7 @@ define('TP_SEARCH_EXTRA_LANDLINE', 8);
 define('TP_SEARCH_EXTRA_LOCATOR', 9);
 define('TP_SEARCH_EXTRA_FAMILY', 10);
 define('TP_SEARCH_EXTRA_NEIGHBORS', 11);
+define('TP_SEARCH_SMS', 12);
 
 
 define('LIMIT_HASH', 5);
@@ -73,9 +75,6 @@ define('LIMIT_TABLE_IMPORTS', 10000);
 define('PROGRESSBAR_INTERVAL', 1);
 
 define('THEME', 'theme-satblue');
-
-define('FEMALE', 1);
-define('MALE', 2);
 
 /**
 * Codigos dos logs de importacao
@@ -123,7 +122,6 @@ define('TUNING_IMPORT_ALL_DATA', 13);
 define('TUNING_FILE_LOAD', 14);
 //Serializa o array
 define('TUNING_SERIALIZE', 15);
-
 
 /**
 * Configuracao do cache das entidades

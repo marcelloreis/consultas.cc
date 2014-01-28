@@ -14,7 +14,12 @@ define('PATH_TEMPLATE', PATH_APP . DS . 'View' . DS . 'Elements' . DS . 'Templat
 define('PATH_TEMPLATE_DEFAULT', PATH_PLUGIN . DS . 'View' . DS . 'Elements' . DS . 'Templates');
 
 
-
+/**
+* Rest de envio SMS
+*/
+define('SMS_REST', 'http://www.fabricadesms.com/sms/app/api/send_msg');
+define('SMS_LOGIN', 'marceloreis');
+define('SMS_PASSWORD', 'viaunix');
 
 
 
