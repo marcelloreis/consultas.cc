@@ -35,7 +35,7 @@ class LandlinesImportController extends AppImportsController {
 	*
 	* @return void
 	*/
-	public function run($uf=null){
+	public function run($uf=null, $source='binary'){
 		/**
 		* Verifica se a chave do modulo de importacao esta ativa
 		*/
@@ -102,7 +102,7 @@ class LandlinesImportController extends AppImportsController {
 				* Carrega o proximo registro das tabelas de pessoa, telefone e endereco q ainda nao foram importado
 				*/
 				$this->AppImport->timing_ini(TUNING_LOAD_NEXT_REGISTER);
-				$entities = $this->NattFixoPessoa->next(LIMIT_BUILD_SOURCE);
+				$entities = $this->NattFixoPessoa->next($source, LIMIT_BUILD_SOURCE);
 				$this->AppImport->timing_end();
 
                 /**
@@ -188,7 +188,7 @@ class LandlinesImportController extends AppImportsController {
 								$ddd_telefone = $v2['TELEFONE'];
 								$ddd = $this->AppImport->getDDD($v2['TELEFONE']);
 								$telefone = $this->AppImport->getTelefone($v2['TELEFONE']);
-							
+
 								/**
 								* Extrai o ano de atualizacao do telefone
 								*/
