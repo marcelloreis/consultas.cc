@@ -72,7 +72,7 @@ class LandlinesImportController extends AppImportsController {
 			/**
 			* Calcula o total de registros que sera importado de cada tabela
 			*/
-			$this->qt_reg = $this->NattFixoPessoa->find('count', array('conditions' => array('CPF_CNPJ !=' => '00000000000000000000')));
+			$this->qt_reg = $this->NattFixoPessoa->findQt($source);
 			$start_time = time();
 			$this->Counter->updateAll(array('Counter.extracted' => $this->qt_reg, 'Counter.start_time' => $start_time), array('table' => 'entities', 'active' => '1'));
 
@@ -84,6 +84,7 @@ class LandlinesImportController extends AppImportsController {
             $this->db['address'] = $this->Ilandline->getDataSource();
             $this->db['zipcode'] = $this->Ilandline->getDataSource();
             $this->db['entityLandlineAddress'] = $this->Iassociation->getDataSource();
+
 
 			/**
 			* Inicia o processo de importacao
@@ -114,7 +115,8 @@ class LandlinesImportController extends AppImportsController {
                 $this->db['zipcode']->begin();
                 $this->db['entityLandlineAddress']->begin();
 
-				foreach ($entities as $k => $v) {	
+				foreach ($entities as $k => $v) {
+echo "pessoa {$k}\n";					
 					if(isset($v['pessoa'])){
 						/**
 						* Gera o hash do nome da entidade

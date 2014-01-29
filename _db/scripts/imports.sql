@@ -35,9 +35,12 @@ repair table i_zipcodes;
 repair table i_landlines;
 repair table i_mobiles;
 
+
 #Migracao dos dados importados
+/*
 INSERT INTO entities SELECT * FROM i_entities;
 INSERT INTO landlines SELECT * FROM i_landlines;
 INSERT INTO zipcodes SELECT * FROM i_zipcodes;
 INSERT INTO addresses SELECT * FROM i_addresses;
 INSERT INTO associations SELECT * FROM i_associations;
+*/
