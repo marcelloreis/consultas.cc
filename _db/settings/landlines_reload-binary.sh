@@ -21,4 +21,4 @@ mysql -u $user -p$password -e 'TRUNCATE table consultas_cc._logs;'
 
 # Reinicia a importacao
 echo '1' > "$app/_db/settings/on_off"
-php app/exec.php /landlines_import/run/$1
+php app/exec.php /landlines_import/run_binary/$1

@@ -24,29 +24,56 @@ echo $this->element('Index/Imports/charts-gauge');
 			<div class="box-title">
 				<h3>
 					<i class="glyphicon-stopwatch"></i>
-					<?php echo __('Tools')?>
+					Painel de controle de importação binária
 				</h3>
 			</div>
 			<div class="box-content">
 				<div class="row-fluid">
 					<div class="span3">
 						<p>
-							<?php echo $this->Html->link('Load/Reload Landline', array('action' => 'reload', 'landlines', $uf), array('class' => 'btn-block btn btn-large'))?>
+							<?php echo $this->Html->link('Importar Fixos', array('action' => 'reload_binary', 'landlines', $uf), array('class' => 'btn-block btn btn-large'))?>
 						</p>
 					</div>					
 					<div class="span3">
 						<p>
-							<?php echo $this->Html->link('Load/Reload Mobile', array('action' => 'reload', 'mobiles', $uf), array('class' => 'btn-block btn btn-large'))?>
+							<?php echo $this->Html->link('Importar Móveis', array('action' => 'reload_binary', 'mobiles', $uf), array('class' => 'btn-block btn btn-large'))?>
 						</p>
 					</div>					
 					<div class="span3">
 						<p>
-							<?php echo $this->Html->link('Lock Import', array('action' => 'lock', 0), array('class' => 'btn-block btn btn-large'))?>
+							<?php echo $this->Html->link('Parar Importação', array('action' => 'lock', 0), array('class' => 'btn-block btn btn-large'))?>
+						</p>
+					</div>					
+				</div>
+			</div>
+		</div>					
+	</div>
+</div>
+
+<div class="row-fluid">
+	<div class="span12">
+		<div class="box box-color box-bordered">
+			<div class="box-title">
+				<h3>
+					<i class="glyphicon-stopwatch"></i>
+					Painel de controle de importação por texto
+				</h3>
+			</div>
+			<div class="box-content">
+				<div class="row-fluid">
+					<div class="span3">
+						<p>
+							<?php echo $this->Html->link('Importar Fixos', array('action' => 'reload_text', 'landlines'), array('class' => 'btn-block btn btn-large'))?>
 						</p>
 					</div>					
 					<div class="span3">
 						<p>
-							<?php echo $this->Html->link('Real-Time', array('action' => 'real_time'), array('class' => 'btn-block btn btn-large'))?>
+							<?php echo $this->Html->link('Importar Móveis', array('action' => 'reload_text', 'mobiles'), array('class' => 'btn-block btn btn-large'))?>
+						</p>
+					</div>					
+					<div class="span3">
+						<p>
+							<?php echo $this->Html->link('Parar Importação', array('action' => 'lock', 0), array('class' => 'btn-block btn btn-large'))?>
 						</p>
 					</div>					
 				</div>
