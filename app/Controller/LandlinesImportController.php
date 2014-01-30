@@ -415,11 +415,9 @@ class LandlinesImportController extends AppImportsController {
         $this->NattFixoPessoa->source_year = 2012;
 
 		/**
-		* Carrega o proximo registro das tabelas de pessoa, telefone e endereco q ainda nao foram importado
+		* Carrega o path de todos os arquivos contidos na pasta de recursos em texto
 		*/
-		$this->AppImport->timing_ini(TUNING_LOAD_NEXT_REGISTER);
 		$sources = $this->NattFixoPessoa->read_sources();
-		$this->AppImport->timing_end();
 
 		/**
 		* Contabiliza a quantidade de registros encontrado
@@ -498,7 +496,9 @@ class LandlinesImportController extends AppImportsController {
 	            /**
 	            * Carrega o array com os dados a serem importados a partir linha extraida do arquivo
 	            */
+				$this->AppImport->timing_ini(TUNING_LOAD_NEXT_REGISTER);
 	            $entity = $this->NattFixoPessoa->txt2array($ln);
+	            $this->AppImport->timing_end();
 
 				if(isset($entity['pessoa'])){
 					/**
