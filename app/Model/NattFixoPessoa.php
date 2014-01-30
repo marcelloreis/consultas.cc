@@ -25,7 +25,7 @@ class NattFixoPessoa extends AppModelClean {
 	public $displayField = 'NOME_RAZAO';
     public $order = 'NattFixoPessoa.CPF_CNPJ';
     public $layout;
-    public $layout_positions;
+    public $map_pos;
     public $folder;
 	public $source_year;
 
@@ -194,24 +194,24 @@ class NattFixoPessoa extends AppModelClean {
         /**
         * Prepra os dados que alimentarao o array
         */
-        @$cpf_cnpj = !empty($v[$this->layout_positions['NRF']])?trim($v[$this->layout_positions['NRF']]):null;
-        @$nome_razao = !empty($v[$this->layout_positions['NOME']])?trim($v[$this->layout_positions['NOME']]):null;
-        @$mae = !empty($v[$this->layout_positions['MAE']])?trim($v[$this->layout_positions['MAE']]):null;
-        @$sexo = !empty($v[$this->layout_positions['SEXO']])?trim($v[$this->layout_positions['SEXO']]):null;
-        @$dt_nascimento = !empty($v[$this->layout_positions['DT_NASCIMENTO']])?trim($v[$this->layout_positions['DT_NASCIMENTO']]):null;
-        @$ddd = !empty($v[$this->layout_positions['DDD']])?$v[$this->layout_positions['DDD']]:null;
-        @$telefone = !empty($v[$this->layout_positions['FONE']])?$v[$this->layout_positions['FONE']]:null;
-        @$tel_full = "0{$ddd}{$telefone}";
-        @$cep = !empty($v[$this->layout_positions['CEP']])?trim($v[$this->layout_positions['CEP']]):null;
-        @$cod_end = null;
-        @$complemento = !empty($v[$this->layout_positions['INS_COMPL']])?trim($v[$this->layout_positions['INS_COMPL']]):null;
-        @$numero = !empty($v[$this->layout_positions['INS_NUM_EN']])?trim($v[$this->layout_positions['INS_NUM_EN']]):null;
-        @$data_atualizacao = !empty($v[$this->layout_positions['DATA_ATUALIZACAO']])?"{$this->source_year}-01-01":null;
-        @$rua = !empty($v[$this->layout_positions['INS_TP_END']])?trim($v[$this->layout_positions['INS_TP_END']]):null;
-        @$nome_rua = !empty($v[$this->layout_positions['INS_ENDERE']])?trim($v[$this->layout_positions['INS_ENDERE']]):null;
-        @$bairro = !empty($v[$this->layout_positions['INS_BAIRRO']])?trim($v[$this->layout_positions['INS_BAIRRO']]):null;
-        @$cidade = !empty($v[$this->layout_positions['CIDADE']])?trim($v[$this->layout_positions['CIDADE']]):null;
-        @$uf = !empty($v[$this->layout_positions['UF']])?trim($v[$this->layout_positions['UF']]):null;
+        @$cpf_cnpj          = !empty($v[$this->map_pos['doc']])?trim($v[$this->map_pos['doc']]):null;
+        @$nome_razao        = !empty($v[$this->map_pos['name']])?trim($v[$this->map_pos['name']]):null;
+        @$mae               = !empty($v[$this->map_pos['mother']])?trim($v[$this->map_pos['mother']]):null;
+        @$sexo              = !empty($v[$this->map_pos['gender']])?trim($v[$this->map_pos['gender']]):null;
+        @$dt_nascimento     = !empty($v[$this->map_pos['birthday']])?trim($v[$this->map_pos['birthday']]):null;
+        @$ddd               = !empty($v[$this->map_pos['ddd']])?$v[$this->map_pos['ddd']]:null;
+        @$telefone          = !empty($v[$this->map_pos['tel']])?$v[$this->map_pos['tel']]:null;
+        @$tel_full          = !empty($v[$this->map_pos['tel_full']])?$v[$this->map_pos['tel_full']]:"0{$ddd}{$telefone}";
+        @$cep               = !empty($v[$this->map_pos['zipcode']])?trim($v[$this->map_pos['zipcode']]):null;
+        @$cod_end           = null;
+        @$complemento       = !empty($v[$this->map_pos['complement']])?trim($v[$this->map_pos['complement']]):null;
+        @$numero            = !empty($v[$this->map_pos['number']])?trim($v[$this->map_pos['number']]):null;
+        @$data_atualizacao  = !empty($v[$this->map_pos['year']])?"{$this->source_year}-01-01":null;
+        @$rua               = !empty($v[$this->map_pos['type_address']])?trim($v[$this->map_pos['type_address']]):null;
+        @$nome_rua          = !empty($v[$this->map_pos['street']])?trim($v[$this->map_pos['street']]):null;
+        @$bairro            = !empty($v[$this->map_pos['neighborhood']])?trim($v[$this->map_pos['neighborhood']]):null;
+        @$cidade            = !empty($v[$this->map_pos['city']])?trim($v[$this->map_pos['city']]):null;
+        @$uf                = !empty($v[$this->map_pos['uf']])?trim($v[$this->map_pos['uf']]):null;
 
         /**
         * Prepara o array para o formato aceito no controller
@@ -246,6 +246,33 @@ class NattFixoPessoa extends AppModelClean {
             );   
 
         return $map;
+    }
+
+    public function load_map_positions($map_fields, $layout){
+        $this->layout = $layout;
+
+        /**
+        * Carrega o mapa de indice a partir do layout passado pelo parametro
+        */
+        $map = explode('"#"', substr($this->layout, 1, -1));
+        $map = array_flip($map);
+
+        /**
+        * Percorre por todos os campos contidos no layout passado pelo parametro
+        */
+        foreach ($map as $k => $v) {
+            /**
+            * Percorre por todos os campos padroes da importacao
+            */
+            foreach ($map_fields as $k2 => $v2) {
+                /**
+                * Verifica se o campo informado confere com o campo padrao, caso confira, informa o indice do campo
+                */
+                if($k == $v2){
+                    $this->map_positions[$k2] = $v;
+                }
+            }
+        }
     }
 
     public function offset($doc){

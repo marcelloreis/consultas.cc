@@ -69,8 +69,7 @@ class StatisticsController extends AppController {
 	* @return void
 	*/
 	public function reload_binary($controller, $uf){
-		$path = dirname(dirname(dirname(__FILE__)));
-		shell_exec("setsid sh {$path}/_db/settings/{$controller}_reload-binary.sh {$uf} > /dev/null 2>/dev/null &");
+		shell_exec("setsid sh " . ROOT . "/_db/settings/{$controller}_reload-binary.sh {$uf} > /dev/null 2>/dev/null &");
 
 		$this->redirect($this->referer());
 	}
@@ -82,8 +81,7 @@ class StatisticsController extends AppController {
 	* @return void
 	*/
 	public function reload_text($controller){
-		$path = dirname(dirname(dirname(__FILE__)));
-		shell_exec("setsid sh {$path}/_db/settings/{$controller}_reload-text.sh > /dev/null 2>/dev/null &");
+		shell_exec("setsid sh " . ROOT . "/_db/settings/{$controller}_reload-text.sh > /dev/null 2>/dev/null &");
 
 		$this->redirect($this->referer());
 	}
@@ -95,8 +93,7 @@ class StatisticsController extends AppController {
 	* @return void
 	*/
 	public function lock($switch){
-		$path = dirname(dirname(dirname(__FILE__)));
-		file_put_contents("{$path}/_db/settings/on_off", $switch);
+		file_put_contents(ROOT . "/_db/settings/on_off", $switch);
 
 		$this->redirect($this->referer());
 	}
@@ -172,10 +169,13 @@ class StatisticsController extends AppController {
 		$now = time();
 	    $elapsed = $now - $startTime;
 
-		$day = str_pad(floor($elapsed/86400), 2, '0', STR_PAD_LEFT);
-		$hour = str_pad(floor(($elapsed/3600) - ($day*24)), 2, '0', STR_PAD_LEFT);
-		$min = str_pad(floor(($elapsed/60) - (($day*1440) + ($hour*60))), 2, '0', STR_PAD_LEFT);
-		$sec = str_pad(floor($elapsed - (($day*86400) + ($hour*3600) + ($min*60))), 2, '0', STR_PAD_LEFT);
+	    $hour_day = 24;
+	    $minuts_day = 1440;
+
+		$day = str_pad(floor($elapsed/DAY), 2, '0', STR_PAD_LEFT);
+		$hour = str_pad(floor(($elapsed/HOUR) - ($day*$hour_day)), 2, '0', STR_PAD_LEFT);
+		$min = str_pad(floor(($elapsed/MINUTE) - (($day*$minuts_day) + ($hour*MINUTE))), 2, '0', STR_PAD_LEFT);
+		$sec = str_pad(floor($elapsed - (($day*DAY) + ($hour*HOUR) + ($min*MINUTE))), 2, '0', STR_PAD_LEFT);
 
 		$map = array(
 			'day' => $day,
@@ -194,10 +194,13 @@ class StatisticsController extends AppController {
 	    $left = $this->statistics['entities']['extracted'] - $done;
 	    $eta = round($rate * $left, 2);
 
-		$day = str_pad(floor($eta/86400), 2, '0', STR_PAD_LEFT);
-		$hour = str_pad(floor(($eta/3600) - ($day*24)), 2, '0', STR_PAD_LEFT);
-		$min = str_pad(floor(($eta/60) - (($day*1440) + ($hour*60))), 2, '0', STR_PAD_LEFT);
-		$sec = str_pad(floor($eta - (($day*86400) + ($hour*3600) + ($min*60))), 2, '0', STR_PAD_LEFT);
+	    $hour_day = 24;
+	    $minuts_day = 1440;
+
+		$day = str_pad(floor($eta/DAY), 2, '0', STR_PAD_LEFT);
+		$hour = str_pad(floor(($eta/HOUR) - ($day*$hour_day)), 2, '0', STR_PAD_LEFT);
+		$min = str_pad(floor(($eta/MINUTE) - (($day*$minuts_day) + ($hour*MINUTE))), 2, '0', STR_PAD_LEFT);
+		$sec = str_pad(floor($eta - (($day*DAY) + ($hour*HOUR) + ($min*MINUTE))), 2, '0', STR_PAD_LEFT);
 
 		$map = array(
 			'day' => $day,
@@ -214,9 +217,9 @@ class StatisticsController extends AppController {
 		$now = time();
 	    $elapsed = $now - $startTime;
 	    $sec = floor($elapsed);
-	    $min = ($elapsed / 60);
-	    $hour = ($elapsed / 3600);
-	    $day = ($elapsed / 86400);
+	    $min = ($elapsed / MINUTE);
+	    $hour = ($elapsed / HOUR);
+	    $day = ($elapsed / DAY);
 
 		foreach ($this->statistics as $k => $v) {
 			$processed = ($v['success'] + $v['fails']);

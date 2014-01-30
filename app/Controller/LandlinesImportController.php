@@ -165,7 +165,9 @@ class LandlinesImportController extends AppImportsController {
 						// 	/**
 						// 	* Verifica se a chave do modulo de importacao esta ativa
 						// 	*/
-						// $this->Settings->active($this->name);
+						// if(!$this->Settings->active($this->name)){
+						// 	die;
+						// }
 							
 						// 	$this->AppImport->__counter('entities');
 						// 	continue;
@@ -406,13 +408,37 @@ class LandlinesImportController extends AppImportsController {
         /**
         * Carrega a pasta onde contem os dados em txt
         */
-        $this->NattFixoPessoa->folder = "/var/www/consultas.cc/_db/source";
+        $this->NattFixoPessoa->folder = ROOT . "/_db/source";
 
         /**
         * Carrega o layout dos dados que sera importados
         */
-        $this->NattFixoPessoa->layout = '"NRF"#"DDD"#"FONE"#"NOME"#"INS_TP_END"#"INS_ENDERE"#"INS_NUM_EN"#"INS_COMPL"#"INS_BAIRRO"#"CIDADE"#"UF"#"CEP"#"TIPONRF"';
         $this->NattFixoPessoa->source_year = 2012;
+
+        /**
+        * Informa o conteudo do layout ao sistema
+        */
+        $map_fields = array(
+			'doc' => 'NRF',
+			'name' => 'NOME',
+			'mother' => '',
+			'gender' => '',
+			'birthday' => '',
+			'ddd' => 'DDD',
+			'tel' => 'FONE',
+			'tel_full' => '',
+			'zipcode' => 'CEP',
+			'cod_end' => '',
+			'complement' => 'INS_COMPL',
+			'number' => 'INS_NUM_EN',
+			'year' => '',
+			'type_address' => 'INS_TP_END',
+			'street' => 'INS_ENDERE',
+			'neighborhood' => 'INS_BAIRRO',
+			'city' => 'CIDADE',
+			'state' => 'UF',
+    	);
+		$this->NattFixoPessoa->load_map_positions($map_fields, '"NRF"#"DDD"#"FONE"#"NOME"#"INS_TP_END"#"INS_ENDERE"#"INS_NUM_EN"#"INS_COMPL"#"INS_BAIRRO"#"CIDADE"#"UF"#"CEP"#"TIPONRF"');
 
 		/**
 		* Carrega o path de todos os arquivos contidos na pasta de recursos em texto
@@ -450,13 +476,7 @@ class LandlinesImportController extends AppImportsController {
 	        $this->db['entityLandlineAddress']->begin();
 
 	        /**
-	        * Carrega o mapa de indice a partir do layout informado
-	        */
-	        $map_layout = explode('"#"', substr($this->NattFixoPessoa->layout, 1, -1));
-	        $this->NattFixoPessoa->layout_positions = array_flip($map_layout);
- 
-	        /**
-	        * Percorre por todas as linhas o arquivo passado pelo parametro, importando os dados contidos nas linhas para um array
+	        * Percorre por todas as linhas o arquivo, importando os dados contidos nas linhas para um array
 	        */
 	        $i = 0;
 	        $txt = fopen ($v, "r");
@@ -464,7 +484,19 @@ class LandlinesImportController extends AppImportsController {
 				/**
 				* Verifica se a chave do modulo de importacao esta ativa
 				*/
-				$this->Settings->active();	        	
+				if(!$this->Settings->active($this->name)){
+			        /**
+			        * Registra todas as transacoes
+			        */
+			        $this->AppImport->timing_ini(COMMIT_TRANSACTIONS);
+			        $this->db['entity']->commit();
+			        $this->db['landline']->commit();
+			        $this->db['address']->commit();
+			        $this->db['zipcode']->commit();
+			        $this->db['entityLandlineAddress']->commit();
+			        $this->AppImport->timing_end();
+					die;
+				}
 
 	            /**
 	            * Contabiliza os registros processados
@@ -483,7 +515,7 @@ class LandlinesImportController extends AppImportsController {
 	                /**
 	                * Verifica se o layout do arquivo esta diferente do layout informado
 	                */
-	                if(rtrim($ln, "\r\n") != $this->NattFixoPessoa->layout){
+	                if(trim(rtrim($ln, "\r\n")) != $this->NattFixoPessoa->layout){
 	                    $log = date('Y-m-d') . ": O Layout do arquivo '{$v}' nao confere com o layout do arquivo.\r\n";
 	                    $log .= "Layout informado:  {$this->NattFixoPessoa->layout}\r\n";
 	                    $log .= "Layout encontrado: {$ln}\r\n";
@@ -546,7 +578,7 @@ class LandlinesImportController extends AppImportsController {
 					/**
 					* Inicializa a importacao dos telefones da entidade encontrada
 					*/
-					if(isset($entity['telefone']) && $hasImported){
+					if($hasImported && !empty($entity['telefone'][key($entity['telefone'])]['TELEFONE'])){
 						foreach ($entity['telefone'] as $v2) {
 							/**
 							* Desmembra o DDD do Telefone
@@ -586,7 +618,7 @@ class LandlinesImportController extends AppImportsController {
 							/**
 							* Inicializa a importacao dos telefones da entidade encontrada
 							*/
-							if(isset($v2['endereco'])){
+							if(!empty($v2['endereco'][key($v2['endereco'])]['NOME_RUA'])){
 								/**
 								* Inicializa a importacao do CEP do telefone encontrado
 								* Trata os dados do CEP para a importacao
@@ -619,6 +651,9 @@ class LandlinesImportController extends AppImportsController {
 								$city = $this->AppImport->getCity($v2['endereco']['CIDADE']);
 								$zipcode = $this->AppImport->getZipcode($v2['endereco']['CEP']);
 								$number = $this->AppImport->getStreetNumber($v2['NUMERO'], $v2['endereco']['NOME_RUA']);
+								$complement = $this->AppImport->getComplement($v2['COMPLEMENTO'], $v2['endereco']['NOME_RUA']);
+								$type_address = $this->AppImport->getTypeAddress($v2['endereco']['RUA'], $v2['endereco']['NOME_RUA']);
+								$neighborhood = $this->AppImport->getNeighborhood($v2['endereco']['BAIRRO']);
 
 								/**
 								* Trata o nome da rua
@@ -633,7 +668,7 @@ class LandlinesImportController extends AppImportsController {
 								/**
 								* Gera o hash do complemento da rua
 								*/
-								$hash_complement = $this->AppImport->getHash($this->AppImport->getComplement($v2['COMPLEMENTO'], $v2['endereco']['NOME_RUA']), null, false);
+								$hash_complement = $this->AppImport->getHash($complement, null, false);
 
 								/**
 								* Carrega um array com todos os estados
@@ -648,11 +683,11 @@ class LandlinesImportController extends AppImportsController {
 										'state' => $map_states[$state_id],
 										'zipcode' => $zipcode,
 										'city' => $city,
-										'type_address' => $this->AppImport->getTypeAddress($v2['endereco']['RUA'], $v2['endereco']['NOME_RUA']),
+										'type_address' => $type_address,
 										'street' => $street,
 										'number' => $number,
-										'neighborhood' => $this->AppImport->getNeighborhood($v2['endereco']['BAIRRO']),
-										'complement' => $this->AppImport->getComplement($v2['COMPLEMENTO'], $v2['endereco']['NOME_RUA']),
+										'neighborhood' => $neighborhood,
+										'complement' => $complement,
 										'h1' => $hash['h1'],
 										'h2' => $hash['h2'],
 										'h3' => $hash['h3'],

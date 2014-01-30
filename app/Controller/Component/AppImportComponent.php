@@ -663,7 +663,7 @@ class AppImportComponent extends Component {
 		/**
 		* Seta o complemento como null caso nao tenho nenhuma infomracao
 		*/
-		if(is_null($complement) || empty($complement) || trim($complement) == ''){
+		if(empty($component)){
 			$complement = null;
 		}
 
