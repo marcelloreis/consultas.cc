@@ -107,8 +107,8 @@ class StatisticsController extends AppController {
 	*
 	* @return void
 	*/
-	public function panel($uf){
-		if(!empty($uf) && (!empty($this->statistics['entities']['success']) || !empty($this->statistics['entities']['fails']))){
+	public function panel($uf=null){
+		if((!empty($this->statistics['entities']['success']) || !empty($this->statistics['entities']['fails']))){
 			/**
 			* Carrega a quantidade de registros a serem importados
 			*/

@@ -21,7 +21,7 @@ class Settings extends AppModelClean {
 	public $useTable = '_settings';
 
 
-	public function active($module){
+	public function active(){
 		$isActive = file_get_contents(dirname(dirname(dirname(__FILE__))) . '/_db/settings/on_off');
 		$isActive = preg_replace('/[^0-1]/si', '', $isActive);
 
