@@ -1,8 +1,13 @@
 .htaccess
 plugins/Google/Config/*
+<<<<<<< HEAD
 _bkps/*
 _db/source/*
+=======
+>>>>>>> import_text
 tmp/*
+_bkps/*
+_db/source/*
 [Cc]onfig/core.php
 [Cc]onfig/database.php
 app/tmp/*

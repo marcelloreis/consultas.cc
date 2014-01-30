@@ -68,9 +68,22 @@ class StatisticsController extends AppController {
 	*
 	* @return void
 	*/
-	public function reload($controller, $uf){
+	public function reload_binary($controller, $uf){
 		$path = dirname(dirname(dirname(__FILE__)));
-		shell_exec("setsid sh {$path}/_db/settings/{$controller}_reload-innodb.sh {$uf} > /dev/null 2>/dev/null &");
+		shell_exec("setsid sh {$path}/_db/settings/{$controller}_reload-binary.sh {$uf} > /dev/null 2>/dev/null &");
+
+		$this->redirect($this->referer());
+	}
+
+	/**
+	* Método reload
+	* Este método recarrega a importacao, migrando o que ja foi importado e zerando as tabelas de importacao
+	*
+	* @return void
+	*/
+	public function reload_text($controller){
+		$path = dirname(dirname(dirname(__FILE__)));
+		shell_exec("setsid sh {$path}/_db/settings/{$controller}_reload-text.sh > /dev/null 2>/dev/null &");
 
 		$this->redirect($this->referer());
 	}
@@ -94,8 +107,8 @@ class StatisticsController extends AppController {
 	*
 	* @return void
 	*/
-	public function panel($uf){
-		if(!empty($uf) && (!empty($this->statistics['entities']['success']) || !empty($this->statistics['entities']['fails']))){
+	public function panel($uf=null){
+		if((!empty($this->statistics['entities']['success']) || !empty($this->statistics['entities']['fails']))){
 			/**
 			* Carrega a quantidade de registros a serem importados
 			*/

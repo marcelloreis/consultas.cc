@@ -21,9 +21,10 @@ class Settings extends AppModelClean {
 	public $useTable = '_settings';
 
 
-	public function active($module){
+	public function active(){
 		$isActive = file_get_contents(dirname(dirname(dirname(__FILE__))) . '/_db/settings/on_off');
 		$isActive = preg_replace('/[^0-1]/si', '', $isActive);
+
 		if($isActive == '0'){
 			$content = "\n\n\n\n";
 			$content .= "###################################################################\n";
@@ -31,8 +32,9 @@ class Settings extends AppModelClean {
 			$content .= "===================================================================\n";
 			$content .= "Importacao Pausada.\n";
 			$content .= "===================================================================\n";
-		}
 
-		return $isActive;
+			echo $content;		
+			die;
+		}
 	}
 }
