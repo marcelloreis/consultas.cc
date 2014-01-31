@@ -522,7 +522,7 @@ class AppImportComponent extends Component {
 				}
 			}
 		}
-		
+
 		return $city_id;
 	}
 
