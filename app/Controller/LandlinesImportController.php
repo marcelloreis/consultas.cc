@@ -251,7 +251,8 @@ class LandlinesImportController extends AppImportsController {
 									$this->AppImport->timing_ini(TUNING_ADDRESS_LOAD);
 									
 									$state_id = $this->AppImport->getState($v2['endereco']['UF'], $this->uf);
-									$city_id = $this->AppImport->getCityId($v2['endereco']['CIDADE'], $state_id, $this->Izipcode->id);
+									$city_id = null;
+									// $city_id = $this->AppImport->getCityId($v2['endereco']['CIDADE'], $state_id, $this->Izipcode->id);
 									$city = $this->AppImport->getCity($v2['endereco']['CIDADE']);
 									$zipcode = $this->AppImport->getZipcode($v2['endereco']['CEP']);
 									$number = $this->AppImport->getStreetNumber($v2['NUMERO'], $v2['endereco']['NOME_RUA']);
@@ -441,8 +442,6 @@ class LandlinesImportController extends AppImportsController {
 			'state' => 'UF',
     	);
 		$this->NattFixoPessoa->load_map_positions($map_fields, 'TEL_FULL;NRF;NOME;INS_ENDERE;INS_NUM_EN;INS_COMPL;INS_BAIRRO;CIDADE;UF;CEP');
-//6530230500;17351180000159;BANCO TRIANGULO SA;R JOSE FARIAS;134;;SANTA LUIZA;VITORIA;ES;29045300
-//'TEL_FULL;NRF;NOME;INS_ENDERE;INS_NUM_EN;INS_COMPL;INS_BAIRRO;CIDADE;UF;CEP'
 
 		/**
 		* Carrega o path de todos os arquivos contidos na pasta de recursos em texto
@@ -457,6 +456,13 @@ class LandlinesImportController extends AppImportsController {
 			$shell = shell_exec("wc -l {$v}");
 			$qt = substr($shell, 0, strpos($shell, ' '));
 			$this->qt_reg += $qt;
+
+			/**
+			* Desconsidera a linha do layout (quando houver)
+			*/
+			if($this->NattFixoPessoa->jumpFirstLine){
+				$this->qt_reg--;
+			}
 		}
 		$start_time = time();
 		$this->Counter->updateAll(array('Counter.extracted' => $this->qt_reg, 'Counter.start_time' => $start_time), array('table' => 'entities', 'active' => '1'));
@@ -651,7 +657,8 @@ class LandlinesImportController extends AppImportsController {
 								$this->AppImport->timing_ini(TUNING_ADDRESS_LOAD);
 
 								$state_id = $this->AppImport->getState($v2['endereco']['UF']);
-								$city_id = $this->AppImport->getCityId($v2['endereco']['CIDADE'], $state_id, $this->Izipcode->id);
+								$city_id = null;
+								// $city_id = $this->AppImport->getCityId($v2['endereco']['CIDADE'], $state_id, $this->Izipcode->id);
 								$city = $this->AppImport->getCity($v2['endereco']['CIDADE']);
 								$zipcode = $this->AppImport->getZipcode($v2['endereco']['CEP']);
 								$number = $this->AppImport->getStreetNumber($v2['NUMERO'], $v2['endereco']['NOME_RUA']);
@@ -714,7 +721,6 @@ class LandlinesImportController extends AppImportsController {
 								$this->AppImport->timing_ini(TUNING_ADDRESS_IMPORT);
 								$this->importAddress($data);
 								$this->AppImport->timing_end();
-								
 							}
 
 							/**
