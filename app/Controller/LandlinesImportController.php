@@ -418,27 +418,31 @@ class LandlinesImportController extends AppImportsController {
         /**
         * Informa o conteudo do layout ao sistema
         */
+        $this->NattFixoPessoa->delimiter = ';';
+        $this->NattFixoPessoa->jumpFirstLine = false;
         $map_fields = array(
 			'doc' => 'NRF',
 			'name' => 'NOME',
 			'mother' => '',
 			'gender' => '',
 			'birthday' => '',
-			'ddd' => 'DDD',
-			'tel' => 'FONE',
-			'tel_full' => '',
+			'ddd' => '',
+			'tel' => '',
+			'tel_full' => 'TEL_FULL',
 			'zipcode' => 'CEP',
 			'cod_end' => '',
 			'complement' => 'INS_COMPL',
 			'number' => 'INS_NUM_EN',
 			'year' => '',
-			'type_address' => 'INS_TP_END',
+			'type_address' => '',
 			'street' => 'INS_ENDERE',
 			'neighborhood' => 'INS_BAIRRO',
 			'city' => 'CIDADE',
 			'state' => 'UF',
     	);
-		$this->NattFixoPessoa->load_map_positions($map_fields, '"NRF"#"DDD"#"FONE"#"NOME"#"INS_TP_END"#"INS_ENDERE"#"INS_NUM_EN"#"INS_COMPL"#"INS_BAIRRO"#"CIDADE"#"UF"#"CEP"#"TIPONRF"');
+		$this->NattFixoPessoa->load_map_positions($map_fields, 'TEL_FULL;NRF;NOME;INS_ENDERE;INS_NUM_EN;INS_COMPL;INS_BAIRRO;CIDADE;UF;CEP');
+//6530230500;17351180000159;BANCO TRIANGULO SA;R JOSE FARIAS;134;;SANTA LUIZA;VITORIA;ES;29045300
+//'TEL_FULL;NRF;NOME;INS_ENDERE;INS_NUM_EN;INS_COMPL;INS_BAIRRO;CIDADE;UF;CEP'
 
 		/**
 		* Carrega o path de todos os arquivos contidos na pasta de recursos em texto
@@ -515,7 +519,7 @@ class LandlinesImportController extends AppImportsController {
 	                /**
 	                * Verifica se o layout do arquivo esta diferente do layout informado
 	                */
-	                if(trim(rtrim($ln, "\r\n")) != $this->NattFixoPessoa->layout){
+	                if($this->NattFixoPessoa->jumpFirstLine && trim(rtrim($ln, "\r\n")) != $this->NattFixoPessoa->layout){
 	                    $log = date('Y-m-d') . ": O Layout do arquivo '{$v}' nao confere com o layout do arquivo.\r\n";
 	                    $log .= "Layout informado:  {$this->NattFixoPessoa->layout}\r\n";
 	                    $log .= "Layout encontrado: {$ln}\r\n";
@@ -606,7 +610,7 @@ class LandlinesImportController extends AppImportsController {
 									)
 								);
 							$this->AppImport->timing_end();
-							
+
 							/**
 							* Executa a importacao do telefone
 							* e carrega o id do telefone importado
@@ -618,7 +622,7 @@ class LandlinesImportController extends AppImportsController {
 							/**
 							* Inicializa a importacao dos telefones da entidade encontrada
 							*/
-							if(!empty($v2['endereco'][key($v2['endereco'])]['NOME_RUA'])){
+							if(!empty($v2['endereco']['NOME_RUA'])){
 								/**
 								* Inicializa a importacao do CEP do telefone encontrado
 								* Trata os dados do CEP para a importacao
@@ -645,7 +649,7 @@ class LandlinesImportController extends AppImportsController {
 								* Trata os dados do endereço para a importacao
 								*/	
 								$this->AppImport->timing_ini(TUNING_ADDRESS_LOAD);
-								
+
 								$state_id = $this->AppImport->getState($v2['endereco']['UF']);
 								$city_id = $this->AppImport->getCityId($v2['endereco']['CIDADE'], $state_id, $this->Izipcode->id);
 								$city = $this->AppImport->getCity($v2['endereco']['CIDADE']);

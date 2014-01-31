@@ -25,7 +25,9 @@ class NattFixoPessoa extends AppModelClean {
 	public $displayField = 'NOME_RAZAO';
     public $order = 'NattFixoPessoa.CPF_CNPJ';
     public $layout;
+    public $jumpFirstLine;
     public $map_pos;
+    public $delimiter;
     public $folder;
 	public $source_year;
 
@@ -171,18 +173,40 @@ class NattFixoPessoa extends AppModelClean {
     }      
 
     public function txt2array($v){
-        /**
-        * Higieniza a string
-        */
-        $v = preg_replace('/[^0-9a-zA-Z\'"# ]/si', '', $v);
-        $v = substr(rtrim($v, "\r\n"), 1, -1);
 
+        
         /**
-        * Gera um array a partir das informacoes contidas na linha
+        * Executa a higienizacao de acordo com o delimitador dos dados
         */
-        $v = preg_replace('/###/si', '#""#""#', $v);
-        $v = preg_replace('/##/si', '#""#', $v);
-        $v = preg_split('/(\'|")?#(\'|")/si', $v);
+        switch ($this->delimiter) {
+            case '"#"':
+                /**
+                * Higieniza a string
+                */
+                $v = preg_replace('/[^0-9a-zA-Z\'"# ]/si', '', $v);
+                $v = substr(rtrim($v, "\r\n"), 1, -1);
+
+                /**
+                * Gera um array a partir das informacoes contidas na linha
+                */
+                $v = preg_replace('/###/si', '#""#""#', $v);
+                $v = preg_replace('/##/si', '#""#', $v);
+                $v = preg_split('/(\'|")?#(\'|")/si', $v);
+                break;
+            case ';':
+                /**
+                * Higieniza a string
+                */
+                $v = preg_replace('/[^0-9a-zA-Z; ]/si', '', $v);
+
+                /**
+                * Gera um array a partir das informacoes contidas na linha
+                */
+                $v = preg_replace('/;;;/si', ";'';'';", $v);
+                $v = preg_replace('/;;/si', ';#;', $v);
+                $v = preg_split('/;/si', $v);
+                break;
+        }
 
         /**
         * Pula a linha caso nao tenha informacoes (linha em branco)
@@ -201,7 +225,8 @@ class NattFixoPessoa extends AppModelClean {
         @$dt_nascimento     = !empty($v[$this->map_pos['birthday']])?trim($v[$this->map_pos['birthday']]):null;
         @$ddd               = !empty($v[$this->map_pos['ddd']])?$v[$this->map_pos['ddd']]:null;
         @$telefone          = !empty($v[$this->map_pos['tel']])?$v[$this->map_pos['tel']]:null;
-        @$tel_full          = !empty($v[$this->map_pos['tel_full']])?$v[$this->map_pos['tel_full']]:"0{$ddd}{$telefone}";
+        @$tel_full          = !empty($v[$this->map_pos['tel_full']])?$v[$this->map_pos['tel_full']]:"{$ddd}{$telefone}";
+        @$tel_full          = "0{$tel_full}";
         @$cep               = !empty($v[$this->map_pos['zipcode']])?trim($v[$this->map_pos['zipcode']]):null;
         @$cod_end           = null;
         @$complemento       = !empty($v[$this->map_pos['complement']])?trim($v[$this->map_pos['complement']]):null;
@@ -211,7 +236,7 @@ class NattFixoPessoa extends AppModelClean {
         @$nome_rua          = !empty($v[$this->map_pos['street']])?trim($v[$this->map_pos['street']]):null;
         @$bairro            = !empty($v[$this->map_pos['neighborhood']])?trim($v[$this->map_pos['neighborhood']]):null;
         @$cidade            = !empty($v[$this->map_pos['city']])?trim($v[$this->map_pos['city']]):null;
-        @$uf                = !empty($v[$this->map_pos['uf']])?trim($v[$this->map_pos['uf']]):null;
+        @$uf                = !empty($v[$this->map_pos['state']])?trim($v[$this->map_pos['state']]):null;
 
         /**
         * Prepara o array para o formato aceito no controller
@@ -254,8 +279,16 @@ class NattFixoPessoa extends AppModelClean {
         /**
         * Carrega o mapa de indice a partir do layout passado pelo parametro
         */
-        $map = explode('"#"', substr($this->layout, 1, -1));
-        $map = array_flip($map);
+        switch ($this->delimiter) {
+            case '"#"':
+                $map = explode('"#"', substr($this->layout, 1, -1));
+                $map = array_flip($map);
+                break;
+            case ';':
+                $map = explode(';', $this->layout);
+                $map = array_flip($map);
+                break;
+        }
 
         /**
         * Percorre por todos os campos contidos no layout passado pelo parametro
@@ -269,7 +302,7 @@ class NattFixoPessoa extends AppModelClean {
                 * Verifica se o campo informado confere com o campo padrao, caso confira, informa o indice do campo
                 */
                 if($k == $v2){
-                    $this->map_positions[$k2] = $v;
+                    $this->map_pos[$k2] = $v;
                 }
             }
         }
