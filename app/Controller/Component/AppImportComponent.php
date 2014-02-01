@@ -38,23 +38,6 @@ class AppImportComponent extends Component {
 	    $this->ModelCounter = ClassRegistry::init('Counter');
 	    $this->Timing = ClassRegistry::init('Timing');
 	    
-       /**
-        * Desabilita as verificacoes de chave estrangeira
-        */
-        $map = $this->Log->query('SET foreign_key_checks = 0');
-        /**
-        * Desabilita as verificacoes de chave unica
-        */
-        $map = $this->Log->query('SET unique_checks = 0');
-        /**
-        * Desabilita o autocommit
-        */
-        $map = $this->Log->query('SET autocommit = 0');
-        /**
-        * Habilita o cache das consultas
-        */
-        $map = $this->Log->query('SET query_cache_type = 1');
-
 	    /**
 	    * Carrega o array de nomes femininos e masculinas para comparacao e deducao de sexo
 	    */
@@ -99,7 +82,7 @@ class AppImportComponent extends Component {
 			/**
 			* Remove os nomes irrelevantes como: junior, filho, neto
 			*/
-			$name = preg_replace('/junior|filho|neto|sobrinho/si', '', $name);
+			$name = preg_replace('/junior$|filho$|neto$|sobrinho$/si', '', $name);
 
 			/**
 			* Remove todas as palavras com menos de 4 letrase que estejam no meio do nome do nome

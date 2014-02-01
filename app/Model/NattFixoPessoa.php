@@ -202,8 +202,8 @@ class NattFixoPessoa extends AppModelClean {
                 /**
                 * Gera um array a partir das informacoes contidas na linha
                 */
-                $v = preg_replace('/;;;/si', ";'';'';", $v);
-                $v = preg_replace('/;;/si', ';#;', $v);
+                $v = preg_replace('/;;;/si', ';' . null . ';' . null . ';', $v);
+                $v = preg_replace('/;;/si', ';' . null . ';', $v);
                 $v = preg_split('/;/si', $v);
                 break;
         }
