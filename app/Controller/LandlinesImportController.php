@@ -402,8 +402,8 @@ class LandlinesImportController extends AppImportsController {
         */
         $this->db['entity'] = $this->Ientity->getDataSource();
         $this->db['landline'] = $this->Ilandline->getDataSource();
-        $this->db['address'] = $this->Ilandline->getDataSource();
-        $this->db['zipcode'] = $this->Ilandline->getDataSource();
+        $this->db['address'] = $this->Iaddress->getDataSource();
+        $this->db['zipcode'] = $this->Izipcode->getDataSource();
         $this->db['entityLandlineAddress'] = $this->Iassociation->getDataSource();
 
         /**
@@ -419,30 +419,31 @@ class LandlinesImportController extends AppImportsController {
         /**
         * Informa o conteudo do layout ao sistema
         */
-        $this->NattFixoPessoa->delimiter = ';';
-        $this->NattFixoPessoa->jumpFirstLine = false;
-        $map_fields = array(
-			'doc' => 'NRF',
-			'name' => 'NOME',
+        $this->NattFixoPessoa->delimiter = '"#"';
+        $this->NattFixoPessoa->jumpFirstLine = true;
+        $this->NattFixoPessoa->map_pos = array(
+			'doc' => 0,
+			'name' => 3,
 			'mother' => '',
 			'gender' => '',
 			'birthday' => '',
-			'ddd' => '',
-			'tel' => '',
-			'tel_full' => 'TEL_FULL',
-			'zipcode' => 'CEP',
+			'ddd' => 1,
+			'tel' => 2,
+			'tel_full' => '',
+			'zipcode' => 11,
 			'cod_end' => '',
-			'complement' => 'INS_COMPL',
-			'number' => 'INS_NUM_EN',
+			'complement' => 7,
+			'number' => 6,
 			'year' => '',
-			'type_address' => '',
-			'street' => 'INS_ENDERE',
-			'neighborhood' => 'INS_BAIRRO',
-			'city' => 'CIDADE',
-			'state' => 'UF',
+			'type_address' => 4,
+			'street' => 5,
+			'neighborhood' => 8,
+			'city' => 9,
+			'state' => 10,
     	);
-		$this->NattFixoPessoa->load_map_positions($map_fields, 'TEL_FULL;NRF;NOME;INS_ENDERE;INS_NUM_EN;INS_COMPL;INS_BAIRRO;CIDADE;UF;CEP');
+//"DOC"#"DDD"#"TEL"#"NOME"#"TPLOG"#"LOGRAD"#"NUM"#"COMPL"#"BAIRRO"#"CIDADE"#"UF"#"CEP"#"TPDOC"        
 
+	
 		/**
 		* Carrega o path de todos os arquivos contidos na pasta de recursos em texto
 		*/
@@ -452,17 +453,25 @@ class LandlinesImportController extends AppImportsController {
 		* Contabiliza a quantidade de registros encontrado
 		*/
 		$this->qt_reg = 0;
-		foreach ($sources as $k => $v) {
+		foreach ($sources as $k => $v) {			
+			/**
+			* Verifica a primeira linha do arquivo é o layout
+			*/
+			$first_line = shell_exec("head -1 {$v}");
+			if(preg_match("/{$this->NattFixoPessoa->delimiter}nome{$this->NattFixoPessoa->delimiter}|{$this->NattFixoPessoa->delimiter}endereco{$this->NattFixoPessoa->delimiter}|{$this->NattFixoPessoa->delimiter}complement{$this->NattFixoPessoa->delimiter}|{$this->NattFixoPessoa->delimiter}bairro{$this->NattFixoPessoa->delimiter}|{$this->NattFixoPessoa->delimiter}cidade{$this->NattFixoPessoa->delimiter}|{$this->NattFixoPessoa->delimiter}uf{$this->NattFixoPessoa->delimiter}/si", $first_line)){
+				/**
+				* Remove a linha de layout do arquivo
+				*/
+				$source_temp = "{$v}.tmp";
+				shell_exec("sed '1d' {$v} > {$source_temp}");
+				shell_exec("mv {$source_temp} {$v}");
+			}			
+
+
 			$shell = shell_exec("wc -l {$v}");
 			$qt = substr($shell, 0, strpos($shell, ' '));
 			$this->qt_reg += $qt;
 
-			/**
-			* Desconsidera a linha do layout (quando houver)
-			*/
-			if($this->NattFixoPessoa->jumpFirstLine){
-				$this->qt_reg--;
-			}
 		}
 		$start_time = time();
 		$this->Counter->updateAll(array('Counter.extracted' => $this->qt_reg, 'Counter.start_time' => $start_time), array('table' => 'entities', 'active' => '1'));
@@ -484,6 +493,11 @@ class LandlinesImportController extends AppImportsController {
 	        $this->db['address']->begin();
 	        $this->db['zipcode']->begin();
 	        $this->db['entityLandlineAddress']->begin();
+
+	        /**
+	        * Inicialiaza a varaivel que contara as transacoes efetuadas
+	        */
+	        $reload_transaction = 0;
 
 	        /**
 	        * Percorre por todas as linhas o arquivo, importando os dados contidos nas linhas para um array
@@ -519,20 +533,39 @@ class LandlinesImportController extends AppImportsController {
 		        $ln = fgets($txt, 4096);
 
 	            /**
-	            * Pula a primeira linha (layout do documento)
+	            * Contabiliza as transacoes para recarrega-las
 	            */
-	            if($i === 1){
-	                /**
-	                * Verifica se o layout do arquivo esta diferente do layout informado
-	                */
-	                if($this->NattFixoPessoa->jumpFirstLine && trim(rtrim($ln, "\r\n")) != $this->NattFixoPessoa->layout){
-	                    $log = date('Y-m-d') . ": O Layout do arquivo '{$v}' nao confere com o layout do arquivo.\r\n";
-	                    $log .= "Layout informado:  {$this->NattFixoPessoa->layout}\r\n";
-	                    $log .= "Layout encontrado: {$ln}\r\n";
-	                    file_put_contents(dirname(dirname(dirname(__FILE__))) . '/_db/settings/logs', $log);
-	                    die($log);
-	                }
-	                continue;
+	            $reload_transaction++;
+
+	            /**
+	            * Recarrega as transacoes quando chegar no limite setado
+	            */	            
+	            if($reload_transaction == LIMIT_TABLE_IMPORTS){
+		            /**
+		            * Reinicia a contagem das transacoes
+		            */	            
+	            	$reload_transaction = 0;
+
+			        /**
+			        * Registra todas as transacoes
+			        */
+			        $this->AppImport->timing_ini(COMMIT_TRANSACTIONS);
+			        $this->db['entity']->commit();
+			        $this->db['landline']->commit();
+			        $this->db['address']->commit();
+			        $this->db['zipcode']->commit();
+			        $this->db['entityLandlineAddress']->commit();
+			        $this->AppImport->timing_end();
+
+
+			        /**
+			        * Inicialiaza a transacao
+			        */
+			        $this->db['entity']->begin();
+			        $this->db['landline']->begin();
+			        $this->db['address']->begin();
+			        $this->db['zipcode']->begin();
+			        $this->db['entityLandlineAddress']->begin();
 	            }
 
 	            /**
@@ -601,7 +634,7 @@ class LandlinesImportController extends AppImportsController {
 							/**
 							* Extrai o ano de atualizacao do telefone
 							*/
-							$year = $this->AppImport->getUpdated($v2['DATA_ATUALIZACAO']);
+							$year = $this->NattFixoPessoa->source_year;
 
 							/**
 							* Trata os dados o telefone para a importacao
@@ -755,6 +788,8 @@ class LandlinesImportController extends AppImportsController {
 							$this->AppImport->__counter('zipcodes');
 							$this->AppImport->__counter('associations');	
 						}
+					}else{
+						file_put_contents(ROOT . '/_db/settings/logs', "Linha: {$i}\r\n{$ln}\r\n\r\n\r\n", FILE_APPEND);
 					}
 
 					/**
@@ -762,7 +797,7 @@ class LandlinesImportController extends AppImportsController {
 					*/					
 					$this->AppImport->__counter('entities');
 				}else{
-					$this->AppImport->fail('entities');
+					file_put_contents(ROOT . '/_db/settings/logs', "Linha: {$i}\r\n{$ln}\r\n\r\n\r\n", FILE_APPEND);
 				}
 	        }
 	        fclose ($txt);

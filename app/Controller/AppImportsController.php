@@ -137,14 +137,14 @@ class AppImportsController extends AppController {
 					)
 				));		
 
-			if(count($hasLandline)){
+			if(count($hasLandline)){				
 				$this->Ilandline->id = $hasLandline['Ilandline']['id'];
 				$this->AppImport->success('landlines');
 			}else{
 				$this->Ilandline->create();
 				if($this->Ilandline->save($landline)){
 					$this->AppImport->success('landlines');
-				}else{
+				}else{					
 					$this->AppImport->fail('landlines');
 					$this->AppImport->__log("Falha ao importar o telefone.", IMPORT_LANDLINE_FAIL, $this->uf, false, $this->Ilandline->useTable, null, $landline['Ilandline']['tel_full'], $this->db['Ilandline']->error);
 				}
