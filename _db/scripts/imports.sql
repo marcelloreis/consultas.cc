@@ -18,7 +18,7 @@ truncate table i_addresses;
 truncate table i_zipcodes;
 truncate table i_landlines;
 truncate table i_mobiles;
-
+/*
 #Repara as tabelas
 repair table _logs;
 repair table entities;
@@ -37,7 +37,7 @@ repair table i_mobiles;
 
 
 #Migracao dos dados importados
-/*
+
 INSERT INTO entities SELECT * FROM i_entities;
 INSERT INTO landlines SELECT * FROM i_landlines;
 INSERT INTO zipcodes SELECT * FROM i_zipcodes;
