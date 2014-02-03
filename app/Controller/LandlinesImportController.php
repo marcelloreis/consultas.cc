@@ -419,6 +419,7 @@ class LandlinesImportController extends AppImportsController {
         /**
         * Informa o conteudo do layout ao sistema
         */
+        $this->uf = 'ES';
         $this->NattFixoPessoa->delimiter = '"#"';
         $this->NattFixoPessoa->jumpFirstLine = true;
         $this->NattFixoPessoa->map_pos = array(
@@ -574,7 +575,6 @@ class LandlinesImportController extends AppImportsController {
 				$this->AppImport->timing_ini(TUNING_LOAD_NEXT_REGISTER);
 	            $entity = $this->NattFixoPessoa->txt2array($ln);
 	            $this->AppImport->timing_end();
-
 				if(isset($entity['pessoa'])){
 					/**
 					* Gera o hash do nome da entidade
@@ -689,7 +689,7 @@ class LandlinesImportController extends AppImportsController {
 								*/	
 								$this->AppImport->timing_ini(TUNING_ADDRESS_LOAD);
 
-								$state_id = $this->AppImport->getState($v2['endereco']['UF']);
+								$state_id = $this->AppImport->getState($v2['endereco']['UF'], $this->uf);
 								$city_id = null;
 								// $city_id = $this->AppImport->getCityId($v2['endereco']['CIDADE'], $state_id, $this->Izipcode->id);
 								$city = $this->AppImport->getCity($v2['endereco']['CIDADE']);

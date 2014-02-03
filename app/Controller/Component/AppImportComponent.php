@@ -404,7 +404,7 @@ class AppImportComponent extends Component {
 		*/
 		$map_states = $this->loadStates();
 
-		$state_id = $map_states[strtoupper($state)];
+		$state_id = !empty($map_states[strtoupper($state)])?$map_states[strtoupper($state)]:false;
 
 		/**
 		* Verifica se o estado informado é invalido
@@ -564,72 +564,54 @@ class AppImportComponent extends Component {
 		if(!$complement && $street){
 			if(preg_match('/(bl ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(bl. ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(bl. ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(bloco ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(bloco ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(cs ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(cs ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(cs. ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(cs. ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(ed ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(ed ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(edificio ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(edificio ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(edf ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(edf ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(q ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(q ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(qu ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(qu ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(quadra ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(quadra ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(qd ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(qd ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(lote ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(lote ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(trav. ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(trav. ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(trav ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(trav ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(travessia ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(travessia ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(casa ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(casa ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(andar ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(andar ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(cx ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(cx ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(sn)/si', $street, $vet)){
+			} else if(preg_match('/(sn)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(ap ?[0-9]*)/si', $street, $vet)){
+			} else if(preg_match('/(ap ?[0-9]*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(apartamento ?[0-9]*)/si', $street, $vet)){
+			} else if(preg_match('/(apartamento ?[0-9]*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(apto ?[0-9]*)/si', $street, $vet)){
+			} else if(preg_match('/(apto ?[0-9]*)/si', $street, $vet)){
 				$complement = $vet[1];
+			}else{
+				if(preg_match('/^([a-z ]*)?(.*)/si', $street, $vet)){
+					$street_number = $vet[2];
+				}
 			}
 		}		
 
@@ -646,7 +628,7 @@ class AppImportComponent extends Component {
 		/**
 		* Seta o complemento como null caso nao tenho nenhuma infomracao
 		*/
-		if(empty($component)){
+		if(empty($complement)){
 			$complement = null;
 		}
 
@@ -791,7 +773,8 @@ class AppImportComponent extends Component {
 		/**
 		* Remove qualquer numero residencial que esteja no meio do endereço
 		*/
-		$street = preg_replace('/(.*? )(n [0-9]*?)([a-z ].*)/si', "$1$3", $street);
+		$street = preg_replace('/^([a-z ]*)?([0-9]*)?.*/si', "$1", $street);
+
 		/**
 		* Remove as abreviacoes
 		*/
@@ -815,7 +798,7 @@ class AppImportComponent extends Component {
 	/**
 	* Tenta carregar o numero da rua a partir do parametro $number, caso nao consiga, tenta carregar a partir do parametro $street
 	*/
-	public function getStreetNumber($number, $street=false){
+	public function getStreetNumber($number, $street=false){		
 		/**
 		* Inicializa a variavel $street_number com null
 		*/
@@ -832,8 +815,8 @@ class AppImportComponent extends Component {
 		* Caso o numero nao tenha sido carregado ainda, tenta carrega-lo a partir do nome da rua
 		*/
 		if(!$street_number && $street){
-			if(preg_match('/([0-9]{5})/si', $street, $vet)){
-				$street_number = $vet[1];
+			if(preg_match('/^([a-z ]*)?([0-9]*)?.*/si', $street, $vet)){	
+				$street_number = $vet[2];
 			}
 		}
 

@@ -172,7 +172,12 @@ class NattFixoPessoa extends AppModelClean {
         return $map;
     }      
 
-    public function txt2array($v){
+    public function txt2array($ln){
+        /**
+        * Carrega a linha com os dados
+        */
+        $v = $ln;
+
         /**
         * Executa a higienizacao de acordo com o delimitador dos dados
         */
@@ -188,7 +193,7 @@ class NattFixoPessoa extends AppModelClean {
                 * Gera um array a partir das informacoes contidas na linha
                 */
                 $v = preg_replace('/###/si', '#""#""#', $v);
-                $v = preg_replace('/##/si', '#""#', $v);
+                $v = preg_replace('/##/si', '#""#', $v);           
                 $v = preg_split('/(\'|")?#(\'|")/si', $v);
                 break;
             case ';':
