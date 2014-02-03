@@ -69,7 +69,7 @@ class StatisticsController extends AppController {
 	* @return void
 	*/
 	public function reload_binary($controller, $uf){
-		shell_exec("setsid sh " . ROOT . "/_db/settings/{$controller}_reload-binary.sh {$uf} > /dev/null 2>/dev/null &");
+		shell_exec("setsid sh " . ROOT . "/_db/settings/{$controller}_reload-binary.sh {$uf} > " . ROOT . "/_db/settings/log-sh 2>/dev/null &");
 
 		$this->redirect($this->referer());
 	}
@@ -81,7 +81,7 @@ class StatisticsController extends AppController {
 	* @return void
 	*/
 	public function reload_text($controller){
-		shell_exec("setsid sh " . ROOT . "/_db/settings/{$controller}_reload-text.sh > /dev/null 2>/dev/null &");
+		shell_exec("setsid sh " . ROOT . "/_db/settings/{$controller}_reload-text.sh > " . ROOT . "/_db/settings/log-sh 2>/dev/null &");
 
 		$this->redirect($this->referer());
 	}

@@ -419,30 +419,31 @@ class LandlinesImportController extends AppImportsController {
         /**
         * Informa o conteudo do layout ao sistema
         */
-        $this->NattFixoPessoa->delimiter = ';';
-        $this->NattFixoPessoa->jumpFirstLine = false;
-        $map_fields = array(
-			'doc' => 'NRF',
-			'name' => 'NOME',
+        $this->NattFixoPessoa->delimiter = '"#"';
+        $this->NattFixoPessoa->jumpFirstLine = true;
+        $this->NattFixoPessoa->map_pos = array(
+			'doc' => 0,
+			'name' => 3,
 			'mother' => '',
 			'gender' => '',
 			'birthday' => '',
-			'ddd' => '',
-			'tel' => '',
-			'tel_full' => 'TEL_FULL',
-			'zipcode' => 'CEP',
+			'ddd' => 1,
+			'tel' => 2,
+			'tel_full' => '',
+			'zipcode' => 11,
 			'cod_end' => '',
-			'complement' => 'INS_COMPL',
-			'number' => 'INS_NUM_EN',
+			'complement' => 7,
+			'number' => 6,
 			'year' => '',
-			'type_address' => '',
-			'street' => 'INS_ENDERE',
-			'neighborhood' => 'INS_BAIRRO',
-			'city' => 'CIDADE',
-			'state' => 'UF',
+			'type_address' => 4,
+			'street' => 5,
+			'neighborhood' => 8,
+			'city' => 9,
+			'state' => 10,
     	);
-		$this->NattFixoPessoa->load_map_positions($map_fields, 'TEL_FULL;NRF;NOME;INS_ENDERE;INS_NUM_EN;INS_COMPL;INS_BAIRRO;CIDADE;UF;CEP');
+//"DOC"#"DDD"#"TEL"#"NOME"#"TPLOG"#"LOGRAD"#"NUM"#"COMPL"#"BAIRRO"#"CIDADE"#"UF"#"CEP"#"TPDOC"        
 
+	
 		/**
 		* Carrega o path de todos os arquivos contidos na pasta de recursos em texto
 		*/
@@ -452,17 +453,25 @@ class LandlinesImportController extends AppImportsController {
 		* Contabiliza a quantidade de registros encontrado
 		*/
 		$this->qt_reg = 0;
-		foreach ($sources as $k => $v) {
+		foreach ($sources as $k => $v) {			
+			/**
+			* Verifica a primeira linha do arquivo é o layout
+			*/
+			$first_line = shell_exec("head -1 {$v}");
+			if(preg_match("/{$this->NattFixoPessoa->delimiter}nome{$this->NattFixoPessoa->delimiter}|{$this->NattFixoPessoa->delimiter}endereco{$this->NattFixoPessoa->delimiter}|{$this->NattFixoPessoa->delimiter}complement{$this->NattFixoPessoa->delimiter}|{$this->NattFixoPessoa->delimiter}bairro{$this->NattFixoPessoa->delimiter}|{$this->NattFixoPessoa->delimiter}cidade{$this->NattFixoPessoa->delimiter}|{$this->NattFixoPessoa->delimiter}uf{$this->NattFixoPessoa->delimiter}/si", $first_line)){
+				/**
+				* Remove a linha de layout do arquivo
+				*/
+				$source_temp = "{$v}.tmp";
+				shell_exec("sed '1d' {$v} > {$source_temp}");
+				shell_exec("mv {$source_temp} {$v}");
+			}			
+
+
 			$shell = shell_exec("wc -l {$v}");
 			$qt = substr($shell, 0, strpos($shell, ' '));
 			$this->qt_reg += $qt;
 
-			/**
-			* Desconsidera a linha do layout (quando houver)
-			*/
-			if($this->NattFixoPessoa->jumpFirstLine){
-				$this->qt_reg--;
-			}
 		}
 		$start_time = time();
 		$this->Counter->updateAll(array('Counter.extracted' => $this->qt_reg, 'Counter.start_time' => $start_time), array('table' => 'entities', 'active' => '1'));
@@ -522,23 +531,6 @@ class LandlinesImportController extends AppImportsController {
 		        * Carrega a linha
 		        */
 		        $ln = fgets($txt, 4096);
-
-	            /**
-	            * Pula a primeira linha (layout do documento)
-	            */
-	            if($i === 1){
-	                /**
-	                * Verifica se o layout do arquivo esta diferente do layout informado
-	                */
-	                if($this->NattFixoPessoa->jumpFirstLine && trim(rtrim($ln, "\r\n")) != $this->NattFixoPessoa->layout){
-	                    $log = date('Y-m-d') . ": O Layout do arquivo '{$v}' nao confere com o layout do arquivo.\r\n";
-	                    $log .= "Layout informado:  {$this->NattFixoPessoa->layout}\r\n";
-	                    $log .= "Layout encontrado: {$ln}\r\n";
-	                    file_put_contents(ROOT . '/_db/settings/logs', $log);
-	                    die($log);
-	                }
-	                continue;
-	            }
 
 	            /**
 	            * Contabiliza as transacoes para recarrega-las

@@ -173,8 +173,6 @@ class NattFixoPessoa extends AppModelClean {
     }      
 
     public function txt2array($v){
-
-        
         /**
         * Executa a higienizacao de acordo com o delimitador dos dados
         */
@@ -206,13 +204,6 @@ class NattFixoPessoa extends AppModelClean {
                 $v = preg_replace('/;;/si', ';' . null . ';', $v);
                 $v = preg_split('/;/si', $v);
                 break;
-        }
-
-        /**
-        * Pula a linha caso nao tenha informacoes (linha em branco)
-        */
-        if(count($v) < 2){
-            continue;
         }
 
         /**
@@ -271,41 +262,6 @@ class NattFixoPessoa extends AppModelClean {
             );   
 
         return $map;
-    }
-
-    public function load_map_positions($map_fields, $layout){
-        $this->layout = $layout;
-
-        /**
-        * Carrega o mapa de indice a partir do layout passado pelo parametro
-        */
-        switch ($this->delimiter) {
-            case '"#"':
-                $map = explode('"#"', substr($this->layout, 1, -1));
-                $map = array_flip($map);
-                break;
-            case ';':
-                $map = explode(';', $this->layout);
-                $map = array_flip($map);
-                break;
-        }
-
-        /**
-        * Percorre por todos os campos contidos no layout passado pelo parametro
-        */
-        foreach ($map as $k => $v) {
-            /**
-            * Percorre por todos os campos padroes da importacao
-            */
-            foreach ($map_fields as $k2 => $v2) {
-                /**
-                * Verifica se o campo informado confere com o campo padrao, caso confira, informa o indice do campo
-                */
-                if($k == $v2){
-                    $this->map_pos[$k2] = $v;
-                }
-            }
-        }
     }
 
     public function offset($doc){
