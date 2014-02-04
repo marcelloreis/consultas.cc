@@ -420,29 +420,52 @@ class LandlinesImportController extends AppImportsController {
         * Informa o conteudo do layout ao sistema
         */
         $this->uf = 'ES';
-        $this->NattFixoPessoa->delimiter = '"#"';
-        $this->NattFixoPessoa->jumpFirstLine = true;
+        $this->NattFixoPessoa->delimiter = ';';
+        $this->NattFixoPessoa->jumpFirstLine = false;
         $this->NattFixoPessoa->map_pos = array(
-			'doc' => 0,
-			'name' => 3,
+			'doc' => 1,
+			'name' => 2,
 			'mother' => '',
 			'gender' => '',
 			'birthday' => '',
-			'ddd' => 1,
-			'tel' => 2,
-			'tel_full' => '',
-			'zipcode' => 11,
+			'ddd' => '',
+			'tel' => '',
+			'tel_full' => 0,
+			'zipcode' => 9,
 			'cod_end' => '',
-			'complement' => 7,
-			'number' => 6,
+			'complement' => 5,
+			'number' => 4,
 			'year' => '',
-			'type_address' => 4,
-			'street' => 5,
-			'neighborhood' => 8,
-			'city' => 9,
-			'state' => 10,
+			'type_address' => '',
+			'street' => 3,
+			'neighborhood' => 6,
+			'city' => 7,
+			'state' => 8,
     	);
-//"DOC"#"DDD"#"TEL"#"NOME"#"TPLOG"#"LOGRAD"#"NUM"#"COMPL"#"BAIRRO"#"CIDADE"#"UF"#"CEP"#"TPDOC"        
+
+   //      $this->uf = 'ES';
+   //      $this->NattFixoPessoa->delimiter = '"#"';
+   //      $this->NattFixoPessoa->jumpFirstLine = true;
+   //      $this->NattFixoPessoa->map_pos = array(
+			// 'doc' => 0,
+			// 'name' => 3,
+			// 'mother' => '',
+			// 'gender' => '',
+			// 'birthday' => '',
+			// 'ddd' => 1,
+			// 'tel' => 2,
+			// 'tel_full' => '',
+			// 'zipcode' => 11,
+			// 'cod_end' => '',
+			// 'complement' => 7,
+			// 'number' => 6,
+			// 'year' => '',
+			// 'type_address' => 4,
+			// 'street' => 5,
+			// 'neighborhood' => 8,
+			// 'city' => 9,
+			// 'state' => 10,
+   //  	);
 
 	
 		/**
