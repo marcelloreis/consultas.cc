@@ -328,7 +328,7 @@ class AppImportComponent extends Component {
 					/**
 					* Aplica regras para tentar descobrir o sexo da entidade apartir do primeiro nome
 					*/
-					$first_name = $this->removeAcentos(strtolower(substr($name, 0, strpos("{$name} ", ' '))));
+					$first_name = $this->clearName(substr($name, 0, strpos("{$name} ", ' ')));
 
 					/**
 					* Tenta descobrir o sexo da entidade a partir de varias combinacoes alfabeticas
@@ -345,6 +345,8 @@ class AppImportComponent extends Component {
 	* Retorna se o nome passado pelo parametro é masculino ou feminino a partir de varias combinacoes alfabeticas
 	*/
 	private function gender($n){    
+		$out = MALE;
+
 	    if (preg_match('/a$/si', $n)) {
 	        $out = FEMALE;
 	        if (
@@ -497,7 +499,7 @@ class AppImportComponent extends Component {
 	        }
 	    } else if (preg_match('/p$/si', $n)) {
 	        $out = MALE;
-	        if(preg_match('/yip$/si', $map)){
+	        if(preg_match('/yip$/si', $n)){
 	        	$out = FEMALE;
 	        }
 	    } else if (preg_match('/r$/si', $n)) {
@@ -536,7 +538,7 @@ class AppImportComponent extends Component {
 	        }
 	    } else if (preg_match('/u$/si', $n)) {
 	        $out = MALE;
-	        if(preg_match('/^du$|alu$|^miharu$|^su$/si', subject)){
+	        if(preg_match('/^du$|alu$|^miharu$|^su$/si', $n)){
 	        	$out = FEMALE;
 	        }
 	    } else if (preg_match('/v$/si', $n)) {
@@ -566,6 +568,7 @@ class AppImportComponent extends Component {
 	        	$out = FEMALE;
 	        }
 	    }
+
 	    return $out;
 	}
 
