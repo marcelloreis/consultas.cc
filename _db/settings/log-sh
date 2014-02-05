@@ -1,36 +1,0 @@
-<pre class="cake-error"><a href="javascript:void(0);" onclick="document.getElementById('cakeErr52f20fe24e2dd-trace').style.display = (document.getElementById('cakeErr52f20fe24e2dd-trace').style.display == 'none' ? '' : 'none');"><b>Notice</b> (8)</a>: Undefined variable: out [<b>APP/Controller/Component/AppImportComponent.php</b>, line <b>570</b>]<div id="cakeErr52f20fe24e2dd-trace" class="cake-stack-trace" style="display: none;"><a href="javascript:void(0);" onclick="document.getElementById('cakeErr52f20fe24e2dd-code').style.display = (document.getElementById('cakeErr52f20fe24e2dd-code').style.display == 'none' ? '' : 'none')">Code</a> <a href="javascript:void(0);" onclick="document.getElementById('cakeErr52f20fe24e2dd-context').style.display = (document.getElementById('cakeErr52f20fe24e2dd-context').style.display == 'none' ? '' : 'none')">Context</a><pre id="cakeErr52f20fe24e2dd-code" class="cake-code-dump" style="display: none;"><code><span style="color: #000000"><span style="color: #0000BB">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #007700">}</span></span></code>
-<code><span style="color: #000000"><span style="color: #0000BB"></span></span></code>
-<span class="code-highlight"><code><span style="color: #000000"><span style="color: #0000BB">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #007700">return&nbsp;</span><span style="color: #0000BB">$out</span><span style="color: #007700">;</span></span></code></span></pre><pre id="cakeErr52f20fe24e2dd-context" class="cake-context" style="display: none;">$n = &#039;&#039;</pre><pre class="stack-trace">AppImportComponent::gender() - APP/Controller/Component/AppImportComponent.php, line 570
-AppImportComponent::getGender() - APP/Controller/Component/AppImportComponent.php, line 336
-LandlinesImportController::run_text() - APP/Controller/LandlinesImportController.php, line 619
-ReflectionMethod::invokeArgs() - [internal], line ??
-Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
-Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
-Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
-[main] - APP/exec.php, line 95</pre></div></pre><pre class="cake-error"><a href="javascript:void(0);" onclick="document.getElementById('cakeErr52f20ff1e843e-trace').style.display = (document.getElementById('cakeErr52f20ff1e843e-trace').style.display == 'none' ? '' : 'none');"><b>Notice</b> (8)</a>: Undefined variable: out [<b>APP/Controller/Component/AppImportComponent.php</b>, line <b>570</b>]<div id="cakeErr52f20ff1e843e-trace" class="cake-stack-trace" style="display: none;"><a href="javascript:void(0);" onclick="document.getElementById('cakeErr52f20ff1e843e-code').style.display = (document.getElementById('cakeErr52f20ff1e843e-code').style.display == 'none' ? '' : 'none')">Code</a> <a href="javascript:void(0);" onclick="document.getElementById('cakeErr52f20ff1e843e-context').style.display = (document.getElementById('cakeErr52f20ff1e843e-context').style.display == 'none' ? '' : 'none')">Context</a><pre id="cakeErr52f20ff1e843e-code" class="cake-code-dump" style="display: none;"><code><span style="color: #000000"><span style="color: #0000BB">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #007700">}</span></span></code>
-<code><span style="color: #000000"><span style="color: #0000BB"></span></span></code>
-<span class="code-highlight"><code><span style="color: #000000"><span style="color: #0000BB">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #007700">return&nbsp;</span><span style="color: #0000BB">$out</span><span style="color: #007700">;</span></span></code></span></pre><pre id="cakeErr52f20ff1e843e-context" class="cake-context" style="display: none;">$n = &#039;&#039;</pre><pre class="stack-trace">AppImportComponent::gender() - APP/Controller/Component/AppImportComponent.php, line 570
-AppImportComponent::getGender() - APP/Controller/Component/AppImportComponent.php, line 336
-LandlinesImportController::run_text() - APP/Controller/LandlinesImportController.php, line 619
-ReflectionMethod::invokeArgs() - [internal], line ??
-Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
-Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
-Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
-[main] - APP/exec.php, line 95</pre></div></pre><pre class="cake-error"><a href="javascript:void(0);" onclick="document.getElementById('cakeErr52f20ff1e8bc9-trace').style.display = (document.getElementById('cakeErr52f20ff1e8bc9-trace').style.display == 'none' ? '' : 'none');"><b>Notice</b> (8)</a>: Undefined variable: out [<b>APP/Controller/Component/AppImportComponent.php</b>, line <b>570</b>]<div id="cakeErr52f20ff1e8bc9-trace" class="cake-stack-trace" style="display: none;"><a href="javascript:void(0);" onclick="document.getElementById('cakeErr52f20ff1e8bc9-code').style.display = (document.getElementById('cakeErr52f20ff1e8bc9-code').style.display == 'none' ? '' : 'none')">Code</a> <a href="javascript:void(0);" onclick="document.getElementById('cakeErr52f20ff1e8bc9-context').style.display = (document.getElementById('cakeErr52f20ff1e8bc9-context').style.display == 'none' ? '' : 'none')">Context</a><pre id="cakeErr52f20ff1e8bc9-code" class="cake-code-dump" style="display: none;"><code><span style="color: #000000"><span style="color: #0000BB">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #007700">}</span></span></code>
-<code><span style="color: #000000"><span style="color: #0000BB"></span></span></code>
-<span class="code-highlight"><code><span style="color: #000000"><span style="color: #0000BB">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #007700">return&nbsp;</span><span style="color: #0000BB">$out</span><span style="color: #007700">;</span></span></code></span></pre><pre id="cakeErr52f20ff1e8bc9-context" class="cake-context" style="display: none;">$n = &#039;&#039;</pre><pre class="stack-trace">AppImportComponent::gender() - APP/Controller/Component/AppImportComponent.php, line 570
-AppImportComponent::getGender() - APP/Controller/Component/AppImportComponent.php, line 336
-LandlinesImportController::run_text() - APP/Controller/LandlinesImportController.php, line 619
-ReflectionMethod::invokeArgs() - [internal], line ??
-Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
-Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
-Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
-[main] - APP/exec.php, line 95</pre></div></pre>
-
-
-
-###################################################################
-Time: 2014-02-05 08:22:28
-===================================================================
-Importacao Pausada.
-===================================================================

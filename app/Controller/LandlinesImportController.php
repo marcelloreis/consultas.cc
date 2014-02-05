@@ -409,20 +409,20 @@ class LandlinesImportController extends AppImportsController {
         /**
         * Carrega a pasta onde contem os dados em txt
         */
-        $this->NattFixoPessoa->folder = ROOT . "/_db/source";
+        $this->Ilandline->folder = ROOT . "/_db/source";
 
         /**
         * Carrega o layout dos dados que sera importados
         */
-        $this->NattFixoPessoa->source_year = 2012;
+        $this->Ilandline->source_year = 2012;
 
         /**
         * Informa o conteudo do layout ao sistema
         */
         $this->uf = 'ES';
-        $this->NattFixoPessoa->delimiter = ';';
-        $this->NattFixoPessoa->jumpFirstLine = false;
-        $this->NattFixoPessoa->map_pos = array(
+        $this->Ilandline->delimiter = ';';
+        $this->Ilandline->jumpFirstLine = false;
+        $this->Ilandline->map_pos = array(
 			'doc' => 1,
 			'name' => 2,
 			'mother' => '',
@@ -442,47 +442,22 @@ class LandlinesImportController extends AppImportsController {
 			'city' => 7,
 			'state' => 8,
     	);
-
-   //      $this->uf = 'ES';
-   //      $this->NattFixoPessoa->delimiter = '"#"';
-   //      $this->NattFixoPessoa->jumpFirstLine = true;
-   //      $this->NattFixoPessoa->map_pos = array(
-			// 'doc' => 0,
-			// 'name' => 3,
-			// 'mother' => '',
-			// 'gender' => '',
-			// 'birthday' => '',
-			// 'ddd' => 1,
-			// 'tel' => 2,
-			// 'tel_full' => '',
-			// 'zipcode' => 11,
-			// 'cod_end' => '',
-			// 'complement' => 7,
-			// 'number' => 6,
-			// 'year' => '',
-			// 'type_address' => 4,
-			// 'street' => 5,
-			// 'neighborhood' => 8,
-			// 'city' => 9,
-			// 'state' => 10,
-   //  	);
-
 	
 		/**
 		* Carrega o path de todos os arquivos contidos na pasta de recursos em texto
 		*/
-		$sources = $this->NattFixoPessoa->read_sources();
+		$sources = $this->Ilandline->read_sources();
 
 		/**
 		* Contabiliza a quantidade de registros encontrado
 		*/
 		$this->qt_reg = 0;
-		foreach ($sources as $k => $v) {			
+		foreach ($sources as $k => $v) {
 			/**
 			* Verifica a primeira linha do arquivo é o layout
 			*/
 			$first_line = shell_exec("head -1 {$v}");
-			if(preg_match("/{$this->NattFixoPessoa->delimiter}nome{$this->NattFixoPessoa->delimiter}|{$this->NattFixoPessoa->delimiter}endereco{$this->NattFixoPessoa->delimiter}|{$this->NattFixoPessoa->delimiter}complement{$this->NattFixoPessoa->delimiter}|{$this->NattFixoPessoa->delimiter}bairro{$this->NattFixoPessoa->delimiter}|{$this->NattFixoPessoa->delimiter}cidade{$this->NattFixoPessoa->delimiter}|{$this->NattFixoPessoa->delimiter}uf{$this->NattFixoPessoa->delimiter}/si", $first_line)){
+			if(preg_match("/{$this->Ilandline->delimiter}nome{$this->Ilandline->delimiter}|{$this->Ilandline->delimiter}endereco{$this->Ilandline->delimiter}|{$this->Ilandline->delimiter}complement{$this->Ilandline->delimiter}|{$this->Ilandline->delimiter}bairro{$this->Ilandline->delimiter}|{$this->Ilandline->delimiter}cidade{$this->Ilandline->delimiter}|{$this->Ilandline->delimiter}uf{$this->Ilandline->delimiter}/si", $first_line)){
 				/**
 				* Remove a linha de layout do arquivo
 				*/
@@ -495,7 +470,6 @@ class LandlinesImportController extends AppImportsController {
 			$shell = shell_exec("wc -l {$v}");
 			$qt = substr($shell, 0, strpos($shell, ' '));
 			$this->qt_reg += $qt;
-
 		}
 		$start_time = time();
 		$this->Counter->updateAll(array('Counter.extracted' => $this->qt_reg, 'Counter.start_time' => $start_time), array('table' => 'entities', 'active' => '1'));
@@ -596,28 +570,28 @@ class LandlinesImportController extends AppImportsController {
 	            * Carrega o array com os dados a serem importados a partir linha extraida do arquivo
 	            */
 				$this->AppImport->timing_ini(TUNING_LOAD_NEXT_REGISTER);
-	            $entity = $this->NattFixoPessoa->txt2array($ln);
+	            $entity = $this->Ilandline->txt2array($ln);
 	            $this->AppImport->timing_end();
-				if(isset($entity['pessoa'])){
+				if(isset($entity['NAME'])){
 					/**
 					* Gera o hash do nome da entidade
 					*/
-					$hash = $this->AppImport->getHash($this->AppImport->clearName($entity['pessoa']['NOME_RAZAO']));
+					$hash = $this->AppImport->getHash($this->AppImport->clearName($entity['NAME']));
 
 					/**
 					* Trata os dados da entidade para a importacao
 					*/
 					//Carrega o tipo de documento
-					$doc_type = $this->AppImport->getTypeDoc($entity['pessoa']['CPF_CNPJ'], $this->AppImport->clearName($entity['pessoa']['NOME_RAZAO']), $this->AppImport->clearName($entity['pessoa']['MAE']), $this->AppImport->getBirthday($entity['pessoa']['DT_NASCIMENTO']));
+					$doc_type = $this->AppImport->getTypeDoc($entity['DOC'], $this->AppImport->clearName($entity['NAME']), $this->AppImport->clearName($entity['MOTHER']), $this->AppImport->getBirthday($entity['BIRTHDAY']));
 					$this->AppImport->timing_ini(TUNING_ENTITY_LOAD);
 					$data = array(
 						'Ientity' => array(
-							'doc' => $entity['pessoa']['CPF_CNPJ'],
-							'name' => $this->AppImport->clearName($entity['pessoa']['NOME_RAZAO']),
-							'mother' => $this->AppImport->clearName($entity['pessoa']['MAE']),
+							'doc' => $entity['DOC'],
+							'name' => $this->AppImport->clearName($entity['NAME']),
+							'mother' => $this->AppImport->clearName($entity['MOTHER']),
 							'type' => $doc_type,
-							'gender' => $this->AppImport->getGender($entity['pessoa']['SEXO'], $doc_type, $entity['pessoa']['NOME_RAZAO']),
-							'birthday' => $this->AppImport->getBirthday($entity['pessoa']['DT_NASCIMENTO']),
+							'gender' => $this->AppImport->getGender($entity['GENDER'], $doc_type, $entity['NAME']),
+							'birthday' => $this->AppImport->getBirthday($entity['BIRTHDAY']),
 							'h1' => $hash['h1'],
 							'h2' => $hash['h2'],
 							'h3' => $hash['h3'],
@@ -628,7 +602,7 @@ class LandlinesImportController extends AppImportsController {
 							'h_last' => $hash['h_last'],
 							'h_first1_first2' => $hash['h_first1_first2'],
 							'h_last1_last2' => $hash['h_last1_last2'],
-							'h_mother' => $this->AppImport->getHash($entity['pessoa']['MAE'], 'h_all'),
+							'h_mother' => $this->AppImport->getHash($entity['MOTHER'], 'h_all'),
 							)
 						);
 					$this->AppImport->timing_end();
@@ -638,179 +612,173 @@ class LandlinesImportController extends AppImportsController {
 					* e carrega o id da entidade importada
 					*/
 					$this->AppImport->timing_ini(TUNING_ENTITY_IMPORT);
-					$hasImported = $this->importEntity($data);
+					$this->importEntity($data);
 					$this->AppImport->timing_end();
 
 					/**
 					* Inicializa a importacao dos telefones da entidade encontrada
 					*/
-					if($hasImported && !empty($entity['telefone'][key($entity['telefone'])]['TELEFONE'])){
-						foreach ($entity['telefone'] as $v2) {
-							/**
-							* Desmembra o DDD do Telefone
-							*/
-							$this->AppImport->timing_ini(TUNING_LANDLINE_LOAD);
-							$ddd_telefone = $v2['TELEFONE'];
-							$ddd = $this->AppImport->getDDD($v2['TELEFONE']);
-							$telefone = $this->AppImport->getTelefone($v2['TELEFONE']);
+					if(!empty($this->Ientity->id)){
+						/**
+						* Desmembra o DDD do Telefone
+						*/
+						$this->AppImport->timing_ini(TUNING_LANDLINE_LOAD);
+						$ddd_telefone = $entity['TEL_FULL'];
+						$ddd = $this->AppImport->getDDD($entity['TEL_FULL']);
+						$telefone = $this->AppImport->getTelefone($entity['TEL_FULL']);
+					
+						/**
+						* Extrai o ano de atualizacao do telefone
+						*/
+						$year = $this->Ilandline->source_year;
+
+						/**
+						* Trata os dados o telefone para a importacao
+						*/
+						$data = array(
+							'Ilandline' => array(
+								'year' => $year,
+								'ddd' => $ddd,
+								'tel' => $telefone,
+								'tel_full' => "{$ddd}{$telefone}",
+								'tel_original' => $entity['TEL_FULL'],
+								)
+							);
+						$this->AppImport->timing_end();
+
+						/**
+						* Executa a importacao do telefone
+						* e carrega o id do telefone importado
+						*/
+						$this->AppImport->timing_ini(TUNING_LANDLINE_IMPORT);
+						$this->importLandline($data, $entity['TEL_FULL']);
+						$this->AppImport->timing_end();
+
+
+						/**
+						* Inicializa a importacao do CEP do telefone encontrado
+						* Trata os dados do CEP para a importacao
+						*/				
+						$this->AppImport->timing_ini(TUNING_ZIPCODE_LOAD);		
+						$data = array(
+							'Izipcode' => array(
+								'code' => $this->AppImport->getZipcode($entity['ZIPCODE']),
+								'code_original' => $entity['ZIPCODE']
+								)
+							);
+						$this->AppImport->timing_end();
+
+						/**
+						* Executa a importacao do CEP
+						* e carrega o id do CEP importado
+						*/
+						$this->AppImport->timing_ini(TUNING_ZIPCODE_IMPORT);
+						$this->importZipcode($data);
+						$this->AppImport->timing_end();
+
+						/**
+						* Inicializa a importacao do endereco do telefone encontrado
+						* Trata os dados do endereço para a importacao
+						*/	
+						$this->AppImport->timing_ini(TUNING_ADDRESS_LOAD);
+
+						$state_id = $this->AppImport->getState($entity['STATE'], $this->uf);
+						$city_id = null;
+						// $city_id = $this->AppImport->getCityId($entity['CITY'], $state_id, $this->Izipcode->id);
+						$city = $this->AppImport->getCity($entity['CITY']);
+						$zipcode = $this->AppImport->getZipcode($entity['ZIPCODE']);
+						$number = $this->AppImport->getStreetNumber($entity['NUMBER'], $entity['STREET']);
+						$complement = $this->AppImport->getComplement($entity['COMPLEMENT'], $entity['STREET']);
+						$type_address = $this->AppImport->getTypeAddress($entity['TYPE_ADDRESS'], $entity['STREET']);
+						$neighborhood = $this->AppImport->getNeighborhood($entity['NEIGHBORHOOD']);
+
+						/**
+						* Trata o nome da rua
+						*/
+						$street = $this->AppImport->getStreet($entity['STREET']);
+
+						/**
+						* Gera o hash do nome da rua
+						*/
+						$hash = $this->AppImport->getHash($street);
+
+						/**
+						* Gera o hash do complemento da rua
+						*/
+						$hash_complement = $this->AppImport->getHash($complement, null, false);
+
+						/**
+						* Carrega um array com todos os estados
+						*/
+						$map_states = $this->AppImport->loadStates(true);
+
+						$data = array(
+							'Iaddress' => array(
+								'state_id' => $state_id,
+								'zipcode_id' => $this->Izipcode->id,
+								'city_id' => $city_id,
+								'state' => $map_states[$state_id],
+								'zipcode' => $zipcode,
+								'city' => $city,
+								'type_address' => $type_address,
+								'street' => $street,
+								'number' => $number,
+								'neighborhood' => $neighborhood,
+								'complement' => $complement,
+								'h1' => $hash['h1'],
+								'h2' => $hash['h2'],
+								'h3' => $hash['h3'],
+								'h4' => $hash['h4'],
+								'h5' => $hash['h5'],
+								'h_all' => $hash['h_all'],
+								'h_first_last' => $hash['h_first_last'],
+								'h_last' => $hash['h_last'],
+								'h_first1_first2' => $hash['h_first1_first2'],
+								'h_last1_last2' => $hash['h_last1_last2'],
+								'h_complement' => $hash_complement['h_all'],
+								)
+							);
+						$this->AppImport->timing_end();
+
+						/**
+						* Executa a importacao do Endereço
+						* e carrega o id do Endereço importado
+						*/
+						$this->AppImport->timing_ini(TUNING_ADDRESS_IMPORT);
+						$this->importAddress($data);
+						$this->AppImport->timing_end();
+
+						/**
+						* Amarra os registros Entidade, Telefone, CEP e Endereço na tabela associations
+						*/
+
+						/**
+						* Carrega todos os id coletados ate o momento
+						*/
+						$this->AppImport->timing_ini(TUNING_LOAD_ALL_DATA);
+						$data = array(
+							'Iassociation' => array(
+								'entity_id' => $this->Ientity->id,
+								'landline_id' => $this->Ilandline->id,
+								'mobile_id' => null,
+								'address_id' => $this->Iaddress->id,
+								'year' => $year,
+								)
+							);
+						$this->AppImport->timing_end();
 						
-							/**
-							* Extrai o ano de atualizacao do telefone
-							*/
-							$year = $this->NattFixoPessoa->source_year;
+						$this->AppImport->timing_ini(TUNING_IMPORT_ALL_DATA);
+                        $this->importAssociation($data);
+						$this->AppImport->timing_end();
 
-							/**
-							* Trata os dados o telefone para a importacao
-							*/
-							$data = array(
-								'Ilandline' => array(
-									'year' => $year,
-									'ddd' => $ddd,
-									'tel' => $telefone,
-									'tel_full' => "{$ddd}{$telefone}",
-									'tel_original' => $v2['TELEFONE'],
-									)
-								);
-							$this->AppImport->timing_end();
-
-							/**
-							* Executa a importacao do telefone
-							* e carrega o id do telefone importado
-							*/
-							$this->AppImport->timing_ini(TUNING_LANDLINE_IMPORT);
-							$this->importLandline($data, $v2['TELEFONE']);
-							$this->AppImport->timing_end();
-
-							/**
-							* Inicializa a importacao dos telefones da entidade encontrada
-							*/
-							if(!empty($v2['endereco']['NOME_RUA'])){
-								/**
-								* Inicializa a importacao do CEP do telefone encontrado
-								* Trata os dados do CEP para a importacao
-								*/				
-								$this->AppImport->timing_ini(TUNING_ZIPCODE_LOAD);		
-								$data = array(
-									'Izipcode' => array(
-										'code' => $this->AppImport->getZipcode($v2['endereco']['CEP']),
-										'code_original' => $v2['endereco']['CEP']
-										)
-									);
-								$this->AppImport->timing_end();
-
-								/**
-								* Executa a importacao do CEP
-								* e carrega o id do CEP importado
-								*/
-								$this->AppImport->timing_ini(TUNING_ZIPCODE_IMPORT);
-								$this->importZipcode($data);
-								$this->AppImport->timing_end();
-
-								/**
-								* Inicializa a importacao do endereco do telefone encontrado
-								* Trata os dados do endereço para a importacao
-								*/	
-								$this->AppImport->timing_ini(TUNING_ADDRESS_LOAD);
-
-								$state_id = $this->AppImport->getState($v2['endereco']['UF'], $this->uf);
-								$city_id = null;
-								// $city_id = $this->AppImport->getCityId($v2['endereco']['CIDADE'], $state_id, $this->Izipcode->id);
-								$city = $this->AppImport->getCity($v2['endereco']['CIDADE']);
-								$zipcode = $this->AppImport->getZipcode($v2['endereco']['CEP']);
-								$number = $this->AppImport->getStreetNumber($v2['NUMERO'], $v2['endereco']['NOME_RUA']);
-								$complement = $this->AppImport->getComplement($v2['COMPLEMENTO'], $v2['endereco']['NOME_RUA']);
-								$type_address = $this->AppImport->getTypeAddress($v2['endereco']['RUA'], $v2['endereco']['NOME_RUA']);
-								$neighborhood = $this->AppImport->getNeighborhood($v2['endereco']['BAIRRO']);
-
-								/**
-								* Trata o nome da rua
-								*/
-								$street = $this->AppImport->getStreet($v2['endereco']['NOME_RUA']);
-
-								/**
-								* Gera o hash do nome da rua
-								*/
-								$hash = $this->AppImport->getHash($street);
-
-								/**
-								* Gera o hash do complemento da rua
-								*/
-								$hash_complement = $this->AppImport->getHash($complement, null, false);
-
-								/**
-								* Carrega um array com todos os estados
-								*/
-								$map_states = $this->AppImport->loadStates(true);
-
-								$data = array(
-									'Iaddress' => array(
-										'state_id' => $state_id,
-										'zipcode_id' => $this->Izipcode->id,
-										'city_id' => $city_id,
-										'state' => $map_states[$state_id],
-										'zipcode' => $zipcode,
-										'city' => $city,
-										'type_address' => $type_address,
-										'street' => $street,
-										'number' => $number,
-										'neighborhood' => $neighborhood,
-										'complement' => $complement,
-										'h1' => $hash['h1'],
-										'h2' => $hash['h2'],
-										'h3' => $hash['h3'],
-										'h4' => $hash['h4'],
-										'h5' => $hash['h5'],
-										'h_all' => $hash['h_all'],
-										'h_first_last' => $hash['h_first_last'],
-										'h_last' => $hash['h_last'],
-										'h_first1_first2' => $hash['h_first1_first2'],
-										'h_last1_last2' => $hash['h_last1_last2'],
-										'h_complement' => $hash_complement['h_all'],
-										)
-									);
-								$this->AppImport->timing_end();
-
-								/**
-								* Executa a importacao do Endereço
-								* e carrega o id do Endereço importado
-								*/
-								$this->AppImport->timing_ini(TUNING_ADDRESS_IMPORT);
-								$this->importAddress($data);
-								$this->AppImport->timing_end();
-							}
-
-							/**
-							* Amarra os registros Entidade, Telefone, CEP e Endereço na tabela associations
-							*/
-
-							/**
-							* Carrega todos os id coletados ate o momento
-							*/
-							$this->AppImport->timing_ini(TUNING_LOAD_ALL_DATA);
-							$data = array(
-								'Iassociation' => array(
-									'entity_id' => $this->Ientity->id,
-									'landline_id' => $this->Ilandline->id,
-									'mobile_id' => null,
-									'address_id' => $this->Iaddress->id,
-									'year' => $year,
-									)
-								);
-							$this->AppImport->timing_end();
-							
-							$this->AppImport->timing_ini(TUNING_IMPORT_ALL_DATA);
-	                        $this->importAssociation($data);
-							$this->AppImport->timing_end();
-
-							/**
-							* Salva as contabilizacoes na base de dados
-							*/					
-							$this->AppImport->__counter('entities');
-							$this->AppImport->__counter('landlines');
-							$this->AppImport->__counter('addresses');
-							$this->AppImport->__counter('zipcodes');
-							$this->AppImport->__counter('associations');	
-						}
+						/**
+						* Salva as contabilizacoes na base de dados
+						*/					
+						$this->AppImport->__counter('entities');
+						$this->AppImport->__counter('landlines');
+						$this->AppImport->__counter('addresses');
+						$this->AppImport->__counter('zipcodes');
+						$this->AppImport->__counter('associations');	
 					}else{
 						file_put_contents(ROOT . '/_db/settings/logs', "Linha: {$i}\r\n{$ln}\r\n\r\n\r\n", FILE_APPEND);
 					}
