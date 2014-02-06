@@ -8,7 +8,6 @@
  * @package       app.Controller.Component
  */
 App::uses('Component', 'Controller');
-App::import('Vendor', 'names');
 
 /**
  * Application Component
@@ -25,9 +24,7 @@ class AppImportComponent extends Component {
 	private $time_end;
 	private $time_id;
 	private $time_desc;
-	private $female_names;
-	private $male_names;
-	private $comapani_names;
+	private $compani_names;
 	public $sizeReload;
 	public $counter;
 
@@ -37,14 +34,6 @@ class AppImportComponent extends Component {
 	    $this->Iaddress = ClassRegistry::init('Iaddress');
 	    $this->ModelCounter = ClassRegistry::init('Counter');
 	    $this->Timing = ClassRegistry::init('Timing');
-	    
-	    /**
-	    * Carrega o array de nomes femininos e masculinas para comparacao e deducao de sexo
-	    */
-	    $names = new Names();
-	    $this->female_names = $names->female();
-	    $this->male_names = $names->male();
-	    $this->compani_names = $names->compani();
 	}	
 
 	/**
@@ -182,7 +171,6 @@ class AppImportComponent extends Component {
 		return $hash;
 	}
 
-
 	/**
 	* Retorna o tipo do documento passado por parametro
 	*/
@@ -230,7 +218,44 @@ class AppImportComponent extends Component {
 				$type = TP_CNPJ;
 			}
 
-			if(in_array(strtolower($this->clearname($name)), $this->compani_names)){
+			$compani_names = array(
+				'advogados',
+				'agropecuaria',
+				'artigos',
+				'artigos',
+				'associacao',
+				'associados',
+				'auto',
+				'bcodo',
+				'brasil',
+				'centro',
+				'clinica',
+				'comercial',
+				'comercio',
+				'comunicacao',
+				'condominio',
+				'conselho',
+				'construtora',
+				'copiadora',
+				'coop',
+				'distribuidora',
+				'drogaria',
+				'edificacoes',
+				'fabrica',
+				'farmacia',
+				'igreja',
+				'industria',
+				'irmaos',
+				'laboratorio',
+				'mecanica',
+				'oficina',
+				'otica',
+				'padaria',
+				'sind',
+				'vidracaria',
+			);
+			$first_name = $this->removeAcentos(strtolower(substr($name, 0, strpos("{$name} ", ' '))));
+			if(in_array(strtolower($this->clearname($first_name)), $compani_names)){
 				$type = TP_CNPJ;
 			}
 		}		
@@ -303,26 +328,248 @@ class AppImportComponent extends Component {
 					/**
 					* Aplica regras para tentar descobrir o sexo da entidade apartir do primeiro nome
 					*/
-					$first_name = $this->removeAcentos(strtolower(substr($name, 0, strpos("{$name} ", ' '))));
+					$first_name = $this->clearName(substr($name, 0, strpos("{$name} ", ' ')));
 
 					/**
-					* Verifica se o primeiro nome é masculino
+					* Tenta descobrir o sexo da entidade a partir de varias combinacoes alfabeticas
 					*/
-					if(in_array($first_name, $this->male_names)){
-						$gender = MALE;
-
-					/**
-					* Verifica se o primeiro nome é feminino
-					*/
-					}else if(in_array($first_name, $this->female_names)){
-						$gender = FEMALE;
-					}
-
+					$gender = $this->gender($first_name);
 					break;
 			}
 		}
 
 		return $gender;
+	}
+
+	/**
+	* Retorna se o nome passado pelo parametro é masculino ou feminino a partir de varias combinacoes alfabeticas
+	*/
+	private function gender($n){    
+		$out = MALE;
+
+	    if (preg_match('/a$/si', $n)) {
+	        $out = FEMALE;
+	        if (
+	        		preg_match('/wilba$|rba$|vica$|milca$|meida$|randa$/si', $n)
+	               || preg_match('/uda$|rrea$|afa$|^ha$|cha$|oha$|apha$/si', $n)
+	               || preg_match('/natha$|^elia$|rdelia$|remia$|aja$/si', $n)
+	               || preg_match('/rja$|aka$|kka$|^ala$|gla$|tila$|vila$/si', $n)
+	               || preg_match('/cola$|orla$|nama$|yama$|inima$|jalma$/si', $n)
+	               || preg_match('/nma$|urma$|zuma$|gna$|tanna$|pna$/si', $n)
+	               || preg_match('/moa$|jara$|tara$|guara$|beira$|veira$/si', $n)
+	               || preg_match('/kira$|uira$|pra$|jura$|mura$|tura$/si', $n)
+	               || preg_match('/asa$|assa$|ussa$|^iata$|onata$|irata$/si', $n)
+	               || preg_match('/leta$|preta$|jota$|ista$|aua$|dua$/si', $n)
+	               || preg_match('/hua$|qua$|ava$|dva$|^iva$|silva$|ova$/si', $n)
+	               || preg_match('/rva$|wa$|naya$|ouza$/si', $n)
+               ){
+	        	$out = MALE;
+               }
+	    } else if (preg_match('/b$/si', $n)) {
+	        $out = MALE;
+	        if (preg_match('/inadab$/si', $n)){
+	        	$out = FEMALE;
+	        }
+	    } else if (preg_match('/c$/si', $n)) {
+	        $out = MALE;
+	        if (preg_match('/lic$|tic$/si', $n)){
+	        	$out = FEMALE;
+	        }
+	    } else if (preg_match('/d$/si', $n)) {
+	        $out = MALE;
+	        if (preg_match('/edad$|rid$/si', $n)){
+	        	$out = FEMALE;
+	        }
+	    } else if (preg_match('/e$/si', $n)) {
+	        $out = FEMALE;
+	        if(
+	        	preg_match('/dae$|jae$|kae$|oabe$|ube$|lace$|dece$/si', $n)
+                || preg_match('/felice$|urice$|nce$|bruce$|dade$|bede$/si', $n)
+                || preg_match('/^ide$|^aide$|taide$|cide$|alide$|vide$/si', $n)
+                || preg_match('/alde$|hilde$|asenilde$|nde$|ode$|lee$/si', $n)
+                || preg_match('/^ge$|ege$|oge$|rge$|uge$|phe$|bie$/si', $n)
+                || preg_match('/elie$|llie$|nie$|je$|eke$|ike$|olke$/si', $n)
+                || preg_match('/nke$|oke$|ske$|uke$|tale$|uale$|vale$/si', $n)
+                || preg_match('/cle$|rdele$|gele$|tiele$|nele$|ssele$/si', $n)
+                || preg_match('/uele$|hle$|tabile$|lile$|rile$|delle$/si', $n)
+                || preg_match('/ole$|yle$|ame$|aeme$|deme$|ime$|lme$/si', $n)
+                || preg_match('/rme$|sme$|ume$|yme$|phane$|nane$|ivane$/si', $n)
+                || preg_match('/alvane$|elvane$|gilvane$|ovane$|dene$/si', $n)
+                || preg_match('/ociene$|tiene$|gilene$|uslene$|^rene$/si', $n)
+                || preg_match('/vaine$|waine$|aldine$|udine$|mine$/si', $n)
+                || preg_match('/nine$|oine$|rtine$|vanne$|renne$|hnne$/si', $n)
+                || preg_match('/ionne$|cone$|done$|eone$|fone$|ecione$/si', $n)
+                || preg_match('/alcione$|edione$|hione$|jone$|rone$/si', $n)
+                || preg_match('/tone$|rne$|une$|ioe$|noe$|epe$|ipe$/si', $n)
+                || preg_match('/ope$|ppe$|ype$|sare$|bre$|dre$|bere$/si', $n)
+                || preg_match('/dere$|fre$|aire$|hire$|ore$|rre$|tre$/si', $n)
+                || preg_match('/dse$|ese$|geise$|wilse$|jose$|rse$/si', $n)
+                || preg_match('/esse$|usse$|use$|aete$|waldete$|iodete$/si', $n)
+                || preg_match('/sdete$|aiete$|nisete$|ezete$|nizete$/si', $n)
+                || preg_match('/dedite$|uite$|lte$|ante$|ente$|arte$/si', $n)
+                || preg_match('/laerte$|herte$|ierte$|reste$|aue$/si', $n)
+                || preg_match('/gue$|oue$|aque$|eque$|aique$|inique$/si', $n)
+                || preg_match('/rique$|lque$|oque$|rque$|esue$|osue$/si', $n)
+                || preg_match('/ozue$|tave$|ive$|ove$|we$|ye$|^ze$/si', $n)
+                || preg_match('/aze$|eze$|uze$/si', $n)
+        	){
+				$out = MALE;
+	        } 
+	    } else if (preg_match('/f$/si', $n)) {
+	        $out = MALE;
+	    } else if (preg_match('/g$/si', $n)) {
+	        $out = MALE;
+	        if(preg_match('/eig$|heng$|mping$|bong$|jung$/si', $n)){
+	        	$out = FEMALE;
+	        }
+	        
+	    } else if (preg_match('/h$/si', $n)) {
+	        $out = MALE;
+	        if(preg_match('/kah$|nah$|rah$|sh$|beth$|reth$|seth$/si', $n) || preg_match('/lizeth$|rizeth$|^edith$|udith$|ruth$/si', $n)){
+	        	$out = FEMALE;
+	        }
+	    } else if (preg_match('/i$/si', $n)) {
+	        $out = MALE;
+	        if(
+	        	preg_match('/elai$|anai$|onai$|abi$|djaci$|glaci$/si', $n)
+               || preg_match('/maraci$|^iraci$|diraci$|loraci$|ildeci$/si', $n) 
+               || preg_match('/^neci$|aici$|arici$|^elci$|nci$|oci$/si', $n) 
+               || preg_match('/uci$|kadi$|leidi$|ridi$|hudi$|hirlei$/si', $n) 
+               || preg_match('/sirlei$|^mei$|rinei$|ahi$|^ji$|iki$/si', $n) 
+               || preg_match('/isuki$|^yuki$|gali$|rali$|ngeli$|ieli$/si', $n) 
+               || preg_match('/keli$|leli$|neli$|seli$|ueli$|veli$/si', $n) 
+               || preg_match('/zeli$|ili$|helli$|kelli$|arli$|wanderli$/si', $n) 
+               || preg_match('/hami$|iemi$|oemi$|romi$|tmi$|ssumi$/si', $n) 
+               || preg_match('/yumi$|zumi$|bani$|iani$|irani$|sani$/si', $n) 
+               || preg_match('/tani$|luani$|^vani$|^ivani$|ilvani$/si', $n) 
+               || preg_match('/yani$|^eni$|ceni$|geni$|leni$|ureni$/si', $n) 
+               || preg_match('/^oseni$|veni$|zeni$|cini$|eini$|lini$/si', $n) 
+               || preg_match('/jenni$|moni$|uni$|mari$|veri$|hri$/si', $n) 
+               || preg_match('/aori$|ayuri$|lsi$|rsi$|gessi$|roti$/si', $n) 
+               || preg_match('/sti$|retti$|uetti$|aui$|iavi$|^zi$/si', $n) 
+               || preg_match('/zazi$|suzi$/si', $n)
+        	){
+				$out = FEMALE;
+	        }
+	    } else if (preg_match('/j$/si', $n)) {
+	        $out = MALE;
+	    } else if (preg_match('/k$/si', $n)) {
+	        $out = MALE;
+	        if(preg_match('/nak$|lk$/si', $n)){
+	        	$out = FEMALE;
+	        }
+	    } else if (preg_match('/l$/si', $n)) {
+	        $out = MALE;
+	        if(
+	        	preg_match('/mal$|^bel$|mabel$|rabel$|sabel$|zabel$/si', $n)
+               || preg_match('/achel$|thel$|quel$|gail$|lenil$|mell$/si', $n) 
+               || preg_match('/ol$/si', $n)
+        	){
+	        	$out = FEMALE;
+	        }
+	    } else if (preg_match('/m$/si', $n)) {
+	        $out = MALE;
+	        if(preg_match('/liliam$|riam$|viam$|miram$|eem$|uelem$/si', $n) || preg_match('/mem$|rem$/si', $n)){
+	        	$out = FEMALE;
+	        }
+	    } else if (preg_match('/n$/si', $n)) {
+	        $out = MALE;
+	        if(
+	        	preg_match('/lilian$|lillian$|marian$|irian$|yrian$/si', $n)
+               || preg_match('/ivian$|elan$|rilan$|usan$|nivan$|arivan$/si', $n) 
+               || preg_match('/iryan$|uzan$|ohen$|cken$|elen$|llen$/si', $n) 
+               || preg_match('/men$|aren$|sten$|rlein$|kelin$|velin$/si', $n) 
+               || preg_match('/smin$|rin$|istin$|rstin$|^ann$|ynn$/si', $n) 
+               || preg_match('/haron$|kun$|sun$|yn$/si', $n)
+
+        	){
+	        	$out = FEMALE;
+	        }
+	    } else if (preg_match('/o$/si', $n)) {
+	        $out = MALE;
+	        if(
+	        	preg_match('/eicao$|eco$|mico$|tico$|^do$|^ho$/si', $n)
+               || preg_match('/ocio$|ako$|eko$|keiko$|seiko$|chiko$/si', $n)
+               || preg_match('/shiko$|akiko$|ukiko$|miko$|riko$|tiko$/si', $n)
+               || preg_match('/oko$|ruko$|suko$|yuko$|izuko$|uelo$/si', $n)
+               || preg_match('/stano$|maurino$|orro$|jeto$|mento$/si', $n)
+               || preg_match('/luo$/si', $n)
+        	){
+	        	$out = FEMALE;
+	        }
+	    } else if (preg_match('/p$/si', $n)) {
+	        $out = MALE;
+	        if(preg_match('/yip$/si', $n)){
+	        	$out = FEMALE;
+	        }
+	    } else if (preg_match('/r$/si', $n)) {
+	        $out = MALE;
+	        if(
+	        	preg_match('/lar$|lamar$|zamar$|ycimar$|idimar$/si', $n)
+               || preg_match('/eudimar$|olimar$|lsimar$|lzimar$|erismar$/si', $n)
+               || preg_match('/edinar$|iffer$|ifer$|ather$|sther$/si', $n)
+               || preg_match('/esper$|^ester$|madair$|eclair$|olair$/si', $n)
+               || preg_match('/^nair$|glacir$|^nadir$|ledir$|^vanir$/si', $n)
+               || preg_match('/^evanir$|^cenir$|elenir$|zenir$|ionir$/si', $n)
+               || preg_match('/fior$|eonor$|racyr$/si', $n)
+        	){
+	        	$out = FEMALE;
+	        }
+	    } else if (preg_match('/s$/si', $n)) {
+	        $out = MALE;
+	        if(
+	        	preg_match('/unidas$|katias$|rces$|cedes$|oides$/', $n)
+               || preg_match('/aildes$|derdes$|urdes$|leudes$|iudes$/si', $n) 
+               || preg_match('/irges$|lkes$|geles$|elenes$|gnes$/si', $n) 
+               || preg_match('/^ines$|aines$|^dines$|rines$|pes$/si', $n) 
+               || preg_match('/deres$|^mires$|amires$|ores$|neves$/si', $n) 
+               || preg_match('/hais$|lais$|tais$|adis$|alis$|^elis$/si', $n) 
+               || preg_match('/ilis$|llis$|ylis$|ldenis$|annis$|ois$/si', $n) 
+               || preg_match('/aris$|^cris$|^iris$|miris$|siris$/si', $n) 
+               || preg_match('/doris$|yris$|isis$|rtis$|zis$|heiros$/si', $n) 
+               || preg_match('/dys$|inys$|rys$/si', $n)
+        	){
+	        	$out = FEMALE;
+	        }
+	    } else if (preg_match('/t$/si', $n)) {
+	        $out = MALE;
+	        if(preg_match('/bet$|ret$|^edit$|git$|est$|nett$|itt$/si', $n)){
+	        	$out = FEMALE;
+	        }
+	    } else if (preg_match('/u$/si', $n)) {
+	        $out = MALE;
+	        if(preg_match('/^du$|alu$|^miharu$|^su$/si', $n)){
+	        	$out = FEMALE;
+	        }
+	    } else if (preg_match('/v$/si', $n)) {
+	        $out = MALE;
+	    } else if (preg_match('/w$/si', $n)) {
+	        $out = MALE;
+	    } else if (preg_match('/x$/si', $n)) {
+	        $out = MALE;
+	    } else if (preg_match('/y$/si', $n)) {
+	        $out = MALE;
+	        if(
+	        	preg_match('/may$|anay$|ionay$|lacy$|^aracy$|^iracy$/', $n)
+               || preg_match('/doracy$|vacy$|aricy$|oalcy$|ncy$|nercy$/si', $n) 
+               || preg_match('/ucy$|lady$|hedy$|hirley$|raney$|gy$/si', $n) 
+               || preg_match('/ahy$|rothy$|taly$|aely$|ucely$|gely$/si', $n) 
+               || preg_match('/kely$|nely$|sely$|uely$|vely$|zely$/si', $n) 
+               || preg_match('/aily$|rily$|elly$|marly$|mony$|tamy$|iany$/si', $n) 
+               || preg_match('/irany$|sany$|uany$|lvany$|wany$|geny$/si', $n) 
+               || preg_match('/leny$|ueny$|anny$|mary$|imery$|smery$/si', $n) 
+               || preg_match('/iry$|rory$|isy$|osy$|usy$|ty$/si', $n)
+        	){
+	        	$out = FEMALE;
+	        }
+	    } else if (preg_match('/z$/si', $n)) {
+	        $out = MALE;
+	        if(preg_match('/^inez$|rinez$|derez$|liz$|riz$|uz$/si', $n)){
+	        	$out = FEMALE;
+	        }
+	    }
+
+	    return $out;
 	}
 
 	/**
@@ -404,7 +651,7 @@ class AppImportComponent extends Component {
 		*/
 		$map_states = $this->loadStates();
 
-		$state_id = $map_states[strtoupper($state)];
+		$state_id = !empty($map_states[strtoupper($state)])?$map_states[strtoupper($state)]:false;
 
 		/**
 		* Verifica se o estado informado é invalido
@@ -564,72 +811,54 @@ class AppImportComponent extends Component {
 		if(!$complement && $street){
 			if(preg_match('/(bl ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(bl. ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(bl. ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(bloco ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(bloco ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(cs ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(cs ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(cs. ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(cs. ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(ed ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(ed ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(edificio ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(edificio ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(edf ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(edf ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(q ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(q ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(qu ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(qu ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(quadra ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(quadra ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(qd ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(qd ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(lote ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(lote ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(trav. ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(trav. ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(trav ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(trav ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(travessia ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(travessia ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(casa ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(casa ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(andar ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(andar ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(cx ?.*)/si', $street, $vet)){
+			} else if(preg_match('/(cx ?.*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(sn)/si', $street, $vet)){
+			} else if(preg_match('/(sn)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(ap ?[0-9]*)/si', $street, $vet)){
+			} else if(preg_match('/(ap ?[0-9]*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(apartamento ?[0-9]*)/si', $street, $vet)){
+			} else if(preg_match('/(apartamento ?[0-9]*)/si', $street, $vet)){
 				$complement = $vet[1];
-			}
-			if(preg_match('/(apto ?[0-9]*)/si', $street, $vet)){
+			} else if(preg_match('/(apto ?[0-9]*)/si', $street, $vet)){
 				$complement = $vet[1];
+			}else{
+				if(preg_match('/^([a-z ]*)?(.*)/si', $street, $vet)){
+					$street_number = $vet[2];
+				}
 			}
 		}		
 
@@ -646,7 +875,7 @@ class AppImportComponent extends Component {
 		/**
 		* Seta o complemento como null caso nao tenho nenhuma infomracao
 		*/
-		if(empty($component)){
+		if(empty($complement)){
 			$complement = null;
 		}
 
@@ -791,7 +1020,8 @@ class AppImportComponent extends Component {
 		/**
 		* Remove qualquer numero residencial que esteja no meio do endereço
 		*/
-		$street = preg_replace('/(.*? )(n [0-9]*?)([a-z ].*)/si', "$1$3", $street);
+		$street = preg_replace('/^([a-z ]*)?([0-9]*)?.*/si', "$1", $street);
+
 		/**
 		* Remove as abreviacoes
 		*/
@@ -815,7 +1045,7 @@ class AppImportComponent extends Component {
 	/**
 	* Tenta carregar o numero da rua a partir do parametro $number, caso nao consiga, tenta carregar a partir do parametro $street
 	*/
-	public function getStreetNumber($number, $street=false){
+	public function getStreetNumber($number, $street=false){		
 		/**
 		* Inicializa a variavel $street_number com null
 		*/
@@ -832,8 +1062,8 @@ class AppImportComponent extends Component {
 		* Caso o numero nao tenha sido carregado ainda, tenta carrega-lo a partir do nome da rua
 		*/
 		if(!$street_number && $street){
-			if(preg_match('/([0-9]{5})/si', $street, $vet)){
-				$street_number = $vet[1];
+			if(!preg_match('/^br /si', $street) && preg_match('/^([a-z ]*)?([0-9]*)?.*/si', $street, $vet)){	
+				$street_number = $vet[2];
 			}
 		}
 
@@ -1459,5 +1689,4 @@ class AppImportComponent extends Component {
 		$avg = array_sum($this->timing_avg[$this->time_id])/count($this->timing_avg[$this->time_id]);
 		$this->Timing->updateAll(array('Timing.time' => $avg), array('Timing.id' => $this->time_id));
 	}
-
 }

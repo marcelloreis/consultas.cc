@@ -193,7 +193,7 @@ class AppController extends Controller {
 		/**
 		 * Autorizações gerais
 		 */
-		$this->Auth->allow('login', 'logout', 'forgot_pass', 'change_pass', 'authentication', 'run_binary', 'run_text');
+		$this->Auth->allow('login', 'logout', 'forgot_pass', 'change_pass', 'authentication', 'build_source', 'run_text');
 		// $this->Auth->allow();
 	}
 

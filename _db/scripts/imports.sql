@@ -18,7 +18,6 @@ truncate table i_addresses;
 truncate table i_zipcodes;
 truncate table i_landlines;
 truncate table i_mobiles;
-
 /*
 #Repara as tabelas
 repair table _logs;
@@ -28,7 +27,6 @@ repair table addresses;
 repair table zipcodes;
 repair table landlines;
 repair table mobiles;
-
 
 repair table i_entities;
 repair table i_associations;

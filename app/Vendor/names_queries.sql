@@ -4,14 +4,14 @@ SELECT
             substring_index(name, ' ', 1),
             '\',')
 FROM
-    naszaco_pessoas.entities
+    i_entities
 where
-    type != 2 and gender is null
+    type not in(2, 3) and gender is null
 		and CHAR_LENGTH(substring_index(name, ' ', 1)) > 3
         and (
-        substring_index(name, " ", 1) like '%o' 
-        or substring_index(name, " ", 1) like '%or' 
-        or substring_index(name, " ", 1) like '%os'
+        substring_index(name, ' ', 1) like '%o' 
+        or substring_index(name, ' ', 1) like '%or' 
+        or substring_index(name, ' ', 1) like '%os'
         or substring_index(name, ' ', 1) like '%f'
         or substring_index(name, ' ', 1) like '%j'
         or substring_index(name, ' ', 1) like '%q'
@@ -25,7 +25,7 @@ where
         or substring_index(name, ' ', 1) like '%g'
         or substring_index(name, ' ', 1) like '%p')
 group by h1
-order by name
+order by count(*) desc, name
 limit 50000;
 
 
@@ -35,12 +35,12 @@ SELECT
             substring_index(name, ' ', 1),
             '\',')
 FROM
-    naszaco_pessoas.entities
+    i_entities
 where
-    type != 2 and gender is null
+    type not in(2, 3) and gender is null
         and CHAR_LENGTH(substring_index(name, ' ', 1)) > 3
         and (substring_index(name, ' ', 1) like '%a'
         or substring_index(name, ' ', 1) like '%e')
 group by h1
-order by name
+order by count(*) desc, name
 limit 50000;
