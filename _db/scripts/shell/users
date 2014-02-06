@@ -1,3 +1,0 @@
-#Adicionando usuarios com diretorio especfico
-useradd sexshoplove_me -d /var/www/homolog/sexshoplove_me -s /bin/false
-passwd sexshoplove_me 
