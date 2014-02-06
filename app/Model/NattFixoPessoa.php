@@ -93,7 +93,7 @@ class NattFixoPessoa extends AppModelClean {
                 'NattFixoTelefone.CPF_CNPJ' => $entity[key($entity)],
                 ),
             'order' => array('NattFixoTelefone.DATA_ATUALIZACAO' => 'DESC'),
-            // 'limit' => "{$row_index},{$row_count}"
+            'group' => array('NattFixoTelefone.TELEFONE'),
             'limit' => "5"
             ));
 
