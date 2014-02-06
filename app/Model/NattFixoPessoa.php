@@ -19,11 +19,35 @@ App::uses('AppModelClean', 'Model');
  */
 class NattFixoPessoa extends AppModelClean {
     public $useTable = false;
-	public $recursive = -1;
-	public $useDbConfig = 'natt';
-	public $primaryKey = 'CPF_CNPJ';
-	public $displayField = 'NOME_RAZAO';
+    public $recursive = -1;
+    public $useDbConfig = 'natt';
+    public $primaryKey = 'CPF_CNPJ';
+    public $displayField = 'NOME_RAZAO';
     public $order = 'NattFixoPessoa.CPF_CNPJ';
+
+    /**
+    * Virtual fields
+    *
+    * @var string
+    */
+    public $virtualFields = array(
+        'line' => "
+        concat(
+            NattFixoPessoa.CPF_CNPJ, ';', 
+            NattFixoPessoa.NOME_RAZAO, ';', 
+            NattFixoPessoa.MAE, ';', 
+            NattFixoPessoa.DT_NASCIMENTO, ';', 
+            NattFixoTelefone.DATA_ATUALIZACAO, ';', 
+            NattFixoTelefone.TELEFONE, ';', 
+            NattFixoEndereco.CEP, ';', 
+            NattFixoEndereco.CIDADE, ';', 
+            NattFixoEndereco.RUA, ';', 
+            NattFixoEndereco.NOME_RUA, ';', 
+            NattFixoTelefone.NUMERO, ';', 
+            NattFixoEndereco.BAIRRO, ';', 
+            NattFixoTelefone.COMPLEMENTO
+            )",
+    );
 
     public $hasMany = array(
         'NattFixoTelefone' => array(
@@ -33,84 +57,48 @@ class NattFixoPessoa extends AppModelClean {
         )
     );
 
-    public function next_binary($row_count){
-        $map = array();
-        $pessoa = $this->find('all', array(
-            'fields' => array(
-                'NattFixoPessoa.CPF_CNPJ',
-                'NattFixoPessoa.NOME_RAZAO',
-                'NattFixoPessoa.MAE',
-                'NattFixoPessoa.SEXO',
-                'NattFixoPessoa.DT_NASCIMENTO',
-                ),
+    public function next_binary($row_index){
+        $entity = $this->find('list', array(
+            'recursive' => -1,
+            'fields' => array('CPF_CNPJ', 'CPF_CNPJ'),
             'conditions' => array(
-                // 'CPF_CNPJ' => '10153108770',
-                // 'CPF_CNPJ' => '09685634734',
-                'CPF_CNPJ !=' => '00000000000000000000',
+                'NattFixoPessoa.CPF_CNPJ !=' => '00000000000000000000',
                 ),
-            'limit' => "0,{$row_count}"
+            'limit' => "{$row_index},1"
             ));
 
-        if(count($pessoa)){
-            foreach ($pessoa as $k => $v) {
-                $map[$k]['pessoa'] = $v['NattFixoPessoa'];
-                $map_telefone = $this->NattFixoTelefone->find('all', array(
-                    'fields' => array(
-                        'NattFixoTelefone.TELEFONE',
-                        'NattFixoTelefone.CPF_CNPJ',
-                        'NattFixoTelefone.CEP',
-                        'NattFixoTelefone.COD_END',
-                        'NattFixoTelefone.COMPLEMENTO',
-                        'NattFixoTelefone.NUMERO',
-                        'NattFixoTelefone.DATA_ATUALIZACAO'
-                        ),
+        $entities = $this->find('list', array(
+            'recursive' => -1,
+            'fields' => array("NattFixoTelefone.SEQ", 'line'),
+            'joins' => array(
+                array(
+                    'table' => $this->NattFixoTelefone->useTable,
+                    'alias' => 'NattFixoTelefone',
+                    'type' => 'INNER',
                     'conditions' => array(
-                        'CPF_CNPJ' => $v['NattFixoPessoa']['CPF_CNPJ'],
-                        'DATA_ATUALIZACAO >' => '2011-01-01'
-                        ),
-                    'order' => array('DATA_ATUALIZACAO' => 'DESC'),
-                    'limit' => 5
-                    ));
+                        'NattFixoTelefone.CPF_CNPJ = NattFixoPessoa.CPF_CNPJ',
+                    )
+                ),
+                array(
+                    'table' => $this->NattFixoTelefone->NattFixoEndereco->useTable,
+                    'alias' => 'NattFixoEndereco',
+                    'type' => 'INNER',
+                    'conditions' => array(
+                        'NattFixoTelefone.COD_END = NattFixoEndereco.COD_END',
+                    )
+                ),
+            ),
+            'conditions' => array(
+                'NattFixoTelefone.DATA_ATUALIZACAO >' => '2012',
+                'NattFixoTelefone.CPF_CNPJ' => $entity[key($entity)],
+                ),
+            'order' => array('NattFixoTelefone.DATA_ATUALIZACAO' => 'DESC'),
+            // 'limit' => "{$row_index},{$row_count}"
+            'limit' => "5"
+            ));
 
-                /**
-                * Agrupa os telefones iguais ordenando a atualizacao do mais novo para mais antigo
-                */
-                krsort($map_telefone);
-                $telefone = array();
-                foreach ($map_telefone as $k3 => $v3) {
-                    $telefone[$v3['NattFixoTelefone']['TELEFONE']] = $v3;
-                }
 
-                if(count($telefone)){
-                    foreach ($telefone as $k2 => $v2) {
-                        $endereco = $this->NattFixoTelefone->NattFixoEndereco->find('first', array(
-                            'fields' => array(
-                                'NattFixoEndereco.RUA',
-                                'NattFixoEndereco.NOME_RUA',
-                                'NattFixoEndereco.BAIRRO',
-                                'NattFixoEndereco.CIDADE',
-                                'NattFixoEndereco.UF',
-                                'NattFixoEndereco.CEP'
-                                ),
-                            'conditions' => array('COD_END' => $v2['NattFixoTelefone']['COD_END']),
-                            ));
-                        $map[$k]['telefone'][$k2] = $v2['NattFixoTelefone'];
-                        if(isset($endereco['NattFixoEndereco'])){
-                            $map[$k]['telefone'][$k2]['endereco'] = $endereco['NattFixoEndereco'];
-                        }
-                    }
-                }else{
-                    /**
-                    * Elimina as entidades que nao tiverem ao menos 1 telefone relacionado
-                    */
-                    unset($map[$k]);
-                }
-
-                $this->offset($v['NattFixoPessoa']['CPF_CNPJ']);
-            }
-        }
-
-        return $map;        
+        return $entities;        
     }
 
     public function offset($doc){
