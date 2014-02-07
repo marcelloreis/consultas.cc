@@ -36,16 +36,7 @@ class NattFixoPessoa extends AppModelClean {
             NattFixoPessoa.CPF_CNPJ, ';', 
             NattFixoPessoa.NOME_RAZAO, ';', 
             NattFixoPessoa.MAE, ';', 
-            NattFixoPessoa.DT_NASCIMENTO, ';', 
-            NattFixoTelefone.DATA_ATUALIZACAO, ';', 
-            NattFixoTelefone.TELEFONE, ';', 
-            NattFixoEndereco.CEP, ';', 
-            NattFixoEndereco.CIDADE, ';', 
-            NattFixoEndereco.RUA, ';', 
-            NattFixoEndereco.NOME_RUA, ';', 
-            NattFixoTelefone.NUMERO, ';', 
-            NattFixoEndereco.BAIRRO, ';', 
-            NattFixoTelefone.COMPLEMENTO
+            NattFixoPessoa.DT_NASCIMENTO
             )",
     );
 
@@ -58,47 +49,85 @@ class NattFixoPessoa extends AppModelClean {
     );
 
     public function next_binary($row_index){
+        /**
+        * Variavel que ira concatenar a linha de dados retonarda
+        */
+        $ln_map = array();
+        $ln_entity = '';
+        $ln_landline = '';
+        $ln_address = '';
+
         $entity = $this->find('list', array(
             'recursive' => -1,
-            'fields' => array('CPF_CNPJ', 'CPF_CNPJ'),
+            'fields' => array('CPF_CNPJ', 'line'),
             'conditions' => array(
+                // 'NattFixoPessoa.CPF_CNPJ' => '33000118000250',
+                // 'NattFixoPessoa.CPF_CNPJ' => '09685634734',
                 'NattFixoPessoa.CPF_CNPJ !=' => '00000000000000000000',
                 ),
             'limit' => "{$row_index},1"
             ));
 
-        $entities = $this->find('list', array(
-            'recursive' => -1,
-            'fields' => array("NattFixoTelefone.SEQ", 'line'),
-            'joins' => array(
-                array(
-                    'table' => $this->NattFixoTelefone->useTable,
-                    'alias' => 'NattFixoTelefone',
-                    'type' => 'INNER',
-                    'conditions' => array(
-                        'NattFixoTelefone.CPF_CNPJ = NattFixoPessoa.CPF_CNPJ',
-                    )
-                ),
-                array(
-                    'table' => $this->NattFixoTelefone->NattFixoEndereco->useTable,
-                    'alias' => 'NattFixoEndereco',
-                    'type' => 'INNER',
-                    'conditions' => array(
-                        'NattFixoTelefone.COD_END = NattFixoEndereco.COD_END',
-                    )
-                ),
-            ),
-            'conditions' => array(
-                'NattFixoTelefone.DATA_ATUALIZACAO >' => '2012',
-                'NattFixoTelefone.CPF_CNPJ' => $entity[key($entity)],
-                ),
-            'order' => array('NattFixoTelefone.DATA_ATUALIZACAO' => 'DESC'),
-            'group' => array('NattFixoTelefone.TELEFONE'),
-            'limit' => "5"
-            ));
+        /**
+        * Carrega os dados da entidade
+        */
+        $ln_entity = reset($entity);
+     
 
+        if(count($entity)){
+            $map_landlines = $this->NattFixoTelefone->find('all', array(
+                'fields' => array(
+                    'NattFixoTelefone.COD_END', 
+                    'NattFixoTelefone.TELEFONE', 
+                    'line'
+                    ),
+                'conditions' => array(
+                    'NattFixoTelefone.CPF_CNPJ' => key($entity),
+                    'NattFixoTelefone.DATA_ATUALIZACAO >' => '2012'
+                    ),
+                'order' => array('DATA_ATUALIZACAO' => 'DESC'),
+                'limit' => 5
+                ));
+            krsort($map_landlines);
 
-        return $entities;        
+                $landlines_grouped = array();
+                if(count($map_landlines)){
+                    /**
+                    * Agrupa os telefones iguais ordenando a atualizacao do mais novo para mais antigo
+                    */
+                    foreach ($map_landlines as $k => $v) {
+                        $landlines_grouped[$v['NattFixoTelefone']['TELEFONE']] = $v;
+                    }            
+
+                    /**
+                    * Percorre por todos os telefones encontrados e buscos seus respectivos enderecos
+                    */
+                    foreach ($landlines_grouped as $k => $v) {
+                        /**
+                        * Carrega a os dados do telefone
+                        */
+                        $ln_landline = ";{$v['NattFixoTelefone']['line']}";
+
+                        $address = $this->NattFixoTelefone->NattFixoEndereco->find('first', array(
+                            'fields' => array('line'),
+                            'conditions' => array('COD_END' => $v['NattFixoTelefone']['COD_END']),
+                            ));
+                        if(isset($address['NattFixoEndereco'])){
+                            /**
+                            * Carrega os dados do endereço
+                            */
+                            $ln_address = ";{$address['NattFixoEndereco']['line']}";
+                        }
+
+                        /**
+                        * Concatena todos os dados encontrados
+                        */
+                        $ln_map[] = "{$ln_entity}{$ln_landline}{$ln_address}";
+                    }
+                }         
+        }
+
+        return $ln_map;        
     }
 
     public function offset($doc){

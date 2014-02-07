@@ -20,4 +20,20 @@ class NattFixoEndereco extends AppModelClean {
 	public $useDbConfig = 'natt';
 	public $primaryKey = 'COD_END';
 	public $order = 'NattFixoEndereco.COD_END';
+
+    /**
+    * Virtual fields
+    *
+    * @var string
+    */
+    public $virtualFields = array(
+        'line' => "
+        concat(
+            NattFixoEndereco.CEP, ';', 
+            NattFixoEndereco.CIDADE, ';', 
+            NattFixoEndereco.RUA, ';', 
+            NattFixoEndereco.NOME_RUA, ';', 
+            NattFixoEndereco.BAIRRO
+            )",
+    );	
 }

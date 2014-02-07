@@ -58,11 +58,6 @@ class LandlinesImportController extends AppImportsController {
 			$this->endereco_uf = "ENDERECO_{$this->uf}";
 
 			/**
-			* Carrega o nome do arquivo que sera armazenado os dados
-			*/
-			$this->filename = ROOT . "/_db/source/{$this->uf}-natt-fixo";
-
-			/**
 			* Carrega os models com o nome das tabelas
 			*/
 			$this->NattFixoTelefone->useTable = $this->telefones_uf;
@@ -76,6 +71,16 @@ class LandlinesImportController extends AppImportsController {
 			$start_time = time();
 			$this->Counter->updateAll(array('Counter.extracted' => $this->qt_reg, 'Counter.start_time' => $start_time), array('table' => 'entities', 'active' => '1'));
 
+	        /**
+	        * Inicialiaza a varaivel que contara as transacoes efetuadas
+	        */
+	        $reload_transaction = 0;
+
+			/**
+			* Carrega o nome do arquivo que sera armazenado os dados
+			*/
+			$this->filename = ROOT . "/_db/source/{$this->uf}-natt-landlines-0-to-" . LIMIT_TABLE_IMPORTS;
+
 			for ($i=0; $i < $this->qt_reg; $i++) { 
 				/**
 				* Carrega o proximo registro das tabelas de pessoa, telefone e endereco q ainda nao foram importado
@@ -83,9 +88,11 @@ class LandlinesImportController extends AppImportsController {
 				$this->AppImport->timing_ini(TUNING_LOAD_NEXT_REGISTER);
 				$entities = $this->NattFixoPessoa->next_binary($i);
 				$this->AppImport->timing_end();
+
 				/**
 				* Percorre por todas as entidades encontradas
 				*/
+				$this->AppImport->timing_ini(TUNING_ENTITY_IMPORT);
 				foreach ($entities as $k => $v) {
 					if(!$this->Settings->active($this->name)){
 						die;
@@ -94,151 +101,31 @@ class LandlinesImportController extends AppImportsController {
 					/**
 					* Insere a linha de dados no arquivo
 					*/
-					$this->AppImport->timing_ini(TUNING_ENTITY_IMPORT);
 					file_put_contents($this->filename, "{$v}\n", FILE_APPEND);
-					$this->AppImport->timing_end();
 
 					$this->AppImport->success('entities');
 					$this->AppImport->__counter('entities');
 				}
+				$this->AppImport->timing_end();
+
+	            /**
+	            * Recarrega as transacoes quando chegar no limite setado
+	            */	            
+	            if($reload_transaction == LIMIT_TABLE_IMPORTS){
+		            /**
+		            * Reinicia a contagem das transacoes
+		            */	            
+	            	$reload_transaction = 0;
+
+	            	$this->filename = ROOT . "/_db/source/{$this->uf}-natt-landlines-{$i}-to-" . (LIMIT_TABLE_IMPORTS + $i);
+
+				}            
+
+	            /**
+	            * Contabiliza as transacoes para recarrega-las
+	            */
+	            $reload_transaction++;
 			}
-			/**
-			* Inicia o processo de importacao
-			*/
-			// $this->AppImport->__log("Importacao Iniciada.", IMPORT_BEGIN, $this->uf);
-			// for ($i=0; $i < $this->qt_reg; $i+=LIMIT_BUILD_SOURCE) { 
-
-			// 	/**
-			// 	* Verifica se a chave do modulo de importacao esta ativa
-			// 	*/
-			// 	if(!$this->Settings->active($this->name)){
-			// 		die;
-			// 	}
-
-			// 	/**
-			// 	* Carrega o proximo registro das tabelas de pessoa, telefone e endereco q ainda nao foram importado
-			// 	*/
-			// 	$this->AppImport->timing_ini(TUNING_LOAD_NEXT_REGISTER);
-			// 	$entities = $this->NattFixoPessoa->next_binary(LIMIT_BUILD_SOURCE);
-			// 	$this->AppImport->timing_end();
-
-			// 	foreach ($entities as $k => $v) {
-
-
-
-			// 		if(isset($v['pessoa'])){
-			// 			$this->AppImport->success('entities');
-
-			// 			/**
-			// 			* Trata os dados da entidade para a importacao
-			// 			*/
-			// 			//Carrega o tipo de documento
-			// 			$doc_type = $this->AppImport->getTypeDoc($v['pessoa']['CPF_CNPJ'], $this->AppImport->clearName($v['pessoa']['NOME_RAZAO']), $this->AppImport->clearName($v['pessoa']['MAE']), $this->AppImport->getBirthday($v['pessoa']['DT_NASCIMENTO']));
-			// 			$this->AppImport->timing_ini(TUNING_ENTITY_LOAD);
-			// 			$this->line['entity'] = array(
-			// 				"{$v['pessoa']['CPF_CNPJ']}",
-			// 				"{$this->AppImport->clearName($v['pessoa']['NOME_RAZAO'])}",
-			// 				"{$this->AppImport->clearName($v['pessoa']['MAE'])}",
-			// 				"{$this->AppImport->getBirthday($v['pessoa']['DT_NASCIMENTO'])}",
-			// 				);
-			// 			$this->AppImport->timing_end();
-
-			// 			/**
-			// 			* Inicializa a importacao dos telefones da entidade encontrada
-			// 			*/
-			// 			if(isset($v['telefone'])){
-			// 				foreach ($v['telefone'] as $v2) {
-			// 					/**
-			// 					* Desmembra o DDD do Telefone
-			// 					*/
-			// 					$this->AppImport->timing_ini(TUNING_LANDLINE_LOAD);
-			// 					$ddd_telefone = $v2['TELEFONE'];
-			// 					$ddd = $this->AppImport->getDDD($v2['TELEFONE']);
-			// 					$telefone = $this->AppImport->getTelefone($v2['TELEFONE']);
-							
-			// 					/**
-			// 					* Extrai o ano de atualizacao do telefone
-			// 					*/
-			// 					$year = $this->AppImport->getUpdated($v2['DATA_ATUALIZACAO']);
-
-			// 					/**
-			// 					* Trata os dados o telefone para a importacao
-			// 					*/
-			// 					$this->line['tel'] = array(
-			// 						"{$year}",
-			// 						"{$ddd}",
-			// 						"{$telefone}"
-			// 						);
-			// 					$this->AppImport->timing_end();
-
-			// 					/**
-			// 					* Inicializa a importacao dos telefones da entidade encontrada
-			// 					*/
-			// 					if(isset($v2['endereco'])){
-			// 						/**
-			// 						* Inicializa a importacao do CEP do telefone encontrado
-			// 						* Trata os dados do CEP para a importacao
-			// 						*/				
-			// 						$this->AppImport->timing_ini(TUNING_ZIPCODE_LOAD);	
-			// 						$this->line['zipcode'] = array(
-			// 							"{$this->AppImport->getZipcode($v2['endereco']['CEP'])}"
-			// 							);
-			// 						$this->AppImport->timing_end();
-
-			// 						/**
-			// 						* Inicializa a importacao do endereco do telefone encontrado
-			// 						* Trata os dados do endereço para a importacao
-			// 						*/	
-			// 						$this->AppImport->timing_ini(TUNING_ADDRESS_LOAD);
-									
-			// 						$city = $this->AppImport->getCity($v2['endereco']['CIDADE']);
-			// 						$zipcode = $this->AppImport->getZipcode($v2['endereco']['CEP']);
-			// 						$number = $this->AppImport->getStreetNumber($v2['NUMERO'], $v2['endereco']['NOME_RUA']);
-
-			// 						/**
-			// 						* Trata o nome da rua
-			// 						*/
-			// 						$street = $this->AppImport->getStreet($v2['endereco']['NOME_RUA']);
-
-			// 						$this->line['address'] = array(
-			// 							"{$city}",
-			// 							"{$this->AppImport->getTypeAddress($v2['endereco']['RUA'], $v2['endereco']['NOME_RUA'])}",
-			// 							"{$street}",
-			// 							"{$number}",
-			// 							"{$this->AppImport->getNeighborhood($v2['endereco']['BAIRRO'])}",
-			// 							"{$this->AppImport->getComplement($v2['COMPLEMENTO'], $v2['endereco']['NOME_RUA'])}",
-			// 							);
-			// 						$this->AppImport->timing_end();
-			// 					}
-
-			// 					/**
-			// 					* Percorre por todos os dados coletados ate o momento
-			// 					*/
-			// 					$ln = '';
-			// 					foreach ($this->line as $k => $v) {
-			// 						$ln .= implode(';', $v);
-			// 					}
-
-			// 					/**
-			// 					* Insere a linha de dados no arquivo
-			// 					*/
-			// 					file_put_contents($this->filename, "{$ln}\n", FILE_APPEND);
-			// 				}
-			// 			}
-			// 		}else{
-			// 			$this->AppImport->fail('entities');
-			// 		}
-
-			// 		$this->AppImport->__counter('entities');
-			// 	}
-
-			// 	/**
-			// 	* Verifica se a chave do modulo de importacao esta ativa
-			// 	*/
-			// 	if(!$this->Settings->active($this->name)){
-			// 		die;
-			// 	}
-			// }
 
 			/**
 			* Finaliza o processo de importacao

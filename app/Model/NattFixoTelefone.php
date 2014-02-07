@@ -31,4 +31,19 @@ class NattFixoTelefone extends AppModelClean {
             'foreignKey' => 'COD_END'
         )
     );	
+
+    /**
+    * Virtual fields
+    *
+    * @var string
+    */
+    public $virtualFields = array(
+        'line' => "
+        concat(
+            NattFixoTelefone.DATA_ATUALIZACAO, ';', 
+            NattFixoTelefone.TELEFONE, ';', 
+            NattFixoTelefone.NUMERO, ';', 
+            NattFixoTelefone.COMPLEMENTO
+            )",
+    );   
 }
