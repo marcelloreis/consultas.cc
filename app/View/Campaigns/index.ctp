@@ -23,9 +23,10 @@ echo $this->Html->tag('thead', $this->AppGrid->tr($columns));
 /**
 * Monta o body
 */
-if(count($smsCampaign)){
+$map = strtolower($modelClass);
+if(count($$map)){
     $body = '';
-    foreach($smsCampaign as $k => $v){
+    foreach($$map as $k => $v){
         /**
         * Seta as larguras das colunas
         */

@@ -2,7 +2,7 @@
 /**
  * Static content controller.
  *
- * Este arquivo ira renderizar as visões contidas em views/SmsGroups/
+ * Este arquivo ira renderizar as visões contidas em views/Lists/
  *
  * PHP 5
  *
@@ -19,16 +19,16 @@ App::uses('AppController', 'Controller');
  * Este controlador contem regras de negócio aplicadas ao model Country
  *
  * @package       app.Controller
- * @link http://.framework.nasza.com.br/2.0/controller/SmsGroups.html
+ * @link http://.framework.nasza.com.br/2.0/controller/Lists.html
  */
-class SmsGroupsController extends AppController {
+class CampaignListsController extends AppController {
 
 	/**
 	* Controller name
 	*
 	* @var string
 	*/
-	public $name = 'SmsGroups';
+	public $name = 'CampaignList';
 
 	/**
 	* Método index
@@ -42,7 +42,7 @@ class SmsGroupsController extends AppController {
 		/**
 		* Carrega os grupos apenas do usuario logado
 		*/
-		$params['conditions']['SmsGroup.user_id'] = $this->Session->read('Auth.User.id');
+		$params['conditions']['CampaignList.user_id'] = $this->Session->read('Auth.User.id');
 
 		//@override
 		parent::index($params);

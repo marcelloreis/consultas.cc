@@ -13,14 +13,14 @@ $menu = array(
         'url' => array('controller' => 'entities', 'action' => 'index', '#' => 'entity-search')
         ),
     array(
-        'label' => '<span>SMS</span>',
+        'label' => '<span>Mailing</span>',
         'params' => array('class' => 'dropdown-toggle', 'data-toggle' => 'dropdown'),
         'icon_right' => '<span class="caret"></span>',
         'children' => array(
             /**
             * Campanhas
             */
-            array('label' => 'Campanhas', 'controller' => 'sms_campaigns'),
+            array('label' => 'Campanhas', 'controller' => 'campaigns'),
             /**
             * Modelos
             */
@@ -28,7 +28,7 @@ $menu = array(
             /**
             * Grupos
             */
-            array('label' => 'Grupos', 'controller' => 'sms_groups'),
+            array('label' => 'Listas', 'controller' => 'campaign_lists'),
             /**
             * Agenda
             */

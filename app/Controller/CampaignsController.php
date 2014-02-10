@@ -2,7 +2,7 @@
 /**
  * Static content controller.
  *
- * Este arquivo ira renderizar as visões contidas em views/SmsCampaigns/
+ * Este arquivo ira renderizar as visões contidas em views/Campaigns/
  *
  * PHP 5
  *
@@ -20,27 +20,27 @@ App::uses('UsersController', 'Controller');
  * Este controlador contem regras de negócio aplicadas ao model Country
  *
  * @package       app.Controller
- * @link http://.framework.nasza.com.br/2.0/controller/SmsCampaigns.html
+ * @link http://.framework.nasza.com.br/2.0/controller/Campaigns.html
  */
-class SmsCampaignsController extends AppBillingsController {
+class CampaignsController extends AppBillingsController {
 
 	/**
 	* Controller name
 	*
 	* @var string
 	*/
-	public $name = 'SmsCampaigns';
+	public $name = 'Campaigns';
 
 	/**
 	* Controller models
 	*
-	* @note OS MODELS SmsTemplate E SmsGroups NAO FORAM LIGADOS COM belongsTo
+	* @note OS MODELS SmsTemplate E CampaignList NAO FORAM LIGADOS COM belongsTo
 	* 		PARA DAR LIBERDADE AO USUARIO DE SELECIONAR O Template OU O Grupo
 	*		E ADITA-LOS APOS A SELECAO, ENTAO, OS MODELS CITADOS SÓ SERVEM DE REFERENCIA
 	*		E NAO EXATAMENTE COMO UMA CHAVE EXTRANGEIRA
 	* @var array
 	*/
-	public $uses = array('SmsCampaign', 'SmsTemplate', 'SmsGroup', 'Entity');
+	public $uses = array('Campaign', 'SmsTemplate', 'CampaignList', 'Entity');
 
 	/**
 	* Carrega os componentes que poderao ser usados em quaisquer controller desta framework
@@ -59,7 +59,7 @@ class SmsCampaignsController extends AppBillingsController {
 		/**
 		* Inicializa a busca de entidades somente se for passado alguma area como parametro
 		*/
-		if(!empty($data['SmsCampaign']['areas'])){
+		if(!empty($data['Campaign']['areas'])){
 			/**
 			* Contabiliza todos os registros de acordo com o filtro da campanha
 			*/
@@ -99,14 +99,14 @@ class SmsCampaignsController extends AppBillingsController {
 	        /**
 	        * Verifica se foi informado algum limite para a busca
 	        */
-			if(!empty($data['SmsCampaign']['limit'])){
-				$limit = $data['SmsCampaign']['limit'];
+			if(!empty($data['Campaign']['limit'])){
+				$limit = $data['Campaign']['limit'];
 			}
 
 	        /**
 	        * Monta a consulta com as areas(CEPs) informadas
 	        */
-			$zipcodes = preg_split('/\n/si', $data['SmsCampaign']['areas']);
+			$zipcodes = preg_split('/\n/si', $data['Campaign']['areas']);
 			foreach ($zipcodes as $k => $v) {
 				if(!empty($v)){
 					$cond['Zipcode.code'][] = trim(preg_replace('/[^0-9]/si', '', $v));
@@ -132,30 +132,30 @@ class SmsCampaignsController extends AppBillingsController {
 	        /**
 	        * Verifica se foi informado algum sexo específico
 	        */
-			if(!empty($data['SmsCampaign']['gender']) && $data['SmsCampaign']['gender'] > 0){
-				$cond['Entity.gender'] = $data['SmsCampaign']['gender'];
+			if(!empty($data['Campaign']['gender']) && $data['Campaign']['gender'] > 0){
+				$cond['Entity.gender'] = $data['Campaign']['gender'];
 			}			
 
 	        /**
 	        * Verifica se foi informado algum tipo de pessoa
 	        */
-			if(!empty($data['SmsCampaign']['type']) && $data['SmsCampaign']['type'] > 0){
-				$cond['Entity.type'] = $data['SmsCampaign']['type'];
+			if(!empty($data['Campaign']['type']) && $data['Campaign']['type'] > 0){
+				$cond['Entity.type'] = $data['Campaign']['type'];
 			}			
 
 	        /**
 	        * Verifica se foi informado alguma faixa de idade
 	        */
-			if(!empty($data['SmsCampaign']['age_ini']) && $data['SmsCampaign']['age_ini'] > 0){
-				$data['SmsCampaign']['age_end'] = (!empty($data['SmsCampaign']['age_end']) && $data['SmsCampaign']['age_end'] > 0)?$data['SmsCampaign']['age_end']:200;
+			if(!empty($data['Campaign']['age_ini']) && $data['Campaign']['age_ini'] > 0){
+				$data['Campaign']['age_end'] = (!empty($data['Campaign']['age_end']) && $data['Campaign']['age_end'] > 0)?$data['Campaign']['age_end']:200;
 
-				if(!empty($data['SmsCampaign']['ignore_age_null']) && $data['SmsCampaign']['ignore_age_null']){
+				if(!empty($data['Campaign']['ignore_age_null']) && $data['Campaign']['ignore_age_null']){
 					$cond['OR'] = array(
 						array('Entity.birthday' => null),
-						array("DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(Entity.birthday)), '%Y')+0 BETWEEN ? AND ?" => array($data['SmsCampaign']['age_ini'], $data['SmsCampaign']['age_end']))
+						array("DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(Entity.birthday)), '%Y')+0 BETWEEN ? AND ?" => array($data['Campaign']['age_ini'], $data['Campaign']['age_end']))
 						);
 				}else{
-					$cond["DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(Entity.birthday)), '%Y')+0 BETWEEN ? AND ?"] = array($data['SmsCampaign']['age_ini'], $data['SmsCampaign']['age_end']);
+					$cond["DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(Entity.birthday)), '%Y')+0 BETWEEN ? AND ?"] = array($data['Campaign']['age_ini'], $data['Campaign']['age_end']);
 				}
 			}			
 
@@ -198,8 +198,8 @@ class SmsCampaignsController extends AppBillingsController {
 		/**
 		* Concatena os contatos informados manualmente da campanha
 		*/
-		if(!empty($data['SmsCampaign']['contact_list'])){
-			$contact_list = preg_split('/\n/si', $data['SmsCampaign']['contact_list']);
+		if(!empty($data['Campaign']['contact_list'])){
+			$contact_list = preg_split('/\n/si', $data['Campaign']['contact_list']);
 
 			foreach ($contact_list as $k => $v) {
 				if(!empty($v)){
@@ -227,10 +227,10 @@ class SmsCampaignsController extends AppBillingsController {
 					/**
 					* Filtra os contatos da lista de acordo com o filtro da camapanha
 					*/
-					if($data['SmsCampaign']['gender'] == FEMALE && $gender == MALE){
+					if($data['Campaign']['gender'] == FEMALE && $gender == MALE){
 						unset($this->entity['Entity'][$i]);
 					}			
-					if($data['SmsCampaign']['gender'] == MALE && $gender == FEMALE){
+					if($data['Campaign']['gender'] == MALE && $gender == FEMALE){
 						unset($this->entity['Entity'][$i]);
 					}			
 				}
@@ -250,7 +250,7 @@ class SmsCampaignsController extends AppBillingsController {
 		/**
 		* Carrega as campanhas apenas do usuario logado
 		*/
-		$params['conditions']['SmsCampaign.user_id'] = $this->Session->read('Auth.User.id');
+		$params['conditions']['Campaign.user_id'] = $this->Session->read('Auth.User.id');
 
 		//@override
 		parent::index($params);
@@ -279,17 +279,17 @@ class SmsCampaignsController extends AppBillingsController {
 				/**
 				* Contabiliza quantos registros foram encontrados
 				*/
-				$this->request->data['SmsCampaign']['people']++;
+				$this->request->data['Campaign']['people']++;
 
 				/**
 				* Contabiliza quantas mulheres/homens foram encontradas
 				*/
 				switch ($v['Entity']['gender']) {
 					case FEMALE:
-						$this->request->data['SmsCampaign']['female']++;
+						$this->request->data['Campaign']['female']++;
 						break;
 					case MALE:
-						$this->request->data['SmsCampaign']['male']++;
+						$this->request->data['Campaign']['male']++;
 						break;
 				}
 
@@ -298,10 +298,10 @@ class SmsCampaignsController extends AppBillingsController {
 				*/
 				switch ($v['Entity']['type']) {
 					case TP_CPF:
-						$this->request->data['SmsCampaign']['individual']++;
+						$this->request->data['Campaign']['individual']++;
 						break;
 					case TP_CNPJ:
-						$this->request->data['SmsCampaign']['corporation']++;
+						$this->request->data['Campaign']['corporation']++;
 						break;
 				}
 			}
@@ -327,17 +327,17 @@ class SmsCampaignsController extends AppBillingsController {
 		/**
 		* Carrega os grupo que pertencem somente ao usuario logado
 		*/
-		$sms_groups = $this->SmsGroup->find('list', array(
+		$campaign_list = $this->CampaignList->find('list', array(
 			'fields' => array(
-				'SmsGroup.group',
-				'SmsGroup.title',
+				'CampaignList.list',
+				'CampaignList.title',
 				),
 			'conditions' => array(
-				'SmsGroup.user_id' => $this->Session->read('Auth.User.id')
+				'CampaignList.user_id' => $this->Session->read('Auth.User.id')
 				)
 			));
 
-		$this->set(compact('sms_templates', 'sms_groups'));
+		$this->set(compact('sms_templates', 'campaign_list'));
 	}
 
 	/**
@@ -351,18 +351,18 @@ class SmsCampaignsController extends AppBillingsController {
 		/**
 		* Carrega o id informado para o objeto
 		*/
-		$this->SmsCampaign->id = $id;
+		$this->Campaign->id = $id;
 
 		/**
 		* Verifica se existe a campanha solicitada
 		*/
-		if (!$this->SmsCampaign->exists()) {
+		if (!$this->Campaign->exists()) {
 			$this->Session->setFlash('Não foi possível encontrar a campanha informada.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
 		}else{
 			/**
 			* Ativa a campanha
 			*/
-			$this->SmsCampaign->saveField('status', false);
+			$this->Campaign->saveField('status', false);
 			$this->Session->setFlash('A campanha foi desativada com sucesso.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
 		}
 
@@ -383,18 +383,18 @@ class SmsCampaignsController extends AppBillingsController {
 		/**
 		* Carrega o id informado para o objeto
 		*/
-		$this->SmsCampaign->id = $id;
+		$this->Campaign->id = $id;
 
 		/**
 		* Verifica se existe a campanha solicitada
 		*/
-		if (!$this->SmsCampaign->exists()) {
+		if (!$this->Campaign->exists()) {
 			$this->Session->setFlash('Não foi possível encontrar a campanha informada.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
 		}else{
 			/**
 			* Ativa a campanha
 			*/
-			$this->SmsCampaign->saveField('status', true);
+			$this->Campaign->saveField('status', true);
 			$this->Session->setFlash('A campanha foi ativada com sucesso.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
 		}
 
@@ -415,14 +415,14 @@ class SmsCampaignsController extends AppBillingsController {
 		/**
 		* Carrega as entidades a partir dos dados da campanha no atributo $this->entity
 		*/
-		$data = $this->SmsCampaign->findById($id);
+		$data = $this->Campaign->findById($id);
 		$this->loadEntities($data);
 
 		/**
 		* Carrega todos os precos dos produtos de acordo com os seus pacotes
 		*/
 		$users = new UsersController();
-		$client = $users->loadClient($data['SmsCampaign']['client_id']);
+		$client = $users->loadClient($data['Campaign']['client_id']);
 		$prices = $users->loadPrices();
 
 		/**
@@ -430,7 +430,7 @@ class SmsCampaignsController extends AppBillingsController {
 		*/
 		$this->tp_search = TP_SEARCH_SMS;
 		$this->product_id = PRODUCT_SMS;
-		$this->user_id = $data['SmsCampaign']['user_id'];
+		$this->user_id = $data['Campaign']['user_id'];
 		$this->package_id = $client['Client']['package_id'];
 		$this->billing_id = $client['Client']['billing_id'];
 		$this->price_id = $prices['prices_id'][$this->package_id][$this->product_id];
@@ -440,7 +440,7 @@ class SmsCampaignsController extends AppBillingsController {
 		/**
 		* Carrega o assunto do SMS com o titulo da campanha
 		*/
-		$params['subject'] = $data['SmsCampaign']['title'];
+		$params['subject'] = $data['Campaign']['title'];
 
 		/**
 		* Percorre por todos as entidades encontradas enviando o SMS para cada uma
@@ -457,7 +457,7 @@ class SmsCampaignsController extends AppBillingsController {
 				'%idade%' => $v['Entity']['age'],
 				'%aniversario%' => $birthday,
 				);
-			$params['msg'] = str_replace(array_keys($vars), $vars, $data['SmsCampaign']['template']);
+			$params['msg'] = str_replace(array_keys($vars), $vars, $data['Campaign']['template']);
 
 			/**
 			* Carrega o numero que sera enviado o SMS
@@ -468,7 +468,7 @@ class SmsCampaignsController extends AppBillingsController {
     		/**
     		* Recarrega o cache de paginas cobradas
     		*/
-			$this->query = "/smsCampaigns/send/3/{$v['Mobile']['tel_full']}";
+			$this->query = "/campaigns/send/3/{$v['Mobile']['tel_full']}";
 
 			/**
 			* Verifica se o usuario tem saldo/permissao para enviar SMSs
@@ -493,7 +493,7 @@ class SmsCampaignsController extends AppBillingsController {
 			*/
 			$data_sms_sent = array(
 				'SmsSent' => array(
-					'sms_campaign_id' => $id,
+					'campaign_id' => $id,
 					'entity_id' => $v['Entity']['id'],
 					'mobile_id' => $v['Mobile']['id'],
 					'name' => $v['Entity']['name'],
@@ -504,8 +504,8 @@ class SmsCampaignsController extends AppBillingsController {
 					'status' => $this->AppSms->status,
 					)
 				);
-			$this->SmsCampaign->SmsSent->create();
-			$this->SmsCampaign->SmsSent->save($data_sms_sent);
+			$this->Campaign->SmsSent->create();
+			$this->Campaign->SmsSent->save($data_sms_sent);
 		}
 
 

@@ -12,7 +12,7 @@ echo $this->Html->script(array('plugins/maskedinput/jquery.maskMoney.min'), arra
 echo $this->Html->script(array('plugins/icheck/jquery.icheck.min'), array('defer' => true));
 
 if(!empty($this->request->data['SmsCampaign']['id'])){
-    echo $this->element('Edit/SmsCampaigns/actions', array('id' => $this->request->data['SmsCampaign']['id'], 'status' => $this->request->data['SmsCampaign']['status']));
+    echo $this->element('Edit/Campaigns/actions', array('id' => $this->request->data['SmsCampaign']['id'], 'status' => $this->request->data['SmsCampaign']['status']));
 }
 ?>
 
@@ -34,18 +34,18 @@ if(!empty($this->request->data['SmsCampaign']['id'])){
             </div> 
             <?php 
                 if(!empty($this->request->data['SmsCampaign']['id'])){
-                    echo $this->element('Edit/SmsCampaigns/summary');
+                    echo $this->element('Edit/Campaigns/summary');
                 }            
                 echo $this->AppForm->input('title', array('class' => 'input-block-level'));
-                echo $this->AppForm->input('template', array('label' => 'Modelo', 'template' => 'SmsCampaigns/form-input-templates', 'class' => 'input-block-level msk-max', 'maxlenth' => 140, 'class-label' => 'msk-max-label'));
-                echo $this->AppForm->input('contact_list', array('label' => 'Lista de Contatos', 'template' => 'SmsCampaigns/form-input-contact_list', 'type' => 'textarea', 'class' => 'input-block-level'));
-                echo $this->AppForm->input('areas', array('label' => 'Áreas', 'template' => 'SmsCampaigns/form-input-areas', 'class' => 'input-block-level'));
+                echo $this->AppForm->input('template', array('label' => 'Modelo', 'template' => 'Campaigns/form-input-templates', 'class' => 'input-block-level msk-max', 'maxlenth' => 140, 'class-label' => 'msk-max-label'));
+                echo $this->AppForm->input('contact_list', array('label' => 'Lista de Contatos', 'template' => 'Campaigns/form-input-contact_list', 'type' => 'textarea', 'class' => 'input-block-level'));
+                echo $this->AppForm->input('areas', array('label' => 'Áreas', 'template' => 'Campaigns/form-input-areas', 'class' => 'input-block-level'));
                 echo $this->AppForm->input('gender', array('type' => 'select', 'empty' => 'Feminino e Masculino', 'class' => 'chosen-select', 'label' => 'Sexo'));
                 echo $this->AppForm->input('type', array('type' => 'select', 'empty' => 'Física e Jurídica', 'options' => array(TP_CPF => 'Física', TP_CNPJ => 'Jurídica'), 'class' => 'chosen-select', 'label' => 'Pessoa'));
-                echo $this->AppForm->input('age', array('label' => 'Faixa Etária', 'template' => 'SmsCampaigns/form-input-age'));
+                echo $this->AppForm->input('age', array('label' => 'Faixa Etária', 'template' => 'Campaigns/form-input-age'));
                 echo $this->AppForm->input('limit', array('label' => 'Limite de envios'));
                 // echo $this->AppForm->input('status', array('type' => 'select', 'class' => 'chosen-select', 'empty' => 'Ativar/Desativar', 'options' => array(1 => 'Ativo', 2 => 'Inativo')));
-                // echo $this->AppForm->input('schedule', array('label' => 'Programação', 'template' => 'SmsCampaigns/form-input-schedule', 'type' => 'textarea', 'class' => 'input-block-level'));
+                // echo $this->AppForm->input('schedule', array('label' => 'Programação', 'template' => 'Campaigns/form-input-schedule', 'type' => 'textarea', 'class' => 'input-block-level'));
             ?>
 
             <?php echo $this->AppForm->btn('Salvar Alterações');?>

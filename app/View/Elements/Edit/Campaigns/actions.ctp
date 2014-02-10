@@ -14,7 +14,7 @@
                 <li class="lightgrey">
                     <?php 
                     if($status == '1'){
-                        echo $this->Html->link('<i class="icon-copy"></i>', array('controller' => 'sms_sent', 'action' => 'index', 'sms_campaign_id' => $id), array('escape' => false));
+                        echo $this->Html->link('<i class="icon-copy"></i>', array('controller' => 'sms_sent', 'action' => 'index', 'campaign_id' => $id), array('escape' => false));
                     }
                     ?>
                 </li>

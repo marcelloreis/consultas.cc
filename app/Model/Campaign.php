@@ -1,11 +1,11 @@
 <?php
 App::uses('AppModel', 'Model');
 /**
- * SmsCampaign Model
+ * Campaign Model
  *
  * @property User $User
  */
-class SmsCampaign extends AppModel {
+class Campaign extends AppModel {
 	/**
 	* Display field
 	*
