@@ -68,6 +68,7 @@ CakePlugin::load('Main', array('bootstrap' => true));
 CakePlugin::load('Google', array('bootstrap' => true));
 CakePlugin::load('Facebook', array('bootstrap' => true));
 CakePlugin::load('Dompdf', array('bootstrap' => true));
+CakePlugin::load('Boletos');
 CakePlugin::load('Upload');
 CakePlugin::load('DebugKit');
 

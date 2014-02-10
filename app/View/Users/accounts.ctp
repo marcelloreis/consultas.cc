@@ -22,11 +22,15 @@ echo $this->AppGrid->create($modelClass, array('id' => $modelClass, 'tableClass'
 $columns['id'] = $this->AppForm->input("", array('id' => 'check-all', 'type' => 'checkbox', 'template' => 'form-input-clean'));
 $columns['action'] = 'Ações';
 
+unset($columns['client_id']);
 unset($columns['password']);
 unset($columns['google_token']);
 unset($columns['google_calendar_key']);
-unset($columns['theme']);
+unset($columns['change_pass_token']);
+unset($columns['change_pass_expire']);
+unset($columns['google_calendar_key']);
 unset($columns['given_name']);
+unset($columns['theme']);
 unset($columns['picture_dir']);
 unset($columns['avatar_27']);
 unset($columns['avatar_158']);
