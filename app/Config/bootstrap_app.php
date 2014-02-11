@@ -2,24 +2,24 @@
 /**
  * Textos padroes da aplicação
  */	
-define('TITLE_HEADER', 'consultas.cc');
-define('TITLE_APP', 'consultas.cc');
+define('TITLE_HEADER', 'Check List');
+define('TITLE_APP', 'Check List');
 define('VERSION_APP', '1.0');
 define('COPYRIGHT', 'NASZA - Produtora Full Service');
 define('COPYRIGHT_LINK', 'http://nasza.com.br');
-define('PROJECT_LINK', 'http://consultas.cc');
+define('PROJECT_LINK', 'http://www.checklist.inf.br/');
 
-define('COMPANY_CORPORATE_NAME', 'NASZA - Produtora Full Service LTDA');
-define('COMPANY_FANCY_NAME', 'NASZA - Produtora Full Service');
-define('COMPANY_PHONE', '(31) xxxx-xxxx');
-define('COMPANY_EMAIL_BUSINESSES', 'comercial@nasza.com.br');
-define('COMPANY_CITY', 'Uberlândia');
-define('COMPANY_STATE', 'Minas Gerais');
-define('COMPANY_ADDRESS', 'Avenida: Vasconcelos Costa, Nº: 000606 - SALA: 12, Bairro: Martins - CEP:38400-450 ' . COMPANY_CITY . ', ' . COMPANY_STATE);
-define('COMPANY_CNPJ', '18.282.801/0001-52');
-define('COMPANY_INSCRIPTION', '235.310-00');
+define('COMPANY_CORPORATE_NAME', 'Check List - Tecnologia em banco de dados');
+define('COMPANY_FANCY_NAME', 'Check List - Tecnologia em banco de dados');
+define('COMPANY_PHONE', '(11)  4063-9943 ');
+define('COMPANY_EMAIL_BUSINESSES', 'comercial@checklist.inf.br');
+define('COMPANY_CITY', 'Serra');
+define('COMPANY_STATE', 'Espirito Santo');
+define('COMPANY_ADDRESS', 'Rua: Marrecas, Nº: 62 - SALA: 1, Bairro: Porto Canoa - CEP:29168-450 ' . COMPANY_CITY . ', ' . COMPANY_STATE);
+define('COMPANY_CNPJ', '99.999.999/9999-99');
+define('COMPANY_INSCRIPTION', '999.999-99');
 define('COMPANY_PARTNER_1', 'Marcelo Martins dos Reis');
-define('COMPANY_PARTNER_2', 'João Angelo da Silva');
+define('COMPANY_PARTNER_2', 'Rodrigo Toledo Beltrão');
 define('COMPANY_PARTNER_1_ID', '1.717-320');
 define('COMPANY_PARTNER_2_ID', 'x.xxx-xxx');
 define('COMPANY_PARTNER_1_ID_ISSUED', 'SSP');
@@ -27,7 +27,7 @@ define('COMPANY_PARTNER_2_ID_ISSUED', 'SSP');
 define('COMPANY_PARTNER_1_ID_ISSUED_DATE', '12/12/2013');
 define('COMPANY_PARTNER_2_ID_ISSUED_DATE', '12/12/2013');
 define('COMPANY_PARTNER_1_CPF', '101.531.087-70');
-define('COMPANY_PARTNER_2_CPF', '056.864.777-79');
+define('COMPANY_PARTNER_2_CPF', '004.459.287-60');
 
 /**
  * IDs padroes do projeto

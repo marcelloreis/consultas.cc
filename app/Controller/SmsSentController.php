@@ -42,13 +42,13 @@ class SmsSentController extends AppController {
 		/**
 		* Verifica se o codigo da campanha foi passado por parametro
 		*/
-		if(!empty($this->params['named']['sms_campaign_id']) && is_numeric($this->params['named']['sms_campaign_id'])){
+		if(!empty($this->params['named']['campaign_id']) && is_numeric($this->params['named']['campaign_id'])){
 			/**
 			* Busca o usuario que criou a campanha e verifica se é o mesmo que esta logado
 			*/
-			$this->SmsSent->SmsCampaign->recursive = -1;
-			$campaign = $this->SmsSent->SmsCampaign->findById($this->params['named']['sms_campaign_id']);
-			if($campaign['SmsCampaign']['user_id'] != $this->Session->read('Auth.User.id')){
+			$this->SmsSent->Campaign->recursive = -1;
+			$campaign = $this->SmsSent->Campaign->findById($this->params['named']['campaign_id']);
+			if($campaign['Campaign']['user_id'] != $this->Session->read('Auth.User.id')){
 				$this->Session->setFlash("{$this->userLogged['given_name']}, você não pode visualizar o relatório de uma campanha que não seja sua.", FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
 				$this->redirect(array('controller' => 'sms_campaigns'));
 			}
@@ -57,11 +57,11 @@ class SmsSentController extends AppController {
 			* Carrega o o log de SMSs enviados somente da campanha passada por parametro
 			*/
 			$params['conditions'] = array(
-				'SmsSent.sms_campaign_id' => $this->params['named']['sms_campaign_id']
+				'SmsSent.campaign_id' => $this->params['named']['campaign_id']
 				);
 		}else{
 			$this->Session->setFlash("{$this->userLogged['given_name']}, você informar para qual campanha deseja o relatório..", FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
-			$this->redirect(array('controller' => 'sms_campaign'));
+			$this->redirect(array('controller' => 'campaigns'));
 		}
 
 

@@ -327,7 +327,7 @@ class AppImportComponent extends Component {
 	/**
 	* Retorna o sexo da entidade
 	*/
-	public function getGender($text_gender, $type_doc, $name){
+	public function getGender($type_doc, $name){
 		/**
 		* Retorna null caso o nome nao seja valido
 		*/
@@ -345,29 +345,15 @@ class AppImportComponent extends Component {
 		*/
 		if($type_doc != TP_CNPJ){
 			/**
-			* Verifica se o campo SEXO de origem esta setado e o converte para inteiro
+			* Aplica regras para tentar descobrir o sexo da entidade apartir do primeiro nome
 			*/
-			switch ($text_gender) {
-				case 'F':
-					$gender = FEMALE;
-					break;
-				
-				case 'M':
-					$gender = MALE;
-					break;
-				
-				default:
-					/**
-					* Aplica regras para tentar descobrir o sexo da entidade apartir do primeiro nome
-					*/
-					$first_name = $this->clearName(substr($name, 0, strpos("{$name} ", ' ')));
+			$first_name = $this->clearName(substr($name, 0, strpos("{$name} ", ' ')));
 
-					/**
-					* Tenta descobrir o sexo da entidade a partir de varias combinacoes alfabeticas
-					*/
-					$gender = $this->gender($first_name);
-					break;
-			}
+			/**
+			* Tenta descobrir o sexo da entidade a partir de varias combinacoes alfabeticas
+			*/
+			$gender = $this->gender($first_name);
+			break;
 		}
 
 		return $gender;

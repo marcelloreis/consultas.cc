@@ -17,7 +17,7 @@ $columns['id'] = $this->AppForm->input("", array('id' => 'check-all', 'type' => 
 $columns['action'] = 'Ações';
 $columns['responsible_partner'] = 'Sócio Resp.';
 $columns['contract_ini'] = 'Início';
-$columns['validity'] = 'Validade';
+$columns['validity'] = 'Validade (Meses)';
 
 
 echo $this->Html->tag('thead', $this->AppGrid->tr($columns));

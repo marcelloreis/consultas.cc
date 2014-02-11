@@ -28,7 +28,9 @@ echo $this->Html->script(array('plugins/icheck/jquery.icheck.min'), array('defer
 
             <?php 
             foreach ($products as $k => $v) {
-                echo $this->AppForm->input("Price.{$k}.price", array('type' => 'text', 'label' => $v['name'], 'value' => $v['price']));
+                $label = isset($v['name'])?$v['name']:$v;
+                $price = isset($v['price'])?$this->AppUtils->num2br($v['price']):'';
+                echo $this->AppForm->input("Price.{$k}.price", array('type' => 'text', 'label' => $label, 'value' => $price));
                 echo $this->Form->hidden("Price.{$k}.product_id", array('value' => $k));
             }
             ?>

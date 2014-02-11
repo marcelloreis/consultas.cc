@@ -1,5 +1,10 @@
 $(document).ready(function(){
     /**
+    * Modal de campanhas
+    */
+    $(".modal-campaign").dialog({ height: 900 });
+
+    /**
     * Graficos de importacao
     */
 	if($("#flot-audience").length > 0){
@@ -88,30 +93,63 @@ $(document).ready(function(){
     /**
     * Grupos de sms salvos
     */
-    if($('select[name*=sms_group_id]').size()){
-        $('select[name*=sms_group_id]')
+    if($('select[name*=contact_id]').size()){
+        $('select[name*=contact_id]')
         .chosen()
         .change(function(){
-            $('textarea[name*=contact_list]').val($(this).val());
+            $('textarea[name*=contacts]').val($(this).val());
         });
     }
 
     /**
     * Cidades por demanda
     */
-    if($('select[name*=state_id]').size()){
-        $('select[name*=state_id]')
+    // if($('select[name*=state_id]').size() && $('select[name*=city_id]').size()){
+    //     $('select[name*=state_id]')
+    //     .chosen()
+    //     .change(function(){
+    //         var form = $(this).parents('form:eq(0)');
+    //         var state_id = $(this).val();
+    //         var select_city = form.find('select[name*=city_id]');
+    //         var box_select_city = select_city.parent();
+
+    //         select_city.remove();
+    //         $.get('/cities/options/' + state_id, function(data){
+    //             box_select_city.html(data);
+    //             $('select', box_select_city).chosen();
+    //         });
+            
+    //     });
+    // }
+
+    /**
+    * Cidades por demanda de Campanhas
+    */
+    if($('select[name*=Campaign][name*=state_id]').size() && $('select[name*=Campaign][name*=city_id]').size()){
+        $('select[name*=Campaign][name*=state_id]')
         .chosen()
         .change(function(){
             var form = $(this).parents('form:eq(0)');
             var state_id = $(this).val();
-            var select_city = form.find('select[name*=city_id]');
-            var box_select_city = select_city.parents('.controls:eq(0)');
+            var select_city = form.find('select[name*=Campaign][name*=city_id]');
+            var box_select_city = select_city.parent();
+
+            $('textarea[name*=Campaign][name*=neighbors]')
+            .attr("disabled", "disabled")
+            .val('Selecione a cidade, depois informe os bairros.');
+
+            // select_city.val('');
 
             select_city.remove();
-            $.get('/cities/options/' + state_id, function(data){
+            $.get('/cities/options/' + state_id + '/model:Campaign', function(data){
                 box_select_city.html(data);
-                $('select', box_select_city).chosen();
+                $('select', box_select_city)
+                .chosen()
+                .change(function(){
+                    $('textarea[name*=Campaign][name*=neighbors]')
+                    .removeAttr("disabled")
+                    .val('');
+                });
             });
             
         });

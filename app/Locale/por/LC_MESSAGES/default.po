@@ -36,6 +36,9 @@ msgstr "Bilhetagens"
 msgid "Btn payment"
 msgstr "Botão de pagamento"
 
+msgid "Campaigns"
+msgstr "Campanhas"
+
 msgid "Cities"
 msgstr "Cidades"
 
@@ -195,9 +198,6 @@ msgstr "Sócio responsável 2"
 msgid "Skills"
 msgstr "Habilidades"
 
-msgid "SmsCampaigns"
-msgstr "Campanhas SMS"
-
 msgid "SmsGroups"
 msgstr "Listas de Contato para SMS"
 
@@ -232,7 +232,7 @@ msgid "User id"
 msgstr "Usuário"
 
 msgid "Users"
-msgstr "Usuários"
+msgstr "Usuário"
 
 msgid "Validity"
 msgstr "Validade"

@@ -1,5 +1,12 @@
 <?php 
 /**
+* Insere o sidebar especifico de usuarios
+*/
+$this->start('sidebar');
+echo $this->element('Components/Users/sidebar-accounts');
+$this->end();
+
+/**
 * Adiciona os CSSs e Scripts de acordo com as views invocadas
 */
 $this->append('css-on-demand');
@@ -31,20 +38,21 @@ echo $this->Html->script(array('plugins/fileupload/bootstrap-fileupload.min'), a
                 <div class="tab-pane active" id="profile">
 
                     <?php echo $this->Form->input('id');?>
+                    <?php echo $this->Form->hidden('group_id', array('value' => CLIENT_GROUP));?>
                         <div class="row-fluid">
                             <div class="span2">
                                 <?php echo $this->AppForm->input('picture', array('type' => 'file', 'template' => 'Users/form-input-picture'));?>
                             </div>
                             <div class="span10">
                                 <?php
-                                echo $this->AppForm->input('group_id', array('type' => 'select', 'class' => 'chosen-select', 'template' => 'Users/form-input-fk'));
+                                echo $this->AppForm->input('client_id', array('type' => 'select', 'class' => 'chosen-select', 'template' => 'Users/form-input-fk'));
                                 echo $this->AppForm->input('name', array('template' => 'Users/form-input'));
                                 echo $this->AppForm->input('given_name', array('template' => 'Users/form-input'));
                                 echo $this->AppForm->input('expire', array('template' => 'Users/form-input'));
                                 echo $this->AppForm->input('email', array('template' => 'Users/form-input'));
                                 echo $this->AppForm->input('password', array('template' => 'Users/form-input'));
                                 echo $this->AppForm->input('unlimited', array('class' => 'icheck-me', 'data-skin' => 'square', 'data-color' => 'blue', 'template' => 'Users/form-input'));
-                                echo $this->AppForm->input('status', array('class' => 'icheck-me', 'data-skin' => 'square', 'data-color' => 'blue', 'template' => 'Users/form-input'));
+                                echo $this->AppForm->input('status', array('label' => 'Ativo', 'class' => 'icheck-me', 'data-skin' => 'square', 'data-color' => 'blue', 'template' => 'Users/form-input'));
 
                                 echo $this->AppForm->btn('Salvar Alterações', array('template' => 'Users/form-input-btn'));
                                 ?>
