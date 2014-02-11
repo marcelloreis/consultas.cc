@@ -19,7 +19,7 @@ echo $this->Html->script(array('plugins/maskedinput/jquery.maskMoney.min'), arra
                 <?php echo $this->Form->hidden('user_id', array('value' => $userLogged['id']))?>
             </div>            
             <?php echo $this->AppForm->input('title', array('class' => 'input-block-level'))?>
-            <?php echo $this->AppForm->input('group', array('label' => 'Modelo', 'class' => 'input-block-level msk-max', 'maxlenth' => 165, 'class-label' => 'msk-max-label', 'template' => 'SmsGroups/form-input-groups'))?>
+            <?php echo $this->AppForm->input('list', array('label' => 'Modelo', 'class' => 'input-block-level msk-max', 'maxlenth' => 165, 'class-label' => 'msk-max-label', 'template' => 'Contacts/form-input-contacts'))?>
 
             <?php echo $this->AppForm->btn('Salvar Alterações');?>
         <?php echo $this->AppForm->end()?>

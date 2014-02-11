@@ -340,7 +340,7 @@ class LandlinesImportController extends AppImportsController {
 							'name' => $this->AppImport->clearName($entity['NAME']),
 							'mother' => $this->AppImport->clearName($entity['MOTHER']),
 							'type' => $doc_type,
-							'gender' => $this->AppImport->getGender($entity['GENDER'], $doc_type, $entity['NAME']),
+							'gender' => $this->AppImport->getGender($doc_type, $entity['NAME']),
 							'birthday' => $this->AppImport->getBirthday($entity['BIRTHDAY']),
 							'h1' => $hash['h1'],
 							'h2' => $hash['h2'],

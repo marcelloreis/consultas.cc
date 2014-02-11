@@ -31,16 +31,55 @@ class CampaignsController extends AppBillingsController {
 	*/
 	public $name = 'Campaigns';
 
+    /**
+	* Método beforeRender
+    * Chamado depois controlador com as regras de negócio, mas antes da visão ser renderizada.
+	*
+	* @override Metodo AppBillingsController.beforeRender
+	* @return void
+	*/
+    public function beforeRender(){
+		//@override
+    	parent::beforeRender();
+
+		/**
+		* Carrega todos os estados cadastrados
+		*/
+		if(!Cache::read('states', 'components')){
+			Cache::write('states', $this->Entity->Address->State->find('list'), 'components');
+		}
+		$states = Cache::read('states', 'components');
+
+		/**
+		* Carrega todos os estados cadastrados
+		*/
+		if(!Cache::read('uf', 'components')){
+			Cache::write('uf', $this->Entity->Address->State->find('list', array('fields' => array('State.id', 'State.uf'))), 'components');
+		}
+		$uf = Cache::read('uf', 'components');
+
+		/**
+		* Carrega todos as cidades cadastrados
+		*/
+		$cities = array();
+
+    	/**
+    	* Carrega as variaveis de ambiente
+    	*/
+    	$this->set(compact('states', 'uf', 'cities'));
+	}
+
+
 	/**
 	* Controller models
 	*
-	* @note OS MODELS SmsTemplate E CampaignList NAO FORAM LIGADOS COM belongsTo
+	* @note OS MODELS SmsTemplate E Contact NAO FORAM LIGADOS COM belongsTo
 	* 		PARA DAR LIBERDADE AO USUARIO DE SELECIONAR O Template OU O Grupo
 	*		E ADITA-LOS APOS A SELECAO, ENTAO, OS MODELS CITADOS SÓ SERVEM DE REFERENCIA
 	*		E NAO EXATAMENTE COMO UMA CHAVE EXTRANGEIRA
 	* @var array
 	*/
-	public $uses = array('Campaign', 'SmsTemplate', 'CampaignList', 'Entity');
+	public $uses = array('Campaign', 'SmsTemplate', 'Contact', 'Entity');
 
 	/**
 	* Carrega os componentes que poderao ser usados em quaisquer controller desta framework
@@ -57,56 +96,53 @@ class CampaignsController extends AppBillingsController {
 	private function loadEntities($data){
 
 		/**
-		* Inicializa a busca de entidades somente se for passado alguma area como parametro
+		* Contabiliza todos os registros de acordo com o filtro da campanha
 		*/
-		if(!empty($data['Campaign']['areas'])){
-			/**
-			* Contabiliza todos os registros de acordo com o filtro da campanha
-			*/
-			$limit = null;
-			$cond = array();
-			$joins = array();
+		$limit = null;
+		$cond = array();
+		$joins = array();
 
-			/**
-			* Monta o join com a tabela de associacoes
-			*/
-			$joins[] = array(
-				'table' => 'associations',
-		        'alias' => 'Association',
-		        'type' => 'INNER',
-		        'conditions' => array(
-		            'Association.entity_id = Entity.id',
-		        )
-	        );
+		/**
+		* Monta o join com a tabela de associacoes
+		*/
+		$joins[] = array(
+			'table' => 'associations',
+	        'alias' => 'Association',
+	        'type' => 'INNER',
+	        'conditions' => array(
+	            'Association.entity_id = Entity.id',
+	        )
+        );
 
-			/**
-			* Monta o join com a tabela de telefones moveis
-			*/
-			$joins[] = array(
-				'table' => 'mobiles',
-		        'alias' => 'Mobile',
-		        'type' => 'INNER',
-		        'conditions' => array(
-		            'Mobile.id = Association.mobile_id',
-		        )
-	        );
+		/**
+		* Monta o join com a tabela de telefones moveis
+		*/
+		$joins[] = array(
+			'table' => 'mobiles',
+	        'alias' => 'Mobile',
+	        'type' => 'INNER',
+	        'conditions' => array(
+	            'Mobile.id = Association.mobile_id',
+	        )
+        );
 
-			/**
-			* Traz somentes os registros com telefone movel
-			*/
-	        $cond['Association.mobile_id NOT'] = null;
+		/**
+		* Traz somentes os registros com telefone movel
+		*/
+        $cond['Association.mobile_id NOT'] = null;
 
-	        /**
-	        * Verifica se foi informado algum limite para a busca
-	        */
-			if(!empty($data['Campaign']['limit'])){
-				$limit = $data['Campaign']['limit'];
-			}
+        /**
+        * Verifica se foi informado algum limite para a busca
+        */
+		if(!empty($data['Campaign']['limit'])){
+			$limit = $data['Campaign']['limit'];
+		}
 
-	        /**
-	        * Monta a consulta com as areas(CEPs) informadas
-	        */
-			$zipcodes = preg_split('/\n/si', $data['Campaign']['areas']);
+        /**
+        * Monta a consulta com as areas(CEPs) informadas
+        */
+        if(!empty($data['Campaign']['zipcodes'])){
+			$zipcodes = preg_split('/\n/si', $data['Campaign']['zipcodes']);
 			foreach ($zipcodes as $k => $v) {
 				if(!empty($v)){
 					$cond['Zipcode.code'][] = trim(preg_replace('/[^0-9]/si', '', $v));
@@ -128,80 +164,80 @@ class CampaignsController extends AppBillingsController {
 		            'Zipcode.id = Address.zipcode_id',
 		        )
 	        );
+        }
 
-	        /**
-	        * Verifica se foi informado algum sexo específico
-	        */
-			if(!empty($data['Campaign']['gender']) && $data['Campaign']['gender'] > 0){
-				$cond['Entity.gender'] = $data['Campaign']['gender'];
-			}			
+        /**
+        * Verifica se foi informado algum sexo específico
+        */
+		if(!empty($data['Campaign']['gender']) && $data['Campaign']['gender'] > 0){
+			$cond['Entity.gender'] = $data['Campaign']['gender'];
+		}			
 
-	        /**
-	        * Verifica se foi informado algum tipo de pessoa
-	        */
-			if(!empty($data['Campaign']['type']) && $data['Campaign']['type'] > 0){
-				$cond['Entity.type'] = $data['Campaign']['type'];
-			}			
+        /**
+        * Verifica se foi informado algum tipo de pessoa
+        */
+		if(!empty($data['Campaign']['type']) && $data['Campaign']['type'] > 0){
+			$cond['Entity.type'] = $data['Campaign']['type'];
+		}			
 
-	        /**
-	        * Verifica se foi informado alguma faixa de idade
-	        */
-			if(!empty($data['Campaign']['age_ini']) && $data['Campaign']['age_ini'] > 0){
-				$data['Campaign']['age_end'] = (!empty($data['Campaign']['age_end']) && $data['Campaign']['age_end'] > 0)?$data['Campaign']['age_end']:200;
+        /**
+        * Verifica se foi informado alguma faixa de idade
+        */
+		if(!empty($data['Campaign']['age_ini']) && $data['Campaign']['age_ini'] > 0){
+			$data['Campaign']['age_end'] = (!empty($data['Campaign']['age_end']) && $data['Campaign']['age_end'] > 0)?$data['Campaign']['age_end']:200;
 
-				if(!empty($data['Campaign']['ignore_age_null']) && $data['Campaign']['ignore_age_null']){
-					$cond['OR'] = array(
-						array('Entity.birthday' => null),
-						array("DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(Entity.birthday)), '%Y')+0 BETWEEN ? AND ?" => array($data['Campaign']['age_ini'], $data['Campaign']['age_end']))
-						);
-				}else{
-					$cond["DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(Entity.birthday)), '%Y')+0 BETWEEN ? AND ?"] = array($data['Campaign']['age_ini'], $data['Campaign']['age_end']);
-				}
-			}			
+			if(!empty($data['Campaign']['ignore_age_null']) && $data['Campaign']['ignore_age_null']){
+				$cond['OR'] = array(
+					array('Entity.birthday' => null),
+					array("DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(Entity.birthday)), '%Y')+0 BETWEEN ? AND ?" => array($data['Campaign']['age_ini'], $data['Campaign']['age_end']))
+					);
+			}else{
+				$cond["DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(Entity.birthday)), '%Y')+0 BETWEEN ? AND ?"] = array($data['Campaign']['age_ini'], $data['Campaign']['age_end']);
+			}
+		}			
 
-			$this->entity['Entity'] = $this->Entity->find('all', array(
-				'recursive' => -1,
-				'fields' => array(
-					'Entity.id',
-					'Entity.name',
-					'Entity.first_name',
-					'Entity.type',
-					'Entity.age',
-					'Entity.birthday',
-					'Entity.gender',
-					'Entity.gender_str',
-					'Mobile.id',
-					'Mobile.tel_full',
-					),
-				'conditions' => $cond,
-				'joins' => $joins,
-				'order' => array('Association.year' => 'DESC'),
-				'limit' => $limit
-				)
-			);
-		}
+		$this->entity['Entity'] = $this->Entity->find('all', array(
+			'recursive' => -1,
+			'fields' => array(
+				'Entity.id',
+				'Entity.name',
+				'Entity.first_name',
+				'Entity.type',
+				'Entity.age',
+				'Entity.birthday',
+				'Entity.gender',
+				'Entity.gender_str',
+				'Mobile.id',
+				'Mobile.tel_full',
+				),
+			'conditions' => $cond,
+			'joins' => $joins,
+			'order' => array('Association.year' => 'DESC'),
+			'limit' => $limit
+			)
+		);
 
 		/**
-		* Carrega os contatos contidos no campo contact_list no atributo $this->entity
+		* Carrega os contatos contidos no campo contacts no atributo $this->entity
 		*/
-		$this->loadContactList($data);
+		$this->loadContact($data);
 	}
 
 	/**
-	* Método loadContactList
+	* Método loadContact
 	* Este método é responsavel pelo envio de SMSs para os contatos vinculados a campanha passada por parametro
 	*
 	* @param string $id
 	* @return void
 	*/
-	private function loadContactList($data){	
+	private function loadContact($data){	
 		/**
 		* Concatena os contatos informados manualmente da campanha
 		*/
-		if(!empty($data['Campaign']['contact_list'])){
-			$contact_list = preg_split('/\n/si', $data['Campaign']['contact_list']);
+		if(!empty($data['Campaign']['contacts'])){
+			$contacts = preg_split('/\n/si', $data['Campaign']['contacts']);
 
-			foreach ($contact_list as $k => $v) {
+			foreach ($contacts as $k => $v) {
 				if(!empty($v)){
 					$i = count($this->entity['Entity']);
 					$name = substr(trim($v), 0, strpos(trim($v), ','));
@@ -327,17 +363,17 @@ class CampaignsController extends AppBillingsController {
 		/**
 		* Carrega os grupo que pertencem somente ao usuario logado
 		*/
-		$campaign_list = $this->CampaignList->find('list', array(
+		$contacts = $this->Contact->find('list', array(
 			'fields' => array(
-				'CampaignList.list',
-				'CampaignList.title',
+				'Contact.list',
+				'Contact.title',
 				),
 			'conditions' => array(
-				'CampaignList.user_id' => $this->Session->read('Auth.User.id')
+				'Contact.user_id' => $this->Session->read('Auth.User.id')
 				)
 			));
 
-		$this->set(compact('sms_templates', 'campaign_list'));
+		$this->set(compact('sms_templates', 'contacts'));
 	}
 
 	/**
@@ -405,13 +441,13 @@ class CampaignsController extends AppBillingsController {
 	}
 
 	/**
-	* Método send
+	* Método send_sms
 	* Este método é responsavel pelo envio de SMSs para os contatos vinculados a campanha passada por parametro
 	*
 	* @param string $id
 	* @return void
 	*/
-	public function send($id){
+	public function send_sms($id){
 		/**
 		* Carrega as entidades a partir dos dados da campanha no atributo $this->entity
 		*/

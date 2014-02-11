@@ -28,7 +28,7 @@ $menu = array(
             /**
             * Grupos
             */
-            array('label' => 'Listas', 'controller' => 'campaign_lists'),
+            array('label' => 'Lista de Contatos', 'controller' => 'contacts'),
             /**
             * Agenda
             */

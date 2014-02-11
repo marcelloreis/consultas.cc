@@ -6,7 +6,7 @@
                     %input%
                 </div>
                 <div class="span4">
-                    <?php echo $this->AppForm->input('campaign_list_id', array('empty' => 'Listas Cadastradas', 'options' => $campaign_list, 'class' => 'chosen-select', 'label' => 'Lista de Contatos', 'template' => 'form-input-clean'))?>
+                    <?php echo $this->AppForm->input('contact_id', array('empty' => 'Contatos Cadastrados', 'options' => $contacts, 'class' => 'chosen-select', 'label' => 'Contatos Cadastrados', 'template' => 'form-input-clean'))?>
                     <div class="alert alert-info">
                         <h4>Um número por linha</h4>
                         <p>

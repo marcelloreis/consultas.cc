@@ -1,5 +1,10 @@
 <?php 
 /**
+* Adiciona os Scripts de acordo com as views invocadas
+*/
+echo $this->Html->script(array('plugins/wizard/jquery.form.wizard.min'), array('defer' => true));
+
+/**
 * Adiciona o painel de funcoes da grid
 */
 echo $this->element('Index/panel');
@@ -17,7 +22,6 @@ $columns['id'] = $this->AppForm->input("", array('id' => 'check-all', 'type' => 
 $columns['action'] = 'Ações';
 $columns['title'] = 'Título';
 $columns['status'] = 'Status';
-$columns['limit'] = 'Limite';
 echo $this->Html->tag('thead', $this->AppGrid->tr($columns));
 
 /**
@@ -30,7 +34,7 @@ if(count($$map)){
         /**
         * Seta as larguras das colunas
         */
-        $v[$modelClass]['action'] = $this->element('Index/action', array('id' => $v[$modelClass]['id']));
+        $v[$modelClass]['action'] = $this->element('Index/Campaigns/action', array('id' => $v[$modelClass]['id']));
         $v[$modelClass]['id'] = $this->AppForm->input("{$modelClass}.id.{$k}", array('type' => 'checkbox', 'template' => 'form-input-clean', 'value' => $v[$modelClass]['id'], 'placeholder' => $v[$modelClass][$fieldText]));
         $v[$modelClass]['status'] = $this->AppUtils->boolTxt($v[$modelClass]['status'], 'Ativo', 'Inativo');
         $body .= $this->AppGrid->tr($v[$modelClass]);

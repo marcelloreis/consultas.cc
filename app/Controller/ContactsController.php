@@ -21,14 +21,14 @@ App::uses('AppController', 'Controller');
  * @package       app.Controller
  * @link http://.framework.nasza.com.br/2.0/controller/Lists.html
  */
-class CampaignListsController extends AppController {
+class ContactsController extends AppController {
 
 	/**
 	* Controller name
 	*
 	* @var string
 	*/
-	public $name = 'CampaignList';
+	public $name = 'Contacts';
 
 	/**
 	* Método index
@@ -42,7 +42,7 @@ class CampaignListsController extends AppController {
 		/**
 		* Carrega os grupos apenas do usuario logado
 		*/
-		$params['conditions']['CampaignList.user_id'] = $this->Session->read('Auth.User.id');
+		$params['conditions']['Contact.user_id'] = $this->Session->read('Auth.User.id');
 
 		//@override
 		parent::index($params);
