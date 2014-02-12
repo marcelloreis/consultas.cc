@@ -46,8 +46,10 @@ if(empty($this->request->data['Campaigns']['neighbors']) && empty($this->request
                 echo $this->AppForm->input('zipcodes', array('label' => 'CEPs', 'template' => 'Campaigns/form-input-zipcodes', 'class' => 'input-block-level'));
                 echo $this->AppForm->input('gender', array('type' => 'select', 'empty' => 'Feminino e Masculino', 'class' => 'chosen-select', 'label' => 'Sexo'));
                 echo $this->AppForm->input('type', array('type' => 'select', 'empty' => 'Física e Jurídica', 'options' => array(TP_CPF => 'Física', TP_CNPJ => 'Jurídica'), 'class' => 'chosen-select', 'label' => 'Pessoa'));
+                echo $this->AppForm->input('tel_type', array('type' => 'select', 'options' => $tel_type, 'class' => 'chosen-select', 'label' => 'Telefones'));
                 echo $this->AppForm->input('age', array('label' => 'Faixa Etária', 'template' => 'Campaigns/form-input-age'));
                 echo $this->AppForm->input('limit', array('label' => 'Limite de registros', 'template' => 'Campaigns/form-input-limit'));
+                echo $this->AppForm->input('fields', array('label' => 'Campos', 'template' => 'Campaigns/form-input-fields'));
             ?>
 
             <?php echo $this->AppForm->btn('Salvar Alterações');?>

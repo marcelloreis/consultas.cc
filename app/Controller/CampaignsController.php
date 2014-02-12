@@ -115,16 +115,60 @@ class CampaignsController extends AppBillingsController {
         );
 
 		/**
-		* Monta o join com a tabela de telefones moveis
+		* Monta o join com a tabela de telefones fixos e moveis
 		*/
-		$joins[] = array(
-			'table' => 'mobiles',
-	        'alias' => 'Mobile',
-	        'type' => 'INNER',
-	        'conditions' => array(
-	            'Mobile.id = Association.mobile_id',
-	        )
-        );
+		switch ($data['Campaign']['tel_type']) {
+			/**
+			* Fixos e Móveis
+			*/
+			case '1':
+        		$joins[] = array(
+					'table' => 'mobiles',
+			        'alias' => 'Mobile',
+			        'type' => 'INNER',
+			        'conditions' => array(
+			            'Mobile.id = Association.mobile_id',
+			        )
+		        );
+        		$joins[] = array(
+					'table' => 'landlines',
+			        'alias' => 'Landline',
+			        'type' => 'INNER',
+			        'conditions' => array(
+			            'Landline.id = Association.landline_id',
+			        )
+		        );
+				break;
+
+			/**
+			* Somente Fixos
+			*/
+			case '2':
+        		$joins[] = array(
+					'table' => 'landlines',
+			        'alias' => 'Landline',
+			        'type' => 'INNER',
+			        'conditions' => array(
+			            'Landline.id = Association.landline_id',
+			        )
+		        );
+				
+				break;
+			
+			/**
+			* Somente Moveis
+			*/
+			case '3':
+				$joins[] = array(
+					'table' => 'mobiles',
+			        'alias' => 'Mobile',
+			        'type' => 'INNER',
+			        'conditions' => array(
+			            'Mobile.id = Association.mobile_id',
+			        )
+				);
+				break;
+		}
 
 		/**
 		* Traz somentes os registros com telefone movel
@@ -287,7 +331,6 @@ class CampaignsController extends AppBillingsController {
 		* Carrega as campanhas apenas do usuario logado
 		*/
 		$params['conditions']['Campaign.user_id'] = $this->Session->read('Auth.User.id');
-
 		//@override
 		parent::index($params);
 	}	
@@ -311,6 +354,9 @@ class CampaignsController extends AppBillingsController {
 			*/
 			$this->loadEntities($this->request->data);
 
+			/**
+			* Percorre por todas as entidades encontradas a partir do filtro montado na campanha
+			*/
 			foreach ($this->entity['Entity'] as $k => $v) {
 				/**
 				* Contabiliza quantos registros foram encontrados
@@ -341,8 +387,13 @@ class CampaignsController extends AppBillingsController {
 						break;
 				}
 			}
-		}		
 
+			/**
+			* Carrega o layout montado na campanha
+			*/
+// debug($this->request->data);
+// die;			
+		}		
 
 		//@override
 		parent::edit($id);
@@ -373,7 +424,51 @@ class CampaignsController extends AppBillingsController {
 				)
 			));
 
-		$this->set(compact('sms_templates', 'contacts'));
+		/**
+		* Carrega os valores do ID tel_type
+		*/
+		$tel_type = array(
+			1 => 'Fixos e Móveis',
+			2 => 'Somente Fixos',
+			3 => 'Somente Móveis',
+			);
+
+		/**
+		* Carrega os campos disponiveis para o mailing
+		*/
+		$fields = array(
+			'entity_doc' => 'CPF/CNPJ',
+			'entity_name' => 'Nome',
+			'entity_mother' => 'Nome da Mãe',
+			'entity_type' => 'Fisica/Juridica',
+			'entity_gender' => 'Sexo',
+			'entity_birthday' => 'Aniversário',
+			'entity_age' => 'Idade',
+
+			'landline_ddd' => '(fixo) DDD',
+			'landline_tel' => '(fixo) Telefone',
+			'landline_tel_full' => '(fixo) dddtelefone',
+			
+			'mobile_ddd' => '(móvel) DDD',
+			'mobile_tel' => '(móvel) Telefone',
+			'mobile_tel_full' => '(móvel) dddtelefone',
+			
+			'address_state' => 'Estado',
+			'address_city' => 'Cidade',
+			'address_zipcode' => 'CEP',
+			'address_type_address' => 'Tipo do Logradouro',
+			'address_street' => 'Logradouro',
+			'address_number' => 'Número',
+			'address_neighborhood' => 'Bairro',
+			'address_complement' => 'Complemento',
+
+			'Association_year' => 'Ano de Atualização',
+			);
+
+		/**
+		* Carrega as variaveis de ambiente
+		*/		
+		$this->set(compact('sms_templates', 'contacts', 'tel_type', 'fields'));
 	}
 
 	/**

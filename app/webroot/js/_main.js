@@ -1,10 +1,5 @@
 $(document).ready(function(){
     /**
-    * Modal de campanhas
-    */
-    $(".modal-campaign").dialog({ height: 900 });
-
-    /**
     * Graficos de importacao
     */
 	if($("#flot-audience").length > 0){
