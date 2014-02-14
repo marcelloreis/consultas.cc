@@ -38,6 +38,7 @@ class Entity extends AppModelClean {
 	public $virtualFields = array(
     	'age' => "DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(Entity.birthday)), '%Y')+0",
     	'gender_str' => "CASE Entity.gender WHEN 1 THEN 'Feminino' WHEN 2 THEN 'Masculino' ELSE null END",
+    	'type_str' => "CASE Entity.type WHEN 1 THEN 'Fisica' WHEN 2 THEN 'Juridica' WHEN 3 THEN 'Ambiguo' WHEN 4 THEN 'Invalido' ELSE null END",
     	'first_name' => "SUBSTRING_INDEX(Entity.name, ' ', 1)",
 	);
 

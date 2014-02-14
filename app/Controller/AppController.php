@@ -36,6 +36,8 @@ class AppController extends Controller {
 	*/
 	private $Model;
 	protected $isRedirect = true;
+	protected $redirect_edit = 'edit';
+	protected $redirect_index = 'index';
 	protected $filters;
 	public $saveType = 'save';
 	public $limit;
@@ -193,7 +195,15 @@ class AppController extends Controller {
 		/**
 		 * Autorizações gerais
 		 */
-		$this->Auth->allow('login', 'logout', 'forgot_pass', 'change_pass', 'authentication', 'build_source', 'run_text');
+		$this->Auth->allow('login', 
+							'logout', 
+							'forgot_pass', 
+							'change_pass', 
+							'authentication', 
+							'build_source', 
+							'run_text',
+							'cron_mailing'
+							);
 		// $this->Auth->allow();
 	}
 
@@ -563,7 +573,7 @@ class AppController extends Controller {
 		$this->Model->id = $id;
 		if (!$this->Model->exists()) {
 			$this->Session->setFlash(sprintf('Não foi possível visualizar o %s, ou ele não existe no banco de dados.', __($this->modelClass)), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
-			$this->redirect(array('action' => 'index'));
+			$this->redirect(array('action' => $this->redirect_index));
 		}	
 
 		$this->edit($id);
@@ -602,7 +612,7 @@ class AppController extends Controller {
 
 			if (!$this->Model->exists()) {
 				$this->Session->setFlash(sprintf('Não foi possível visualizar o %s [%s], ou ele não existe no banco de dados.', __($this->modelClass), $this->Model->id), FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
-				$this->redirect(array('action' => 'index'));
+				$this->redirect(array('action' => $this->redirect_index));
 			}
 		}
 
@@ -625,7 +635,7 @@ class AppController extends Controller {
 			if($this->Model->{$this->saveType}($this->request->data)){
 				$this->Session->setFlash(FLASH_SAVE_SUCCESS, FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
 				if($this->isRedirect){
-					$this->redirect(array('action' => 'edit', $this->Model->id));
+					$this->redirect(array('action' => $this->redirect_edit, $this->Model->id));
 				}
 			}else{
 				/**

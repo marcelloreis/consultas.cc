@@ -42,6 +42,10 @@ define('PRODUCT_LOCALIZADOR', 7);
 define('PRODUCT_POSSIVEIS_PARENTES', 8);
 define('PRODUCT_VIZINHOS', 9);
 define('PRODUCT_SMS', 10);
+define('PRODUCT_MAILING', 11);
+
+define('TP_TEL_LANDLINE', 1);
+define('TP_TEL_MOBILE', 2);
 
 define('TP_CPF', 1);
 define('TP_CNPJ', 2);
@@ -60,6 +64,7 @@ define('TP_SEARCH_EXTRA_LOCATOR', 9);
 define('TP_SEARCH_EXTRA_FAMILY', 10);
 define('TP_SEARCH_EXTRA_NEIGHBORS', 11);
 define('TP_SEARCH_SMS', 12);
+define('TP_SEARCH_MAILING', 13);
 
 
 define('LIMIT_HASH', 5);

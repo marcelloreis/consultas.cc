@@ -1,5 +1,12 @@
 <?php 
 /**
+* Insere o sidebar especifico de usuarios
+*/
+$this->start('sidebar');
+echo $this->element('Components/Campaigns/sidebar-checklist');
+$this->end();
+
+/**
 * Adiciona os CSSs e Scripts de acordo com as views invocadas
 */
 $this->append('css-on-demand');
@@ -42,16 +49,16 @@ if(empty($this->request->data['Campaigns']['neighbors']) && empty($this->request
                     echo $this->element('Edit/Campaigns/summary');
                 }            
                 echo $this->AppForm->input('title', array('class' => 'input-block-level'));
-                echo $this->AppForm->input('template', array('label' => 'Modelo', 'template' => 'Campaigns/form-input-templates', 'class' => 'input-block-level msk-max', 'maxlenth' => 140, 'class-label' => 'msk-max-label'));
+                // echo $this->AppForm->input('template', array('label' => 'Modelo', 'template' => 'Campaigns/form-input-templates', 'class' => 'input-block-level msk-max', 'maxlenth' => 140, 'class-label' => 'msk-max-label'));
                 // echo $this->AppForm->input('contacts', array('label' => 'Lista de Contatos', 'template' => 'Campaigns/form-input-contacts', 'type' => 'textarea', 'class' => 'input-block-level'));
                 echo $this->AppForm->input('source', array('type' => 'file', 'template' => 'Campaigns/form-input-source'));
 
-                echo $this->AppForm->input('neighbors', array('label' => 'Localização', 'disabled' => $neighbors_disabled, 'placeholder' => 'Bairros', 'value' => $neighbors_value, 'template' => 'Campaigns/form-input-location', 'class' => 'input-block-level'));
-                echo $this->AppForm->input('zipcodes', array('label' => 'CEPs', 'template' => 'Campaigns/form-input-zipcodes', 'class' => 'input-block-level'));
-                echo $this->AppForm->input('gender', array('type' => 'select', 'empty' => 'Feminino e Masculino', 'class' => 'chosen-select', 'label' => 'Sexo'));
-                echo $this->AppForm->input('type', array('type' => 'select', 'empty' => 'Física e Jurídica', 'options' => array(TP_CPF => 'Física', TP_CNPJ => 'Jurídica'), 'class' => 'chosen-select', 'label' => 'Pessoa'));
-                echo $this->AppForm->input('tel_type', array('type' => 'select', 'options' => $tel_type, 'class' => 'chosen-select', 'label' => 'Telefones'));
-                echo $this->AppForm->input('age', array('label' => 'Faixa Etária', 'template' => 'Campaigns/form-input-age'));
+                // echo $this->AppForm->input('neighbors', array('label' => 'Localização', 'disabled' => $neighbors_disabled, 'placeholder' => 'Bairros', 'value' => $neighbors_value, 'template' => 'Campaigns/form-input-location', 'class' => 'input-block-level'));
+                // echo $this->AppForm->input('zipcodes', array('label' => 'CEPs', 'template' => 'Campaigns/form-input-zipcodes', 'class' => 'input-block-level'));
+                // echo $this->AppForm->input('gender', array('type' => 'select', 'empty' => 'Feminino e Masculino', 'class' => 'chosen-select', 'label' => 'Sexo'));
+                // echo $this->AppForm->input('type', array('type' => 'select', 'empty' => 'Física e Jurídica', 'options' => array(TP_CPF => 'Física', TP_CNPJ => 'Jurídica'), 'class' => 'chosen-select', 'label' => 'Pessoa'));
+                // echo $this->AppForm->input('tel_type', array('type' => 'select', 'options' => $tel_type, 'class' => 'chosen-select', 'label' => 'Telefones'));
+                // echo $this->AppForm->input('age', array('label' => 'Faixa Etária', 'template' => 'Campaigns/form-input-age'));
                 echo $this->AppForm->input('limit', array('label' => 'Limite de registros', 'template' => 'Campaigns/form-input-limit'));
                 echo $this->AppForm->input('layout', array('label' => 'Campos', 'template' => 'Campaigns/form-input-layout'));
             ?>

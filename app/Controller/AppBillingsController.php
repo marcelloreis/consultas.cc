@@ -106,7 +106,7 @@ class AppBillingsController extends AppController {
 	*/
 	private function isUnlimited(){
 		$return = false;
-		if($this->userLogged['unlimited']){
+		if(!empty($this->userLogged['unlimited']) && $this->userLogged['unlimited']){
 			$return = true;
 		}
 

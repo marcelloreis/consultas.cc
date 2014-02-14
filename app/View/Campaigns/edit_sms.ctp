@@ -1,5 +1,12 @@
 <?php 
 /**
+* Insere o sidebar especifico de usuarios
+*/
+$this->start('sidebar');
+echo $this->element('Components/Campaigns/sidebar-sms');
+$this->end();
+
+/**
 * Adiciona os CSSs e Scripts de acordo com as views invocadas
 */
 $this->append('css-on-demand');
@@ -43,7 +50,7 @@ if(empty($this->request->data['Campaigns']['neighbors']) && empty($this->request
                 }            
                 echo $this->AppForm->input('title', array('class' => 'input-block-level'));
                 echo $this->AppForm->input('template', array('label' => 'Modelo', 'template' => 'Campaigns/form-input-templates', 'class' => 'input-block-level msk-max', 'maxlenth' => 140, 'class-label' => 'msk-max-label'));
-                // echo $this->AppForm->input('contacts', array('label' => 'Lista de Contatos', 'template' => 'Campaigns/form-input-contacts', 'type' => 'textarea', 'class' => 'input-block-level'));
+                echo $this->AppForm->input('contacts', array('label' => 'Lista de Contatos', 'template' => 'Campaigns/form-input-contacts', 'type' => 'textarea', 'class' => 'input-block-level'));
                 echo $this->AppForm->input('source', array('type' => 'file', 'template' => 'Campaigns/form-input-source'));
 
                 echo $this->AppForm->input('neighbors', array('label' => 'Localização', 'disabled' => $neighbors_disabled, 'placeholder' => 'Bairros', 'value' => $neighbors_value, 'template' => 'Campaigns/form-input-location', 'class' => 'input-block-level'));

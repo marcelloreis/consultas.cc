@@ -7,9 +7,14 @@
 		    	</div>
 		    	<div class="span9">
 					<div class="alert alert-info">
-						<h4>Limite de Registros</h4>
-						<p>Informe a quantidade máxima que deseja trazer nesta campanha.</p>
-						<p>Caso não informe nenhum valor, a campanha trará registros ilimitados.</p>
+						<h4>Um DDD por linha</h4>
+						<p>
+							Formatos aceitos:<br/>
+							11<br/>
+							21<br/>
+							27<br/>
+							31<br/>
+						</p>
 					</div>
 				</div>
 		    </div>

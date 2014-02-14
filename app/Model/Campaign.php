@@ -14,6 +14,23 @@ class Campaign extends AppModel {
 	public $displayField = 'title';
 
 	/**
+	 * Behaviors
+	 *
+	 * @var string
+	 */
+    public $actsAs = array(
+        'Upload.Upload' => array(
+            'source' => array(
+                'fields' => array(
+                    'dir' => 'source_dir',
+                    'type' => 'source_type',
+                    'size' => 'source_size',
+                )
+            )
+        )
+	);	
+
+	/**
 	* hasMany
 	*
 	* @var array
@@ -25,7 +42,7 @@ class Campaign extends AppModel {
 	*
 	* @var array
 	*/
-	public $belongsTo = array('User', 'Client');
+	public $belongsTo = array('User', 'Client', 'City', 'State');
 
 
 
