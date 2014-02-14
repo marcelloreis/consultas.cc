@@ -33,7 +33,7 @@ class AppBillingsController extends AppController {
 	protected $price_id;
 	protected $price;
 	protected $tp_search;
-	protected $client_name;
+	protected $user_name;
 
 	/**
 	* Método beforeFilter
@@ -125,7 +125,7 @@ class AppBillingsController extends AppController {
 	*/
 	protected function security(){
 		$return = false;
-		$client_name = !empty($this->userLogged['given_name'])?$this->userLogged['given_name']:$this->client_name;
+		$user_name = !empty($this->userLogged['given_name'])?$this->userLogged['given_name']:$this->user_name;
 
 		/**
 		* Caso o usuario nao tenho acesso ilimitado as consultas, 
@@ -136,7 +136,7 @@ class AppBillingsController extends AppController {
 			* Verifica se o usuario ja efetuou a compra dos creditos
 			*/
 			if(is_null($this->billing_id)){
-				$this->Session->setFlash("{$client_name}, " . 'ainda não constam créditos em sua conta para realizar este tipo de consulta.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+				$this->Session->setFlash("{$user_name}, " . 'ainda não constam créditos em sua conta para realizar este tipo de consulta.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
 				$return = true;
 			}
 
@@ -144,7 +144,7 @@ class AppBillingsController extends AppController {
 			* Verifica se o usuario tem saldo para efetuar a pesquisa
 			*/
 			if($this->AppUtils->num2db($this->price) > $this->balance){
-				$this->Session->setFlash("{$client_name}, " . 'seu saldo é insuficiênte para realizar consultas.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+				$this->Session->setFlash("{$user_name}, " . 'seu saldo é insuficiênte para realizar consultas.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
 				$return = true;
 			}
 
@@ -152,7 +152,7 @@ class AppBillingsController extends AppController {
 			* Verifica se o saldo do usuario esta dentro da validade
 			*/
 			if($this->validity_orig < date('Y-m-d')){
-				$this->Session->setFlash("{$client_name}, " . 'seu saldo expirou.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+				$this->Session->setFlash("{$user_name}, " . 'seu saldo expirou.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
 				$return = true;
 			}
 
@@ -161,7 +161,7 @@ class AppBillingsController extends AppController {
 			*/
 			$contract_id = !empty($this->contract_id)?$this->contract_id:$this->Session->read('Client.contract_id');
 			if(empty($contract_id)){
-				$this->Session->setFlash("{$client_name}, " . 'Seu contrato ainda não foi gerado, procure o setor administrativo e regularize sua situação.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+				$this->Session->setFlash("{$user_name}, " . 'Seu contrato ainda não foi gerado, procure o setor administrativo e regularize sua situação.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
 				$return = true;
 			}
 		}

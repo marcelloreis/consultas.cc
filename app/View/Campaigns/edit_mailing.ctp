@@ -20,6 +20,8 @@ echo $this->Html->script(array('plugins/icheck/jquery.icheck.min'), array('defer
 echo $this->Html->script(array('plugins/fileupload/bootstrap-fileupload.min'), array('defer' => true));
 echo $this->Html->script(array('plugins/mockjax/jquery.mockjax'), array('defer' => true));
 
+$status = !empty($this->data['Campaign']['status'])?$this->data['Campaign']['status']:CAMPAIGN_NOT_PROCESSED;
+
 $neighbors_disabled = '';
 $neighbors_value = !empty($this->request->data['Campaign']['neighbors'])?$this->request->data['Campaign']['neighbors']:'';
 if(empty($this->request->data['Campaign']['neighbors']) && empty($this->request->data['Campaign']['city_id'])){
@@ -27,6 +29,17 @@ if(empty($this->request->data['Campaign']['neighbors']) && empty($this->request-
     $neighbors_value = 'Selecione a cidade, depois informe os bairros.';
 }
 ?>
+
+    <?php if($status == CAMPAIGN_NOT_PROCESSED):?>
+        <div class="alert alert-error">
+            <p>
+                <strong>Atenção!</strong>
+            </p>
+            <p>
+                Estamos processando o sua campanha. Quando estiver completo, nós lhe enviaremos um e-mail. Você terá 7 dias para fazer o download.
+            </p>
+        </div>
+    <?php endif?>
 
 <div class="box box-bordered">
     <?php echo $this->element('Edit/panel')?>
@@ -41,7 +54,7 @@ if(empty($this->request->data['Campaign']['neighbors']) && empty($this->request-
                 <?php echo $this->Form->hidden('male', array('value' => 0))?>
                 <?php echo $this->Form->hidden('individual', array('value' => 0))?>
                 <?php echo $this->Form->hidden('corporation', array('value' => 0))?>
-                <?php echo $this->Form->hidden('status', array('value' => 0))?>
+                <?php echo $this->Form->hidden('status', array('value' => $status))?>
                 <?php echo $this->Form->hidden('ignore_age_null', array('value' => 0))?>
                 <?php echo $this->Form->hidden('product', array('value' => 'mailing'))?>
             </div> 

@@ -341,16 +341,17 @@ class UsersController extends AppController {
                             )
                         );
 
-					$email = new CakeEmail('apps');
-					$email->template($this->action);
-					$email->emailFormat('html');
-					$email->viewVars(array('user' => $hasEmail));
+                        $email = new CakeEmail('apps');
+                        $email->template($this->action);
+                        $email->emailFormat('html');
+                        $email->viewVars(array('user' => $hasEmail));
 
-					$email->sender(array('noreply@consultas.cc' => TITLE_APP));
-					$email->from(array('noreply@consultas.cc' => TITLE_APP));
-					$email->to($hasEmail['User']['email']);
-					$email->subject("Lembrete da senha nova de {$hasEmail['User']['given_name']}");
-					$email->send();
+                        $email->sender(array(EMAIL_NO_REPLAY => TITLE_APP));
+                        $email->from(array(EMAIL_NO_REPLAY => TITLE_APP));
+                        $email->to($hasEmail['User']['email']);
+                        $email->subject("Lembrete da senha nova de {$hasEmail['User']['given_name']}");
+                        $email->send();     
+
 					
                     $this->Session->setFlash("Em instantes, você receberá um e-mail com instruções sobre como recuperar sua senha.", FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_LOGIN);
                 }

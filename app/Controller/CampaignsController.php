@@ -151,7 +151,6 @@ class CampaignsController extends AppBillingsController {
 	* @return void
 	*/
 	private function loadEntities($data){
-
 		/**
 		* Contabiliza todos os registros de acordo com o filtro da campanha
 		*/
@@ -811,19 +810,31 @@ class CampaignsController extends AppBillingsController {
 		$data = $this->Campaign->findById($id);
 
 		/**
+		* Altera o status da campanha para PROCESSO EM ANDAMENTO
+		*/
+		$this->Campaign->id = $data['Campaign']['id'];
+		$this->Campaign->saveField('status', CAMPAIGN_RUN_PROCESSED);
+
+		/**
+		* Carrega os dados do usuario que criou a campanha
+		*/
+		$this->Campaign->User->recursive = -1;
+		$user = $this->Campaign->User->findById($data['Campaign']['user_id']);
+
+		/**
 		* Carrega todos os precos dos produtos de acordo o pacote do cliente
 		*/
-		$users = new UsersController();
+		$obj_users = new UsersController();
 		$this->loadModel('Billing');
-		$client = $users->loadClient($data['Campaign']['client_id']);
-		$prices = $users->loadPrices();	
+		$client = $obj_users->loadClient($data['Campaign']['client_id']);
+		$prices = $obj_users->loadPrices();	
 
 		/**
 		* Carrega os IDs necessarios para cobranca
 		*/
 		$this->tp_search = TP_SEARCH_MAILING;
 		$this->product_id = PRODUCT_MAILING;
-		$this->client_name = $client['Client']['fancy_name'];
+		$this->user_name = $user['User']['given_name'];
 		$this->user_id = $data['Campaign']['user_id'];
 		$this->package_id = $client['Client']['package_id'];
 		$this->contract_id = $client['Client']['contract_id'];
@@ -881,9 +892,31 @@ class CampaignsController extends AppBillingsController {
 		/**
 		* Salva os arquivos gerados
 		*/
-		file_put_contents("{$dir}/info.txt", $files['info']);			
-		file_put_contents("{$dir}/" . Inflector::slug(strtolower($data['Campaign']['title']), '-') . '.txt', $files['txt']);			
-		file_put_contents("{$dir}/" . Inflector::slug(strtolower($data['Campaign']['title']), '-') . '.xls', $files['xls']);
+		$file_name = Inflector::slug(strtolower($data['Campaign']['title']), '-') . '-' . date('YmdHi');
+		file_put_contents("{$dir}/RELATORIO-{$file_name}.txt", $files['info']);			
+		file_put_contents("{$dir}/{$file_name}.txt", $files['txt']);			
+		file_put_contents("{$dir}/{$file_name}.xls", $files['xls']);
+
+		/**
+		* Dispara um email para o usuario que criou a campanha, avisando que os arquivos ja estao disponiveis
+		*/
+		$email = new CakeEmail('apps');
+		$email->template($this->action);
+		$email->emailFormat('html');
+		$email->viewVars(array('user' => $hasEmail));
+
+		$email->sender(array(EMAIL_NO_REPLAY => TITLE_APP));
+		$email->from(array(EMAIL_NO_REPLAY => TITLE_APP));
+		$email->to($hasEmail['User']['email']);
+		$email->subject("Lembrete da senha nova de {$hasEmail['User']['given_name']}");
+		$email->send();		
+
+		/**
+		* Altera o status da campanha para PROCESSADO
+		*/
+		$this->Campaign->saveField('status', CAMPAIGN_PROCESSED);
+		$this->Campaign->saveField('date_process', date('Y-m-d H:i:s'));
+
 	}
 
 	/**
