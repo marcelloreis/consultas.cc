@@ -24,6 +24,7 @@ class AppBillingsController extends AppController {
 	protected $user_id;
 	protected $product_id;
 	protected $package_id;
+	protected $contract_id;
 	protected $billing_id;
 	protected $cache_id;
 	protected $query;
@@ -32,6 +33,7 @@ class AppBillingsController extends AppController {
 	protected $price_id;
 	protected $price;
 	protected $tp_search;
+	protected $client_name;
 
 	/**
 	* Método beforeFilter
@@ -123,6 +125,7 @@ class AppBillingsController extends AppController {
 	*/
 	protected function security(){
 		$return = false;
+		$client_name = !empty($this->userLogged['given_name'])?$this->userLogged['given_name']:$this->client_name;
 
 		/**
 		* Caso o usuario nao tenho acesso ilimitado as consultas, 
@@ -133,7 +136,7 @@ class AppBillingsController extends AppController {
 			* Verifica se o usuario ja efetuou a compra dos creditos
 			*/
 			if(is_null($this->billing_id)){
-				$this->Session->setFlash("{$this->userLogged['given_name']}, " . 'ainda não constam créditos em sua conta para realizar este tipo de consulta.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+				$this->Session->setFlash("{$client_name}, " . 'ainda não constam créditos em sua conta para realizar este tipo de consulta.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
 				$return = true;
 			}
 
@@ -141,7 +144,7 @@ class AppBillingsController extends AppController {
 			* Verifica se o usuario tem saldo para efetuar a pesquisa
 			*/
 			if($this->AppUtils->num2db($this->price) > $this->balance){
-				$this->Session->setFlash("{$this->userLogged['given_name']}, " . 'seu saldo é insuficiênte para realizar consultas.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+				$this->Session->setFlash("{$client_name}, " . 'seu saldo é insuficiênte para realizar consultas.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
 				$return = true;
 			}
 
@@ -149,16 +152,16 @@ class AppBillingsController extends AppController {
 			* Verifica se o saldo do usuario esta dentro da validade
 			*/
 			if($this->validity_orig < date('Y-m-d')){
-				$this->Session->setFlash("{$this->userLogged['given_name']}, " . 'seu saldo expirou.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+				$this->Session->setFlash("{$client_name}, " . 'seu saldo expirou.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
 				$return = true;
 			}
 
 			/**
 			* Verifica se o cliente ja esta ativo (se o contrato ja foi gerado)
 			*/
-			$contract_id = $this->Session->read('Client.contract_id');
+			$contract_id = !empty($this->contract_id)?$this->contract_id:$this->Session->read('Client.contract_id');
 			if(empty($contract_id)){
-				$this->Session->setFlash("{$this->userLogged['given_name']}, " . 'Seu contrato ainda não foi gerado, procure o setor administrativo e regularize sua situação.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+				$this->Session->setFlash("{$client_name}, " . 'Seu contrato ainda não foi gerado, procure o setor administrativo e regularize sua situação.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
 				$return = true;
 			}
 		}

@@ -1,0 +1,11 @@
+CPF/CNPJ;Nome;Nome da Mãe;Idade;Sexo;Fisica/Juridica;Aniversário;(fixo) DDD;(fixo) Telefone;(fixo) dddtelefone;Estado;Cidade;CEP;Tipo do Logradouro;Logradouro;Número;Bairro;Complemento;Ano de Atualização
+14452052703;Leon Ramos Passos;;;Masculino;Fisica;27;33414660;2733414660ES;Serra;29168600;Avenida;Brasilia              00084;;Porto Canoa;2013
+294621776;Rita Oliveira dos Santos;;64;Feminino;Fisica;06/08/194927;32450760;2732450760ES;Serra;29172180;Rua;Solidoneas;3;Pedro feu Rosa;2013
+7425264706;Kelly Cristina Cruz;Marina Cruz;37;Feminino;Fisica;07/07/197627;32435652;2732435652ES;Serra;29172026;Rua;Ipe Roxo;11;Pedro feu Rosa;2013
+57483957700;Elaine Machado dos Santos;;;Feminino;Fisica;27;32430398;2732430398ES;Serra;29172358;Rua;Das Castanheiras;6;Feu Rosa;2013
+11440658790;Laislany dos Reis Fernandes;;;;Fisica;27;33416696;2733416696ES;Serra;29167536;Avenida;Amazonas;1224;Novo Porto Canoa;2013
+89093160710;Claudio Antonio Soares;;;Masculino;Fisica;27;32451277;2732451277ES;Serra;29172145;Rua;Pau Brasil;125;Pedro feu Rosa;2013
+5562450755;Mackson Ramos da Serra;Diva Ramos da Serra;31;Masculino;Fisica;07/12/198227;32456151;2732456151ES;Serra;29172230;Rua;Das Nogueiras;12;Feu Rosa;2013
+56181531653;Ana Rodrigues de Carvalho;;;Feminino;Fisica;27;32824128;2732824128ES;Serra;29167569;Rua;Mestre Valentim;145;Novo Porto Canoa;2013
+72138009734;Cesar Leonardo de Paula;;;Masculino;Fisica;27;32433545;2732433545ES;Serra;29172590;Rua;Rauna;14;Pedro feu Rosa;2013
+52927571791;Willes Silva da Costa;;;Masculino;Fisica;27;32432349;2732432349ES;Serra;29172200;Rua;Macanaiba;39;Pedro feu Rosa;2013

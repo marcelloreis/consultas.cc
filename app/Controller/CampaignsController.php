@@ -34,7 +34,7 @@ class CampaignsController extends AppBillingsController {
 	/**
 	* Atributos da classe
 	*/
-	public $layout;
+	public $campaign_layout;
 
 	/**
 	* Método beforeFilter
@@ -50,13 +50,13 @@ class CampaignsController extends AppBillingsController {
 		/**
 		* Carrega os campos disponiveis para o mailing
 		*/
-		$this->layout = array(
+		$this->campaign_layout = array(
 			'entity_doc' => 'CPF/CNPJ',
 			'entity_name' => 'Nome',
 			'entity_mother' => 'Nome da Mãe',
 			'entity_type_str' => 'Fisica/Juridica',
 			'entity_gender_str' => 'Sexo',
-			'entity_birthday' => 'Aniversário',
+			'entity_birthday_str' => 'Aniversário',
 			'entity_age' => 'Idade',
 
 			'landline_ddd' => '(fixo) DDD',
@@ -76,7 +76,7 @@ class CampaignsController extends AppBillingsController {
 			'address_neighborhood' => 'Bairro',
 			'address_complement' => 'Complemento',
 
-			'Association_year' => 'Ano de Atualização',
+			'association_year' => 'Ano de Atualização',
 			);		
 	}
 
@@ -346,7 +346,13 @@ class CampaignsController extends AppBillingsController {
 		* Carrega o layout montado na campanha
 		*/
 		if(!empty($data['Campaign']['layout']) && count($data['Campaign']['layout'])){
-			$fields = array();
+			/**
+			* Inicializa a variavel $fields com os campos padroes
+			*/
+			$fields = array(
+				'Association.id'
+				);
+
 			$layout = explode(';', $data['Campaign']['layout']);
 			foreach ($layout as $k => $v) {
 				$field = ucfirst(preg_replace('/^([a-z].*?)_/si', '$1.', $v));
@@ -474,7 +480,7 @@ class CampaignsController extends AppBillingsController {
 
 	/**
 	* Método loadTable
-	* Este método é responsavel pelo envio de SMSs para os contatos vinculados a campanha passada por parametro
+	* Este método carrega os dados das entidades em formato de Tabelas (HTML)
 	*
 	* @return void
 	*/
@@ -483,6 +489,10 @@ class CampaignsController extends AppBillingsController {
 			/**
 			* Tags da tabela
 			*/
+			$thead_open = '<thead>';
+			$thead_close = '</thead>';
+			$tbody_open = '<tbody>';
+			$tbody_close = '</tbody>';
 			$table_open = '<table>';
 			$table_close = '</table>';
 			$tr_open = '<tr>';
@@ -492,33 +502,89 @@ class CampaignsController extends AppBillingsController {
 			$th_open = '<th>';
 			$th_close = '</th>';
 
-			$body = '';
+			$table = '';
 
 			/**
 			* Carrega o cabecalho da tabela
 			*/
-			foreach ($this->entity['Entity'] as $k => $v) {
+			$header = array_slice($this->entity['Entity'], 0, 1);
+			$lines = '';
+			foreach ($header as $k => $v) {
+				$lines .= "{$tr_open}";
 				foreach ($v as $k2 => $v2) {
-					$body .= "{$tr_open}";
 					foreach ($v2 as $k3 => $v3) {
-						$body .= "{$th_open}{$k3}{$th_close}";
+						if(!empty($this->campaign_layout[strtolower($k2) . '_' . $k3])){
+							$lines .= "{$th_open}" . $this->campaign_layout[strtolower($k2) . '_' . $k3] . "{$th_close}";
+						}
 					}
-					$body .= "{$tr_close}";
 				}
+				$lines .= "{$tr_close}";
 			}
-debug($body);
-die;
+			$table = "{$thead_open}{$lines}{$thead_close}";
+
 			/**
 			* Carrega o body da tabela
 			*/
+			$lines = '';
 			foreach ($this->entity['Entity'] as $k => $v) {
+				$lines .= $tr_open;
 				foreach ($v as $k2 => $v2) {
-					$body .= "{$tr_open}{$td_open}" . implode("{$td_close}{$td_open}", $v2) . "{$td_close}{$tr_close}";
+					$lines .= $td_open . implode("{$td_close}{$td_open}", $v2) . $td_close;
 				}
+				$lines .= $tr_close;
 			}
+			$table .= "{$tbody_open}{$lines}{$tbody_close}";
+
+			/**
+			* Finaliza a montagem da tabela
+			*/
+			$table =  "{$table_open}{$table}{$table_close}";
+
+			return $table;			
 		}
 	}
 
+	/**
+	* Método loadSemicolon
+	* Este método carrega os dados das entidades em formato de textp (Separado por ;)
+	*
+	* @return void
+	*/
+	private function loadSemicolon(){
+		if(is_array($this->entity['Entity']) && count($this->entity['Entity'])){
+			$content = '';
+
+			/**
+			* Carrega o cabecalho da tabela
+			*/
+			$header = array_slice($this->entity['Entity'], 0, 1);
+			$lines = '';
+			foreach ($header as $k => $v) {
+				foreach ($v as $k2 => $v2) {
+					foreach ($v2 as $k3 => $v3) {
+						if(!empty($this->campaign_layout[strtolower($k2) . '_' . $k3])){
+							$lines .= ';' . $this->campaign_layout[strtolower($k2) . '_' . $k3];
+						}
+					}
+				}
+			}
+			$content = substr($lines, 1) . "\n";
+
+			/**
+			* Carrega o body da tabela
+			*/
+			$lines = '';
+			foreach ($this->entity['Entity'] as $k => $v) {
+				foreach ($v as $k2 => $v2) {
+					$lines .= implode(';', $v2);
+				}
+				$lines .=  "\n";
+			}
+			$content .= $lines;
+
+			return $content;			
+		}
+	}
 
 	/**
 	* Método index
@@ -599,7 +665,7 @@ die;
 		/**
 		* Carrega os campos disponiveis para o mailing
 		*/
-		$layout = $this->layout;
+		$layout = $this->campaign_layout;
 
 		/**
 		* Carrega o layout selecionado da campanha
@@ -728,78 +794,96 @@ die;
 		* Desabilita a renderizacao do cake
 		*/
 		$this->autoRender = false;
+
 		/**
-		* Carrega as entidades a partir dos dados da campanha no atributo $this->entity
+		* Variaveis q contera os retornos do cron
+		*/
+		$files = array(
+			'txt' => '',
+			'xls' => '',
+			'info' => '',
+			);
+
+		/**
+		* Carrega os dados da campanha
 		*/
 		$this->Campaign->recursive = -1;
 		$data = $this->Campaign->findById($id);
-		$this->loadEntities($data);
-		
-		$this->loadTable();
-debug($this->entity);
-die;
-		/**
-		* Carrega todos os precos dos produtos de acordo com os seus pacotes
-		*/
-		$users = new UsersController();
-		$client = $users->loadClient($data['Campaign']['client_id']);
-		$prices = $users->loadPrices();
 
 		/**
-		* Carrega os IDs de envio de SMS
+		* Carrega todos os precos dos produtos de acordo o pacote do cliente
+		*/
+		$users = new UsersController();
+		$this->loadModel('Billing');
+		$client = $users->loadClient($data['Campaign']['client_id']);
+		$prices = $users->loadPrices();	
+
+		/**
+		* Carrega os IDs necessarios para cobranca
 		*/
 		$this->tp_search = TP_SEARCH_MAILING;
 		$this->product_id = PRODUCT_MAILING;
+		$this->client_name = $client['Client']['fancy_name'];
 		$this->user_id = $data['Campaign']['user_id'];
 		$this->package_id = $client['Client']['package_id'];
+		$this->contract_id = $client['Client']['contract_id'];
 		$this->billing_id = $client['Client']['billing_id'];
 		$this->price_id = $prices['prices_id'][$this->package_id][$this->product_id];
 		$this->price = $prices['prices_val'][$this->package_id][$this->product_id];
+		$this->balance = $this->Billing->balance($client['Client']['id']);
 		$this->validity_orig = $client['Client']['validity_orig'];
 
 		/**
-		* Carrega o assunto do SMS com o titulo da campanha
+		* Verifica se o cliente tem permissao/credito para continuar o processo
 		*/
-		$params['subject'] = $data['Campaign']['title'];
-
-		/**
-		* Percorre por todos as entidades encontradas efetuando a cobrança
-		*/
-		foreach ($this->entity['Entity'] as $k => $v) {
+		if($this->security()){
+			$files['info'] = $this->Session->read('Message.session_form.message');
+		}else{
 			/**
-			* Prepara e carrega a mensagem que sera enviada por SMS
+			* Carrega as entidades no atributo $this->entity a partir dos dados da campanha
 			*/
-			$birthday = $v['Entity']['birthday']?$this->AppUtils->dt2br($v['Entity']['birthday']):null;
-
-    		/**
-    		* Recarrega o cache de paginas cobradas
-    		*/
-			$this->query = "/campaigns/mailing/campaign:{$id}/association_id:{$v['Association']['id']}";
+			$this->loadEntities($data);
+			$files['xls'] = $this->loadTable();
+			$files['txt'] = $this->loadSemicolon();
 
 			/**
-			* Verifica se o usuario tem saldo/permissao
+			* Percorre por todos as entidades encontradas efetuando a cobrança
 			*/
-			if($this->security()){
-				$this->AppSms->log = $this->Session->read('Message.session_form.message');
-				$this->AppSms->status = false;
-			}else{
-				/**
-				* Envia o SMS para o destinatario
-				*/
-				// $this->AppSms->send($params);
+			foreach ($this->entity['Entity'] as $k => $v) {
+	    		/**
+	    		* Recarrega o cache de paginas cobradas
+	    		*/
+				$this->query = "/campaigns/mailing/campaign:{$id}/association_id:{$v['Association']['id']}";
 
 				/**
-				* Efetua a cobrança do envio
+				* Verifica se o usuario tem saldo/permissao
 				*/
-				$this->charge();
+				if($this->security()){
+					$files['info'] = $this->Session->read('Message.session_form.message');
+					break;
+				}else{
+					/**
+					* Efetua a cobrança do envio
+					*/
+					$this->charge();
+				}
 			}
 		}
 
-$test="<table border=1><tr><td>Cell 1</td><td>Cell 2</td></tr></table>";
-header("Content-type: application/vnd.ms-excel");
-header("Content-Disposition: attachment; filename=mailing");
-file_put_contents('teste_file_put2.xls', $test);			
+		/**
+		* Cria a pasta onde sera guardado os arquivos
+		*/
+		$dir = ROOT . "/app/webroot/files/campaign/mailing/{$client['Client']['id']}/{$id}/";
+		if(!is_dir($dir)){
+			mkdir($dir, 0777, true);
+		}
 
+		/**
+		* Salva os arquivos gerados
+		*/
+		file_put_contents("{$dir}/info.txt", $files['info']);			
+		file_put_contents("{$dir}/" . Inflector::slug(strtolower($data['Campaign']['title']), '-') . '.txt', $files['txt']);			
+		file_put_contents("{$dir}/" . Inflector::slug(strtolower($data['Campaign']['title']), '-') . '.xls', $files['xls']);
 	}
 
 	/**
