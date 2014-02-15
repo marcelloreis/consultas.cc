@@ -353,7 +353,6 @@ class AppImportComponent extends Component {
 			* Tenta descobrir o sexo da entidade a partir de varias combinacoes alfabeticas
 			*/
 			$gender = $this->gender($first_name);
-			break;
 		}
 
 		return $gender;

@@ -21,7 +21,7 @@ class Ilandline extends AppModelClean {
     public $useTable = 'i_landlines';
 	public $recursive = -1;
     public $layout;
-    public $jumpFirstLine;
+    public $lote;
     public $map_pos;
     public $delimiter;
     public $folder;
@@ -104,6 +104,23 @@ class Ilandline extends AppModelClean {
         * Executa a higienizacao de acordo com o delimitador dos dados
         */
         switch ($this->delimiter) {
+            case '";"':
+                /**
+                * Higieniza a string
+                */
+                $v = preg_replace('/[^0-9a-zA-Z\'"; ]/si', '', $v);
+                $v = substr(rtrim($v, "\r\n"), 1, -1);
+
+                /**
+                * Gera um array a partir das informacoes contidas na linha
+                */
+                $v = preg_replace('/;;;;;;/si', ';"";"";"";"";"";', $v);
+                $v = preg_replace('/;;;;;/si', ';"";"";"";"";', $v);
+                $v = preg_replace('/;;;;/si', ';"";"";"";', $v);
+                $v = preg_replace('/;;;/si', ';"";"";', $v);
+                $v = preg_replace('/;;/si', ';"";', $v);           
+                $v = preg_split('/(\'|")?;(\'|")/si', $v);
+                break;
             case '"#"':
                 /**
                 * Higieniza a string
@@ -114,6 +131,9 @@ class Ilandline extends AppModelClean {
                 /**
                 * Gera um array a partir das informacoes contidas na linha
                 */
+                $v = preg_replace('/######/si', '#""#""#""#""#""#', $v);
+                $v = preg_replace('/#####/si', '#""#""#""#""#', $v);
+                $v = preg_replace('/####/si', '#""#""#""#', $v);
                 $v = preg_replace('/###/si', '#""#""#', $v);
                 $v = preg_replace('/##/si', '#""#', $v);           
                 $v = preg_split('/(\'|")?#(\'|")/si', $v);
@@ -127,6 +147,9 @@ class Ilandline extends AppModelClean {
                 /**
                 * Gera um array a partir das informacoes contidas na linha
                 */
+                $v = preg_replace('/;;;;;;/si', ';' . null . ';' . null . ';' . null . ';' . null . ';' . null . ';', $v);
+                $v = preg_replace('/;;;;;/si', ';' . null . ';' . null . ';' . null . ';' . null . ';', $v);
+                $v = preg_replace('/;;;;/si', ';' . null . ';' . null . ';' . null . ';', $v);
                 $v = preg_replace('/;;;/si', ';' . null . ';' . null . ';', $v);
                 $v = preg_replace('/;;/si', ';' . null . ';', $v);
                 $v = preg_split('/;/si', $v);
@@ -148,8 +171,8 @@ class Ilandline extends AppModelClean {
         @$number            = !empty($v[$this->map_pos['number']])      ?trim($v[$this->map_pos['number']])      :null;
         @$state             = !empty($v[$this->map_pos['state']])       ?trim($v[$this->map_pos['state']])       :null;
         @$street            = !empty($v[$this->map_pos['street']])      ?trim($v[$this->map_pos['street']])      :null;
-        @$tel_full          = !empty($v[$this->map_pos['tel_full']])    ?$v[$this->map_pos['tel_full']]          :"{$ddd}{$telefone}";
         @$telefone          = !empty($v[$this->map_pos['tel']])         ?$v[$this->map_pos['tel']]               :null;
+        @$tel_full          = !empty($v[$this->map_pos['tel_full']])    ?$v[$this->map_pos['tel_full']]          :"{$ddd}{$telefone}";
         @$type_address      = !empty($v[$this->map_pos['type_address']])?trim($v[$this->map_pos['type_address']]):null;
         @$zipcode           = !empty($v[$this->map_pos['zipcode']])     ?trim($v[$this->map_pos['zipcode']])     :null;
 

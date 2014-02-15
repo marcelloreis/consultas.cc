@@ -154,7 +154,7 @@ class LandlinesImportController extends AppImportsController {
         $this->db['landline'] = $this->Ilandline->getDataSource();
         $this->db['address'] = $this->Iaddress->getDataSource();
         $this->db['zipcode'] = $this->Izipcode->getDataSource();
-        $this->db['entityLandlineAddress'] = $this->Iassociation->getDataSource();
+        $this->db['associations'] = $this->Iassociation->getDataSource();
 
         /**
         * Carrega a pasta onde contem os dados em txt
@@ -167,32 +167,40 @@ class LandlinesImportController extends AppImportsController {
         $this->Ilandline->source_year = 2012;
 
         /**
+        * Carrega o lote da importacao
+        */
+        $map = $this->Ientity->find('first', array(
+        	'recursive' => -1,
+        	'fields' => array('Ientity.lote'),
+        	'order' => array('Ientity.lote' => 'desc'),
+        	));
+        $this->Ilandline->lote = $map['Ientity']['lote']+1;
+
+        /**
         * Informa o conteudo do layout ao sistema
         */
-        $this->uf = 'ES';
-        $this->Ilandline->delimiter = ';';
-        $this->Ilandline->jumpFirstLine = false;
+        $this->Ilandline->delimiter = '"#"';
         $this->Ilandline->map_pos = array(
-			'doc' => 1,
-			'name' => 2,
+			'doc' => 0,
+			'name' => 3,
 			'mother' => '',
 			'gender' => '',
 			'birthday' => '',
-			'ddd' => '',
-			'tel' => '',
-			'tel_full' => 0,
-			'zipcode' => 9,
+			'ddd' => 1,
+			'tel' => 2,
+			'tel_full' => '',
+			'zipcode' => 11,
 			'cod_end' => '',
-			'complement' => 5,
-			'number' => 4,
+			'complement' => 7,
+			'number' => 6,
 			'year' => '',
-			'type_address' => '',
-			'street' => 3,
-			'neighborhood' => 6,
-			'city' => 7,
-			'state' => 8,
+			'type_address' => 4,
+			'street' => 5,
+			'neighborhood' => 8,
+			'city' => 9,
+			'state' => 10,
     	);
-	
+
 		/**
 		* Carrega o path de todos os arquivos contidos na pasta de recursos em texto
 		*/
@@ -240,12 +248,15 @@ class LandlinesImportController extends AppImportsController {
 	        $this->db['landline']->begin();
 	        $this->db['address']->begin();
 	        $this->db['zipcode']->begin();
-	        $this->db['entityLandlineAddress']->begin();
+	        $this->db['associations']->begin();
 
 	        /**
 	        * Inicialiaza a varaivel que contara as transacoes efetuadas
 	        */
 	        $reload_transaction = 0;
+
+	        preg_match('/([a-z]{2}[0-9]?).txt$/si', $v, $vet);
+	        $this->uf = preg_replace('/[^a-z]/si', '', $vet[1]);
 
 	        /**
 	        * Percorre por todas as linhas o arquivo, importando os dados contidos nas linhas para um array
@@ -265,7 +276,7 @@ class LandlinesImportController extends AppImportsController {
 			        $this->db['landline']->commit();
 			        $this->db['address']->commit();
 			        $this->db['zipcode']->commit();
-			        $this->db['entityLandlineAddress']->commit();
+			        $this->db['associations']->commit();
 			        $this->AppImport->timing_end();
 					die;
 				}
@@ -302,7 +313,7 @@ class LandlinesImportController extends AppImportsController {
 			        $this->db['landline']->commit();
 			        $this->db['address']->commit();
 			        $this->db['zipcode']->commit();
-			        $this->db['entityLandlineAddress']->commit();
+			        $this->db['associations']->commit();
 			        $this->AppImport->timing_end();
 
 
@@ -313,7 +324,7 @@ class LandlinesImportController extends AppImportsController {
 			        $this->db['landline']->begin();
 			        $this->db['address']->begin();
 			        $this->db['zipcode']->begin();
-			        $this->db['entityLandlineAddress']->begin();
+			        $this->db['associations']->begin();
 	            }
 
 	            /**
@@ -322,6 +333,7 @@ class LandlinesImportController extends AppImportsController {
 				$this->AppImport->timing_ini(TUNING_LOAD_NEXT_REGISTER);
 	            $entity = $this->Ilandline->txt2array($ln);
 	            $this->AppImport->timing_end();
+
 				if(isset($entity['NAME'])){
 					/**
 					* Gera o hash do nome da entidade
@@ -353,6 +365,7 @@ class LandlinesImportController extends AppImportsController {
 							'h_first1_first2' => $hash['h_first1_first2'],
 							'h_last1_last2' => $hash['h_last1_last2'],
 							'h_mother' => $this->AppImport->getHash($entity['MOTHER'], 'h_all'),
+							'lote' => $this->Ilandline->lote,
 							)
 						);
 					$this->AppImport->timing_end();
@@ -392,6 +405,7 @@ class LandlinesImportController extends AppImportsController {
 								'tel' => $telefone,
 								'tel_full' => "{$ddd}{$telefone}",
 								'tel_original' => $entity['TEL_FULL'],
+								'lote' => $this->Ilandline->lote,
 								)
 							);
 						$this->AppImport->timing_end();
@@ -413,7 +427,8 @@ class LandlinesImportController extends AppImportsController {
 						$data = array(
 							'Izipcode' => array(
 								'code' => $this->AppImport->getZipcode($entity['ZIPCODE']),
-								'code_original' => $entity['ZIPCODE']
+								'code_original' => $entity['ZIPCODE'],
+								'lote' => $this->Ilandline->lote,
 								)
 							);
 						$this->AppImport->timing_end();
@@ -486,6 +501,7 @@ class LandlinesImportController extends AppImportsController {
 								'h_first1_first2' => $hash['h_first1_first2'],
 								'h_last1_last2' => $hash['h_last1_last2'],
 								'h_complement' => $hash_complement['h_all'],
+								'lote' => $this->Ilandline->lote,
 								)
 							);
 						$this->AppImport->timing_end();
@@ -513,6 +529,7 @@ class LandlinesImportController extends AppImportsController {
 								'mobile_id' => null,
 								'address_id' => $this->Iaddress->id,
 								'year' => $year,
+								'lote' => $this->Ilandline->lote,
 								)
 							);
 						$this->AppImport->timing_end();
@@ -551,7 +568,7 @@ class LandlinesImportController extends AppImportsController {
 	        $this->db['landline']->commit();
 	        $this->db['address']->commit();
 	        $this->db['zipcode']->commit();
-	        $this->db['entityLandlineAddress']->commit();
+	        $this->db['associations']->commit();
 	        $this->AppImport->timing_end();
 		}
 

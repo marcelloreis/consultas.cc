@@ -131,6 +131,7 @@ class StatisticsController extends AppController {
 			* Calcula o tempo percorrido da importacao
 			*/
 			$imports['remaining'] = $this->getRemaining();
+			$imports['remaining_times'] = $this->remainingTimes();
 
 			/**
 			* Carrega a quantidade de processos por tempo
@@ -140,12 +141,17 @@ class StatisticsController extends AppController {
 			/**
 			* Carrega o timing da importacao sem o NEXT
 			*/
-			$imports['timing'] = $this->Timing->find('list', array('fields' => array('Timing.time', 'Timing.description'), 'conditions' => array('Timing.time NOT' => null, 'Timing.id NOT' => TUNING_LOAD_NEXT_REGISTER)));
+			$imports['timing'] = $this->Timing->find('list', array('fields' => array('Timing.time', 'Timing.description'), 'conditions' => array('Timing.time NOT' => null, 'Timing.id NOT' => array(TUNING_LOAD_NEXT_REGISTER, COMMIT_TRANSACTIONS))));
 
 			/**
 			* Carrega o timing do NEXT da importacao
 			*/
 			$imports['timing_next'] = $this->Timing->find('first', array('fields' => array('Timing.time', 'Timing.description'), 'conditions' => array('Timing.time NOT' => null, 'Timing.id' => TUNING_LOAD_NEXT_REGISTER)));
+
+			/**
+			* Carrega o timing do NEXT da importacao
+			*/
+			$imports['timing_commit'] = $this->Timing->find('first', array('fields' => array('Timing.time', 'Timing.description'), 'conditions' => array('Timing.time NOT' => null, 'Timing.id' => COMMIT_TRANSACTIONS)));
 
 			/**
 			* Carrega as tableas que estao sendo alimentadas
