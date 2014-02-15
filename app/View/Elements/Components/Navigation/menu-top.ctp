@@ -13,14 +13,22 @@ $menu = array(
         'url' => array('controller' => 'entities', 'action' => 'index', '#' => 'entity-search')
         ),
     array(
-        'label' => '<span>Mailing</span>',
+        'label' => '<span>Campanhas</span>',
         'params' => array('class' => 'dropdown-toggle', 'data-toggle' => 'dropdown'),
         'icon_right' => '<span class="caret"></span>',
         'children' => array(
             /**
-            * Campanhas
+            * Mailing
             */
-            array('label' => 'Campanhas', 'controller' => 'campaigns'),
+            array('label' => 'Mailings', 'controller' => 'campaigns', 'action' => 'index_mailing'),
+            /**
+            * Mailing
+            */
+            array('label' => 'SMS', 'controller' => 'campaigns', 'action' => 'index_sms'),
+            /**
+            * Mailing
+            */
+            array('label' => 'Checklist', 'controller' => 'campaigns', 'action' => 'index_checklist'),
             /**
             * Modelos
             */

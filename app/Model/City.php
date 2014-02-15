@@ -20,11 +20,18 @@ App::uses('AppModel', 'Model');
  */
 class City extends AppModel {
 
-/**
- * Validation rules
- *
- * @var array
- */
+	/**
+	* Recursive
+	*
+	* @var integer
+	*/
+	public $recursive = -1;
+
+	/**
+	 * Validation rules
+	 *
+	 * @var array
+	 */
 	public $validate = array(
 		'state_id' => array(
 			'numeric' => array(
@@ -42,11 +49,11 @@ class City extends AppModel {
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
-/**
- * belongsTo associations
- *
- * @var array
- */
+	/**
+	 * belongsTo associations
+	 *
+	 * @var array
+	 */
 	public $belongsTo = array(
 		'State' => array(
 			'className' => 'State',
@@ -56,39 +63,4 @@ class City extends AppModel {
 			'order' => ''
 		)
 	);
-
-/**
- * hasMany associations
- *
- * @var array
- */
-	public $hasMany = array(
-		'Event' => array(
-			'className' => 'Event',
-			'foreignKey' => 'city_id',
-			'dependent' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		),
-		'Student' => array(
-			'className' => 'Student',
-			'foreignKey' => 'city_id',
-			'dependent' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		)
-	);
-
 }

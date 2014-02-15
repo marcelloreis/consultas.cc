@@ -137,12 +137,12 @@ class AppFormHelper extends AppHelper {
         preg_match('/id=[\"\'](.*?)[\"\']/si', $this->input, $map);
         $id = !empty($map[1])?$map[1]:null;
 
-        if (isset($id)) {
-            $this->inputId = $map[1];
-            //Insere o atributo FOR na tag LABEL
-            $this->input = preg_replace('/\for=[\"\'].*?[\"\']/si', "", $this->input);
-            $this->input = preg_replace('/\<label/si', "<label for=\"{$this->inputId}\" ", $this->input);
-        }
+        // if (isset($id)) {
+        //     $this->inputId = $map[1];
+        //     //Insere o atributo FOR na tag LABEL
+        //     $this->input = preg_replace('/\for=[\"\'].*?[\"\']/si', "", $this->input);
+        //     $this->input = preg_replace('/\<label/si', "<label for=\"{$this->inputId}\" ", $this->input);
+        // }
 
         return $this->input;
     }

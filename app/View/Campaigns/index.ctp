@@ -1,7 +1,12 @@
 <?php 
 /**
-* Adiciona os Scripts de acordo com as views invocadas
+* Adiciona os CSSs e Scripts de acordo com as views invocadas
 */
+$this->append('css-on-demand');
+echo $this->Html->css(array('plugins/icheck/all'));
+$this->end();
+
+echo $this->Html->script(array('plugins/icheck/jquery.icheck.min'), array('defer' => true));
 echo $this->Html->script(array('plugins/wizard/jquery.form.wizard.min'), array('defer' => true));
 
 /**
