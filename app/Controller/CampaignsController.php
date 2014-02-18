@@ -13,6 +13,7 @@
 
 App::uses('AppBillingsController', 'Controller');
 App::uses('UsersController', 'Controller');
+App::uses('CakeEmail', 'Network/Email');
 
 /**
  * Static content controller
@@ -45,8 +46,11 @@ class CampaignsController extends AppBillingsController {
 	* @return void
 	*/
 	public function beforeFilter() {
-		AppController::beforeFilter();
-
+		if(strstr($this->action, 'cron')){
+    		AppController::beforeFilter();
+		}else{
+			parent::beforeFilter();
+		}
 		/**
 		* Carrega os campos disponiveis para o mailing
 		*/
@@ -112,14 +116,18 @@ class CampaignsController extends AppBillingsController {
 		*/
 		$cities = array();
 		if(!empty($this->data['Campaign']['state_id'])){
-			$cities = $this->Campaign->City->find('list', array(
-				'recursive' => -1,
-				'fields' => array('City.id', 'City.name'),
-				'conditions' => array(
-					'City.state_id' => $this->data['Campaign']['state_id']
-					)
-				));
-		}		
+			if(!Cache::read("cities_from_{$this->data['Campaign']['state_id']}", 'components')){
+					$cities = $this->Campaign->City->find('list', array(
+						'recursive' => -1,
+						'fields' => array('City.id', 'City.name'),
+						'conditions' => array(
+							'City.state_id' => $this->data['Campaign']['state_id']
+							)
+						));
+					Cache::write("cities_from_{$this->data['Campaign']['state_id']}", $cities, 'components');
+			}
+			$cities = Cache::read("cities_from_{$this->data['Campaign']['state_id']}", 'components');
+		}	
 
     	/**
     	* Carrega as variaveis de ambiente
@@ -130,18 +138,61 @@ class CampaignsController extends AppBillingsController {
 	/**
 	* Controller models
 	*
-	* @note OS MODELS SmsTemplate E Contact NAO FORAM LIGADOS COM belongsTo
-	* 		PARA DAR LIBERDADE AO USUARIO DE SELECIONAR O Template OU O Grupo
+	* @note O MODEL SmsTemplate NAO FOI LIGADO COM belongsTo
+	* 		PARA DAR LIBERDADE AO USUARIO DE SELECIONAR O Template
 	*		E ADITA-LOS APOS A SELECAO, ENTAO, OS MODELS CITADOS SÓ SERVEM DE REFERENCIA
 	*		E NAO EXATAMENTE COMO UMA CHAVE EXTRANGEIRA
 	* @var array
 	*/
-	public $uses = array('Campaign', 'SmsTemplate', 'Contact', 'Entity');
+	public $uses = array('Campaign', 'SmsTemplate','Entity');
 
 	/**
 	* Carrega os componentes que poderao ser usados em quaisquer controller desta framework
 	*/
 	public $components = array('Main.AppSms', 'AppImport');
+
+	/**
+	* Método __cron
+	* Este método busca todos as campanhas q ainda nao foram processadas e as executa
+	*
+	* @return void
+	*/
+	public function cron(){
+		/**
+		* Desabilita a renderizacao do cake
+		*/
+		$this->autoRender = false;
+
+		/**
+		* Verifica se existe algum processo em execucao, caso exista, aborta o processo
+		*/
+		$isBusy = $this->Campaign->find('count', array(
+			'recursive' => -1,
+			'conditions' => array(
+				'Campaign.process_state' => CAMPAIGN_RUN_PROCESSED
+				)
+			));	
+
+		if(!$isBusy){
+			/**
+			* Carrega todas as campanhas q ainda nao foram processadas
+			*/
+			$campaign = $this->Campaign->find('first', array(
+				'recursive' => -1,
+				'conditions' => array(
+					'Campaign.process_state' => CAMPAIGN_NOT_PROCESSED
+					),
+				'order' => array('Campaign.created'),
+				));
+	
+			if(!empty($campaign['Campaign']['id'])){
+				/**
+				* Executa a campanha
+				*/
+				$this->build_campaign($campaign);
+			}
+		}
+	}
 
 	/**
 	* Método loadEntities
@@ -152,36 +203,44 @@ class CampaignsController extends AppBillingsController {
 	*/
 	private function loadEntities($data){
 		/**
-		* Contabiliza todos os registros de acordo com o filtro da campanha
+		* Carrega os dados da entidade a partir do cache caso ja exista
 		*/
-		$fields = array('*');
-		$limit = null;
-		$cond = array();
-		$joins = array();
-		$counter = array(
-			'people' => 0, 
-			'female' => 0, 
-			'male' => 0, 
-			'individual' => 0, 
-			'corporation' => 0
-			);
-
+		$this->cache_id = "us{$data['Campaign']['user_id']}cl{$data['Campaign']['client_id']}ca{$data['Campaign']['id']}";;		
+		$this->entity = Cache::read($this->cache_id, 'campaigns');
 		/**
-		* Monta o join com a tabela de associacoes
+		* Salva os dados encontrados da entidade em cache
 		*/
-		$joins[] = array(
-			'table' => 'associations',
-	        'alias' => 'Association',
-	        'type' => 'INNER',
-	        'conditions' => array(
-	            'Association.entity_id = Entity.id',
-	        )
-        );
+		if(!$this->entity){
+			/**
+			* Contabiliza todos os registros de acordo com o filtro da campanha
+			*/
+			$fields = array('*');
+			$limit = null;
+			$cond = array();
+			$joins = array();
+			$counter = array(
+				'people' => 0, 
+				'female' => 0, 
+				'male' => 0, 
+				'individual' => 0, 
+				'corporation' => 0
+				);
 
-        /**
-        * Monta o join de endereco
-        */
-        if(!empty($data['Campaign']['zipcodes']) || !empty($data['Campaign']['state_id'])){
+			/**
+			* Monta o join com a tabela de associacoes
+			*/
+			$joins[] = array(
+				'table' => 'associations',
+		        'alias' => 'Association',
+		        'type' => 'INNER',
+		        'conditions' => array(
+		            'Association.entity_id = Entity.id',
+		        )
+	        );
+
+	        /**
+	        * Monta o join de endereco
+	        */
 			$joins[] = array(
 				'table' => 'addresses',
 		        'alias' => 'Address',
@@ -190,66 +249,10 @@ class CampaignsController extends AppBillingsController {
 		            'Address.id = Association.address_id',
 		        )
 	        );        
-        }
 
-		/**
-		* Monta o join com a tabela de telefones fixos e moveis
-		*/
-		switch ($data['Campaign']['tel_type']) {
 			/**
-			* Somente Fixos
+			* Monta o join de CEPs
 			*/
-			case TP_TEL_LANDLINE:
-        		$joins[] = array(
-					'table' => 'landlines',
-			        'alias' => 'Landline',
-			        'type' => 'INNER',
-			        'conditions' => array(
-			            'Landline.id = Association.landline_id',
-			        )
-		        );
-				/**
-				* Traz somentes os registros com telefone movel
-				*/
-		        $cond['Association.landline_id NOT'] = null;
-				break;
-			
-			/**
-			* Somente Moveis
-			*/
-			case TP_TEL_MOBILE:
-				$joins[] = array(
-					'table' => 'mobiles',
-			        'alias' => 'Mobile',
-			        'type' => 'INNER',
-			        'conditions' => array(
-			            'Mobile.id = Association.mobile_id',
-			        )
-				);
-				/**
-				* Traz somentes os registros com telefone movel
-				*/
-		        $cond['Association.mobile_id NOT'] = null;
-				break;
-		}
-
-        /**
-        * Verifica se foi informado algum limite para a busca
-        */
-		if(!empty($data['Campaign']['limit'])){
-			$limit = $data['Campaign']['limit'];
-		}
-
-        /**
-        * Monta a consulta com CEPs informadas
-        */
-        if(!empty($data['Campaign']['zipcodes'])){
-			$zipcodes = preg_split('/\n/si', $data['Campaign']['zipcodes']);
-			foreach ($zipcodes as $k => $v) {
-				if(!empty($v)){
-					$cond['Zipcode.code'][] = trim(preg_replace('/[^0-9]/si', '', $v));
-				}
-			}
 			$joins[] = array(
 				'table' => 'zipcodes',
 		        'alias' => 'Zipcode',
@@ -258,182 +261,247 @@ class CampaignsController extends AppBillingsController {
 		            'Zipcode.id = Address.zipcode_id',
 		        )
 	        );
-        }
 
-        /**
-        * Monta a consulta com as areas (Estado, Cidade e Bairros)
-        */
-        if(!empty($data['Campaign']['state_id'])){
-			$cond['Address.state_id'] = $data['Campaign']['state_id'];
-        
-        	if(!empty($data['Campaign']['city_id'])){
-		        	$city = $this->Campaign->City->findById($data['Campaign']['city_id']);
-					$cond['Address.city like'] = $city['City']['name'];
+			/**
+			* Monta o join com a tabela de telefones fixos e moveis
+			*/
+			switch ($data['Campaign']['tel_type']) {
+				/**
+				* Somente Fixos
+				*/
+				case TP_TEL_LANDLINE:
+	        		$joins[] = array(
+						'table' => 'landlines',
+				        'alias' => 'Landline',
+				        'type' => 'INNER',
+				        'conditions' => array(
+				            'Landline.id = Association.landline_id',
+				        )
+			        );
+					/**
+					* Traz somentes os registros com telefone movel
+					*/
+			        $cond['Association.landline_id NOT'] = null;
+					break;
+				
+				/**
+				* Somente Moveis
+				*/
+				case TP_TEL_MOBILE:
+					$joins[] = array(
+						'table' => 'mobiles',
+				        'alias' => 'Mobile',
+				        'type' => 'INNER',
+				        'conditions' => array(
+				            'Mobile.id = Association.mobile_id',
+				        )
+					);
+					/**
+					* Traz somentes os registros com telefone movel
+					*/
+			        $cond['Association.mobile_id NOT'] = null;
+					break;
+			}
 
-		        if(!empty($data['Campaign']['neighbors'])){
-					$neighbors = preg_split('/\n/si', $data['Campaign']['neighbors']);
-					foreach ($neighbors as $k => $v) {
-						if(!empty($v)){
-							$cond_or[] = array('Address.neighborhood LIKE' => "%" . trim($v) . "%");
-						}
+	        /**
+	        * Verifica se foi informado algum limite para a busca
+	        */
+			if(!empty($data['Campaign']['limit'])){
+				$limit = $data['Campaign']['limit'];
+			}
+
+	        /**
+	        * Monta a consulta com CEPs informadas
+	        */
+	        if(!empty($data['Campaign']['zipcodes'])){
+				$zipcodes = preg_split('/\n/si', $data['Campaign']['zipcodes']);
+				foreach ($zipcodes as $k => $v) {
+					if(!empty($v)){
+						$cond['Zipcode.code'][] = trim(preg_replace('/[^0-9]/si', '', $v));
 					}
-					$cond['AND'][]['OR'] = $cond_or;
+				}
+	        }
+
+	        /**
+	        * Monta a consulta com as areas (Estado, Cidade e Bairros)
+	        */
+	        if(!empty($data['Campaign']['state_id'])){
+				$cond['Address.state_id'] = $data['Campaign']['state_id'];
+	        
+	        	if(!empty($data['Campaign']['city_id'])){
+			        	$city = $this->Campaign->City->findById($data['Campaign']['city_id']);
+						$cond['Address.city like'] = $city['City']['name'];
+
+			        if(!empty($data['Campaign']['neighbors'])){
+						$neighbors = preg_split('/\n/si', $data['Campaign']['neighbors']);
+						foreach ($neighbors as $k => $v) {
+							if(!empty($v)){
+								$cond_or[] = array('Address.neighborhood LIKE' => "%" . trim($v) . "%");
+							}
+						}
+						$cond['AND'][]['OR'] = $cond_or;
+			        }
 		        }
 	        }
-        }
 
-        /**
-        * Monta a consulta com DDDs informadas
-        */
-        if(!empty($data['Campaign']['ddd'])){
-			$ddd = preg_split('/\n/si', $data['Campaign']['ddd']);
-			foreach ($ddd as $k => $v) {
-				if(!empty($v)){
-					/**
-					* Monta as condicoes de busca de telefones fixos e moveis
-					*/
-					switch ($data['Campaign']['tel_type']) {
+	        /**
+	        * Monta a consulta com DDDs informadas
+	        */
+	        if(!empty($data['Campaign']['ddd'])){
+				$ddd = preg_split('/\n/si', $data['Campaign']['ddd']);
+				foreach ($ddd as $k => $v) {
+					if(!empty($v)){
 						/**
-						* Somente Fixos
+						* Monta as condicoes de busca de telefones fixos e moveis
 						*/
-						case TP_TEL_LANDLINE:
-							break;
-							$cond['Landline.ddd'][] = trim(preg_replace('/[^0-9]/si', '', $v));
-						
-						/**
-						* Somente Moveis
-						*/
-						case TP_TEL_MOBILE:
-							$cond['Mobile.ddd'][] = trim(preg_replace('/[^0-9]/si', '', $v));
-							break;
+						switch ($data['Campaign']['tel_type']) {
+							/**
+							* Somente Fixos
+							*/
+							case TP_TEL_LANDLINE:
+								break;
+								$cond['Landline.ddd'][] = trim(preg_replace('/[^0-9]/si', '', $v));
+							
+							/**
+							* Somente Moveis
+							*/
+							case TP_TEL_MOBILE:
+								$cond['Mobile.ddd'][] = trim(preg_replace('/[^0-9]/si', '', $v));
+								break;
+						}
 					}
 				}
-			}
-        }
+	        }
 
-        /**
-        * Verifica se foi informado algum sexo específico
-        */
-		if(!empty($data['Campaign']['gender_str']) && $data['Campaign']['gender_str'] > 0){
-			$cond['Entity.gender'] = $data['Campaign']['gender_str'];
-		}			
+	        /**
+	        * Verifica se foi informado algum sexo específico
+	        */
+			if(!empty($data['Campaign']['gender_str']) && $data['Campaign']['gender_str'] > 0){
+				$cond['Entity.gender'] = $data['Campaign']['gender_str'];
+			}			
 
-        /**
-        * Verifica se foi informado algum tipo de pessoa
-        */
-		if(!empty($data['Campaign']['type_str']) && $data['Campaign']['type_str'] > 0){
-			$cond['Entity.type'] = $data['Campaign']['type_str'];
-		}			
+	        /**
+	        * Verifica se foi informado algum tipo de pessoa
+	        */
+			if(!empty($data['Campaign']['type_str']) && $data['Campaign']['type_str'] > 0){
+				$cond['Entity.type'] = $data['Campaign']['type_str'];
+			}			
 
-        /**
-        * Verifica se foi informado alguma faixa de idade
-        */
-		if(!empty($data['Campaign']['age_ini']) && $data['Campaign']['age_ini'] > 0){
-			$data['Campaign']['age_end'] = (!empty($data['Campaign']['age_end']) && $data['Campaign']['age_end'] > 0)?$data['Campaign']['age_end']:200;
+	        /**
+	        * Verifica se foi informado alguma faixa de idade
+	        */
+			if(!empty($data['Campaign']['age_ini']) && $data['Campaign']['age_ini'] > 0){
+				$data['Campaign']['age_end'] = (!empty($data['Campaign']['age_end']) && $data['Campaign']['age_end'] > 0)?$data['Campaign']['age_end']:200;
 
-			if(!empty($data['Campaign']['ignore_age_null']) && $data['Campaign']['ignore_age_null']){
-				$cond['OR'] = array(
-					array('Entity.birthday' => null),
-					array("DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(Entity.birthday)), '%Y')+0 BETWEEN ? AND ?" => array($data['Campaign']['age_ini'], $data['Campaign']['age_end']))
+				if(!empty($data['Campaign']['ignore_age_null']) && $data['Campaign']['ignore_age_null']){
+					$cond['OR'] = array(
+						array('Entity.birthday' => null),
+						array("DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(Entity.birthday)), '%Y')+0 BETWEEN ? AND ?" => array($data['Campaign']['age_ini'], $data['Campaign']['age_end']))
+						);
+				}else{
+					$cond["DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(Entity.birthday)), '%Y')+0 BETWEEN ? AND ?"] = array($data['Campaign']['age_ini'], $data['Campaign']['age_end']);
+				}
+			}			
+			
+			/**
+			* Carrega o layout montado na campanha
+			*/
+			if(!empty($data['Campaign']['layout']) && count($data['Campaign']['layout'])){
+				/**
+				* Inicializa a variavel $fields com os campos padroes
+				*/
+				$fields = array(
+					'Association.id'
 					);
-			}else{
-				$cond["DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(Entity.birthday)), '%Y')+0 BETWEEN ? AND ?"] = array($data['Campaign']['age_ini'], $data['Campaign']['age_end']);
-			}
-		}			
-		
-		/**
-		* Carrega o layout montado na campanha
-		*/
-		if(!empty($data['Campaign']['layout']) && count($data['Campaign']['layout'])){
-			/**
-			* Inicializa a variavel $fields com os campos padroes
-			*/
-			$fields = array(
-				'Association.id'
-				);
 
-			$layout = explode(';', $data['Campaign']['layout']);
-			foreach ($layout as $k => $v) {
-				$field = ucfirst(preg_replace('/^([a-z].*?)_/si', '$1.', $v));
-				if($data['Campaign']['tel_type'] == TP_TEL_LANDLINE && strstr($field, 'Mobile')){
-					unset($field);
+				$layout = explode(';', $data['Campaign']['layout']);
+				foreach ($layout as $k => $v) {
+					$field = ucfirst(preg_replace('/^([a-z].*?)_/si', '$1.', $v));
+					if($data['Campaign']['tel_type'] == TP_TEL_LANDLINE && strstr($field, 'Mobile')){
+						unset($field);
+					}
+					if($data['Campaign']['tel_type'] == TP_TEL_MOBILE && strstr($field, 'Landline')){
+						unset($field);
+					}
+					if(!empty($field)){
+						$fields[] = $field;
+					}
 				}
-				if($data['Campaign']['tel_type'] == TP_TEL_MOBILE && strstr($field, 'Landline')){
-					unset($field);
+			}		
+
+			/**
+			* Carrega as entidades encontradas a partir do filtro da campanha
+			*/
+			$this->entity['Entity'] = $this->Entity->find('all', array(
+				'recursive' => -1,
+				'fields' => $fields,
+				'conditions' => $cond,
+				'joins' => $joins,
+				'order' => array('Association.year2' => 'DESC'),
+				'limit' => $limit
+				)
+			);
+
+			/**
+			* Carrega os codumentos contidos no arquivo anexado a campanha
+			*/
+			$this->loadFile($data);
+
+			/**
+			* Percorre por todas as entidades encontradas a partir do filtro montado na campanha
+			* contabilizando as entidades
+			*/
+			foreach ($this->entity['Entity'] as $k => $v) {
+				/**
+				* Contabiliza quantos registros foram encontrados
+				*/
+				$counter['people']++;
+
+				/**
+				* Contabiliza quantas mulheres/homens foram encontradas
+				*/
+				switch ($v['Entity']['gender_str']) {
+					case FEMALE:
+						$counter['female']++;
+						break;
+					case MALE:
+						$counter['male']++;
+						break;
 				}
-				if(!empty($field)){
-					$fields[] = $field;
+
+				/**
+				* Contabiliza quantas pessoas fisicas/juridicas foram encontradas
+				*/
+				switch ($v['Entity']['type_str']) {
+					case TP_CPF:
+						$counter['individual']++;
+						break;
+					case TP_CNPJ:
+						$counter['corporation']++;
+						break;
 				}
-			}
-		}		
-
-		/**
-		* Carrega as entidades encontradas a partir do filtro da campanha
-		*/
-		$this->entity['Entity'] = $this->Entity->find('all', array(
-			'recursive' => -1,
-			'fields' => $fields,
-			'conditions' => $cond,
-			'joins' => $joins,
-			'order' => array('Association.year' => 'DESC'),
-			'limit' => $limit
-			)
-		);
-
-		/**
-		* Carrega os contatos contidos no campo contacts no atributo $this->entity
-		*/
-		$this->loadContact($data);
-
-		/**
-		* Percorre por todas as entidades encontradas a partir do filtro montado na campanha
-		* contabilizando as entidades
-		*/
-		foreach ($this->entity['Entity'] as $k => $v) {
-			/**
-			* Contabiliza quantos registros foram encontrados
-			*/
-			$counter['people']++;
+			}		
 
 			/**
-			* Contabiliza quantas mulheres/homens foram encontradas
+			* Salva os numeros contabilizados da campanha
 			*/
-			switch ($v['Entity']['gender_str']) {
-				case FEMALE:
-					$counter['female']++;
-					break;
-				case MALE:
-					$counter['male']++;
-					break;
-			}
+			$this->Campaign->updateAll($counter, array('Campaign.id' => $data['Campaign']['id']));
 
 			/**
-			* Contabiliza quantas pessoas fisicas/juridicas foram encontradas
+			* Salva os dados encontrados da entidade em cache
 			*/
-			switch ($v['Entity']['type_str']) {
-				case TP_CPF:
-					$counter['individual']++;
-					break;
-				case TP_CNPJ:
-					$counter['corporation']++;
-					break;
-			}
-		}		
-
-		/**
-		* Salva os numeros contabilizados da campanha
-		*/
-		$this->Campaign->updateAll($counter, array('Campaign.id' => $data['Campaign']['id']));
+			Cache::write($this->cache_id, $this->entity, 'campaigns');
+		}
 	}
 
 	/**
-	* Método loadContact
-	* Este método é responsavel pelo envio de SMSs para os contatos vinculados a campanha passada por parametro
+	* Método loadFile
+	* Este método é responsavel pela extracao dos documentos contidos no arquivo anexado a campanha
 	*
 	* @param string $id
 	* @return void
 	*/
-	private function loadContact($data){
+	private function loadFile($data){
 		/**
 		* Concatena os contatos informados manualmente da campanha
 		*/
@@ -512,6 +580,9 @@ class CampaignsController extends AppBillingsController {
 				$lines .= "{$tr_open}";
 				foreach ($v as $k2 => $v2) {
 					foreach ($v2 as $k3 => $v3) {
+						/**
+						* Remove os campos q nao estiverem no layout da campanha
+						*/	
 						if(!empty($this->campaign_layout[strtolower($k2) . '_' . $k3])){
 							$lines .= "{$th_open}" . $this->campaign_layout[strtolower($k2) . '_' . $k3] . "{$th_close}";
 						}
@@ -527,7 +598,15 @@ class CampaignsController extends AppBillingsController {
 			$lines = '';
 			foreach ($this->entity['Entity'] as $k => $v) {
 				$lines .= $tr_open;
-				foreach ($v as $k2 => $v2) {
+				foreach ($v as $k2 => $v2) {		
+					/**
+					* Remove os campos q nao estiverem no layout da campanha
+					*/	
+					foreach ($v2 as $k3 => $v3) {
+						if(empty($this->campaign_layout[strtolower($k2) . '_' . $k3])){
+							unset($v2[$k3]);
+						}
+					}
 					$lines .= $td_open . implode("{$td_close}{$td_open}", $v2) . $td_close;
 				}
 				$lines .= $tr_close;
@@ -641,19 +720,6 @@ class CampaignsController extends AppBillingsController {
 			));
 
 		/**
-		* Carrega os grupo que pertencem somente ao usuario logado
-		*/
-		$contacts = $this->Contact->find('list', array(
-			'fields' => array(
-				'Contact.list',
-				'Contact.title',
-				),
-			'conditions' => array(
-				'Contact.user_id' => $this->Session->read('Auth.User.id')
-				)
-			));
-
-		/**
 		* Carrega os valores do ID tel_type
 		*/
 		$tel_type = array(
@@ -677,7 +743,7 @@ class CampaignsController extends AppBillingsController {
 		/**
 		* Carrega as variaveis de ambiente
 		*/		
-		$this->set(compact('sms_templates', 'contacts', 'tel_type', 'layout', 'layout_checked'));
+		$this->set(compact('sms_templates', 'tel_type', 'layout', 'layout_checked'));
 	}
 
 	/**
@@ -692,7 +758,7 @@ class CampaignsController extends AppBillingsController {
 		/**
 		* Carrega as campanhas de mailing
 		*/
-		$params['conditions']['Campaign.product'] = 'mailing';
+		$params['conditions']['Campaign.product_id'] = PRODUCT_MAILING;
 
 		$this->index($params);
 
@@ -711,7 +777,7 @@ class CampaignsController extends AppBillingsController {
 		/**
 		* Carrega as campanhas de sms
 		*/
-		$params['conditions']['Campaign.product'] = 'sms';
+		$params['conditions']['Campaign.product_id'] = PRODUCT_SMS;
 
 		$this->index($params);
 
@@ -730,7 +796,7 @@ class CampaignsController extends AppBillingsController {
 		/**
 		* Carrega as campanhas de checklist
 		*/
-		$params['conditions']['Campaign.product'] = 'checklist';
+		$params['conditions']['Campaign.product_id'] = PRODUCT_CHECKLIST;
 
 		$this->index($params);
 
@@ -746,11 +812,38 @@ class CampaignsController extends AppBillingsController {
 	* @return void
 	*/
 	public function edit_mailing($id=null){
-		$this->redirect_edit = 'edit_mailing';
+		$this->redirect_edit = $this->action;
+
+		/**
+		* Valida o limite informado no formualrio
+		*/
+		if(!empty($this->request->data['Campaign']['limit']) && !empty($this->request->data['Campaign']['limit_max']) && $this->request->data['Campaign']['limit'] > $this->request->data['Campaign']['limit_max']){
+			$this->request->data['Campaign']['limit'] = $this->request->data['Campaign']['limit_max'];
+		}
+
+		/**
+		 * Verifica se o formulário foi submetido por post
+		 */
+		if ($this->request->is('post') || $this->request->is('put')) {
+
+			$this->request->data['Campaign']['tp_search'] = TP_SEARCH_MAILING;
+			$this->request->data['Campaign']['product_id'] = PRODUCT_MAILING;
+			$this->request->data['Campaign']['user_id'] = $this->userLogged['id'];
+			$this->request->data['Campaign']['client_id'] = $this->userLogged['client_id'];
+
+
+			/**
+			* Remove o cache da campanha caso ela seja atualizada
+			*/
+			if(!empty($this->request->data['Campaign']['user_id']) && !empty($this->request->data['Campaign']['client_id']) && !empty($this->request->data['Campaign']['id'])){
+				$this->cache_id = "us{$this->request->data['Campaign']['user_id']}cl{$this->request->data['Campaign']['client_id']}ca{$this->request->data['Campaign']['id']}";		
+				Cache::delete($this->cache_id, 'campaigns');
+			}
+		}		
 
 		$this->edit($id);
 
-		$this->view = 'edit_mailing';
+		$this->view = $this->action;
 	}
 
 	/**
@@ -764,7 +857,7 @@ class CampaignsController extends AppBillingsController {
 	public function edit_sms($id=null){
 		$this->edit($id);
 
-		$this->view = 'edit_sms';
+		$this->view = $this->action;
 	}
 
 	/**
@@ -776,24 +869,48 @@ class CampaignsController extends AppBillingsController {
 	* @return void
 	*/
 	public function edit_checklist($id=null){
+		$this->redirect_edit = $this->action;
+
+		/**
+		* Valida o limite informado no formualrio
+		*/
+		if(!empty($this->request->data['Campaign']['limit']) && !empty($this->request->data['Campaign']['limit_max']) && $this->request->data['Campaign']['limit'] > $this->request->data['Campaign']['limit_max']){
+			$this->request->data['Campaign']['limit'] = $this->request->data['Campaign']['limit_max'];
+		}
+
+		/**
+		 * Verifica se o formulário foi submetido por post
+		 */
+		if ($this->request->is('post') || $this->request->is('put')) {
+
+			$this->request->data['Campaign']['tp_search'] = TP_SEARCH_CHECKLIST;
+			$this->request->data['Campaign']['product_id'] = PRODUCT_CHECKLIST;
+			$this->request->data['Campaign']['user_id'] = $this->userLogged['id'];
+			$this->request->data['Campaign']['client_id'] = $this->userLogged['client_id'];
+
+
+			/**
+			* Remove o cache da campanha caso ela seja atualizada
+			*/
+			if(!empty($this->request->data['Campaign']['user_id']) && !empty($this->request->data['Campaign']['client_id']) && !empty($this->request->data['Campaign']['id'])){
+				$this->cache_id = "us{$this->request->data['Campaign']['user_id']}cl{$this->request->data['Campaign']['client_id']}ca{$this->request->data['Campaign']['id']}";		
+				Cache::delete($this->cache_id, 'campaigns');
+			}
+		}		
+
 		$this->edit($id);
 
-		$this->view = 'edit_checklist';
+		$this->view = $this->action;
 	}
 
 	/**
-	* Método cron_mailing
+	* Método build_campaign
 	* Este método é responsavel pela producao dos arquivos de retorno a partir da campanha de Mailing
 	*
-	* @param string $id
+	* @param string $campaign
 	* @return void
 	*/
-	public function cron_mailing($id){
-		/**
-		* Desabilita a renderizacao do cake
-		*/
-		$this->autoRender = false;
-
+	private function build_campaign($campaign){
 		/**
 		* Variaveis q contera os retornos do cron
 		*/
@@ -804,38 +921,32 @@ class CampaignsController extends AppBillingsController {
 			);
 
 		/**
-		* Carrega os dados da campanha
-		*/
-		$this->Campaign->recursive = -1;
-		$data = $this->Campaign->findById($id);
-
-		/**
 		* Altera o status da campanha para PROCESSO EM ANDAMENTO
 		*/
-		$this->Campaign->id = $data['Campaign']['id'];
-		$this->Campaign->saveField('status', CAMPAIGN_RUN_PROCESSED);
+// $this->Campaign->id = $campaign['Campaign']['id'];
+// $this->Campaign->saveField('process_state', CAMPAIGN_RUN_PROCESSED);
 
 		/**
 		* Carrega os dados do usuario que criou a campanha
 		*/
 		$this->Campaign->User->recursive = -1;
-		$user = $this->Campaign->User->findById($data['Campaign']['user_id']);
+		$user = $this->Campaign->User->findById($campaign['Campaign']['user_id']);
 
 		/**
 		* Carrega todos os precos dos produtos de acordo o pacote do cliente
 		*/
 		$obj_users = new UsersController();
 		$this->loadModel('Billing');
-		$client = $obj_users->loadClient($data['Campaign']['client_id']);
+		$client = $obj_users->loadClient($campaign['Campaign']['client_id']);
 		$prices = $obj_users->loadPrices();	
 
 		/**
 		* Carrega os IDs necessarios para cobranca
 		*/
-		$this->tp_search = TP_SEARCH_MAILING;
-		$this->product_id = PRODUCT_MAILING;
+		$this->tp_search = $campaign['Campaign']['tp_search'];
+		$this->product_id = $campaign['Campaign']['product_id'];
 		$this->user_name = $user['User']['given_name'];
-		$this->user_id = $data['Campaign']['user_id'];
+		$this->user_id = $campaign['Campaign']['user_id'];
 		$this->package_id = $client['Client']['package_id'];
 		$this->contract_id = $client['Client']['contract_id'];
 		$this->billing_id = $client['Client']['billing_id'];
@@ -853,7 +964,7 @@ class CampaignsController extends AppBillingsController {
 			/**
 			* Carrega as entidades no atributo $this->entity a partir dos dados da campanha
 			*/
-			$this->loadEntities($data);
+			$this->loadEntities($campaign);
 			$files['xls'] = $this->loadTable();
 			$files['txt'] = $this->loadSemicolon();
 
@@ -884,7 +995,7 @@ class CampaignsController extends AppBillingsController {
 		/**
 		* Cria a pasta onde sera guardado os arquivos
 		*/
-		$dir = ROOT . "/app/webroot/files/campaign/mailing/{$client['Client']['id']}/{$id}/";
+		$dir = ROOT . "/app/webroot/files/campaign/return/{$client['Client']['id']}/{$id}/";
 		if(!is_dir($dir)){
 			mkdir($dir, 0777, true);
 		}
@@ -892,31 +1003,31 @@ class CampaignsController extends AppBillingsController {
 		/**
 		* Salva os arquivos gerados
 		*/
-		$file_name = Inflector::slug(strtolower($data['Campaign']['title']), '-') . '-' . date('YmdHi');
+		$file_name = "us{$campaign['Campaign']['user_id']}cl{$campaign['Campaign']['client_id']}ca{$campaign['Campaign']['id']}";
 		file_put_contents("{$dir}/RELATORIO-{$file_name}.txt", $files['info']);			
-		file_put_contents("{$dir}/{$file_name}.txt", $files['txt']);			
-		file_put_contents("{$dir}/{$file_name}.xls", $files['xls']);
+		file_put_contents("{$dir}/TEXTO-{$file_name}.txt", $files['txt']);			
+		file_put_contents("{$dir}/EXCEL-{$file_name}.xls", $files['xls']);
+
+		/**
+		* Altera o process_state da campanha para PROCESSADO
+		*/
+		$this->Campaign->saveField('process_state', CAMPAIGN_PROCESSED);
+		$this->Campaign->saveField('process_date', date('Y-m-d H:i:s'));
 
 		/**
 		* Dispara um email para o usuario que criou a campanha, avisando que os arquivos ja estao disponiveis
 		*/
 		$email = new CakeEmail('apps');
-		$email->template($this->action);
+		$email->template('mailing');
 		$email->emailFormat('html');
-		$email->viewVars(array('user' => $hasEmail));
+		$email->viewVars(array('user' => $user, 'campaign' => $campaign));
 
 		$email->sender(array(EMAIL_NO_REPLAY => TITLE_APP));
 		$email->from(array(EMAIL_NO_REPLAY => TITLE_APP));
-		$email->to($hasEmail['User']['email']);
-		$email->subject("Lembrete da senha nova de {$hasEmail['User']['given_name']}");
+		// $email->to($user['User']['given_name']);
+		$email->to('marcello@marcelloreis.com');
+		$email->subject("Campanha disponível para download.");
 		$email->send();		
-
-		/**
-		* Altera o status da campanha para PROCESSADO
-		*/
-		$this->Campaign->saveField('status', CAMPAIGN_PROCESSED);
-		$this->Campaign->saveField('date_process', date('Y-m-d H:i:s'));
-
 	}
 
 	/**

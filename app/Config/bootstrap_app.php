@@ -44,6 +44,7 @@ define('PRODUCT_POSSIVEIS_PARENTES', 8);
 define('PRODUCT_VIZINHOS', 9);
 define('PRODUCT_SMS', 10);
 define('PRODUCT_MAILING', 11);
+define('PRODUCT_CHECKLIST', 12);
 
 define('CAMPAIGN_NOT_PROCESSED', 1);
 define('CAMPAIGN_RUN_PROCESSED', 2);
@@ -70,6 +71,7 @@ define('TP_SEARCH_EXTRA_FAMILY', 10);
 define('TP_SEARCH_EXTRA_NEIGHBORS', 11);
 define('TP_SEARCH_SMS', 12);
 define('TP_SEARCH_MAILING', 13);
+define('TP_SEARCH_CHECKLIST', 14);
 
 define('LIMIT_HASH', 5);
 define('LIMIT_SEARCH', 50);
@@ -142,6 +144,18 @@ Cache::config('entities', array(
     'duration' => '+999 days',
     'probability' => 100,
     'path' => CACHE . 'entities' . DS,
+    'mask' => 0777
+));
+
+/**
+* Configuracao do cache das campanhas
+*/
+Cache::config('campaigns', array(
+    'engine' => 'File',
+    'duration' => '+999 days',
+    'probability' => 100,
+    'path' => CACHE . 'campaigns' . DS,
+    'mask' => 0777
 ));
 
 /**
@@ -152,4 +166,5 @@ Cache::config('components', array(
     'duration' => '+999 days',
     'probability' => 100,
     'path' => CACHE . 'components' . DS,
+    'mask' => 0777
 ));

@@ -84,7 +84,7 @@ class EntitiesController extends AppBillingsController {
 		* Carrega os dados da entidade a partir do cache caso ja exista
 		*/
 		$this->cache_id = Inflector::slug(substr(urldecode($_SERVER['REQUEST_URI']), 1), '_');		
-		$this->entity = Cache::read($this->cache_id, 'entities');
+		$this->entity = Cache::read($this->cache_id, 'campagins');
 
     	/**
     	* Renderiza qualquer action na view index por padrao
@@ -130,7 +130,7 @@ class EntitiesController extends AppBillingsController {
 		$entity = $this->entity;
 
 		/**
-		* Carrega o cache com os dados encontrados da entidade
+		* Salva os dados encontrados da entidade em cache
 		*/
 		if($this->entity){
 			Cache::write($this->cache_id, $this->entity, 'entities');

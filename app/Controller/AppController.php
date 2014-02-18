@@ -202,7 +202,7 @@ class AppController extends Controller {
 							'authentication', 
 							'build_source', 
 							'run_text',
-							'cron_mailing'
+							'cron'
 							);
 		// $this->Auth->allow();
 	}
