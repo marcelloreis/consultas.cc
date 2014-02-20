@@ -25,13 +25,11 @@
         echo $this->Html->meta(array('name' => 'content-language', 'content' => 'pt-br'));
 
 
-        //Styles da aplicacao
+        /**
+        * Styles da aplicacao
+        */
         echo $this->Html->css(array(
-            'bootstrap.min.css',
-            'bootstrap-responsive.min.css',
-            'plugins/icheck/all.css',
-            'style.css',
-            'themes.css',
+            'all.min',
         ));
 
         //Scrips da aplicacao

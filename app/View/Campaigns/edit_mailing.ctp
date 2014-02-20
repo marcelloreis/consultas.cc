@@ -44,7 +44,7 @@ $price = $this->Session->read("Billing.prices_val.{$package_id}." . PRODUCT_MAIL
 /**
 * Carrega o elemento com as mensagens do estado do processamento da campanha
 */
-echo $this->element('Index/Campaigns/process_state', array('process_state' => $process_state));
+echo $this->element('Edit/Campaigns/process_state', array('process_state' => $process_state));
 ?>
 
 
@@ -55,7 +55,6 @@ echo $this->element('Index/Campaigns/process_state', array('process_state' => $p
         <?php echo $this->AppForm->create($modelClass, array('defaultSize' => 'input-xlarge', 'classForm' => 'form-horizontal form-bordered form-striped', 'type' => 'file'))?>
             <div style="display:none;">
                 <?php echo $this->Form->input('id')?>
-                <?php echo $this->Form->hidden('process_state', array('value' => $process_state))?>
                 <?php echo $this->Form->hidden('ignore_age_null', array('value' => 0))?>
                 <?php echo $this->Form->hidden('limit_max', array('value' => floor($balance/$this->AppUtils->num2db($price))))?>
             </div> 
@@ -75,7 +74,7 @@ echo $this->element('Index/Campaigns/process_state', array('process_state' => $p
                 echo $this->AppForm->input('layout', array('label' => 'Campos', 'template' => 'Campaigns/form-input-layout'));
             ?>
 
-            <?php echo $this->AppForm->btn('Salvar Alterações');?>
+            <?php echo $this->AppForm->btn('Salvar Alterações', array('template' => 'Campaigns/form-input-btn'));?>
         <?php echo $this->AppForm->end()?>
     </div>
 </div>

@@ -63,23 +63,25 @@ class CitiesController extends AppController {
 	* @param string $state_id
 	* @return void
 	*/
-	public function options ($state_id){
-		/**
-		* Habilita o carregamento automatico do layout
-		*/
-        $this->autoLayout = true;
+	public function options ($state_id=null){
+		if($state_id){
+			/**
+			* Habilita o carregamento automatico do layout
+			*/
+	        $this->autoLayout = true;
 
-		/**
-		* Habilita o carregamento automatico da view
-		*/
-        $this->autoRender = true;			
+			/**
+			* Habilita o carregamento automatico da view
+			*/
+	        $this->autoRender = true;			
 
-		if(isset($state_id) && !empty($state_id)){
-			$params['conditions'] = array('City.state_id' => $state_id);
+			if(isset($state_id) && !empty($state_id)){
+				$params['conditions'] = array('City.state_id' => $state_id);
+			}
+
+			$cities = $this->City->find('list', $params);
+			$model = isset($this->params['named']['model'])?$this->params['named']['model']:$this->modelClass;
+			$this->set(compact('cities', 'model'));
 		}
-
-		$cities = $this->City->find('list', $params);
-		$model = isset($this->params['named']['model'])?$this->params['named']['model']:$this->modelClass;
-		$this->set(compact('cities', 'model'));
 	}
 }

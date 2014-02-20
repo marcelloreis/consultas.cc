@@ -34,14 +34,6 @@ $menu = array(
             */
             array('label' => 'Modelos', 'controller' => 'sms_templates'),
             /**
-            * Grupos
-            */
-            array('label' => 'Lista de Contatos', 'controller' => 'contacts'),
-            /**
-            * Agenda
-            */
-            array('label' => 'Agenda', 'controller' => 'sms_calendar'),
-            /**
             * Relatorios
             */
             array('label' => 'Relatórios', 'controller' => 'sms_reports'),
