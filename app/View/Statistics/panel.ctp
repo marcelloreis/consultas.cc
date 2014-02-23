@@ -17,7 +17,6 @@ echo $this->Html->script('https://www.google.com/jsapi');
 echo $this->element('Index/Imports/charts-gauge');
 // echo $this->element('Index/Imports/real-time');
 ?>
-
 <?php if(!empty($uf)):?>
 	<div class="row-fluid">
 		<div class="span12">
@@ -85,7 +84,7 @@ echo $this->element('Index/Imports/charts-gauge');
 <?php endif?>
 
 <?php if(isset($imports['records_processed'])):?>
-	<div class="row-fluid">
+	<div id="dados-importados" class="row-fluid">
 		<div class="span12">
 			<div class="box box-color box-bordered">
 				<div class="box-title">

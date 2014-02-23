@@ -91,6 +91,11 @@ class Ilandline extends AppModelClean {
         */
         closedir($dir);
 
+        /**
+        * Ordena a lista de arquivos encontrada
+        */
+        sort($map);
+
         return $map;
     }      
 
@@ -119,6 +124,7 @@ class Ilandline extends AppModelClean {
                 $v = preg_replace('/;;;;/si', ';"";"";"";', $v);
                 $v = preg_replace('/;;;/si', ';"";"";', $v);
                 $v = preg_replace('/;;/si', ';"";', $v);           
+                $v = preg_replace('/^;/si', '"";', $v);           
                 $v = preg_split('/(\'|")?;(\'|")/si', $v);
                 break;
             case '"#"':
@@ -136,6 +142,7 @@ class Ilandline extends AppModelClean {
                 $v = preg_replace('/####/si', '#""#""#""#', $v);
                 $v = preg_replace('/###/si', '#""#""#', $v);
                 $v = preg_replace('/##/si', '#""#', $v);           
+                $v = preg_replace('/^#/si', '""#', $v);           
                 $v = preg_split('/(\'|")?#(\'|")/si', $v);
                 break;
             case ';':
@@ -152,6 +159,7 @@ class Ilandline extends AppModelClean {
                 $v = preg_replace('/;;;;/si', ';' . null . ';' . null . ';' . null . ';', $v);
                 $v = preg_replace('/;;;/si', ';' . null . ';' . null . ';', $v);
                 $v = preg_replace('/;;/si', ';' . null . ';', $v);
+                $v = preg_replace('/^;/si', null . ';', $v);           
                 $v = preg_split('/;/si', $v);
                 break;
         }

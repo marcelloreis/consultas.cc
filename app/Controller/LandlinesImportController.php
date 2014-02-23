@@ -164,7 +164,7 @@ class LandlinesImportController extends AppImportsController {
         /**
         * Carrega o layout dos dados que sera importados
         */
-        $this->Ilandline->source_year = 2012;
+        $this->Ilandline->source_year = 2013;
 
         /**
         * Carrega o lote da importacao
@@ -179,26 +179,26 @@ class LandlinesImportController extends AppImportsController {
         /**
         * Informa o conteudo do layout ao sistema
         */
-        $this->Ilandline->delimiter = '"#"';
+        $this->Ilandline->delimiter = ';';
         $this->Ilandline->map_pos = array(
-			'doc' => 0,
-			'name' => 3,
+			'doc' => 1,
+			'name' => 2,
 			'mother' => '',
 			'gender' => '',
 			'birthday' => '',
-			'ddd' => 1,
-			'tel' => 2,
-			'tel_full' => '',
-			'zipcode' => 11,
+			'ddd' => '',
+			'tel' => '',
+			'tel_full' => 0,
+			'zipcode' => 9,
 			'cod_end' => '',
-			'complement' => 7,
-			'number' => 6,
+			'complement' => 5,
+			'number' => 4,
 			'year' => '',
-			'type_address' => 4,
-			'street' => 5,
-			'neighborhood' => 8,
-			'city' => 9,
-			'state' => 10,
+			'type_address' => '',
+			'street' => 3,
+			'neighborhood' => 6,
+			'city' => 7,
+			'state' => 8,
     	);
 
 		/**
@@ -255,7 +255,7 @@ class LandlinesImportController extends AppImportsController {
 	        */
 	        $reload_transaction = 0;
 
-	        preg_match('/([a-z]{2}[0-9]?).txt$/si', $v, $vet);
+	        preg_match('/tel([a-z]{2})fixo\.txt$/si', $v, $vet);
 	        $this->uf = preg_replace('/[^a-z]/si', '', $vet[1]);
 
 	        /**
