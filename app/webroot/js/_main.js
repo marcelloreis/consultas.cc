@@ -126,27 +126,27 @@ $(document).ready(function(){
         .change(function(){
             var form = $(this).parents('form:eq(0)');
             var state_id = $(this).val();
-            var select_city = form.find('select[name*=Campaign][name*=city_id]');
-            var box_select_city = select_city.parent();
+    
+            if(typeof(state_id) != 'undefined' && state_id > 0){
+                var select_city = form.find('select[name*=Campaign][name*=city_id]');
+                var box_select_city = select_city.parent();
 
-            $('textarea[name*=Campaign][name*=neighbors]')
-            .attr("disabled", "disabled")
-            .val('Selecione a cidade, depois informe os bairros.');
+                $('textarea[name*=Campaign][name*=neighbors]')
+                .attr("disabled", "disabled")
+                .val('Selecione a cidade, depois informe os bairros.');
 
-            // select_city.val('');
-
-            select_city.remove();
-            $.get('/cities/options/' + state_id + '/model:Campaign', function(data){
-                box_select_city.html(data);
-                $('select', box_select_city)
-                .chosen()
-                .change(function(){
-                    $('textarea[name*=Campaign][name*=neighbors]')
-                    .removeAttr("disabled")
-                    .val('');
+                select_city.remove();
+                $.get('/cities/options/' + state_id + '/model:Campaign', function(data){
+                    box_select_city.html(data);
+                    $('select', box_select_city)
+                    .chosen()
+                    .change(function(){
+                        $('textarea[name*=Campaign][name*=neighbors]')
+                        .removeAttr("disabled")
+                        .val('');
+                    });
                 });
-            });
-            
+            }
         });
     }
 

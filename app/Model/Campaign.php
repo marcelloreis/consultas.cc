@@ -14,6 +14,15 @@ class Campaign extends AppModel {
 	public $displayField = 'title';
 
 	/**
+	* Virtual fields
+	*
+	* @var string
+	*/
+	public $virtualFields = array(
+    	'elapsed' => "DATEDIFF(NOW(), Campaign.process_date)",
+	);
+
+	/**
 	 * Behaviors
 	 *
 	 * @var string

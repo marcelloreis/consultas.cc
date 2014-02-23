@@ -1,5 +1,4 @@
 <?php 
-echo $this->Html->link('<i class="glyphicon-list"></i>', array('#' => 'modal-mailing'), array('title' => 'Gerar Mailing', 'class' => 'btn', 'rel' => 'tooltip', 'data-original-title' => 'Visualizar Registro', 'data-toggle' => 'modal', 'escape' => false)) . ' ';
 echo $this->Html->link('<i class="icon-edit"></i>', array("controller" => $this->params['controller'], "action" => "edit_checklist", $id), array('title' => 'Editar Registro', 'class' => 'btn', 'rel' => 'tooltip', 'data-original-title' => 'Editar Registro', 'escape' => false)) . ' ';
 
 if(isset($this->params['named']['trashed']) && $this->AppPermissions->check("{$this->name}.trash")){
@@ -7,10 +6,5 @@ if(isset($this->params['named']['trashed']) && $this->AppPermissions->check("{$t
 }else{
 	echo $this->Html->link('<i class="icon-trash"></i>', array("controller" => $this->params['controller'], "action" => "trash", $id), array('title' => 'Lixeira', 'class' => 'btn', 'rel' => 'tooltip', 'data-original-title' => 'Lixeira', 'escape' => false), 'Tem certeza de que deseja mover esse registro para o lixo?') . ' ';
 }
-
-/**
-* Carrega o modal de mailings
-*/
-echo $this->element('Index/Campaigns/modal-mailing');
 ?>
 

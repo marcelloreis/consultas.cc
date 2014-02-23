@@ -33,7 +33,6 @@ unset($columns);
 $columns['id'] = $this->AppForm->input("", array('id' => 'check-all', 'type' => 'checkbox', 'template' => 'form-input-clean'));
 $columns['action'] = 'Ações';
 $columns['title'] = 'Título';
-$columns['status'] = 'Status';
 echo $this->Html->tag('thead', $this->AppGrid->tr($columns));
 
 /**
@@ -48,7 +47,6 @@ if(count($$map)){
         */
         $v[$modelClass]['action'] = $this->element('Index/Campaigns/action-mailing', array('id' => $v[$modelClass]['id']));
         $v[$modelClass]['id'] = $this->AppForm->input("{$modelClass}.id.{$k}", array('type' => 'checkbox', 'template' => 'form-input-clean', 'value' => $v[$modelClass]['id'], 'placeholder' => $v[$modelClass][$fieldText]));
-        $v[$modelClass]['status'] = $this->AppUtils->boolTxt($v[$modelClass]['status'], 'Ativo', 'Inativo');
         $body .= $this->AppGrid->tr($v[$modelClass]);
     }
     echo $this->Html->tag('tbody', $body);

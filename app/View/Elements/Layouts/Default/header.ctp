@@ -66,6 +66,8 @@
 
     </head>
     <?php 
-    $theme = !empty($userLogged['theme'])?$userLogged['theme']:THEME;
+    if(empty($theme)){
+        $theme = !empty($userLogged['theme'])?$userLogged['theme']:THEME;
+    }
     ?>
     <body data-theme="<?php echo $theme?>" class="<?php echo $theme?>">

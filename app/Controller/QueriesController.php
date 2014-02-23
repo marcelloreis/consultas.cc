@@ -61,6 +61,7 @@ class QueriesController extends AppController {
 			TP_SEARCH_EXTRA_NEIGHBORS => 'Extra - Vizinhos',
 			TP_SEARCH_SMS => 'SMS',
 			TP_SEARCH_MAILING => 'Mailing',
+			TP_SEARCH_CHECKLIST => 'Check List',
 		);
 	}
 
