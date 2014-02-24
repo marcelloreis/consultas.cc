@@ -164,7 +164,7 @@ class MobilesImportController extends AppImportsController {
         /**
         * Carrega o layout dos dados que sera importados
         */
-        $this->Imobile->source_year = 2013;
+        $this->Imobile->source_year = 2012;
 
         /**
         * Carrega o lote da importacao
@@ -174,31 +174,31 @@ class MobilesImportController extends AppImportsController {
         	'fields' => array('Ientity.lote'),
         	'order' => array('Ientity.lote' => 'desc'),
         	));
-        $this->Imobile->lote = $map['Ientity']['lote']+1;
+        $this->Imobile->lote = (!empty($map['Ientity']['lote']))?$map['Ientity']['lote']:1;
 
         /**
         * Informa o conteudo do layout ao sistema
         */
         $this->Imobile->delimiter = ';';
         $this->Imobile->map_pos = array(
-			'doc' => 1,
+			'doc' => '',
 			'name' => 2,
 			'mother' => '',
 			'gender' => '',
 			'birthday' => '',
-			'ddd' => '',
-			'tel' => '',
-			'tel_full' => 0,
-			'zipcode' => 9,
+			'ddd' => 0,
+			'tel' => 1,
+			'tel_full' => '',
+			'zipcode' => 8,
 			'cod_end' => '',
-			'complement' => 5,
-			'number' => 4,
+			'complement' => 6,
+			'number' => 5,
 			'year' => '',
-			'type_address' => '',
-			'street' => 3,
-			'neighborhood' => 6,
-			'city' => 7,
-			'state' => 8,
+			'type_address' => 3,
+			'street' => 4,
+			'neighborhood' => 7,
+			'city' => 9,
+			'state' => 10,
     	);
 
 		/**
@@ -255,7 +255,8 @@ class MobilesImportController extends AppImportsController {
 	        */
 	        $reload_transaction = 0;
 
-	        preg_match('/tel([a-z]{2})fixo\.txt$/si', $v, $vet);
+	        // preg_match('/tel([a-z]{2})fixo\.txt$/si', $v, $vet);
+	        preg_match('/([a-z]{2})[0-9]?\.txt$/si', $v, $vet);
 	        $this->uf = preg_replace('/[^a-z]/si', '', $vet[1]);
 
 	        /**
@@ -387,8 +388,8 @@ class MobilesImportController extends AppImportsController {
 						*/
 						$this->AppImport->timing_ini(TUNING_LANDLINE_LOAD);
 						$ddd_telefone = $entity['TEL_FULL'];
-						$ddd = $this->AppImport->getDDD($entity['TEL_FULL']);
-						$telefone = $this->AppImport->getTelefone($entity['TEL_FULL']);
+						$ddd = $this->AppImport->getDDDMobile($entity['TEL_FULL']);
+						$telefone = $this->AppImport->getMobile($entity['TEL_FULL']);
 					
 						/**
 						* Extrai o ano de atualizacao do telefone
@@ -415,7 +416,7 @@ class MobilesImportController extends AppImportsController {
 						* e carrega o id do telefone importado
 						*/
 						$this->AppImport->timing_ini(TUNING_LANDLINE_IMPORT);
-						$this->importLandline($data, $entity['TEL_FULL']);
+						$this->importMobile($data);
 						$this->AppImport->timing_end();
 
 
@@ -526,7 +527,7 @@ class MobilesImportController extends AppImportsController {
 							'Iassociation' => array(
 								'entity_id' => $this->Ientity->id,
 								'mobile_id' => $this->Imobile->id,
-								'mobile_id' => null,
+								'landline_id' => null,
 								'address_id' => $this->Iaddress->id,
 								'year' => $year,
 								'lote' => $this->Imobile->lote,

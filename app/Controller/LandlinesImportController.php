@@ -415,7 +415,7 @@ class LandlinesImportController extends AppImportsController {
 						* e carrega o id do telefone importado
 						*/
 						$this->AppImport->timing_ini(TUNING_LANDLINE_IMPORT);
-						$this->importLandline($data, $entity['TEL_FULL']);
+						$this->importLandline($data);
 						$this->AppImport->timing_end();
 
 

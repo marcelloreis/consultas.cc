@@ -73,11 +73,11 @@
 
       function chartNext() {
         <?php 
-        $timing = array_flip($imports['timing']);
+        $timing_commit = (!empty($imports['timing_commit']['Timing']['time']))?$imports['timing_commit']['Timing']['time']:0;
         ?>
         var data = google.visualization.arrayToDataTable([
           ['Label', 'Value'],
-          ['Commit', <?php echo number_format(($imports['timing_commit']['Timing']['time'] * 1000), 2)?>]
+          ['Commit', <?php echo number_format(($timing_commit * 1000), 2)?>]
         ]);
 
         var options = {

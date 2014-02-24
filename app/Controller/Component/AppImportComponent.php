@@ -1114,6 +1114,14 @@ class AppImportComponent extends Component {
 		*/
 		switch ($qt_numbers) {
 			/**
+			* 11 Zero: Indica que o numero contem 8 digitos e esta acompanhado do DDD e zero na frente 02799999999
+			*/
+			case 11:
+				$ddd = substr($tel, 1, 2);
+				$tel = '9' . substr($tel, 3);
+				break;
+
+			/**
 			* 10 Zero: Indica que o numero contem 8 digitos e esta acompanhado do DDD
 			*/
 			case 10:
