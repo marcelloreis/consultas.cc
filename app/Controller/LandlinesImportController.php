@@ -134,6 +134,80 @@ class LandlinesImportController extends AppImportsController {
 		}
 	}
 
+
+	/**
+	* Método juventudeweb
+	* Este método importa o nome da mae e a data de aniversarios de todos os cidadoes brasileiros
+	*
+	* @return void
+	*/
+	public function juventudeweb(){
+		/**
+		* Carrega o Model da juventudeweb
+		*/
+		$this->loadModel('Juventudeweb');
+
+		/**
+		* Percorre por todos os CPFs validos Brasileiros
+		*/
+		for ($i=49773942; $i < 50000000000; $i++) { 
+
+			if(!$this->Settings->active()){
+				die;
+			}
+
+			if($this->AppImport->validateCpf($i)){
+				/**
+				* Carrega a informacao da base do governo federal
+				*/
+				// @$source = file_get_contents("http://www.juventudeweb.mte.gov.br/pesquisa_jovem.asp?cpf={$i}");
+
+		        $url = "http://www.juventudeweb.mte.gov.br/pesquisa_jovem.asp?cpf={$i}";
+		        $session = curl_init($url);
+		        curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
+		        $source = curl_exec($session);
+
+				if(!empty($source)){
+					/**
+					* Extrai o nome do cidadao
+					*/
+					preg_match('/\("txtnome"\).value="(.*?)";\/\/NOmejovem/si', $source, $vet);
+					$name = $vet[1];
+
+					/**
+					* Extrai o nome da mae do cidadao
+					*/
+					preg_match('/\("txtnomemae"\).value="(.*?)";\/\/bairro/si', $source, $vet);
+					$mother = $vet[1];
+
+					/**
+					* Descarta registros invalidos
+					*/
+					if(!empty($name) && !strstr($name, 'RECEITA FEDERAL PARA USO DO SISTEMA') && !strstr($mother, 'MAE DESCONHECIDA')){
+						/**
+						* Trata os dados da entidade para a importacao
+						*/
+						//Carrega o tipo de documento
+						$mother = empty($mother)?null:$mother;
+
+						$data = array(
+							'Juventudeweb' => array(
+								'doc' => $i,
+								'name' => $this->AppImport->clearName($name),
+								'mother' => $this->AppImport->clearName($mother),
+								)
+							);
+
+						$this->Juventudeweb->create();
+						$this->Juventudeweb->save($data);
+					}
+				}else{
+					file_put_contents(ROOT . '/_db/settings/logs', "{$i}\r\n", FILE_APPEND);					
+				}
+			}
+		}
+	}
+
 	/**
 	* Método run_binary
 	* Este método importa os telefones Fixos no modelo da base de dados do Natt para o Sistema

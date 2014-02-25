@@ -105,11 +105,11 @@ class User extends AppModel {
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
-/**
- * belongsTo associations
- *
- * @var array
- */
+	/**
+	* belongsTo associations
+	*
+	* @var array
+	*/
 	public $belongsTo = array(
 		'Group' => array(
 			'className' => 'Group',
@@ -127,11 +127,11 @@ class User extends AppModel {
 		)
 	);
 
-/**
- * hasMany associations
- *
- * @var array
- */
+	/**
+	* hasMany associations
+	*
+	* @var array
+	*/
 	public $hasMany = array(
 		'Social' => array(
 			'className' => 'Social',

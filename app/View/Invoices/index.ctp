@@ -15,20 +15,12 @@ echo $this->AppGrid->create($modelClass, array('id' => $modelClass, 'tableClass'
 unset($columns);
 $columns['id'] = $this->AppForm->input("", array('id' => 'check-all', 'type' => 'checkbox', 'template' => 'form-input-clean'));
 $columns['action'] = 'Ações';
-$columns['contact_name'] = 'Contrato';
-$columns['fancy_name'] = 'Nome';
-$columns['tel1'] = 'Telefone';
-$columns['state_id'] = 'UF';
-
-switch ($this->action) {
-    case 'index':
-        unset($columns['prospect_pkg_id']);
-        break;
-    case 'prospects':
-        $columns['prospect_pkg_id'] = 'Pacote';
-        break;
-}
-
+$columns['package_id'] = 'Pacote';
+$columns['client_id'] = 'Cliente';
+$columns['maturity'] = 'Vencimento';
+$columns['is_paid'] = 'Pago';
+$columns['is_signature'] = 'Assinatura';
+$columns['value'] = 'Valor';
 echo $this->Html->tag('thead', $this->AppGrid->tr($columns));
 
 /**
@@ -41,21 +33,12 @@ if(count($$map)){
         /**
         * Seta as larguras das colunas
         */
-        switch ($this->action) {
-            case 'index':
-                $v[$modelClass]['action_width'] = '140px';
-                break;
-            case 'prospects':
-                if(!empty($packages[$v[$modelClass]['prospect_pkg_id']])){
-                    $v[$modelClass]['prospect_pkg_id'] = $packages[$v[$modelClass]['prospect_pkg_id']];
-                }
-                break;
-        }
-
-        $v[$modelClass]['action'] = $this->element('Index/action', array('id' => $v[$modelClass]['id']));
+        $v[$modelClass]['action'] = $this->element('Index/Invoices/action', array('id' => $v[$modelClass]['id']));
         $v[$modelClass]['id'] = $this->AppForm->input("{$modelClass}.id.{$k}", array('type' => 'checkbox', 'template' => 'form-input-clean', 'value' => $v[$modelClass]['id']));
-        $v[$modelClass]['state_id'] = $v['State']['uf'];
-        $v[$modelClass]['tel1'] = $this->AppUtils->tel($v[$modelClass]['tel1']);
+        $v[$modelClass]['package_id'] = $v['Package']['name'];
+        $v[$modelClass]['client_id'] = $v['Client']['fancy_name'];
+        $v[$modelClass]['is_paid'] = $this->AppUtils->boolTxt($v[$modelClass]['is_paid'], 'Sim', 'Não');
+        $v[$modelClass]['is_signature'] = $this->AppUtils->boolTxt($v[$modelClass]['is_signature'], 'Sim', 'Não');
         $body .= $this->AppGrid->tr($v[$modelClass]);
     }
     echo $this->Html->tag('tbody', $body);

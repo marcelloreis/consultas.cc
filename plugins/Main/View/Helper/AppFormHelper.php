@@ -318,11 +318,11 @@ class AppFormHelper extends AppHelper {
         $options = null;
         //Chaves SIM|NAO
         if (preg_match('/in_out.*|has_.*|is_.*|check.*|published.*|trashed.*|deleted.*/si', $fieldName)){
-            $options = array('1' => 'Sim', '0' => 'Não');
+            $options = array(true => 'Sim', false => 'Não');
         }
         //Status
         if (preg_match('/status.*|active.*/si', $fieldName)){
-            $options = array('1' => 'Ativo', '0' => 'Inativo');
+            $options = array(true => 'Ativo', false => 'Inativo');
         }
         //Sexo
         if (preg_match('/gender|sexo.*|sex.*/si', $fieldName)){

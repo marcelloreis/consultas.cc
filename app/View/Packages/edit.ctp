@@ -16,14 +16,13 @@ echo $this->Html->script(array('plugins/icheck/jquery.icheck.min'), array('defer
         <?php echo $this->AppForm->create($modelClass, array('defaultSize' => 'input-xlarge', 'classForm' => 'form-horizontal form-bordered form-striped'))?>
             <?php echo $this->Form->input('id')?>
             <?php echo $this->AppForm->input('name')?>
-            <?php echo $this->AppForm->input('price')?>
-            <?php echo $this->AppForm->input('color')?>
-            <?php echo $this->AppForm->input('validity_days')?>
+            <?php echo $this->AppForm->input('signature', array('label' => 'Valor da assinatura', 'class' => 'msk-money'))?>
+            <?php echo $this->AppForm->input('price', array('label' => 'Valor mensal', 'class' => 'msk-money'))?>
+            <?php echo $this->AppForm->input('franchise', array('label' => 'Franquia'))?>
             <?php echo $this->AppForm->input('btn_payment')?>
-            <?php echo $this->AppForm->input('popular', array('class' => 'icheck-me', 'data-skin' => 'square', 'data-color' => 'blue'))?>
 
             <div class="control-group">
-                <label class="control-label" style="padding:10px 0 10px 30px; width:auto;"><i class="icon-money"></i> Preços</label>
+                <label class="control-label" style="padding:10px 0 10px 30px; width:auto;"><i class="icon-money"></i> Preços Excedentes</label>
             </div>
 
             <?php 

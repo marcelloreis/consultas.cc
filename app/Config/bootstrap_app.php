@@ -5,10 +5,11 @@
 define('TITLE_HEADER', 'Check List');
 define('TITLE_APP', 'Check List');
 define('VERSION_APP', '1.0');
-define('COPYRIGHT', 'NASZA - Produtora Full Service');
+define('COPYRIGHT', 'CheckList - Consultas Cadastrais');
 define('COPYRIGHT_LINK', 'http://www.checklist.inf.br/');
 define('PROJECT_LINK', 'http://loc-consultas.cc/');
 // define('PROJECT_LINK', 'http://www.checklist.inf.br/');
+define('SHORT_LINK', 'checklist.inf.br');
 define('EMAIL_NO_REPLAY', 'noreply@checklist.inf.br');
 
 define('COMPANY_CORPORATE_NAME', 'Check List - Tecnologia em banco de dados');
@@ -55,6 +56,12 @@ define('CAMPAIGN_DOWNLOADED_LINK_BROKEN', 5);
 define('CAMPAIGN_DOWNLOADED_EXPIRED', 6);
 
 define('CAMPAIGN_VALIDITY', 7);
+
+define('CLIENT_STATUS_OK', 1);
+define('CLIENT_STATUS_BLOCK', 2);
+define('CLIENT_STATUS_NO_PAID', 3);
+
+define('MATURITY_DAY_DEFAULT', 5);
 
 define('TP_TEL_LANDLINE', 1);
 define('TP_TEL_MOBILE', 2);

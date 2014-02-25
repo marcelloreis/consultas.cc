@@ -63,7 +63,7 @@ echo $this->Html->script(array('plugins/maskedinput/jquery.maskMoney.min'), arra
                                 <div class="controls">
                                     <?php foreach($filters as $k => $v):?>
                                         <div class="span3">
-                                            <?php $selected = !empty($this->params['named'][$k])?$this->params['named'][$k]:'';?>
+                                            <?php $selected = ($this->params['named'][$k] != '')?$this->params['named'][$k]:'';?>
                                             <?php echo $this->AppForm->input($k, array('empty' => 'Todos os ' . __(ucfirst(str_replace('_', ' ', $k))) . '(s)', 'options' => $v, 'selected' => $selected, 'template' => 'form-input-clean', 'type' => 'select', 'class' => 'chosen-select filter-index'))?>
                                         </div>
                                     <?php endforeach?>

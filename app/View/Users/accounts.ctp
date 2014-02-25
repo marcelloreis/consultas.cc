@@ -21,8 +21,10 @@ echo $this->AppGrid->create($modelClass, array('id' => $modelClass, 'tableClass'
 */
 $columns['id'] = $this->AppForm->input("", array('id' => 'check-all', 'type' => 'checkbox', 'template' => 'form-input-clean'));
 $columns['action'] = 'Ações';
+$columns['client_id'] = 'Cliente';
 
-unset($columns['client_id']);
+unset($columns['expire']);
+unset($columns['master_account']);
 unset($columns['password']);
 unset($columns['google_token']);
 unset($columns['google_calendar_key']);

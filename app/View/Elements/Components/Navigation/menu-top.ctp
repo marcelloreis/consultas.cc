@@ -97,6 +97,10 @@ $menu = array(
             * Administrativo/Boleto
             */
             array('label' => 'Consultas', 'controller' => 'queries'),
+            /**
+            * Administrativo/Boleto
+            */
+            array('label' => 'Boletos', 'controller' => 'invoices'),
             )
         ),
     /**

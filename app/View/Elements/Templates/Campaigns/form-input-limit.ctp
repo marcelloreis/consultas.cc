@@ -17,8 +17,12 @@ $price = $this->Session->read("Billing.prices_val.{$package_id}." . PRODUCT_MAIL
 						<h4>Limite de Registros</h4>
 						<p>
 							Seu saldo atual é de <strong>R$<?php echo $this->AppUtils->num2br($balance)?></strong><br>
-							Cada registro encontrado nesta campanha custará <strong><?php echo $price?></strong><br>
-							A quantidade máxima que essa campanha poderá trazer são <strong><?php echo $this->AppUtils->num2qt(floor($balance/$this->AppUtils->num2db($price)))?></strong> registros
+							<?php if($balance > 0):?>
+								A quantidade máxima que essa campanha poderá trazer são <strong><?php echo $this->AppUtils->num2qt($balance)?></strong> registros <br>
+							<?php endif?>
+							<?php if($balance <= 0 && $limit_exceeded):?>
+								Cada registro encontrado nesta campanha custará <strong>R$<?php echo $price?></strong><br>
+							<?php endif?>
 						</p>
 					</div>
 				</div>

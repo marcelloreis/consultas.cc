@@ -100,7 +100,7 @@ class PackagesController extends AppController {
             $products = $map;
 
             $this->set(compact('products'));			
-		}		
+		}	
 	}
 
 	public function pricing(){

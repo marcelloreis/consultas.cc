@@ -34,7 +34,7 @@ $fator_vencimento = fator_vencimento($dadosboleto["data_vencimento"]);
 
 //valor tem 10 digitos, sem virgula
 $valor = formata_numero($dadosboleto["valor_boleto"],10,0,"valor");
-//agencia � sempre 4 digitos
+//agencia é sempre 4 digitos
 $agencia = formata_numero($dadosboleto["agencia"],4,0);
 //conta � sempre 8 digitos
 $conta = formata_numero($dadosboleto["conta"],8,0);

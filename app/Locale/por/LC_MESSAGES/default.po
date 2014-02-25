@@ -105,6 +105,9 @@ msgstr "Índice"
 msgid "Infinite"
 msgstr "Infinito"
 
+msgid "Invoices"
+msgstr "Boletos"
+
 msgid "Landline"
 msgstr "Tel. Fixo"
 
@@ -232,7 +235,7 @@ msgid "User id"
 msgstr "Usuário"
 
 msgid "Users"
-msgstr "Usuário"
+msgstr "Usuários"
 
 msgid "Validity"
 msgstr "Validade"

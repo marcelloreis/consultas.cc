@@ -65,7 +65,6 @@ class BillingsController extends AppController {
 	* @return void
 	*/
 	public function edit($id=null){
-
 		//@override
 		parent::edit($id);
 

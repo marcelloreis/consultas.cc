@@ -1,17 +1,26 @@
 <?php
 App::uses('AppModel', 'Model');
 /**
- * Billing Model
+ * Invoice Model
  *
  * @property User $User
  */
-class Billing extends AppModel {
+class Invoice extends AppModel {
 	/**
 	* Display field
 	*
 	* @var string
 	*/
-	public $displayField = 'franchise';
+	public $displayField = 'id';
+
+	/**
+	* Virtual fields
+	*
+	* @var string
+	*/
+	public $virtualFields = array(
+    	'days_expired' => "DATEDIFF(now(), Invoice.maturity)",
+	);
 
 	/**
 	* belongsTo associations
