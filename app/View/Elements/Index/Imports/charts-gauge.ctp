@@ -22,8 +22,9 @@
           width: '100%', height: '100%',
           redFrom: 0, redTo: 800,
           yellowFrom: 800, yellowTo: 1100,
+          greenFrom: 8000, greenTo: 11000,
           minorTicks: 5,
-          max: 3000
+          max: 11000
         };
 
         var chart = new google.visualization.Gauge(document.getElementById('chart_minuts'));
@@ -43,7 +44,7 @@
           redFrom: 0, redTo: (800*60),
           yellowFrom: (800*60), yellowTo: (1100*60),
           minorTicks: 5,
-          max: (3000*60)
+          max: (11000*60)
         };
 
         var chart = new google.visualization.Gauge(document.getElementById('chart_hour'));
@@ -63,7 +64,7 @@
           redFrom: 0, redTo: (800*1440),
           yellowFrom: (800*1440), yellowTo: (1100*1440),
           minorTicks: 5,
-          max: (3000*1440)
+          max: (11000*1440)
         };
 
         var chart = new google.visualization.Gauge(document.getElementById('chart_day'));
@@ -71,9 +72,12 @@
       }
 
       function chartNext() {
+        <?php 
+        $timing_commit = (!empty($imports['timing_commit']['Timing']['time']))?$imports['timing_commit']['Timing']['time']:0;
+        ?>
         var data = google.visualization.arrayToDataTable([
           ['Label', 'Value'],
-          ['Next', <?php echo number_format($imports['timing_next']['Timing']['time'], 2)?>]
+          ['Commit', <?php echo number_format(($timing_commit * 1000), 2)?>]
         ]);
 
         var options = {

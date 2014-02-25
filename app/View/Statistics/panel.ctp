@@ -17,7 +17,6 @@ echo $this->Html->script('https://www.google.com/jsapi');
 echo $this->element('Index/Imports/charts-gauge');
 // echo $this->element('Index/Imports/real-time');
 ?>
-
 <?php if(!empty($uf)):?>
 	<div class="row-fluid">
 		<div class="span12">
@@ -85,17 +84,17 @@ echo $this->element('Index/Imports/charts-gauge');
 <?php endif?>
 
 <?php if(isset($imports['records_processed'])):?>
-	<div class="row-fluid">
+	<div id="dados-importados" class="row-fluid">
 		<div class="span12">
 			<div class="box box-color box-bordered">
 				<div class="box-title">
 					<h3>
 						<i class="icon-th-large"></i>
-						<?php echo __('Imports Data')?>
+						Dados Importados 
 					</h3>
+						<div class="pull-right"><code>Previsão: <?php echo date('l H:i', mktime((date('H')+$imports['remaining_times']['hour']), (date('i')+$imports['remaining_times']['min']), (date('s')+$imports['remaining_times']['sec']), date('m'), (date('d')+$imports['remaining_times']['day']), date('Y')))?></code></div>
 				</div>
 				<div class="box-content">
-
 					<div class="row-fluid">
 						<div class="span3">
 							<ul class="pagestats style-3">
@@ -104,7 +103,7 @@ echo $this->element('Index/Imports/charts-gauge');
 										<div data-trackcolor="#fae2e2" data-color="#f96d6d" data-percent="<?php echo $imports['progress']?>" class="chart easyPieChart progress" style="width: 80px; height: 80px; line-height: 80px;"><?php echo $imports['progress']?>%<canvas height="80" width="80"></canvas></div>
 									</div>
 									<div class="bottom">
-										<span class="name"><?php echo __('Imports Progress')?></span>
+										<span class="name">Progresso da Importação</span>
 									</div>
 								</li>
 							</ul>
@@ -116,35 +115,33 @@ echo $this->element('Index/Imports/charts-gauge');
 									<i style="margin-top:10px;" class="glyphicon-inbox_out"></i>
 									<div class="details">
 										<span class="big"><?php echo $this->AppUtils->num2qt($imports['records_to_process'])?></span>
-										<span class="records_to_process"><?php echo __('Records to Process')?></span>
+										<span class="records_to_process">Registros Encontrados</span>
 									</div>
 								</li>
 								<li class="green">
 									<i style="margin-top:10px;" class="glyphicon-inbox_in"></i>
 									<div class="details">
 										<span class="big records_processed"><?php echo $this->AppUtils->num2qt($imports['records_processed'])?></span>
-										<span><?php echo __('Records Processed')?></span>
+										<span>Registros Processados</span>
 									</div>
 								</li>
 								<li class="lightgrey">
 									<i style="margin-top:10px;" class="glyphicon-stopwatch"></i>
 									<div class="details">
 										<span class="big elapsed"><?php echo $imports['elapsed']?></span>
-										<span><?php echo __('Elapsed')?></span>
+										<span>Percorrido</span>
 									</div>
 								</li>
 								<li class="green">
 									<i style="margin-top:10px;" class="glyphicon-stopwatch"></i>
 									<div class="details">
 										<span class="big remaining"><?php echo $imports['remaining']?></span>
-										<span><?php echo __('Remaining')?></span>
+										<span>Restante</span>
 									</div>
 								</li>
 							</ul>
 						</div>
 					</div>
-
-
 				</div>
 			</div>					
 		</div>
@@ -156,7 +153,7 @@ echo $this->element('Index/Imports/charts-gauge');
 				<div class="box-title">
 					<h3>
 						<i class="glyphicon-stopwatch"></i>
-						<?php echo __('Process per Minuts')?>
+						Processos por minuto
 					</h3>
 				</div>
 				<div class="box-content">
@@ -174,7 +171,7 @@ echo $this->element('Index/Imports/charts-gauge');
 				<div class="box-title">
 					<h3>
 						<i class="glyphicon-stopwatch"></i>
-						<?php echo __('Process per Hour')?>
+						Processos por hora
 					</h3>
 				</div>
 				<div class="box-content">
@@ -192,7 +189,7 @@ echo $this->element('Index/Imports/charts-gauge');
 				<div class="box-title">
 					<h3>
 						<i class="glyphicon-stopwatch"></i>
-						<?php echo __('Process per Day')?>
+						Processos por dia
 					</h3>
 				</div>
 				<div class="box-content">
@@ -210,7 +207,7 @@ echo $this->element('Index/Imports/charts-gauge');
 				<div class="box-title">
 					<h3>
 						<i class="glyphicon-stopwatch"></i>
-						<?php echo __('Timing')?>
+						Tempo dos procesos
 					</h3>
 				</div>
 				<div class="box-content">

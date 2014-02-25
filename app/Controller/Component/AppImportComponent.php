@@ -24,7 +24,6 @@ class AppImportComponent extends Component {
 	private $time_end;
 	private $time_id;
 	private $time_desc;
-	private $compani_names;
 	public $sizeReload;
 	public $counter;
 
@@ -219,39 +218,72 @@ class AppImportComponent extends Component {
 			}
 
 			$compani_names = array(
+				'advogado',
 				'advogados',
 				'agropecuaria',
 				'artigos',
 				'artigos',
+				'assembleia',
 				'associacao',
 				'associados',
 				'auto',
+				'banco',
 				'bcodo',
 				'brasil',
+				'casa',
 				'centro',
+				'centro',
+				'cia',
 				'clinica',
 				'comercial',
 				'comercio',
+				'companhia',
 				'comunicacao',
 				'condominio',
 				'conselho',
 				'construtora',
-				'copiadora',
 				'coop',
+				'copiadora',
+				'departamento',
 				'distribuidora',
 				'drogaria',
 				'edificacoes',
+				'empresa',
+				'engenharia',
 				'fabrica',
 				'farmacia',
+				'federacao',
+				'fundacao',
+				'hospital',
 				'igreja',
 				'industria',
+				'inspetoria',
+				'instituto',
 				'irmaos',
+				'justica',
 				'laboratorio',
+				'loja',
+				'lojas',
 				'mecanica',
+				'ministerio',
 				'oficina',
+				'organizacao',
+				'organizacoes',
 				'otica',
 				'padaria',
+				'policia',
+				'poder',
+				'judiciario',
+				'prefeitura',
+				'restaurante',
+				'secretaria',
+				'servico',
 				'sind',
+				'supermercados',
+				'tecnologia',
+				'tribunal',
+				'universidade',
+				'viacao',
 				'vidracaria',
 			);
 			$first_name = $this->removeAcentos(strtolower(substr($name, 0, strpos("{$name} ", ' '))));
@@ -1081,6 +1113,14 @@ class AppImportComponent extends Component {
 		* Trata o numero de acordo com os zeros iniciais
 		*/
 		switch ($qt_numbers) {
+			/**
+			* 11 Zero: Indica que o numero contem 8 digitos e esta acompanhado do DDD e zero na frente 02799999999
+			*/
+			case 11:
+				$ddd = substr($tel, 1, 2);
+				$tel = '9' . substr($tel, 3);
+				break;
+
 			/**
 			* 10 Zero: Indica que o numero contem 8 digitos e esta acompanhado do DDD
 			*/

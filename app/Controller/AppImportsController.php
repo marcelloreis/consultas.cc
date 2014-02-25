@@ -83,11 +83,14 @@ class AppImportsController extends AppController {
 			/**
 			* Verifica se a entidade que sera importada já existe na base de dados
 			*/
-			$hasEntity = $this->Ientity->find('first', array(
-				'conditions' => array(
-					'doc' => $entity['Ientity']['doc'],
-					)
-				));				
+			$hasEntity = array();
+			if(!empty($entity['Ientity']['doc'])){
+				$hasEntity = $this->Ientity->find('first', array(
+					'conditions' => array(
+						'doc' => $entity['Ientity']['doc'],
+						)
+					));				
+			}
 
 			if(count($hasEntity)){
 				$this->Ientity->id = $hasEntity['Ientity']['id'];
