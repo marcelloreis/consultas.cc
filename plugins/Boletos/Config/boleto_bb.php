@@ -15,11 +15,11 @@ $config['Boleto']["formatacao_convenio"] = "7"; // REGRA: 8 p/ Convênio c/ 8 d�
 $config['Boleto']["formatacao_nosso_numero"] = "2"; // REGRA: Usado apenas p/ Convênio c/ 6 dígitos: informe 1 se for NossoN�mero de at� 5 dígitos ou 2 para opção de até 17 dígitos
 
 /* Seus Dados */
-$config['Boleto']["identificacao"] = "CakePHP Boletos";
-$config['Boleto']["cpf_cnpj"] = "00.000.000/0001-00";
-$config['Boleto']["endereco"] = "Rua de teste, 88";
-$config['Boleto']["cidade_uf"] = "São Paulo / SP";
-$config['Boleto']["cedente"] = "Minha Empresa Ltda.";
+$config['Boleto']["identificacao"] = TITLE_APP;
+$config['Boleto']["cpf_cnpj"] = COMPANY_CNPJ;
+$config['Boleto']["endereco"] = COMPANY_ADDRESS;
+$config['Boleto']["cidade_uf"] = "";
+$config['Boleto']["cedente"] = TITLE_APP;
 
 /* Vence em quantos dias? */
 $config['Boleto']['dias_vencimento'] = 5;
@@ -29,7 +29,7 @@ $config['Boleto']['taxa'] = 0;
 
 /* Informações para o cliente*/
 $config['Boleto']["demonstrativo1"] = "Pagamento dos produtos comprados no<br />";
-$config['Boleto']["demonstrativo2"] = "CakePHP Boletos.<br />";
+$config['Boleto']["demonstrativo2"] = TITLE_APP . "<br />";
 $config['Boleto']["demonstrativo3"] = "";
 
 /* Instruções ao caixa*/

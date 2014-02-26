@@ -24,11 +24,12 @@ class AppBillingsController extends AppController {
 	protected $user_id;
 	protected $product_id;
 	protected $package_id;
-	protected $contract_id;
 	protected $billing_id;
 	protected $cache_id;
+	protected $hasSignature;
+	protected $limit_exceeded;
+	protected $client_status;
 	protected $query;
-	protected $validity_orig;
 	protected $balance;
 	protected $price_id;
 	protected $price;
@@ -47,22 +48,35 @@ class AppBillingsController extends AppController {
 		//@override
 		parent::beforeFilter();
 
-		/**
-		* Carrega o saldo atual do cliente
-		*/
-		$this->loadModel('Billing');
-		$this->balance = $this->Billing->balance($this->Session->read('Auth.User.Client.id'));
-		$this->set('balance', $this->balance);
-
         /**
         * Carrega os dados da ultima bilhetagem do cliente
         */
         $this->user_id = $this->Session->read('Auth.User.id');
         $this->billing_id = $this->Session->read('Client.billing_id');
+        $this->hasSignature = $this->Session->read('Client.signature');
         $this->package_id = $this->Session->read('Client.package_id');
+        $this->client_status = $this->Session->read('Client.status');
         $this->query = $this->here;
-        $this->validity_orig = $this->Session->read('Client.validity_orig');
-		$this->set('validity_orig', $this->validity_orig);
+        
+        $this->limit_exceeded = $this->Session->read('Client.limit_exceeded');
+		$this->set('limit_exceeded', $this->limit_exceeded);
+
+		/**
+		* Carrega o saldo atual do cliente
+		*/
+		$this->loadModel('Billing');
+		$map = $this->Billing->findById($this->billing_id);
+		$this->balance = ($map['Billing']['franchise'] - $map['Billing']['qt_queries']);
+		$this->balance = ($this->balance < 0)?0:$this->balance;
+		$this->set('balance', $this->balance);
+
+		/**
+		* Carrega o valor das consultas excedidas
+		*/
+		if($this->balance <= 0){	
+			$this->value_exceeded = $map['Billing']['value_exceeded'];
+			$this->set('value_exceeded', $this->value_exceeded);
+		}
 
 		/**
 		* Carrega o preço do produto consumido
@@ -78,7 +92,7 @@ class AppBillingsController extends AppController {
 		* Verificar se o usuario logado tem autorizacao para efetuar as consultas
 		*/
 		if($this->security()){
-			$this->redirect(array('controller' => 'packages', 'action' => 'pricing'));
+			throw new NotFoundException();
 		}
 	}
 
@@ -132,37 +146,42 @@ class AppBillingsController extends AppController {
 		* verificar se o usuario logado tem autorizacao para efetuar as consultas
 		*/
 		if(!$this->isUnlimited()){
+
 			/**
-			* Verifica se o usuario ja efetuou a compra dos creditos
+			* Verifica se o cliente já efetuou o pagamento da assinatura
 			*/
-			if(is_null($this->billing_id)){
-				$this->Session->setFlash("{$user_name}, " . 'ainda não constam créditos em sua conta para realizar este tipo de consulta.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+			if(!$this->hasSignature){
+				$this->Session->setFlash("{$user_name}, " . 'ainda não identificamos o pagamento da assinatura do seu contrato.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+				return true;
+			}
+
+			/**
+			* Verifica se o cliente esta com o pagamento em dia e se ele nao esta bloqueado por qq outro motivo
+			*/
+			switch ($this->client_status) {
+				case CLIENT_STATUS_BLOCK:
+					$this->Session->setFlash("{$user_name}, " . 'seu contrato esta bloqueado temporáriamente, entre em contato com a nossa equipe de apoio.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+					return true;
+					break;
+				case CLIENT_STATUS_NO_PAID:
+					$this->Session->setFlash("{$user_name}, " . 'ainda não identificamos o pagamento da sua última fatura.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+					return true;
+					break;
+			}
+
+			/**
+			* Verifica se o usuario tem saldo para efetuar a pesquisa
+			*/
+			if($this->balance <= 0 && !$this->limit_exceeded){
+				$this->Session->setFlash("{$user_name}, " . 'seu saldo é insuficiênte para realizar consultas, Ligue para nosso pessoal de apoio.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
 				$return = true;
 			}
 
 			/**
 			* Verifica se o usuario tem saldo para efetuar a pesquisa
 			*/
-			if($this->AppUtils->num2db($this->price) > $this->balance){
-				$this->Session->setFlash("{$user_name}, " . 'seu saldo é insuficiênte para realizar consultas.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
-				$return = true;
-			}
-
-			/**
-			* Verifica se o saldo do usuario esta dentro da validade
-			*/
-			if($this->validity_orig < date('Y-m-d')){
-				$this->Session->setFlash("{$user_name}, " . 'seu saldo expirou.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
-				$return = true;
-			}
-
-			/**
-			* Verifica se o cliente ja esta ativo (se o contrato ja foi gerado)
-			*/
-			$contract_id = !empty($this->contract_id)?$this->contract_id:$this->Session->read('Client.contract_id');
-			if(empty($contract_id)){
-				$this->Session->setFlash("{$user_name}, " . 'Seu contrato ainda não foi gerado, procure o setor administrativo e regularize sua situação.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
-				$return = true;
+			if($this->balance <= 0 && $this->limit_exceeded){
+				$this->Session->setFlash('ATENÇÃO!!! <br>O saldo do seu plano já se esgotou, neste momento você esta pagando o valor excedente.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
 			}
 		}
 
@@ -196,9 +215,10 @@ class AppBillingsController extends AppController {
 		/**
 		* Desabilita a bilhetagem quando a consulta realizada nao trouxer registros
 		*/
-		if(empty($this->entity['Entity'])){
+		if(empty($this->entity)){
 			$enabled = false;
 		}
+
 
 		/**
 		* Desabilita a bilhetagem quando o usuario tiver acesso a consultas ilimitadas
@@ -245,6 +265,7 @@ class AppBillingsController extends AppController {
 			$data = array(
 				'Query' => array(
 					'user_id' => $this->user_id,
+					'product_id' => $this->product_id,
 					'billing_id' => $this->billing_id,
 					'price_id' => $this->price_id,
 					'tp_search' => $this->tp_search,
@@ -259,21 +280,42 @@ class AppBillingsController extends AppController {
 			$this->Query->save($data);
 
 			/**
-			* Debita a consulta no saldo do cliente
+			* Debita a consulta no saldo do cliente caso ele ainda nao tenha ultrapassado o limite do seu pacote
 			*/
-			$this->Billing->updateAll(
-				array(
-					"Billing.consumed" => "(ifnull(Billing.consumed, 0) + " . $this->AppUtils->num2db($this->price) . ")",
-					"Billing.qt_queries" => "(ifnull(Billing.qt_queries, 0) + 1)",
-					"Billing.modified" => "NOW()",
-					),
-				array('Billing.id' => $this->billing_id)
-				);
+			if($this->balance){
+				$this->Billing->updateAll(
+					array(
+						"Billing.qt_queries" => "(ifnull(Billing.qt_queries, 0) + 1)",
+						"Billing.modified" => "NOW()",
+						),
+					array('Billing.id' => $this->billing_id)
+					);
+
+				/**
+				* Recarrega o saldo do cliente subtraindo o saldo atual com o valor da consulta realizada
+				*/
+				$this->balance = ($this->balance < 1)?0:--$this->balance;
+			}
 
 			/**
-			* Recarrega o saldo do cliente subtraindo o saldo atual com o valor da consulta realizada
+			* Debita a consulta com o valor de consulta exedente
 			*/
-			$this->balance = ($this->balance - $this->AppUtils->num2db($this->price));
+			if($this->balance <= 0 && $this->limit_exceeded){
+				$this->Billing->updateAll(
+					array(
+						"Billing.value_exceeded" => "(ifnull(Billing.value_exceeded, 0) + " . $this->AppUtils->num2db($this->price) . ")",
+						"Billing.qt_exceeded" => "(ifnull(Billing.qt_exceeded, 0) + 1)",
+						"Billing.modified" => "NOW()",
+						),
+					array('Billing.id' => $this->billing_id)
+					);
+
+				$map = $this->Billing->findById($this->billing_id);
+				$this->value_exceeded = $map['Billing']['value_exceeded'];
+				
+				$this->set('value_exceeded', $this->value_exceeded);
+			}
+
 			$this->set('balance', $this->balance);
 		}
 	}

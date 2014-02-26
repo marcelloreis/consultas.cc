@@ -181,6 +181,69 @@ class UsersController extends AppController {
     }
 
     /**
+    * Método forgot_pass
+    *
+    * Este método inicia o processo de recueracao da senha do usuario
+    */
+    public function forgot_pass(){
+        $this->layout = 'login';
+        $this->Session->setFlash("Por favor, preencha o campo abaixo e enviaremos um link para seu e-mail para informar uma nova senha:", FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_LOGIN);
+
+        /**
+         * Verifica se o formulário foi submetido por post
+         */
+        if ($this->request->is('post') || $this->request->is('put')) {
+            /**
+            * Verifica se o campo de email foi informado
+            */
+            if(!empty($this->request->data['User']['email'])){
+                $this->User->recursive = -1;
+
+                /**
+                * Verifica se o email informado existe na base de dados
+                */
+                $hasEmail = $this->User->find('first', array(
+                    'conditions' => array(
+                        'User.email' => $this->request->data['User']['email']
+                        )
+                    ));
+
+                if(empty($hasEmail['User'])){
+                    $this->Session->setFlash("O e-mail informado não existe em nossa base de dados, informe o seu e-mail cadastrado por favor.", FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_LOGIN);
+                }else{
+                    $hasEmail['User']['change_pass_token'] = md5(uniqid());
+                    /**
+                    * Registra o token da requisicao
+                    */
+                    $this->User->updateAll(
+                        array(
+                            'User.change_pass_token' => "'{$hasEmail['User']['change_pass_token']}'",
+                            'User.change_pass_expire' => "'" . date('Y-m-d H:i:s', mktime(date('H'), (date('i') + 10), date('s'), date('m'), date('d'), date('Y'))) . "'",
+                            ),
+                        array(
+                            'User.id' => $hasEmail['User']['id']
+                            )
+                        );
+
+                        $email = new CakeEmail('apps');
+                        $email->template('forgot-pass');
+                        $email->emailFormat('html');
+                        $email->viewVars(array('user' => $hasEmail));
+
+                        $email->sender(array(EMAIL_NO_REPLAY => TITLE_APP));
+                        $email->from(array(EMAIL_NO_REPLAY => TITLE_APP));
+                        $email->to($hasEmail['User']['email']);
+                        $email->subject("Lembrete da senha nova de {$hasEmail['User']['given_name']}");
+                        $email->send();     
+
+                    
+                    $this->Session->setFlash("Em instantes, você receberá um e-mail com instruções sobre como recuperar sua senha.", FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_LOGIN);
+                }
+            }
+        }        
+    }
+
+    /**
     * Método loadClient
     *
     * Este método carrega todos os dados do cliente logado
@@ -203,8 +266,8 @@ class UsersController extends AppController {
             /**
             * Carrega os dados do cliente logado
             */
-            $client = $packages = $this->User->Client->find('first', array(
-                'recursive' => -1,
+            $client = $this->User->Client->find('first', array(
+                // 'recursive' => -1,
                 'conditions' => array(
                     'Client.id' => $client_id
                     )
@@ -220,27 +283,72 @@ class UsersController extends AppController {
             }
 
             /**
-            * Carrega os dados da ultima bilhetagem do cliente
+            * Calcula as competencias do mes vigente a partir da data de pagamento do cliente
+            */
+            $competence_ini = date('Y-m-d', mktime(0, 0, 0, date('m'), $client['Client']['maturity_day'], date('Y')));
+            $competence_end = date('Y-m-d', mktime(0, 0, 0, (date('m') + 1), $client['Client']['maturity_day'], date('Y')));
+
+            /**
+            * Carrega os dados da bilhetagem do mes vigente do cliente
             */
             $billing = $this->User->Client->Billing->find('first', array(
                 'fields' => array(
                     'Billing.id',
-                    'Billing.package_id',
-                    'Billing.validity_orig',
                     ),
                 'conditions' => array(
-                    'Billing.client_id' => $client_id
-                    ),
-                'order' => array('Billing.created' => 'desc')
-                ));  
+                    'Billing.client_id' => $client_id,
+                    'Billing.competence_ini' => $competence_ini,
+                    'Billing.competence_end' => $competence_end,
+                    )
+                )); 
+
+            /**
+            * Cria a bilhetagem do mes vigente do cliente, caso nao exista
+            */
+            if(!count($billing)){
+                $data = array(
+                    'Billing' => array(
+                        'client_id' => $client_id,
+                        'package_id' => $client['Package']['id'],
+                        'franchise' => $client['Package']['franchise'],
+                        'qt_queries' => 0,
+                        'competence_ini' => $competence_ini,
+                        'competence_end' => $competence_end,
+                        'qt_exceeded' => 0,
+                        'value_exceeded' => 0,
+                        )
+                    );
+                $this->User->Client->Billing->create();
+                $this->User->Client->Billing->save($data);
+                $billing = $this->User->Client->Billing->read();
+            }
+
+            /**
+            * Verifica se o cliente ja efetuou o pagamento da assinatura do pacote
+            */
+            $hasSignature = $this->User->Client->Invoice->find('count', array(
+                'recursive' => -1,
+                'conditions' => array(
+                    'Invoice.client_id' => $client_id,
+                    'Invoice.is_signature' => true,
+                    'Invoice.is_paid' => true,
+                    )
+                ));
+
+            /**
+            * Verifica se o cliente ja efetuou pelo menos o primero pagamento
+            */
             if(method_exists($this->Session, 'write')){
                 $this->Session->write("Client.billing_id", $billing['Billing']['id']);          
-                $this->Session->write("Client.package_id", $billing['Billing']['package_id']);          
-                $this->Session->write("Client.validity_orig", $billing['Billing']['validity_orig']);          
+                $this->Session->write("Client.package_id", $client['Package']['id']);          
+                $this->Session->write("Client.franchise", $client['Package']['franchise']);          
+                $this->Session->write("Client.signature", $hasSignature);          
             }
             $client['Client']['billing_id'] = $billing['Billing']['id'];
-            $client['Client']['package_id'] = $billing['Billing']['package_id'];
-            $client['Client']['validity_orig'] = $billing['Billing']['validity_orig'];
+            $client['Client']['package_id'] = $client['Package']['id'];
+            $client['Client']['franchise'] = $client['Package']['franchise'];
+            $client['Client']['signature'] = $hasSignature;
+
         }
 
         return $client;
@@ -294,69 +402,6 @@ class UsersController extends AppController {
         }
 
         return $billings;
-    }
-
-    /**
-    * Método forgot_pass
-    *
-    * Este método inicia o processo de recueracao da senha do usuario
-    */
-    public function forgot_pass(){
-    	$this->layout = 'login';
-        $this->Session->setFlash("Por favor, preencha o campo abaixo e enviaremos um link para seu e-mail para informar uma nova senha:", FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_LOGIN);
-
-		/**
-		 * Verifica se o formulário foi submetido por post
-		 */
-		if ($this->request->is('post') || $this->request->is('put')) {
-			/**
-			* Verifica se o campo de email foi informado
-			*/
-			if(!empty($this->request->data['User']['email'])){
-                $this->User->recursive = -1;
-
-				/**
-				* Verifica se o email informado existe na base de dados
-				*/
-				$hasEmail = $this->User->find('first', array(
-					'conditions' => array(
-						'User.email' => $this->request->data['User']['email']
-						)
-					));
-
-				if(empty($hasEmail['User'])){
-					$this->Session->setFlash("O e-mail informado não existe em nossa base de dados, informe o seu e-mail cadastrado por favor.", FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_LOGIN);
-				}else{
-                    $hasEmail['User']['change_pass_token'] = md5(uniqid());
-                    /**
-                    * Registra o token da requisicao
-                    */
-                    $this->User->updateAll(
-                        array(
-                            'User.change_pass_token' => "'{$hasEmail['User']['change_pass_token']}'",
-                            'User.change_pass_expire' => "'" . date('Y-m-d H:i:s', mktime(date('H'), (date('i') + 10), date('s'), date('m'), date('d'), date('Y'))) . "'",
-                            ),
-                        array(
-                            'User.id' => $hasEmail['User']['id']
-                            )
-                        );
-
-                        $email = new CakeEmail('apps');
-                        $email->template($this->action);
-                        $email->emailFormat('html');
-                        $email->viewVars(array('user' => $hasEmail));
-
-                        $email->sender(array(EMAIL_NO_REPLAY => TITLE_APP));
-                        $email->from(array(EMAIL_NO_REPLAY => TITLE_APP));
-                        $email->to($hasEmail['User']['email']);
-                        $email->subject("Lembrete da senha nova de {$hasEmail['User']['given_name']}");
-                        $email->send();     
-
-					
-                    $this->Session->setFlash("Em instantes, você receberá um e-mail com instruções sobre como recuperar sua senha.", FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_LOGIN);
-                }
-            }
-        }        
     }
 
     /**
@@ -462,7 +507,7 @@ class UsersController extends AppController {
 
             //Redireciona o usuario para a pagina de login novamente caso o cadastro nao seja bem sucedido
             $this->Session->setFlash(FLASH_SAVE_ERROR, FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR, 'multiple' => $msgs), FLASH_SESSION_LOGIN);
-            $this->redirect($this->Auth->logout());
+            $this->logout(FLASH_SAVE_ERROR);
         }
 
         $user = $this->User->read();
@@ -486,8 +531,8 @@ class UsersController extends AppController {
     /**
      * Exclui todas as sessoes do usuario logado e o redireciona para a tela de login
      */
-    public function logout() {
-        $this->Session->setFlash("Sessão Encerrada.", FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_LOGIN);
+    public function logout($msg="Sessão Encerrada.") {
+        $this->Session->setFlash($msg, FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_LOGIN);
         $this->Session->delete('Auth');
         $this->Session->delete('User');
         $this->Session->delete('Billing');

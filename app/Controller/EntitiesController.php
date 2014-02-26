@@ -76,7 +76,7 @@ class EntitiesController extends AppBillingsController {
 				$this->product_id = PRODUCT_VIZINHOS;
 				break;
 		}    	
-    	
+
 		//@override
 		parent::beforeFilter();
 

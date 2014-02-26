@@ -4,7 +4,7 @@ class BoletoBbComponent extends Object {
 	/**
 	 * Armazena as opções padrões do boleto.
 	 */
-	var $options = array(
+	public $options = array(
 		'sacado',
 		'endereco1',
 		'endereco2',
@@ -33,6 +33,10 @@ class BoletoBbComponent extends Object {
 		}
 		$dadosboleto = $this->options;
 		require_once App::pluginPath('Boletos') . 'Vendor' . DS . 'boletophp' . DS . 'boleto_bb.php';
+	}
+
+	public function beforeRedirect(Controller $controller){
+
 	}
 
 	public function beforeRender(Controller $controller){

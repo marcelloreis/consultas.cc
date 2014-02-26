@@ -99,23 +99,24 @@ $(document).ready(function(){
     /**
     * Cidades por demanda
     */
-    // if($('select[name*=state_id]').size() && $('select[name*=city_id]').size()){
-    //     $('select[name*=state_id]')
-    //     .chosen()
-    //     .change(function(){
-    //         var form = $(this).parents('form:eq(0)');
-    //         var state_id = $(this).val();
-    //         var select_city = form.find('select[name*=city_id]');
-    //         var box_select_city = select_city.parent();
+    if($('select[name*=state_id][class*=city-by-state]').size() && $('select[name*=city_id][class*=city-by-state]').size()){
+        $('select[name*=state_id][class*=city-by-state]')
+        .chosen()
+        .change(function(){
+            var form = $(this).parents('form:eq(0)');
+            var state_id = $(this).val();
+            var select_city = form.find('select[name*=city_id][class*=city-by-state]');
+            var box_select_city = select_city.parent();
+            var model = select_city.attr('data-model');
 
-    //         select_city.remove();
-    //         $.get('/cities/options/' + state_id, function(data){
-    //             box_select_city.html(data);
-    //             $('select', box_select_city).chosen();
-    //         });
+            select_city.remove();
+            $.get('/cities/options/' + state_id + '/model:' + model, function(data){
+                box_select_city.html(data);
+                $('select', box_select_city).chosen();
+            });
             
-    //     });
-    // }
+        });
+    }
 
     /**
     * Cidades por demanda de Campanhas
