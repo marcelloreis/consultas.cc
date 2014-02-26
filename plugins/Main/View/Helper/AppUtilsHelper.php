@@ -340,8 +340,6 @@ class AppUtilsHelper extends AppHelper {
 	* @return string $mask
 	*/
 	private function format($doc, $mask){
-		$mask = '';
-		
 		if(!empty($doc)){
 			// Elimina possivel mascara
 			$doc = preg_replace('[^0-9]', '', $doc);

@@ -24,7 +24,6 @@ echo $this->Html->script(array('plugins/maskedinput/jquery.maskMoney.min'), arra
             <?php echo $this->AppForm->input('fancy_name')?>
             <?php echo $this->AppForm->input('corporate_name')?>
             <?php echo $this->AppForm->input('contact_name')?>
-            <?php echo $this->AppForm->input('responsible', array('label' => 'Responsável pelo contrato'))?>
             <?php echo $this->AppForm->input('activity', array('label' => 'Atividade'))?>
             <?php echo $this->AppForm->input('cnpj', array('class' => 'msk-cnpj'))?>
             <?php echo $this->AppForm->input('email')?>

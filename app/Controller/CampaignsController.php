@@ -524,7 +524,14 @@ class CampaignsController extends AppBillingsController {
 	        * Verifica se foi informado algum tipo de pessoa
 	        */
 			if(!empty($data['Campaign']['type']) && $data['Campaign']['type'] > 0){
-				$cond['Entity.type'] = $data['Campaign']['type'];
+				switch ($data['Campaign']['type']) {
+					case TP_CPF:
+						$cond['Entity.type'] = array(TP_CPF, TP_AMBIGUO, TP_INVALID);
+						break;
+					case TP_CNPJ:
+						$cond['Entity.type'] = array(TP_CNPJ, TP_AMBIGUO);
+						break;
+				}
 			}			
 
 	        /**

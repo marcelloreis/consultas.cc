@@ -108,6 +108,15 @@ msgstr "Infinito"
 msgid "Invoices"
 msgstr "Boletos"
 
+msgid "Is paid"
+msgstr "Pago"
+
+msgid "Is separete"
+msgstr "Avulso"
+
+msgid "Is signature"
+msgstr "Assinatura"
+
 msgid "Landline"
 msgstr "Tel. Fixo"
 
@@ -235,7 +244,7 @@ msgid "User id"
 msgstr "Usuário"
 
 msgid "Users"
-msgstr "Usuários"
+msgstr "Usuário"
 
 msgid "Validity"
 msgstr "Validade"

@@ -13,7 +13,7 @@ define('SHORT_LINK', 'checklist.inf.br');
 define('EMAIL_NO_REPLAY', 'noreply@checklist.inf.br');
 
 define('COMPANY_CORPORATE_NAME', 'Check List - Tecnologia em banco de dados');
-define('COMPANY_FANCY_NAME', 'Check List - Tecnologia em banco de dados');
+define('COMPANY_FANCY_NAME', 'Check List');
 define('COMPANY_PHONE', '(11)  4063-9943 ');
 define('COMPANY_EMAIL_BUSINESSES', 'comercial@checklist.inf.br');
 define('COMPANY_CITY', 'Serra');
@@ -64,6 +64,9 @@ define('TP_CPF', 1);
 define('TP_CNPJ', 2);
 define('TP_AMBIGUO', 3);
 define('TP_INVALID', 4);
+
+define('BANK_ACTIVE', 'bb');
+define('BANK_TAX', 2);
 
 define('TP_SEARCH_ID', 1);
 define('TP_SEARCH_DOC', 2);

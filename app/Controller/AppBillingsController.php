@@ -66,14 +66,17 @@ class AppBillingsController extends AppController {
 		*/
 		$this->loadModel('Billing');
 		$map = $this->Billing->findById($this->billing_id);
-		$this->balance = ($map['Billing']['franchise'] - $map['Billing']['qt_queries']);
-		$this->balance = ($this->balance < 0)?0:$this->balance;
+		$this->balance = 0;
+		if(!empty($map['Billing'])){
+			$this->balance = ($map['Billing']['franchise'] - $map['Billing']['qt_queries']);
+			$this->balance = ($this->balance < 0)?0:$this->balance;
+		}
 		$this->set('balance', $this->balance);
 
 		/**
 		* Carrega o valor das consultas excedidas
 		*/
-		if($this->balance <= 0){	
+		if(!empty($map['Billing']) && $this->balance <= 0){	
 			$this->value_exceeded = $map['Billing']['value_exceeded'];
 			$this->set('value_exceeded', $this->value_exceeded);
 		}

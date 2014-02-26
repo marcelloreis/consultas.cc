@@ -10,8 +10,8 @@
  * @link          http://www.nasza.com.br/ Nasza(tm) Project
  * @package       app.Controller
  */
-
 App::uses('AppController', 'Controller');
+App::uses('CakeEmail', 'Network/Email');
 
 /**
  * Static content controller
@@ -48,10 +48,10 @@ class InvoicesController extends AppController {
         * Carrega os filtros do painel de buscas
         */
         $this->filters = array(
-            'package_id' => $this->Invoice->Package->find('list', array('id', 'name')),
             'client_id' => $this->Invoice->Client->find('list', array('id', 'name')),
             'is_paid' => array(true => 'Sim', false => 'Não'),
             'is_signature' => array(true => 'Sim', false => 'Não'),
+            'is_separete' => array(true => 'Sim', false => 'Não'),
             );
 
 		//@override
@@ -67,18 +67,41 @@ class InvoicesController extends AppController {
 	* @return void
 	*/
 	public function edit($id=null){
+		/**
+		 * Verifica se o formulário foi submetido por post
+		 */
+		if ($this->request->is('post') || $this->request->is('put')) {
+			/**
+			* Caso nao seja informado o pacote, considera q o boleto é avulso
+			*/
+			if(empty($this->request->data['Invoice']['package_id'])){
+				$this->request->data['Invoice']['is_separete'] = true;
+			}else{
+				$this->request->data['Invoice']['is_separete'] = false;
+			}
+		}
+
 		//@override
 		parent::edit($id);	
+
+		/**
+		* Gera o token do boleto
+		*/
+		if(!empty($this->data['Invoice']['id']) && empty($this->data['Invoice']['token'])){
+			$package_id = !empty($this->data['Invoice']['package_id'])?$this->data['Invoice']['package_id']:'0';
+			$token = preg_replace('/[^0-9]/si', '', "{$id}{$this->data['Invoice']['client_id']}{$package_id}{$this->data['Invoice']['maturity_db']}" . substr(uniqid(), -4));
+			$this->Invoice->updateAll(array('token' => $token), array('Invoice.id' => $id));
+		}
 	}
 
 	/**
-	* Método resend
+	* Método send
 	* Este método reenvia para o cliente o boleto passado pelo parametro
 	*
 	* @param string $id
 	* @return void
 	*/
-	public function resend($id){
+	public function send($id){
 		$this->Invoice->id = $id;
 
 		/**
@@ -88,6 +111,43 @@ class InvoicesController extends AppController {
 			$this->Session->setFlash('Não foi possível encontrar o boleto, ou ele não existe no banco de dados.', FLASH_TEMPLATE, array('class' => FLASH_CLASS_ALERT), FLASH_SESSION_FORM);
 			$this->redirect($this->referer());
 		}
+
+		/**
+		* Carrega os dados do boleto
+		*/
+		$invoice = $this->Invoice->read();
+
+		/**
+		* Carrega os dados do cliente
+		*/
+		$this->Invoice->Client->recursive = -1;
+		$client = $this->Invoice->Client->findById($invoice['Invoice']['client_id']);
+
+		/**
+		* Monta o link para download do boleto
+		*/
+		$link = PROJECT_LINK . "invoices/" . BANK_ACTIVE . "/{$invoice['Invoice']['token']}";
+
+		/**
+		* Dispara um email para o usuario responsavel do boleto
+		*/
+		$obj_email = new CakeEmail('apps');
+		$obj_email->template('invoice-default');
+		$obj_email->emailFormat('html');
+		$obj_email->viewVars(array('link' => $link, 'client' => $client));
+
+		$obj_email->sender(array(EMAIL_NO_REPLAY => TITLE_APP));
+		$obj_email->from(array(EMAIL_NO_REPLAY => TITLE_APP));
+		// $obj_email->to($client['Client']['email']);
+		$obj_email->to('marcello@marcelloreis.com');
+		$obj_email->subject('Instruções para pagamento do boleto.');
+		if($obj_email->send()){
+			$this->Session->setFlash("Um email com o boleto da assinatura foi enviados para o endereço: <strong>{$client['Client']['email']}</strong>", FLASH_TEMPLATE, array('class' => FLASH_CLASS_SUCCESS), FLASH_SESSION_FORM);
+		}else{
+			$this->Session->setFlash("Não foi possível enviar o boleto da assinatura para o endereço: <strong>{$client['Client']['email']}</strong>", FLASH_TEMPLATE, array('class' => FLASH_CLASS_ERROR), FLASH_SESSION_FORM);
+		}		
+
+		$this->redirect($this->referer());
 	}
 
 	/**
@@ -97,7 +157,7 @@ class InvoicesController extends AppController {
 	* @param string $token
 	* @return void
 	*/
-	public function bb($token){
+	public function bb($token, $count=true){
 		$this->autoRender = false;
 
 		/**
@@ -121,28 +181,34 @@ class InvoicesController extends AppController {
 			throw new NotFoundException();
 		}
 
-		/**
-		* Calcula quantas vezes o boleto foi baixado
-		*/
-		$download_qt = empty($invoice['Invoice']['download_qt'])?1:$invoice['Invoice']['download_qt']+1;
 
 		/**
-		* Carrega os valores q serao atualizados
+		* Contabiliza a quantidade de vezes q o boleto foi baixado
 		*/
-		$values = array(
-			'download_date' => 'NOW()',
-			'download_qt' => $download_qt,
-			);
-		
-		/**
-		* Carrega as condicoes da atualozacao
-		*/
-		$condition = array('Invoice.id' => $invoice['Invoice']['id']);
-		
-		/**
-		* Atualiza os dados da campanha
-		*/
-		$this->Invoice->updateAll($values, $condition);
+		if($count){
+			/**
+			* Carrega a quantidade de vezes o boleto foi baixado
+			*/
+			$download_qt = empty($invoice['Invoice']['download_qt'])?1:$invoice['Invoice']['download_qt']+1;
+
+			/**
+			* Carrega os valores q serao atualizados
+			*/
+			$values = array(
+				'download_date' => 'NOW()',
+				'download_qt' => $download_qt,
+				);
+			
+			/**
+			* Carrega as condicoes da atualozacao
+			*/
+			$condition = array('Invoice.id' => $invoice['Invoice']['id']);
+			
+			/**
+			* Atualiza os dados da campanha
+			*/
+			$this->Invoice->updateAll($values, $condition);
+		}
 
 		/**
 		* Carrega a cidade
@@ -157,9 +223,19 @@ class InvoicesController extends AppController {
 		$state = $state['State']['uf'];
 
 		/**
-		* Formata o valor cobrado
+		* Carrega o valor do pacote
 		*/
-		$valor_cobrado = substr(preg_replace('/[^0-9]/si', '', $invoice['Package']['price']), 0, -2);
+		$value_package = $this->AppUtils->num2db($invoice['Invoice']['value']);
+
+		/**
+		* Carrega o valor excedido
+		*/
+		$value_exceeded = $this->AppUtils->num2db($invoice['Invoice']['value_exceeded']);
+
+		/**
+		* Carrega o valor total do boleto
+		*/
+		$valor_cobrado = ($value_package + $value_exceeded);
 
 		$dados = array(
 			'sacado' => $invoice['Client']['corporate_name'],

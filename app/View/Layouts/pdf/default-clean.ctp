@@ -15,6 +15,7 @@
  * @since         CakePHP(tm) v 0.10.0.1076
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-echo $this->Html->charset();
+//echo $this->Html->charset();
+echo $this->element('Layouts/Download/header');
 echo $this->fetch('content');
 ?>

@@ -1,6 +1,7 @@
 <?php 
-echo $this->Html->link('<i class="icon-print"></i>', array("controller" => $this->params['controller'], "action" => BANK_ACTIVE, $token, '0'), array('title' => 'Imprimir Boleto', 'target' => '_blank', 'class' => 'btn', 'rel' => 'tooltip', 'data-original-title' => 'Imprimir Boleto', 'escape' => false)) . ' ';
-echo $this->Html->link('<i class="icon-envelope-alt"></i>', array("controller" => $this->params['controller'], "action" => "send", $id), array('title' => 'Enviar Boleto', 'class' => 'btn', 'rel' => 'tooltip', 'data-original-title' => 'Enviar Boleto', 'escape' => false)) . ' ';
+echo $this->Html->link('<i class="icon-print"></i>', array("controller" => $this->params['controller'], "action" => "contract", $id), array('title' => 'Imprimir Contrato', 'class' => 'btn', 'target' => '_blank', 'rel' => 'tooltip', 'data-original-title' => 'Imprimir Contrato', 'escape' => false)) . ' ';
+echo $this->Html->link('<i class="glyphicon-inbox_in"></i>', array("controller" => $this->params['controller'], "action" => "download", $id, "{$cnpj}.pdf"), array('title' => 'Baixar Contrato', 'class' => 'btn', 'rel' => 'tooltip', 'data-original-title' => 'Baixar Contrato', 'escape' => false)) . ' ';
+echo $this->Html->link('<i class="icon-search"></i>', array("controller" => $this->params['controller'], "action" => "view", $id), array('title' => 'Visualizar Registro', 'class' => 'btn', 'rel' => 'tooltip', 'data-original-title' => 'Visualizar Registro', 'escape' => false)) . ' ';
 echo $this->Html->link('<i class="icon-edit"></i>', array("controller" => $this->params['controller'], "action" => "edit", $id), array('title' => 'Editar Registro', 'class' => 'btn', 'rel' => 'tooltip', 'data-original-title' => 'Editar Registro', 'escape' => false)) . ' ';
 
 if(isset($this->params['named']['trashed']) && $this->AppPermissions->check("{$this->name}.trash")){

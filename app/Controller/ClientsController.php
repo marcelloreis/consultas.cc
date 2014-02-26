@@ -165,7 +165,7 @@ class ClientsController extends AppController {
 					/**
 					* Monta o link para download do boleto
 					*/
-					$link = PROJECT_LINK . "invoices/bb/{$token}";
+					$link = PROJECT_LINK . "invoices/" . BANK_ACTIVE . "/{$token}";
 
 					/**
 					* Dispara um email para o usuario que criou a campanha, avisando que os arquivos ja estao disponiveis
@@ -196,5 +196,49 @@ class ClientsController extends AppController {
 		$cities = $this->Client->City->loadByState($state_id);
 
 		$this->set(compact('cities'));		
+	}
+
+	/**
+	* Método contract
+	* Gera o contrato do cliente a partir dos seus dados
+	*
+	* @param string $id
+	* @return void
+	*/
+	public function contract($id){
+		$this->layout = 'default-clean';
+
+		$this->Client->recursive = 1;
+		$client = $this->Client->findById($id);
+
+		/**
+		* Carrega todos os produtos disponiveis
+		*/
+		$products = $this->Client->Package->Product->find('list');
+
+		/**
+		* Carrega os valores dos produtos disponiveis de acordo com o pacote do contrato
+		*/
+		$prices = $this->Client->Package->Product->Price->find('list', array(
+			'recursive' => -1,
+			'fields' => array('Price.product_id', 'Price.price'),
+			'conditions' => array(
+				'Price.package_id' => $client['Client']['package_id'],
+				'Price.product_id' => array_flip($products),
+				)
+			));
+		$this->set(compact('client', 'products', 'prices'));
+	}
+
+	public function download($id){
+		$this->contract($id);
+
+	    $params = array(
+	        'download' => true,
+	        // 'name' => 'nome-do-contrato.pdf',
+	        'paperOrientation' => 'portrait',
+	        'paperSize' => 'legal'
+	    );
+	    $this->set($params);		
 	}
 }
