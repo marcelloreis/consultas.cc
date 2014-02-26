@@ -37,7 +37,9 @@ class LandlinesImportController extends AppImportsController {
 	*
 	* @return void
 	*/
-	public function build_source($uf=null){
+	public function build_source($uf){
+		$this->autoRender = false;
+		
 		/**
 		* Desabilita o contador mobile e habilita o landline
 		*/
@@ -79,7 +81,7 @@ class LandlinesImportController extends AppImportsController {
 			/**
 			* Carrega o nome do arquivo que sera armazenado os dados
 			*/
-			$this->filename = ROOT . "/_db/source/{$this->uf}-natt-landlines-0-to-" . LIMIT_TABLE_IMPORTS;
+			$this->filename = ROOT . "/_db/binary_source/{$this->uf}-natt-landlines-0-to-" . LIMIT_TABLE_IMPORTS;
 
 			for ($i=0; $i < $this->qt_reg; $i++) { 
 				/**
@@ -117,7 +119,7 @@ class LandlinesImportController extends AppImportsController {
 		            */	            
 	            	$reload_transaction = 0;
 
-	            	$this->filename = ROOT . "/_db/source/{$this->uf}-natt-landlines-{$i}-to-" . (LIMIT_TABLE_IMPORTS + $i);
+	            	$this->filename = ROOT . "/_db/binary_source/{$this->uf}-natt-landlines-{$i}-to-" . (LIMIT_TABLE_IMPORTS + $i);
 
 				}            
 
