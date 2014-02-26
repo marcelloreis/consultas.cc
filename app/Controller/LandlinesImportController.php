@@ -152,7 +152,7 @@ class LandlinesImportController extends AppImportsController {
 		/**
 		* Percorre por todos os CPFs validos Brasileiros
 		*/
-		for ($i=49773942; $i < 50000000000; $i++) { 
+		for ($i=120066379; $i < 50000000000; $i++) { 
 
 			if(!$this->Settings->active()){
 				die;
