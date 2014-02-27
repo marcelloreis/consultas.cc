@@ -202,6 +202,7 @@ class AppController extends Controller {
 							'authentication', 
 							'build_source', 
 							'run_text',
+							'run_binary',
 							'cron',
 							'download',
 							'bb',

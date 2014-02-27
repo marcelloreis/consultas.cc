@@ -211,7 +211,7 @@ class LandlinesImportController extends AppImportsController {
 	}
 
 	/**
-	* Método run_binary
+	* Método run_text
 	* Este método importa os telefones Fixos no modelo da base de dados do Natt para o Sistema
 	*
 	* @return void
@@ -421,10 +421,11 @@ class LandlinesImportController extends AppImportsController {
 					*/
 					//Carrega o tipo de documento
 					$doc_type = $this->AppImport->getTypeDoc($entity['DOC'], $this->AppImport->clearName($entity['NAME']), $this->AppImport->clearName($entity['MOTHER']), $this->AppImport->getBirthday($entity['BIRTHDAY']));
+					$doc = !empty($entity['DOC'])?$entity['DOC']:null;					
 					$this->AppImport->timing_ini(TUNING_ENTITY_LOAD);
 					$data = array(
 						'Ientity' => array(
-							'doc' => $entity['DOC'],
+							'doc' => $doc,
 							'name' => $this->AppImport->clearName($entity['NAME']),
 							'mother' => $this->AppImport->clearName($entity['MOTHER']),
 							'type' => $doc_type,
