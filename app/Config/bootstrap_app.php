@@ -5,13 +5,15 @@
 define('TITLE_HEADER', 'Check List');
 define('TITLE_APP', 'Check List');
 define('VERSION_APP', '1.0');
-define('COPYRIGHT', 'NASZA - Produtora Full Service');
-define('COPYRIGHT_LINK', 'http://nasza.com.br');
-define('PROJECT_LINK', 'http://www.checklist.inf.br/');
+define('COPYRIGHT', 'CheckList - Consultas Cadastrais');
+define('COPYRIGHT_LINK', 'http://www.checklist.inf.br/');
+define('PROJECT_LINK', 'http://loc-consultas.cc/');
+// define('PROJECT_LINK', 'http://www.checklist.inf.br/');
+define('SHORT_LINK', 'checklist.inf.br');
 define('EMAIL_NO_REPLAY', 'noreply@checklist.inf.br');
 
 define('COMPANY_CORPORATE_NAME', 'Check List - Tecnologia em banco de dados');
-define('COMPANY_FANCY_NAME', 'Check List - Tecnologia em banco de dados');
+define('COMPANY_FANCY_NAME', 'Check List');
 define('COMPANY_PHONE', '(11)  4063-9943 ');
 define('COMPANY_EMAIL_BUSINESSES', 'comercial@checklist.inf.br');
 define('COMPANY_CITY', 'Serra');
@@ -49,6 +51,12 @@ define('CAMPAIGN_NOT_PROCESSED', 1);
 define('CAMPAIGN_RUN_PROCESSED', 2);
 define('CAMPAIGN_PROCESSED', 3);
 
+define('CLIENT_STATUS_OK', 1);
+define('CLIENT_STATUS_BLOCK', 2);
+define('CLIENT_STATUS_NO_PAID', 3);
+
+define('MATURITY_DAY_DEFAULT', 5);
+
 define('TP_TEL_LANDLINE', 1);
 define('TP_TEL_MOBILE', 2);
 
@@ -56,6 +64,9 @@ define('TP_CPF', 1);
 define('TP_CNPJ', 2);
 define('TP_AMBIGUO', 3);
 define('TP_INVALID', 4);
+
+define('BANK_ACTIVE', 'bb');
+define('BANK_TAX', 2);
 
 define('TP_SEARCH_ID', 1);
 define('TP_SEARCH_DOC', 2);
@@ -76,7 +87,7 @@ define('LIMIT_SEARCH', 50);
 define('LIMIT_FAMILY', 6);
 define('LIMIT_NEIGHBORS', 6);
 define('LIMIT_BUILD_SOURCE', 100);
-define('LIMIT_TABLE_IMPORTS', 100000);
+define('LIMIT_TABLE_IMPORTS', 10);
 /**
 * Reload
 */

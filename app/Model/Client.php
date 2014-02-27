@@ -14,23 +14,27 @@ class Client extends AppModel {
 	public $displayField = 'fancy_name';
 
 	/**
-	* hasOne associations
+	* Virtual fields
 	*
-	* @var array
+	* @var string
 	*/
-	public $hasOne = array('Contract');
+	public $virtualFields = array(
+    	'contract_ini_day' => "DATE_FORMAT(Client.contract_ini, '%d')",
+    	'contract_ini_month' => "DATE_FORMAT(Client.contract_ini, '%m')",
+    	'contract_ini_year' => "DATE_FORMAT(Client.contract_ini, '%Y')",
+	);
 
 	/**
 	* belongsTo associations
 	*
 	* @var array
 	*/
-	public $belongsTo = array('City', 'State');
+	public $belongsTo = array('City', 'State', 'NaturesLegal', 'Package');
 
 	/**
 	* hasMany associations
 	*
 	* @var array
 	*/
-	public $hasMany = array('User', 'Billing');
+	public $hasMany = array('User', 'Billing', 'Invoice');
 }

@@ -63,4 +63,34 @@ class City extends AppModel {
 			'order' => ''
 		)
 	);
+
+	/**
+	* Método loadByState
+	* Este método carrega todos as cidades cadastradas a partir do estado passado pelo parametro
+	*
+	* @override Metodo AppController.loadByState
+	* @param string $id
+	* @return void
+	*/
+	public function loadByState($state_id=null){
+		/**
+		* Carrega todos as cidades cadastrados
+		*/
+		$cities = array();
+		if($state_id){
+			if(!Cache::read("cities_from_{$state_id}", 'components')){
+					$cities = $this->find('list', array(
+						'recursive' => -1,
+						'fields' => array('City.id', 'City.name'),
+						'conditions' => array(
+							'City.state_id' => $state_id
+							)
+						));
+					Cache::write("cities_from_{$state_id}", $cities, 'components');
+			}
+			$cities = Cache::read("cities_from_{$state_id}", 'components');
+		}
+
+		return $cities;
+	}		
 }

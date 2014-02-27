@@ -140,20 +140,8 @@ class CampaignsController extends AppBillingsController {
 		/**
 		* Carrega todos as cidades cadastrados
 		*/
-		$cities = array();
-		if(!empty($this->data['Campaign']['state_id'])){
-			if(!Cache::read("cities_from_{$this->data['Campaign']['state_id']}", 'components')){
-					$cities = $this->Campaign->City->find('list', array(
-						'recursive' => -1,
-						'fields' => array('City.id', 'City.name'),
-						'conditions' => array(
-							'City.state_id' => $this->data['Campaign']['state_id']
-							)
-						));
-					Cache::write("cities_from_{$this->data['Campaign']['state_id']}", $cities, 'components');
-			}
-			$cities = Cache::read("cities_from_{$this->data['Campaign']['state_id']}", 'components');
-		}	
+		$state_id = !empty($this->data['Campaign']['state_id'])?$this->data['Campaign']['state_id']:null;
+		$cities = $this->Campaign->City->loadByState($state_id);
 
     	/**
     	* Carrega as variaveis de ambiente
@@ -167,24 +155,23 @@ class CampaignsController extends AppBillingsController {
 	*
 	* @return void
 	*/
-	public function download($user_id, $client_id, $campaign_id) {
+	public function download($token) {
 		$this->Campaign->recursive = -1;
 
 		/**
 		* Carrega a campanha passada pelo parametro
 		*/
-		$this->Campaign->id = $campaign_id;
-		$campaign = $this->Campaign->findById($campaign_id);
+		$campaign = $this->Campaign->findByToken($token);
 
 		/**
 		* Desencriptografa o nome do arquivo
 		*/
-		$name = "us{$user_id}cl{$client_id}ca{$campaign_id}.zip";
+		$name = "us{$campaign['Campaign']['user_id']}cl{$campaign['Campaign']['client_id']}ca{$campaign['Campaign']['id']}.zip";
 
 		/**
 		* Monta o diretorio a partir do nome do arquivo informado
 		*/
-		$path = ROOT . "/app/webroot/files/campaign/return/{$client_id}/{$campaign_id}/{$name}";
+		$path = ROOT . "/app/webroot/files/campaign/return/{$campaign['Campaign']['client_id']}/{$campaign['Campaign']['id']}/{$name}";
 
 		/**
 		* Verifica se o arquivo solicitado existe
@@ -221,7 +208,7 @@ class CampaignsController extends AppBillingsController {
 		/**
 		* Carrega as condicoes da atualozacao
 		*/
-		$condition = array('Campaign.id' => $campaign_id);
+		$condition = array('Campaign.id' => $campaign['Campaign']['id']);
 		
 		/**
 		* Atualiza os dados da campanha
@@ -291,6 +278,11 @@ class CampaignsController extends AppBillingsController {
 		$this->autoRender = false;
 
 		/**
+		* Carrega o model de bilhetagem
+		*/
+		$this->loadModel('Billing');
+
+		/**
 		* Verifica se existe algum processo em execucao, caso exista, aborta o processo
 		*/
 		$isBusy = $this->Campaign->find('count', array(
@@ -299,7 +291,6 @@ class CampaignsController extends AppBillingsController {
 				'Campaign.process_state' => CAMPAIGN_RUN_PROCESSED
 				)
 			));	
-
 		if(!$isBusy){
 			/**
 			* Carrega todas as campanhas q ainda nao foram processadas
@@ -525,15 +516,22 @@ class CampaignsController extends AppBillingsController {
 	        /**
 	        * Verifica se foi informado algum sexo específico
 	        */
-			if(!empty($data['Campaign']['gender_str']) && $data['Campaign']['gender_str'] > 0){
-				$cond['Entity.gender'] = $data['Campaign']['gender_str'];
+			if(!empty($data['Campaign']['gender']) && $data['Campaign']['gender'] > 0){
+				$cond['Entity.gender'] = $data['Campaign']['gender'];
 			}			
 
 	        /**
 	        * Verifica se foi informado algum tipo de pessoa
 	        */
-			if(!empty($data['Campaign']['type_str']) && $data['Campaign']['type_str'] > 0){
-				$cond['Entity.type'] = $data['Campaign']['type_str'];
+			if(!empty($data['Campaign']['type']) && $data['Campaign']['type'] > 0){
+				switch ($data['Campaign']['type']) {
+					case TP_CPF:
+						$cond['Entity.type'] = array(TP_CPF, TP_AMBIGUO, TP_INVALID);
+						break;
+					case TP_CNPJ:
+						$cond['Entity.type'] = array(TP_CNPJ, TP_AMBIGUO);
+						break;
+				}
 			}			
 
 	        /**
@@ -560,7 +558,9 @@ class CampaignsController extends AppBillingsController {
 				* Inicializa a variavel $fields com os campos padroes
 				*/
 				$fields = array(
-					'Association.id'
+					'Association.id',
+					'Entity.gender',
+					'Entity.type',
 					);
 
 				$layout = explode(';', $data['Campaign']['layout']);
@@ -665,7 +665,7 @@ class CampaignsController extends AppBillingsController {
 				/**
 				* Contabiliza quantas mulheres/homens foram encontradas
 				*/
-				switch ($v['Entity']['gender_str']) {
+				switch ($v['Entity']['gender']) {
 					case FEMALE:
 						$counter['female']++;
 						break;
@@ -677,7 +677,7 @@ class CampaignsController extends AppBillingsController {
 				/**
 				* Contabiliza quantas pessoas fisicas/juridicas foram encontradas
 				*/
-				switch ($v['Entity']['type_str']) {
+				switch ($v['Entity']['type']) {
 					case TP_CPF:
 						$counter['individual']++;
 						break;
@@ -850,11 +850,24 @@ class CampaignsController extends AppBillingsController {
 		 */
 		if ($this->request->is('post') || $this->request->is('put')) {
 			/**
+			* Insere o valor padrao do estado do processo
+			*/
+			$this->request->data['Campaign']['process_state'] = CAMPAIGN_NOT_PROCESSED;
+
+			/**
 			* Carrega o layout montado na campanha
 			*/
 			if(!empty($this->request->data['Campaign']['layout']) && count($this->request->data['Campaign']['layout'])){
 				$this->request->data['Campaign']['layout'] = implode(';', array_keys($this->request->data['Campaign']['layout']));
 			}		
+
+			/**
+			* Gera o token da campanha
+			*/
+			if(empty($this->request->data['Campaign']['id'])){
+				$token = md5(uniqid());
+				$this->request->data['Campaign']['token'] = $token;
+			}
 
 			/**
 			* Recarrega a campanha
@@ -978,8 +991,12 @@ class CampaignsController extends AppBillingsController {
 		/**
 		* Valida o limite informado no formualrio
 		*/
-		if(!empty($this->request->data['Campaign']['limit']) && !empty($this->request->data['Campaign']['limit_max']) && $this->request->data['Campaign']['limit'] > $this->request->data['Campaign']['limit_max']){
-			$this->request->data['Campaign']['limit'] = $this->request->data['Campaign']['limit_max'];
+		if(!empty($this->request->data['Campaign']['limit']) && $this->request->data['Campaign']['limit'] > $this->balance && !$this->limit_exceeded){
+			$this->request->data['Campaign']['limit'] = $this->balance;
+		}
+
+		if(empty($this->request->data['Campaign']['empty']) && !$this->limit_exceeded){
+			$this->request->data['Campaign']['limit'] = $this->balance;
 		}
 
 		/**
@@ -992,6 +1009,7 @@ class CampaignsController extends AppBillingsController {
 			$this->request->data['Campaign']['client_id'] = $this->userLogged['client_id'];
 		}		
 
+		//override
 		$this->edit($id);
 
 		$this->view = $this->action;
@@ -1078,7 +1096,6 @@ class CampaignsController extends AppBillingsController {
 		* Carrega todos os precos dos produtos de acordo o pacote do cliente
 		*/
 		$obj_users = new UsersController();
-		$this->loadModel('Billing');
 		$client = $obj_users->loadClient($campaign['Campaign']['client_id']);
 		$prices = $obj_users->loadPrices();	
 
@@ -1090,12 +1107,24 @@ class CampaignsController extends AppBillingsController {
 		$this->user_name = $user['User']['given_name'];
 		$this->user_id = $campaign['Campaign']['user_id'];
 		$this->package_id = $client['Client']['package_id'];
-		$this->contract_id = $client['Client']['contract_id'];
 		$this->billing_id = $client['Client']['billing_id'];
 		$this->price_id = $prices['prices_id'][$this->package_id][$this->product_id];
 		$this->price = $prices['prices_val'][$this->package_id][$this->product_id];
-		$this->balance = $this->Billing->balance($client['Client']['id']);
-		$this->validity_orig = $client['Client']['validity_orig'];
+		$this->limit_exceeded = $client['Client']['limit_exceeded'];
+		
+		$hasSignature = $this->Campaign->Client->Invoice->find('count', array(
+		                'recursive' => -1,
+		                'conditions' => array(
+		                    'Invoice.client_id' => $client['Client']['id'],
+		                    'Invoice.is_signature' => true,
+		                    'Invoice.is_paid' => true,
+		                    )
+		                ));
+		$this->hasSignature = $hasSignature;
+
+		$map = $this->Campaign->Client->Billing->findById($this->billing_id);
+		$this->balance = ($map['Billing']['franchise'] - $map['Billing']['qt_queries']);
+		$this->balance = ($this->balance < 0)?0:$this->balance;
 
 		/**
 		* Verifica se o cliente tem permissao/credito para continuar o processo
@@ -1182,7 +1211,7 @@ class CampaignsController extends AppBillingsController {
 		/**
 		* Gera o link da campanha
 		*/
-		$download_link = PROJECT_LINK . "campaigns/download/{$campaign['Campaign']['user_id']}/{$campaign['Campaign']['client_id']}/{$campaign['Campaign']['id']}";
+		$download_link = PROJECT_LINK . "campaigns/download/{$campaign['Campaign']['token']}";
 
 		/**
 		* Altera o process_state da campanha para PROCESSADO
@@ -1238,7 +1267,6 @@ class CampaignsController extends AppBillingsController {
 		$this->billing_id = $client['Client']['billing_id'];
 		$this->price_id = $prices['prices_id'][$this->package_id][$this->product_id];
 		$this->price = $prices['prices_val'][$this->package_id][$this->product_id];
-		$this->validity_orig = $client['Client']['validity_orig'];
 
 		/**
 		* Carrega o assunto do SMS com o titulo da campanha

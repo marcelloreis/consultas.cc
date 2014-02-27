@@ -60,7 +60,7 @@ if(!empty($this->params['pass'][0])){
                             Você tem <strong><?php echo $remaing?></strong> dias para baixar os arquivos gerados.
                         <?php endif?>
 
-                        <p>Para obter os arquivos gerados, clique aqui: <?php echo $this->Html->link($this->data['Campaign']['download_link'])?></p>
+                        <p>Para obter os arquivos, clique aqui: <?php echo $this->Html->link($this->data['Campaign']['download_link'])?></p>
                     </div>
                 <?php endif?>
             <?php

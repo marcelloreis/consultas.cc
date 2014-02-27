@@ -33,10 +33,10 @@ class NattFixoPessoa extends AppModelClean {
     public $virtualFields = array(
         'line' => "
         concat(
-            NattFixoPessoa.CPF_CNPJ, ';', 
-            NattFixoPessoa.NOME_RAZAO, ';', 
-            NattFixoPessoa.MAE, ';', 
-            NattFixoPessoa.DT_NASCIMENTO
+            ifnull(NattFixoPessoa.CPF_CNPJ, ''), ';', 
+            ifnull(NattFixoPessoa.NOME_RAZAO, ''), ';', 
+            ifnull(NattFixoPessoa.MAE, ''), ';', 
+            ifnull(NattFixoPessoa.DT_NASCIMENTO, '')
             )",
     );
 
@@ -73,8 +73,12 @@ class NattFixoPessoa extends AppModelClean {
         */
         $ln_entity = reset($entity);
      
+        /**
+        * Carrega o documento da entidade
+        */
+        $doc = key($entity);
 
-        if(count($entity)){
+        if(count($entity) && !empty($doc)){
             $map_landlines = $this->NattFixoTelefone->find('all', array(
                 'fields' => array(
                     'NattFixoTelefone.COD_END', 
@@ -82,8 +86,8 @@ class NattFixoPessoa extends AppModelClean {
                     'line'
                     ),
                 'conditions' => array(
-                    'NattFixoTelefone.CPF_CNPJ' => key($entity),
-                    'NattFixoTelefone.DATA_ATUALIZACAO >' => '2012'
+                    'NattFixoTelefone.CPF_CNPJ' => $doc,
+                    'NattFixoTelefone.DATA_ATUALIZACAO >=' => '2010'
                     ),
                 'order' => array('DATA_ATUALIZACAO' => 'DESC'),
                 'limit' => 5

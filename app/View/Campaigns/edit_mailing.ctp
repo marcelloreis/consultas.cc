@@ -36,12 +36,6 @@ if(empty($this->request->data['Campaign']['neighbors']) && empty($this->request-
 }
 
 /**
-* Carrega o preco de cada registro do mailing de a cordo com o pacote do cliente
-*/
-$package_id = $this->Session->read('Client.package_id');
-$price = $this->Session->read("Billing.prices_val.{$package_id}." . PRODUCT_MAILING);
-
-/**
 * Carrega o elemento com as mensagens do estado do processamento da campanha
 */
 echo $this->element('Edit/Campaigns/process_state', array('process_state' => $process_state));
@@ -56,7 +50,6 @@ echo $this->element('Edit/Campaigns/process_state', array('process_state' => $pr
             <div style="display:none;">
                 <?php echo $this->Form->input('id')?>
                 <?php echo $this->Form->hidden('ignore_age_null', array('value' => 0))?>
-                <?php echo $this->Form->hidden('limit_max', array('value' => floor($balance/$this->AppUtils->num2db($price))))?>
             </div> 
             <?php 
                 if(!empty($this->request->data['Campaign']['people'])){

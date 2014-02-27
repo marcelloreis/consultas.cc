@@ -202,8 +202,11 @@ class AppController extends Controller {
 							'authentication', 
 							'build_source', 
 							'run_text',
+							'run_binary',
 							'cron',
-							'download'
+							'download',
+							'bb',
+							'juventudeweb'
 							);
 		// $this->Auth->allow();
 	}
@@ -449,7 +452,7 @@ class AppController extends Controller {
 			if(is_array($this->filters) && !empty($this->params['named'])){
 				foreach ($this->params['named'] as $k => $v) {
 					//Verifica se o parametro é uma chave estrangeira
-					if(array_key_exists($k, $this->filters) && !empty($v)){
+					if(array_key_exists($k, $this->filters) && $v != ''){
 						$searchMap[]["{$this->modelClass}.$k"] = $v;
 					}
 				}
@@ -666,7 +669,9 @@ class AppController extends Controller {
 		*/
 		foreach ($this->relationship as $v) {
 			foreach ($this->Model->{$v} as $v2) {
-				$this->set(Inflector::pluralize(Inflector::variable($v2['className'])), $this->Model->{$v2['className']}->find('list', array('fields' => $v2['fields'], 'conditions' => $v2['conditions'])));
+				if($v2['className'] != 'City'){
+					$this->set(Inflector::pluralize(Inflector::variable($v2['className'])), $this->Model->{$v2['className']}->find('list', array('fields' => $v2['fields'], 'conditions' => $v2['conditions'])));
+				}
 			}
 		}
 	}

@@ -1,27 +1,22 @@
 <?php if(isset($balance)):?>
 	<div class="pull-right">
 			<ul class="stats">
-				<!-- <li class='teal'>
+				<li class='satblue'>
 					<i class="icon-search"></i>
 					<div class="details">
-						<span class="big"><?php echo $billing['qt_queries']?></span>
-						<span>Consultas</span>
-					</div>
-				</li> -->
-				<li class='satgreen'>
-					<i class="icon-money"></i>
-					<div class="details">
-						<span class="big">R$<?php echo $this->AppUtils->num2br($balance)?></span>
-						<span>Saldo</span>
+						<span class="big"><?php echo $this->AppUtils->num2qt($balance)?></span>
+						<span>Consultas Restantes</span>
 					</div>
 				</li>
-				<li class='lightred'>
-					<i class="icon-calendar"></i>
-					<div class="details">
-						<span class="big"><?php echo $this->AppUtils->dt2br($validity_orig)?></span>
-						<span>Validade</span>
-					</div>
-				</li>
+				<?php if(!empty($value_exceeded)):?>
+					<li class='satgreen'>
+						<i class="icon-money"></i>
+						<div class="details">
+							<span class="big">R$<?php echo $value_exceeded?></span>
+							<span>Consultas Excedidas</span>
+						</div>
+					</li>
+				<?php endif?>
 			</ul>
 		</div>
 <?php endif?>

@@ -97,7 +97,7 @@ class Imobile extends AppModelClean {
         sort($map);
 
         return $map;
-    }      
+    } 
 
     public function txt2array($ln){
         /**

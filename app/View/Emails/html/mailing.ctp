@@ -16,7 +16,8 @@
 							</p>
 
 							<p style="font-size:12px; line-height:18px;">
-								Para obter os arquivos gerados para esta campanha, clique aqui: <?php echo $this->Html->link($download_link)?>
+								Para obter os arquivos gerados para esta campanha, clique aqui: <br>
+								<?php echo $this->Html->link($download_link)?>
 							</p>
 							<p style="font-size:12px; line-height:18px;">
 								Uma vez que o download estiver concluído, descompacte o arquivo com o WinRar (R) 
@@ -25,13 +26,15 @@
 							
 							<p style="font-size:12px; line-height:18px;">
 								Se você tiver alguma dúvida, não hesite em contactar o nosso 
-								pessoal de apoio pelo telefone <?php echo COMPANY_PHONE?> ou pelo email <?php echo COMPANY_EMAIL_BUSINESSES?>
+								pessoal de apoio <br>
+								pelo telefone <?php echo COMPANY_PHONE?> <br>
+								ou pelo email <?php echo COMPANY_EMAIL_BUSINESSES?>
 							</p>
 
 							<h6>Sucesso em sua campanha!</h6>
 							<br>
 							<small>Atenciosamente,</small>
-							<h4>Check List</h4>
+							<h4><?php echo TITLE_APP?></h4>
 						</td>
 					</tr>
 				</table>
