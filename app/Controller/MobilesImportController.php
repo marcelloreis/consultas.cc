@@ -174,7 +174,7 @@ class MobilesImportController extends AppImportsController {
         	'fields' => array('Ientity.lote'),
         	'order' => array('Ientity.lote' => 'desc'),
         	));
-        $this->Imobile->lote = (!empty($map['Ientity']['lote']))?$map['Ientity']['lote']:1;
+        $this->Imobile->lote = (!empty($map['Ientity']['lote']))?($map['Ientity']['lote'] + 1):1;
 
         /**
         * Informa o conteudo do layout ao sistema

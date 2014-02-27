@@ -174,7 +174,7 @@ class LandlinesImportController extends AppImportsController {
         	'fields' => array('Ientity.lote'),
         	'order' => array('Ientity.lote' => 'desc'),
         	));
-        $this->Ilandline->lote = $map['Ientity']['lote']+1;
+        $this->Ilandline->lote = (!empty($map['Ientity']['lote']))?($map['Ientity']['lote'] + 1):1;
 
         /**
         * Informa o conteudo do layout ao sistema
