@@ -75,7 +75,7 @@ define('LIMIT_HASH', 5);
 define('LIMIT_SEARCH', 50);
 define('LIMIT_FAMILY', 6);
 define('LIMIT_NEIGHBORS', 6);
-define('LIMIT_BUILD_SOURCE', 100);
+define('LIMIT_BUILD_SOURCE', 500);
 define('LIMIT_TABLE_IMPORTS', 100000);
 /**
 * Reload

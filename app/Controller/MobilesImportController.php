@@ -1,10 +1,5 @@
 <?php
 /**
-* MASTER
-*/
-
-
-/**
  * Import content controller.
  *
  * Este arquivo ira renderizar as visões contidas em views/MobilesImport/
@@ -617,7 +612,7 @@ class MobilesImportController extends AppImportsController {
         $map = $this->Ientity->find('first', array(
         	'recursive' => -1,
         	'fields' => array('Ientity.lote'),
-        	'order' => array('Ientity.lote' => 'desc'),
+        	'order' => array('Ientity.id' => 'desc'),
         	));
         $this->Imobile->lote = (!empty($map['Ientity']['lote']))?($map['Ientity']['lote'] + 1):1;
 
@@ -632,7 +627,12 @@ class MobilesImportController extends AppImportsController {
 		$this->qt_reg = 0;
 		foreach ($sources as $k => $v) {
 			$this->NattMovelTelefone->setSource($v);
-			$this->qt_reg += $this->NattMovelTelefone->find('count');
+			$this->qt_reg += $this->NattMovelTelefone->find('count', array(
+				'recursive' => -1,				
+				'conditions' => array(
+					'NattMovelTelefone.CPF_CNPJ !=' => '00000000000000',
+					),
+				));
 		}
 		$start_time = time();
 		$this->Counter->updateAll(array('Counter.extracted' => $this->qt_reg, 'Counter.start_time' => $start_time), array('table' => 'entities', 'active' => '1'));
@@ -683,6 +683,9 @@ class MobilesImportController extends AppImportsController {
 		        */
 				$entities = $this->NattMovelTelefone->find('all', array(
 						'recursive' => -1,
+						'conditions' => array(
+							'NattMovelTelefone.CPF_CNPJ !=' => '00000000000000',
+							),
 						'limit' => "{$i}," . LIMIT_BUILD_SOURCE,
 					));
 
@@ -789,9 +792,9 @@ class MobilesImportController extends AppImportsController {
 						$this->importEntity($data);
 						$this->AppImport->timing_end();
 
-						*
+						/**
 						* Inicializa a importacao dos telefones da entidade encontrada
-						
+						*/
 						if(!empty($this->Ientity->id)){
 							/**
 							* Desmembra o DDD do Telefone
@@ -994,5 +997,4 @@ class MobilesImportController extends AppImportsController {
 		*/
 		exit();
 	}
-
 }
