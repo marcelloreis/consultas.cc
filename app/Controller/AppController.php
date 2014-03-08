@@ -204,7 +204,7 @@ class AppController extends Controller {
 							'run_text',
 							'run_binary',
 							'cron',
-							'download'
+							'download',
 							'panel'
 							);
 		// $this->Auth->allow();
