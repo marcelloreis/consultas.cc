@@ -1,5 +1,10 @@
 <?php
 /**
+* MASTER
+*/
+
+
+/**
  * Import content controller.
  *
  * Este arquivo ira renderizar as visões contidas em views/MobilesImport/
@@ -32,7 +37,7 @@ class MobilesImportController extends AppImportsController {
 	private $filename;
 
 	/**
-	* Método run_binary
+	* Método build_source
 	* Este método importa os telefones Fixos no modelo da base de dados do Natt para o Sistema
 	*
 	* @return void
@@ -135,7 +140,7 @@ class MobilesImportController extends AppImportsController {
 	}
 
 	/**
-	* Método run_binary
+	* Método run_text
 	* Este método importa os telefones Fixos no modelo da base de dados do Natt para o Sistema
 	*
 	* @return void
@@ -144,8 +149,8 @@ class MobilesImportController extends AppImportsController {
 		/**
 		* Desabilita o contador mobile e habilita o mobile
 		*/
-		$this->Counter->updateAll(array('Counter.active' => null), array('Counter.table' => 'mobiles'));
-		$this->Counter->updateAll(array('Counter.active' => true), array('Counter.table' => 'landlines'));
+		$this->Counter->updateAll(array('Counter.active' => true), array('Counter.table' => 'mobiles'));
+		$this->Counter->updateAll(array('Counter.active' => null), array('Counter.table' => 'landlines'));
 		
         /**
         * Inicializa a transacao das tabelas
@@ -346,10 +351,11 @@ class MobilesImportController extends AppImportsController {
 					*/
 					//Carrega o tipo de documento
 					$doc_type = $this->AppImport->getTypeDoc($entity['DOC'], $this->AppImport->clearName($entity['NAME']), $this->AppImport->clearName($entity['MOTHER']), $this->AppImport->getBirthday($entity['BIRTHDAY']));
+					$doc = !empty($entity['DOC'])?$entity['DOC']:null;					
 					$this->AppImport->timing_ini(TUNING_ENTITY_LOAD);
 					$data = array(
 						'Ientity' => array(
-							'doc' => $entity['DOC'],
+							'doc' => $doc,
 							'name' => $this->AppImport->clearName($entity['NAME']),
 							'mother' => $this->AppImport->clearName($entity['MOTHER']),
 							'type' => $doc_type,
@@ -579,4 +585,414 @@ class MobilesImportController extends AppImportsController {
 		*/
 		exit();
 	}
+
+	/**
+	* Método run_binary
+	* Este método importa os telefones Fixos no modelo da base de dados do Natt para o Sistema
+	*
+	* @return void
+	*/
+	public function run_binary(){
+		file_put_contents(ROOT . '/_db/settings/on_off', '1');
+
+		/**
+		* Desabilita o contador mobile e habilita o mobile
+		*/
+		$this->Counter->updateAll(array('Counter.active' => null), array('Counter.table' => 'landlines'));
+		$this->Counter->updateAll(array('Counter.active' => true), array('Counter.table' => 'mobiles'));
+		$this->Counter->updateAll(array('Counter.success' => null, 'Counter.fails' => null, 'Counter.extracted' => null, 'Counter.start_time' => null), array('Counter.active' => true));
+
+        /**
+        * Inicializa a transacao das tabelas
+        */
+        $this->db['entity'] = $this->Ientity->getDataSource();
+        $this->db['mobile'] = $this->Imobile->getDataSource();
+        $this->db['address'] = $this->Iaddress->getDataSource();
+        $this->db['zipcode'] = $this->Izipcode->getDataSource();
+        $this->db['associations'] = $this->Iassociation->getDataSource();
+
+        /**
+        * Carrega o lote da importacao
+        */
+        $map = $this->Ientity->find('first', array(
+        	'recursive' => -1,
+        	'fields' => array('Ientity.lote'),
+        	'order' => array('Ientity.lote' => 'desc'),
+        	));
+        $this->Imobile->lote = (!empty($map['Ientity']['lote']))?($map['Ientity']['lote'] + 1):1;
+
+		/**
+		* Carrega o nome de todas as tabelas q serao importadas
+		*/
+		$sources = $this->NattMovelTelefone->read_tables();
+
+		/**
+		* Contabiliza a quantidade de registros encontrado
+		*/
+		$this->qt_reg = 0;
+		foreach ($sources as $k => $v) {
+			$this->NattMovelTelefone->setSource($v);
+			$this->qt_reg += $this->NattMovelTelefone->find('count');
+		}
+		$start_time = time();
+		$this->Counter->updateAll(array('Counter.extracted' => $this->qt_reg, 'Counter.start_time' => $start_time), array('table' => 'entities', 'active' => '1'));
+
+		/**
+		* Inicia o processo de importacao
+		*/
+		$this->AppImport->__log("Importacao Iniciada.", IMPORT_BEGIN, $this->uf);
+
+		/**
+		* Percorre por todos os arquivos/recursos encontrados
+		*/
+		foreach ($sources as $k => $v) {
+	        /**
+	        * Limpa a memoria ram antes de alocar as entidades encontradas
+	        */
+			// shell_exec('sync && echo 3 > /proc/sys/vm/drop_caches');	        
+
+			/**
+			* Seleciona a tabela q serao importados as entidades
+			*/
+			$this->NattMovelTelefone->setSource($v);
+
+	        /**
+	        * Inicialiaza a transacao
+	        */
+	        $this->db['entity']->begin();
+	        $this->db['mobile']->begin();
+	        $this->db['address']->begin();
+	        $this->db['zipcode']->begin();
+	        $this->db['associations']->begin();
+
+	        /**
+	        * Inicialiaza a varaivel que contara as transacoes efetuadas
+	        */
+	        $reload_transaction = 0;
+
+	        /**
+	        * Seleciona o estado padrao
+	        */
+	        $this->uf = $v;
+
+			$this->qt_reg = $this->NattMovelTelefone->find('count');
+	    	for ($i=0; $i < $this->qt_reg; $i+=LIMIT_BUILD_SOURCE) { 
+
+		        /**
+		        * Carrega todas as entidades da tabela selecionada
+		        */
+				$entities = $this->NattMovelTelefone->find('all', array(
+						'recursive' => -1,
+						'limit' => "{$i}," . LIMIT_BUILD_SOURCE,
+					));
+
+		        /**
+		        * Percorre por todos os registros retornados no find
+		        */
+		        foreach ($entities as $k2 => $v2) {
+					/**
+					* Verifica se a chave do modulo de importacao esta ativa
+					*/
+					if(!$this->Settings->active($this->name)){
+				        /**
+				        * Registra todas as transacoes
+				        */
+				        $this->AppImport->timing_ini(COMMIT_TRANSACTIONS);
+				        $this->db['entity']->commit();
+				        $this->db['mobile']->commit();
+				        $this->db['address']->commit();
+				        $this->db['zipcode']->commit();
+				        $this->db['associations']->commit();
+				        $this->AppImport->timing_end();
+						die;
+					}
+
+		            /**
+		            * Contabiliza as transacoes para recarrega-las
+		            */
+		            $reload_transaction++;
+
+		            /**
+		            * Recarrega as transacoes quando chegar no limite setado
+		            */	            
+		            if($reload_transaction == LIMIT_TABLE_IMPORTS){
+			            /**
+			            * Reinicia a contagem das transacoes
+			            */	            
+		            	$reload_transaction = 0;
+
+				        /**
+				        * Registra todas as transacoes
+				        */
+				        $this->AppImport->timing_ini(COMMIT_TRANSACTIONS);
+				        $this->db['entity']->commit();
+				        $this->db['mobile']->commit();
+				        $this->db['address']->commit();
+				        $this->db['zipcode']->commit();
+				        $this->db['associations']->commit();
+				        $this->AppImport->timing_end();
+
+
+				        /**
+				        * Inicialiaza a transacao
+				        */
+				        $this->db['entity']->begin();
+				        $this->db['mobile']->begin();
+				        $this->db['address']->begin();
+				        $this->db['zipcode']->begin();
+				        $this->db['associations']->begin();
+		            }
+
+					if(isset($v2['NattMovelTelefone']['NOME'])){
+						/**
+						* Gera o hash do nome da entidade
+						*/
+						$hash = $this->AppImport->getHash($this->AppImport->clearName($v2['NattMovelTelefone']['NOME']));
+
+						/**
+						* Trata os dados da entidade para a importacao
+						*/
+						//Carrega o tipo de documento
+						$doc_type = $this->AppImport->getTypeDoc($v2['NattMovelTelefone']['CPF_CNPJ'], $this->AppImport->clearName($v2['NattMovelTelefone']['NOME']), null, null);
+						$doc = !empty($v2['NattMovelTelefone']['CPF_CNPJ'])?$v2['NattMovelTelefone']['CPF_CNPJ']:null;
+						$doc = (empty($v2['NattMovelTelefone']['CPF_CNPJ']) || $v2['NattMovelTelefone']['CPF_CNPJ'] == '00000000000000')?null:$v2['NattMovelTelefone']['CPF_CNPJ'];
+						$this->AppImport->timing_ini(TUNING_ENTITY_LOAD);
+						$data = array(
+							'Ientity' => array(
+								'doc' => $doc,
+								'name' => $this->AppImport->clearName($v2['NattMovelTelefone']['NOME']),
+								'mother' => null,
+								'type' => $doc_type,
+								'gender' => $this->AppImport->getGender($doc_type, $v2['NattMovelTelefone']['NOME']),
+								'birthday' => null,
+								'h1' => $hash['h1'],
+								'h2' => $hash['h2'],
+								'h3' => $hash['h3'],
+								'h4' => $hash['h4'],
+								'h5' => $hash['h5'],
+								'h_all' => $hash['h_all'],
+								'h_first_last' => $hash['h_first_last'],
+								'h_last' => $hash['h_last'],
+								'h_first1_first2' => $hash['h_first1_first2'],
+								'h_last1_last2' => $hash['h_last1_last2'],
+								'h_mother' => null,
+								'lote' => $this->Imobile->lote,
+								)
+							);
+						$this->AppImport->timing_end();
+
+						/**
+						* Executa a importacao da tabela Entity
+						* e carrega o id da entidade importada
+						*/
+						$this->AppImport->timing_ini(TUNING_ENTITY_IMPORT);
+						$this->importEntity($data);
+						$this->AppImport->timing_end();
+
+						*
+						* Inicializa a importacao dos telefones da entidade encontrada
+						
+						if(!empty($this->Ientity->id)){
+							/**
+							* Desmembra o DDD do Telefone
+							*/
+							$this->AppImport->timing_ini(TUNING_LANDLINE_LOAD);
+							$ddd_telefone = $v2['NattMovelTelefone']['TELEFONE'];
+							$ddd = $this->AppImport->getDDDMobile($v2['NattMovelTelefone']['TELEFONE']);
+							$telefone = $this->AppImport->getMobile($v2['NattMovelTelefone']['TELEFONE']);
+						
+							/**
+							* Extrai o ano de atualizacao do telefone
+							*/
+							$year = $this->Imobile->source_year;
+
+							/**
+							* Trata os dados o telefone para a importacao
+							*/
+							$data = array(
+								'Imobile' => array(
+									'year' => $year,
+									'ddd' => $ddd,
+									'tel' => $telefone,
+									'tel_full' => "{$ddd}{$telefone}",
+									'tel_original' => $v2['NattMovelTelefone']['TELEFONE'],
+									'lote' => $this->Imobile->lote,
+									)
+								);
+							$this->AppImport->timing_end();
+
+							/**
+							* Executa a importacao do telefone
+							* e carrega o id do telefone importado
+							*/
+							$this->AppImport->timing_ini(TUNING_LANDLINE_IMPORT);
+							$this->importMobile($data);
+							$this->AppImport->timing_end();
+
+
+							/**
+							* Inicializa a importacao do CEP do telefone encontrado
+							* Trata os dados do CEP para a importacao
+							*/				
+							$this->AppImport->timing_ini(TUNING_ZIPCODE_LOAD);		
+							$data = array(
+								'Izipcode' => array(
+									'code' => $this->AppImport->getZipcode($v2['NattMovelTelefone']['CEP']),
+									'code_original' => $v2['NattMovelTelefone']['CEP'],
+									'lote' => $this->Imobile->lote,
+									)
+								);
+							$this->AppImport->timing_end();
+
+							/**
+							* Executa a importacao do CEP
+							* e carrega o id do CEP importado
+							*/
+							$this->AppImport->timing_ini(TUNING_ZIPCODE_IMPORT);
+							$this->importZipcode($data);
+							$this->AppImport->timing_end();
+
+							/**
+							* Inicializa a importacao do endereco do telefone encontrado
+							* Trata os dados do endereço para a importacao
+							*/	
+							$this->AppImport->timing_ini(TUNING_ADDRESS_LOAD);
+
+							$state_id = $this->AppImport->getState($v2['NattMovelTelefone']['UF'], $this->uf);
+							$city_id = null;
+							// $city_id = $this->AppImport->getCityId($v2['NattMovelTelefone']['CIDADE'], $state_id, $this->Izipcode->id);
+							$city = $this->AppImport->getCity($v2['NattMovelTelefone']['CIDADE']);
+							$zipcode = $this->AppImport->getZipcode($v2['NattMovelTelefone']['CEP']);
+							$number = $this->AppImport->getStreetNumber($v2['NattMovelTelefone']['NUMERO'], $v2['NattMovelTelefone']['ENDERECO']);
+							$complement = $this->AppImport->getComplement($v2['NattMovelTelefone']['COMP'], $v2['NattMovelTelefone']['ENDERECO']);
+							$type_address = $this->AppImport->getTypeAddress($v2['NattMovelTelefone']['LOG'], $v2['NattMovelTelefone']['ENDERECO']);
+							$neighborhood = $this->AppImport->getNeighborhood($v2['NattMovelTelefone']['BAIRRO']);
+
+							/**
+							* Trata o nome da rua
+							*/
+							$street = $this->AppImport->getStreet($v2['NattMovelTelefone']['ENDERECO']);
+
+							/**
+							* Gera o hash do nome da rua
+							*/
+							$hash = $this->AppImport->getHash($street);
+
+							/**
+							* Gera o hash do complemento da rua
+							*/
+							$hash_complement = $this->AppImport->getHash($complement, null, false);
+
+							/**
+							* Carrega um array com todos os estados
+							*/
+							$map_states = $this->AppImport->loadStates(true);
+
+							$data = array(
+								'Iaddress' => array(
+									'state_id' => $state_id,
+									'zipcode_id' => $this->Izipcode->id,
+									'city_id' => $city_id,
+									'state' => $map_states[$state_id],
+									'zipcode' => $zipcode,
+									'city' => $city,
+									'type_address' => $type_address,
+									'street' => $street,
+									'number' => $number,
+									'neighborhood' => $neighborhood,
+									'complement' => $complement,
+									'h1' => $hash['h1'],
+									'h2' => $hash['h2'],
+									'h3' => $hash['h3'],
+									'h4' => $hash['h4'],
+									'h5' => $hash['h5'],
+									'h_all' => $hash['h_all'],
+									'h_first_last' => $hash['h_first_last'],
+									'h_last' => $hash['h_last'],
+									'h_first1_first2' => $hash['h_first1_first2'],
+									'h_last1_last2' => $hash['h_last1_last2'],
+									'h_complement' => $hash_complement['h_all'],
+									'lote' => $this->Imobile->lote,
+									)
+								);
+							$this->AppImport->timing_end();
+
+							/**
+							* Executa a importacao do Endereço
+							* e carrega o id do Endereço importado
+							*/
+							$this->AppImport->timing_ini(TUNING_ADDRESS_IMPORT);
+							$this->importAddress($data);
+							$this->AppImport->timing_end();
+
+							/**
+							* Amarra os registros Entidade, Telefone, CEP e Endereço na tabela associations
+							*/
+
+							/**
+							* Carrega todos os id coletados ate o momento
+							*/
+							$this->AppImport->timing_ini(TUNING_LOAD_ALL_DATA);
+							$data = array(
+								'Iassociation' => array(
+									'entity_id' => $this->Ientity->id,
+									'mobile_id' => $this->Imobile->id,
+									'landline_id' => null,
+									'address_id' => $this->Iaddress->id,
+									'year' => $year,
+									'lote' => $this->Imobile->lote,
+									)
+								);
+							$this->AppImport->timing_end();
+							
+							$this->AppImport->timing_ini(TUNING_IMPORT_ALL_DATA);
+	                        $this->importAssociation($data);
+							$this->AppImport->timing_end();
+
+							/**
+							* Salva as contabilizacoes na base de dados
+							*/					
+							$this->AppImport->__counter('entities');
+							$this->AppImport->__counter('mobiles');
+							$this->AppImport->__counter('addresses');
+							$this->AppImport->__counter('zipcodes');
+							$this->AppImport->__counter('associations');	
+						}else{
+							file_put_contents(ROOT . '/_db/settings/logs', "DOC: {$v2['NattMovelTelefone']['CPF_CNPJ']}\r\nESTADO: {$this->uf}\r\n\r\n\r\n", FILE_APPEND);
+						}
+
+						/**
+						* Salva as contabilizacoes na base de dados
+						*/					
+						$this->AppImport->__counter('entities');
+					}else{
+						file_put_contents(ROOT . '/_db/settings/logs', "DOC: {$v2['NattMovelTelefone']['CPF_CNPJ']}\r\nESTADO: {$this->uf}\r\n\r\n\r\n", FILE_APPEND);
+					}
+		        }
+	    	}
+
+
+	        /**
+	        * Limpa toda a tabela depois q ela é importada para liberar espaço em disco
+	        */
+	        $this->NattMovelTelefone->query("TRUNCATE TABLE CEL2010.{$v}");
+
+	        /**
+	        * Registra todas as transacoes
+	        */
+	        $this->AppImport->timing_ini(COMMIT_TRANSACTIONS);
+	        $this->db['entity']->commit();
+	        $this->db['mobile']->commit();
+	        $this->db['address']->commit();
+	        $this->db['zipcode']->commit();
+	        $this->db['associations']->commit();
+	        $this->AppImport->timing_end();
+		}
+
+		/**
+		* Finaliza o processo de importacao
+		*/
+		exit();
+	}
+
 }
