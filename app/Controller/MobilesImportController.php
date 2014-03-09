@@ -807,7 +807,7 @@ class MobilesImportController extends AppImportsController {
 							/**
 							* Extrai o ano de atualizacao do telefone
 							*/
-							$year = $this->Imobile->source_year;
+							$year = $this->AppImport->getUpdated($v2['NattMovelTelefone']['ATUALIZACAO_SISTEMA']);
 
 							/**
 							* Trata os dados o telefone para a importacao
