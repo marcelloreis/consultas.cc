@@ -1,3 +1,4 @@
+<?php if(!$this->fetch('navigation')):?>
 	<div id="navigation">
 		<div class="container-fluid">
 			<?php 
@@ -9,6 +10,8 @@
 			?>
 		</div>
 	</div>
+<?php endif?>
+<?php echo $this->fetch('navigation')?>
 
 
 <!-- Top Content -->

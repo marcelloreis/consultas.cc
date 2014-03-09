@@ -1,4 +1,16 @@
 <?php 
+/**
+* Oculta o sidebar
+*/
+$this->assign('sidebar-class-hidden', 'nav-hidden');
+
+/**
+* Oculta a barra de navegacao
+*/
+$this->start('navigation');
+echo '&nbsp;';
+$this->end();
+
 $this->append('css-on-demand');
 echo $this->Html->css(array(
     'plugins/easy-pie-chart/jquery.easy-pie-chart',

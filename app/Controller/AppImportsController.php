@@ -17,7 +17,7 @@ class AppImportsController extends AppController {
 		"Iassociation",
 		"Settings",
 		"Counter",
-		"NattMovelTelefone", 
+		// "NattMovelTelefone", 
 		"NattFixoTelefone", 
 		"NattFixoPessoa", 
 		"NattFixoEndereco",
