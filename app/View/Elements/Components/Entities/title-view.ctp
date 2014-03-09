@@ -12,7 +12,7 @@ if(count($this->params['named'])){
 }
 
 $map = strtolower($modelClass);
-$qt_found = count($$map);
+$qt_found = (count($$map) - 1);
 ?>
 
 <div class="box-title">
