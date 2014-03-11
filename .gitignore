@@ -7,7 +7,6 @@ _db/source/*
 >>>>>>> import_text
 tmp/*
 _bkps/*
-_db/*
 [Cc]onfig/core.php
 [Cc]onfig/database.php
 app/tmp/*
