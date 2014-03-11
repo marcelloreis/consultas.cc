@@ -132,7 +132,9 @@ define('TUNING_FILE_LOAD', 14);
 //Serializa o array
 define('TUNING_SERIALIZE', 15);
 //Commita as transacoes executadas
-define('COMMIT_TRANSACTIONS', 16);
+define('TUNING_COMMIT_TRANSACTIONS', 16);
+//Seta o registro como transferido
+define('TUNING_UPDATED', 17);
 
 /**
 * Configuracao do cache das entidades

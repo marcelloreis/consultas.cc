@@ -272,7 +272,7 @@ class MobilesImportController extends AppImportsController {
 			        /**
 			        * Registra todas as transacoes
 			        */
-			        $this->AppImport->timing_ini(COMMIT_TRANSACTIONS);
+			        $this->AppImport->timing_ini(TUNING_COMMIT_TRANSACTIONS);
 			        $this->db['entity']->commit();
 			        $this->db['mobile']->commit();
 			        $this->db['address']->commit();
@@ -309,7 +309,7 @@ class MobilesImportController extends AppImportsController {
 			        /**
 			        * Registra todas as transacoes
 			        */
-			        $this->AppImport->timing_ini(COMMIT_TRANSACTIONS);
+			        $this->AppImport->timing_ini(TUNING_COMMIT_TRANSACTIONS);
 			        $this->db['entity']->commit();
 			        $this->db['mobile']->commit();
 			        $this->db['address']->commit();
@@ -565,7 +565,7 @@ class MobilesImportController extends AppImportsController {
 	        /**
 	        * Registra todas as transacoes
 	        */
-	        $this->AppImport->timing_ini(COMMIT_TRANSACTIONS);
+	        $this->AppImport->timing_ini(TUNING_COMMIT_TRANSACTIONS);
 	        $this->db['entity']->commit();
 	        $this->db['mobile']->commit();
 	        $this->db['address']->commit();
@@ -646,10 +646,6 @@ class MobilesImportController extends AppImportsController {
 		* Percorre por todos os arquivos/recursos encontrados
 		*/
 		foreach ($sources as $k => $v) {
-	        /**
-	        * Limpa a memoria ram antes de alocar as entidades encontradas
-	        */
-			//shell_exec('sync && echo 3 > /proc/sys/vm/drop_caches');	        
 
 			/**
 			* Seleciona a tabela q serao importados as entidades
@@ -685,8 +681,9 @@ class MobilesImportController extends AppImportsController {
 						'recursive' => -1,
 						'conditions' => array(
 							'NattMovelTelefone.CPF_CNPJ !=' => '00000000000000',
+							'NattMovelTelefone.transf' => null,
 							),
-						'limit' => "{$i}," . LIMIT_BUILD_SOURCE,
+						'limit' => "0," . LIMIT_BUILD_SOURCE,
 					));
 		        $this->AppImport->timing_end();
 
@@ -701,7 +698,7 @@ class MobilesImportController extends AppImportsController {
 				        /**
 				        * Registra todas as transacoes
 				        */
-				        $this->AppImport->timing_ini(COMMIT_TRANSACTIONS);
+				        $this->AppImport->timing_ini(TUNING_COMMIT_TRANSACTIONS);
 				        $this->db['entity']->commit();
 				        $this->db['mobile']->commit();
 				        $this->db['address']->commit();
@@ -728,7 +725,7 @@ class MobilesImportController extends AppImportsController {
 				        /**
 				        * Registra todas as transacoes
 				        */
-				        $this->AppImport->timing_ini(COMMIT_TRANSACTIONS);
+				        $this->AppImport->timing_ini(TUNING_COMMIT_TRANSACTIONS);
 				        $this->db['entity']->commit();
 				        $this->db['mobile']->commit();
 				        $this->db['address']->commit();
@@ -969,9 +966,14 @@ class MobilesImportController extends AppImportsController {
 						* Salva as contabilizacoes na base de dados
 						*/					
 						$this->AppImport->__counter('entities');
-					}else{
-						file_put_contents(ROOT . '/_db/settings/logs', "DOC: {$v2['NattMovelTelefone']['CPF_CNPJ']}\r\nESTADO: {$this->uf}\r\n\r\n\r\n", FILE_APPEND);
 					}
+
+					/**
+					* Seta o registro como transferido
+					*/
+					$this->AppImport->timing_ini(TUNING_UPDATED);
+					$this->NattMovelTelefone->updateAll(array('transf' => true), array('NattMovelTelefone.CPF_CNPJ' => $v2['NattMovelTelefone']['CPF_CNPJ'], 'NattMovelTelefone.TELEFONE' => $v2['NattMovelTelefone']['TELEFONE']));
+					$this->AppImport->timing_end();
 		        }
 	    	}
 
@@ -984,7 +986,7 @@ class MobilesImportController extends AppImportsController {
 	        /**
 	        * Registra todas as transacoes
 	        */
-	        $this->AppImport->timing_ini(COMMIT_TRANSACTIONS);
+	        $this->AppImport->timing_ini(TUNING_COMMIT_TRANSACTIONS);
 	        $this->db['entity']->commit();
 	        $this->db['mobile']->commit();
 	        $this->db['address']->commit();
