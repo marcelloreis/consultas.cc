@@ -850,6 +850,27 @@ class AppController extends Controller {
     	}		
 	}	
 
+	/**
+	* Previne que o mesmo processo seja executado mais de uma vez ao mesmo tempo usando um arquivo de log
+	* @param string $pidfile 
+	* @return void
+	*/	
+	protected static function preventOverlap($pidfile) {
+        if (!is_dir(dirname($pidfile))) {
+            mkdir(dirname($pidfile), 0777, true);
+        }
+        if (file_exists($pidfile)) {
+            $oldpid = trim(file_get_contents($pidfile));
+            exec("ps -p $oldpid 2>&1", $output, $return);
+            if ($return == 0) {
+                die('O processo ja esta em execucao!');
+            } else {
+                unlink($pidfile);
+            }
+        }
+        file_put_contents($pidfile, getmypid());
+    }	
+
     /**
      * Carrega todas as permissoes do usuario logado em sessions
      */
