@@ -1,0 +1,3 @@
+#Adicionando usuarios com diretorio especfico
+useradd suppliers -d /var/suppliers -s /bin/false
+passwd suppliers
