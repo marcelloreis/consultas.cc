@@ -141,7 +141,8 @@ class StatisticsController extends AppController {
 			/**
 			* Carrega o timing da importacao sem o NEXT
 			*/
-			$imports['timing'] = $this->Timing->find('list', array('fields' => array('Timing.time', 'Timing.description'), 'conditions' => array('Timing.time NOT' => null, 'Timing.id NOT' => array(TUNING_LOAD_NEXT_REGISTER, COMMIT_TRANSACTIONS))));
+			//$imports['timing'] = $this->Timing->find('list', array('fields' => array('Timing.time', 'Timing.description'), 'conditions' => array('Timing.time NOT' => null, 'Timing.id NOT' => array(TUNING_LOAD_NEXT_REGISTER, COMMIT_TRANSACTIONS))));
+			$imports['timing'] = $this->Timing->find('list', array('fields' => array('Timing.time', 'Timing.description'), 'conditions' => array('Timing.time NOT' => null, 'Timing.id NOT' => array(COMMIT_TRANSACTIONS))));
 
 			/**
 			* Carrega o timing do NEXT da importacao

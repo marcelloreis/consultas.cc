@@ -649,7 +649,7 @@ class MobilesImportController extends AppImportsController {
 	        /**
 	        * Limpa a memoria ram antes de alocar as entidades encontradas
 	        */
-			// shell_exec('sync && echo 3 > /proc/sys/vm/drop_caches');	        
+			//shell_exec('sync && echo 3 > /proc/sys/vm/drop_caches');	        
 
 			/**
 			* Seleciona a tabela q serao importados as entidades
@@ -677,10 +677,10 @@ class MobilesImportController extends AppImportsController {
 
 			$this->qt_reg = $this->NattMovelTelefone->find('count');
 	    	for ($i=0; $i < $this->qt_reg; $i+=LIMIT_BUILD_SOURCE) { 
-
 		        /**
 		        * Carrega todas as entidades da tabela selecionada
 		        */
+		        $this->AppImport->timing_ini(TUNING_LOAD_NEXT_REGISTER);
 				$entities = $this->NattMovelTelefone->find('all', array(
 						'recursive' => -1,
 						'conditions' => array(
@@ -688,6 +688,7 @@ class MobilesImportController extends AppImportsController {
 							),
 						'limit' => "{$i}," . LIMIT_BUILD_SOURCE,
 					));
+		        $this->AppImport->timing_end();
 
 		        /**
 		        * Percorre por todos os registros retornados no find
