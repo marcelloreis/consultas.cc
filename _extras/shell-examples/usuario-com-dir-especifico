@@ -1,0 +1,3 @@
+#Adicionando usuarios com diretorio especfico
+useradd nome_do_usuario -d /var/nome_do_usuario -s /bin/false
+passwd nome_do_usuario
