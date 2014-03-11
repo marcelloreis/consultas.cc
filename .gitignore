@@ -1,7 +1,6 @@
 .htaccess
 plugins/Google/Config/*
 tmp/*
-_bkps/*
 [Cc]onfig/core.php
 [Cc]onfig/database.php
 app/tmp/*
