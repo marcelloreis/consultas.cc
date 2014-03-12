@@ -165,14 +165,14 @@ echo $this->element('Index/Imports/charts-gauge');
 				<div class="box-title">
 					<h3>
 						<i class="glyphicon-stopwatch"></i>
-						Processos por minuto
+						Processos por minuto/hora/dia
 					</h3>
 				</div>
 				<div class="box-content">
 					<div class="row-fluid">
-						<div class="span4" id='chart_minuts'></div>
-						<div class="span4" id='chart_hour'></div>
-						<div class="span4" id='chart_day'></div>
+						<div class="span4" style="height: 500px; padding-top: 100px;" id='chart_minuts'></div>
+						<div class="span4" style="height: 500px; padding-top: 100px;" id='chart_hour'></div>
+						<div class="span4" style="height: 500px; padding-top: 100px;" id='chart_day'></div>
 					</div>
 				</div>
 			</div>					
