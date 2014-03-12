@@ -170,9 +170,9 @@ echo $this->element('Index/Imports/charts-gauge');
 				</div>
 				<div class="box-content">
 					<div class="row-fluid">
-						<div class="span4" style="height: 300px; padding-top: 100px;" id='chart_minuts'></div>
-						<div class="span4" style="height: 300px; padding-top: 100px;" id='chart_hour'></div>
-						<div class="span4" style="height: 300px; padding-top: 100px;" id='chart_day'></div>
+						<div class="span4" style="height: 400px; padding-top: 100px;" id='chart_minuts'></div>
+						<div class="span4" style="height: 400px; padding-top: 100px;" id='chart_hour'></div>
+						<div class="span4" style="height: 400px; padding-top: 100px;" id='chart_day'></div>
 					</div>
 				</div>
 			</div>					
