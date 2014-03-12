@@ -104,7 +104,7 @@ echo $this->element('Index/Imports/charts-gauge');
 						<i class="icon-th-large"></i>
 						Dados Importados 
 					</h3>
-						<div class="pull-right"><code>Previsão: <?php echo date('l H:i', mktime((date('H')+$imports['remaining_times']['hour']), (date('i')+$imports['remaining_times']['min']), (date('s')+$imports['remaining_times']['sec']), date('m'), (date('d')+$imports['remaining_times']['day']), date('Y')))?></code></div>
+					<div class="pull-right"><code>Previsão: <?php echo date('l H:i', mktime((date('H')+$imports['remaining_times']['hour']), (date('i')+$imports['remaining_times']['min']), (date('s')+$imports['remaining_times']['sec']), date('m'), (date('d')+$imports['remaining_times']['day']), date('Y')))?></code></div>
 				</div>
 				<div class="box-content">
 					<div class="row-fluid">
@@ -170,14 +170,16 @@ echo $this->element('Index/Imports/charts-gauge');
 				</div>
 				<div class="box-content">
 					<div class="row-fluid">
-						<div id='chart_minuts'></div>
+						<div class="span4" id='chart_minuts'></div>
+						<div class="span4" id='chart_hour'></div>
+						<div class="span4" id='chart_day'></div>
 					</div>
 				</div>
 			</div>					
 		</div>
 	</div>
 
-	<div class="row-fluid">
+	<!-- div class="row-fluid">
 		<div class="span12">
 			<div class="box box-color box-bordered">
 				<div class="box-title">
@@ -193,9 +195,9 @@ echo $this->element('Index/Imports/charts-gauge');
 				</div>
 			</div>					
 		</div>
-	</div>
+	</div -->
 
-	<div class="row-fluid">
+	<!-- div class="row-fluid">
 		<div class="span12">
 			<div class="box box-color box-bordered">
 				<div class="box-title">
@@ -211,7 +213,7 @@ echo $this->element('Index/Imports/charts-gauge');
 				</div>
 			</div>					
 		</div>
-	</div>
+	</div -->
 
 	<div class="row-fluid">
 		<div class="span12">

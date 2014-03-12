@@ -12,10 +12,8 @@
 
       function chartMinuts() {
         var data = google.visualization.arrayToDataTable([
-          ['Label', 'Value']
-<?php foreach($imports['statistics'] as $k => $v):?>
-          ,['<?php echo $k?>', <?php echo $v['process_per_min']?>]
-<?php endforeach?>
+          ['Label', 'Value'],
+          ['minuto', <?php echo $imports['statistics']['entities']['process_per_min']?>]
         ]);
 
         var options = {
@@ -33,10 +31,8 @@
 
       function chartHours() {
         var data = google.visualization.arrayToDataTable([
-          ['Label', 'Value']
-<?php foreach($imports['statistics'] as $k => $v):?>
-          ,['<?php echo $k?>', <?php echo $v['process_per_hour']?>]
-<?php endforeach?>
+          ['Label', 'Value'],
+          ['hora', <?php echo $imports['statistics']['entities']['process_per_hour']?>]
         ]);
 
         var options = {
@@ -53,10 +49,8 @@
 
       function chartDays() {
         var data = google.visualization.arrayToDataTable([
-          ['Label', 'Value']
-<?php foreach($imports['statistics'] as $k => $v):?>
-          ,['<?php echo $k?>', <?php echo $v['process_per_day']?>]
-<?php endforeach?>
+          ['Label', 'Value'],
+          ['dia', <?php echo $imports['statistics']['entities']['process_per_day']?>]
         ]);
 
         var options = {
