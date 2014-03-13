@@ -716,7 +716,7 @@ class MobilesImportController extends AppImportsController {
 		            /**
 		            * Recarrega as transacoes quando chegar no limite setado
 		            */	            
-		            if($reload_transaction == LIMIT_TABLE_IMPORTS){
+		            if($reload_transaction >= LIMIT_TABLE_IMPORTS){
 			            /**
 			            * Reinicia a contagem das transacoes
 			            */	            

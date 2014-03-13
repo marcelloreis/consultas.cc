@@ -179,42 +179,6 @@ echo $this->element('Index/Imports/charts-gauge');
 		</div>
 	</div>
 
-	<!-- div class="row-fluid">
-		<div class="span12">
-			<div class="box box-color box-bordered">
-				<div class="box-title">
-					<h3>
-						<i class="glyphicon-stopwatch"></i>
-						Processos por hora
-					</h3>
-				</div>
-				<div class="box-content">
-					<div class="row-fluid">
-						<div id='chart_hour'></div>
-					</div>
-				</div>
-			</div>					
-		</div>
-	</div -->
-
-	<!-- div class="row-fluid">
-		<div class="span12">
-			<div class="box box-color box-bordered">
-				<div class="box-title">
-					<h3>
-						<i class="glyphicon-stopwatch"></i>
-						Processos por dia
-					</h3>
-				</div>
-				<div class="box-content">
-					<div class="row-fluid">
-						<div id='chart_day'></div>
-					</div>
-				</div>
-			</div>					
-		</div>
-	</div -->
-
 	<div class="row-fluid">
 		<div class="span12">
 			<div class="box box-color box-bordered">
